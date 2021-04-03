@@ -56,21 +56,26 @@ const SignUp = () => {
 
   let sendEmail = async(e)=>{
     e.preventDefault();
-    console.log(userinfo.email)
-
+    console.log(userinfo.email.slice(-6))
+    //if(userinfo.email.slice)
     const data={
       email:userinfo.email
     }
-
-    fetch('http://localhost:3001/users/sendEmail',{  
-            method: "post",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data),
-        })
-        .then(res => res.json())
-        .then(json => {
-            
-        })
+    if(data.email.slice(-6)===".ac.kr"){
+      fetch('http://localhost:3001/users/sendEmail',{  
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    })
+    .then(res => console.log(res))
+    .then(json => {
+        console.log(json)
+    })
+    }
+    else{
+      alert("대학교 이메일로만 가입이 가능합니다.")
+    }
+    
   }
    
   return (
