@@ -2,6 +2,7 @@ import React,{useEffect, useState} from "react";
 import {dbService} from "../firebase"
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
+import axios from 'axios';
 
 const SignUpBox = styled.div`
   border: 1.5px solid rgb(221, 221, 221);;
@@ -15,45 +16,70 @@ const SignUpBox = styled.div`
 
 const SignUp = () => {
 
-    const [userinfo,setUserinfo]=useState({
-        name:"",
-        nickname:"",
-        gender:"",
-        birth:"",
-        email:"",
-        password:"",
-    })
-    let onChangehandler = (e) => {
-      let { name, value } = e.target;
+  /*사용자 정보*/
+  const [userinfo,setUserinfo]=useState({
+    name:"",
+    nickname:"",
+    gender:"",
+    birth:"",
+    email:"",
+    password:"",
+  })
+  /*U-TING이 제공한 인증코드*/
+  const [code,setCode]=useState('');
+
+  /*사용자가 입력한 인증코드*/
+  const [usercode,setUsercode]=useState('');
+
+  /*인증코드 옳은지 확인용*/
+  const [checkcode,setCheckcode]=useState(false);
+
+
+
+  let onChangehandler = (e) => {
+    let { name, value } = e.target;
+    if(name==="check-email"){
+      setUsercode(value);
+    }
+    else{
       setUserinfo({
-          ...userinfo,
-          [name]: value,
-      });
-      console.log(userinfo)
+        ...userinfo,
+        [name]: value,
+    });
+    }
+    
   };
+
+  /*사용자 정보 firebase storage에 저장하기 - 회원가입!*/
   let onSignupSubmit = async(e) => {
     e.preventDefault();
     console.log(userinfo)
-    await dbService.collection("users").add({
-      name:userinfo.name,
-      nickname:userinfo.nickname,
-      gender:userinfo.gender,
-      birth:userinfo.birth,
-      email:userinfo.email,
-      password:userinfo.password,
-    })
-
+    if(checkcode===true&&userinfo.name!==""&&userinfo.nickname!==""&&userinfo.gender!==""&&userinfo.birth!==""&&userinfo.email!==""&&userinfo.password!==""){
+      await dbService.collection("users").add({
+        name:userinfo.name,
+        nickname:userinfo.nickname,
+        gender:userinfo.gender,
+        birth:userinfo.birth,
+        email:userinfo.email,
+        password:userinfo.password,
+      })
+  
+      setUserinfo({
+          name:"",
+          nickname:"",
+          gender:"",
+          birth:"",
+          email:"",
+          password:"",
+      })
+    }
+    else{
+      alert("입력하지 않은 정보가 있습니다.")
+    }
     
-    setUserinfo({
-        name:"",
-        nickname:"",
-        gender:"",
-        birth:"",
-        email:"",
-        password:"",
-    })
   }
 
+  /*대학생 인증 및 이메일 인증 코드 전송*/
   let sendEmail = async(e)=>{
     e.preventDefault();
     console.log(userinfo.email.slice(-6))
@@ -61,21 +87,29 @@ const SignUp = () => {
     const data={
       email:userinfo.email
     }
+
     if(data.email.slice(-6)===".ac.kr"){
-      fetch('http://localhost:3001/users/sendEmail',{  
-        method: "post",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-    })
-    .then(res => console.log(res))
-    .then(json => {
-        console.log(json)
-    })
+      const res = await axios.post('http://localhost:3001/users/sendEmail',data);
+      setCode(res.data);
+      console.log(res)
+
     }
     else{
       alert("대학교 이메일로만 가입이 가능합니다.")
     }
-    
+  }
+
+  let check = (e) =>{
+    if(code===usercode){
+      setCheckcode(true);
+      if(checkcode===true){
+        alert("인증코드 확인이 완료되었습니다.")
+      }
+    }
+    else{
+      setCheckcode(false);
+      alert("인증코드가 틀렸습니다.")
+    }
   }
    
   return (
@@ -111,15 +145,15 @@ const SignUp = () => {
         </SignUpBox>
         <SignUpBox>
           <div>인증번호</div>
-            <Input type="text" name="check-email" placeholder="인증번호" />
-            <Button>확인</Button>
+            <Input type="text" name="check-email" placeholder="인증번호" onChange={(e) => onChangehandler(e)} />
+            <Button onClick={(e)=>check(e)}>확인</Button>
         </SignUpBox>
         <SignUpBox>
           <div>비밀번호</div>
             <Input type="password" name="password" placeholder="password" onChange={(e) => onChangehandler(e)}/>
         </SignUpBox>
-         
-            <Button onClick={(e)=>onSignupSubmit(e)}>가입</Button>
+         {checkcode===true?<Button onClick={(e)=>onSignupSubmit(e)}>가입</Button>:""}
+            
       
     </div>
   );
