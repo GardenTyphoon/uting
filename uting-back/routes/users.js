@@ -28,7 +28,7 @@ router.post('/sendEmail',async function(req, res, next) {
       console.log(error);
     } else {
       console.log('Email sent: ' + info.response);
-      res.send({code:code});
+      res.send(code);
     }
   }); 
   
