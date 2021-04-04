@@ -15,13 +15,13 @@ var reportsRouter = require('./routes/reports');
 // PORT => 3001
 var app = express();
 
-// mongoose.connect("mongodb://localhost:PORT/DB_NAME", {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useCreateIndex: true,
-//   useFindAndModify: false,
-// }).then(()=>console.log("Connect MongoDB"));
-// autoIncrement.initialize(mongoose.connection);
+ mongoose.connect("mongodb://localhost:27017/uting", {
+   useNewUrlParser: true,
+   useUnifiedTopology: true,
+   useCreateIndex: true,
+   useFindAndModify: false,
+ }).then(()=>console.log("Connect MongoDB"));
+ //autoIncrement.initialize(mongoose.connection);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

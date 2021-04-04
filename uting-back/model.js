@@ -7,6 +7,30 @@ const User = new Schema({
         type:String,
         required:true
     },
+    nickname : {
+        type:String,
+        required:true
+    },
+    gender : {
+        type:String,
+        required:true
+    },
+    birth : {
+        type:String,
+        required:true
+    },
+    email : {
+        type:String,
+        required:true
+    },
+    password : {
+        type:String,
+        required:true
+    },
+    introduce : {
+        type:String,
+        required:false
+    },
 })
 // User.plugin(autoInc.plugin, 'user');
 

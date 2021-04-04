@@ -34,4 +34,36 @@ router.post('/sendEmail',async function(req, res, next) {
   
 });
 
+router.post('/signup',function(req,res,next){
+  
+  const user = new User({
+    name:req.body.name,
+    nickname:req.body.nickname,
+    gender:req.body.gender,
+    birth:req.body.birth,
+    email:req.body.email,
+    password:req.body.password
+  })
+
+  user.save((err)=>{
+    res.send("회원가입이 되었습니다.")
+  })
+
+})
+
+router.post('/signin',function(req,res,next){
+  
+  User.find(function(err,user){
+    user.forEach(per=>{
+      if(per.email===req.body.email && per.password===req.body.password){
+        res.send(per);
+      }
+      else{
+        res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
+      }
+    })
+  })
+
+})
+
 module.exports = router;

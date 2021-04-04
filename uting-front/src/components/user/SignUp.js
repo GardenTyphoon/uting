@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from "react";
-import {dbService} from "../firebase"
+import {dbService,authService} from "../../firebase"
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
 import axios from 'axios';
@@ -55,15 +55,24 @@ const SignUp = () => {
     e.preventDefault();
     console.log(userinfo)
     if(checkcode===true&&userinfo.name!==""&&userinfo.nickname!==""&&userinfo.gender!==""&&userinfo.birth!==""&&userinfo.email!==""&&userinfo.password!==""){
-      await dbService.collection("users").add({
+
+      let data = {
         name:userinfo.name,
         nickname:userinfo.nickname,
         gender:userinfo.gender,
         birth:userinfo.birth,
         email:userinfo.email,
-        password:userinfo.password,
-      })
-  
+        password:userinfo.password
+      }
+
+      const res = await axios.post('http://localhost:3001/users/signup',data);
+      console.log(res.data)
+      let authdata;
+      authdata = await authService.createUserWithEmailAndPassword(
+        userinfo.email,
+        userinfo.password
+      );
+      
       setUserinfo({
           name:"",
           nickname:"",
@@ -72,6 +81,8 @@ const SignUp = () => {
           email:"",
           password:"",
       })
+      alert("회원가입이 안료되었습니다.");
+      window.location.href = 'http://localhost:3000/';
     }
     else{
       alert("입력하지 않은 정보가 있습니다.")
@@ -82,8 +93,6 @@ const SignUp = () => {
   /*대학생 인증 및 이메일 인증 코드 전송*/
   let sendEmail = async(e)=>{
     e.preventDefault();
-    console.log(userinfo.email.slice(-6))
-    //if(userinfo.email.slice)
     const data={
       email:userinfo.email
     }
@@ -99,6 +108,7 @@ const SignUp = () => {
     }
   }
 
+  /*발급된 인증코드와 맞는지 체크하는 함수*/
   let check = (e) =>{
     if(code===usercode){
       setCheckcode(true);
@@ -114,7 +124,6 @@ const SignUp = () => {
    
   return (
     <div>
-      
         <strong>회원가입</strong>
         
         <SignUpBox>
@@ -154,7 +163,6 @@ const SignUp = () => {
         </SignUpBox>
          {checkcode===true?<Button onClick={(e)=>onSignupSubmit(e)}>가입</Button>:""}
             
-      
     </div>
   );
 };
