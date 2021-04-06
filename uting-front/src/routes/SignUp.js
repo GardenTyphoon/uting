@@ -1,5 +1,4 @@
 import React,{useEffect, useState} from "react";
-import {dbService,authService} from "../../firebase"
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
 import axios from 'axios';

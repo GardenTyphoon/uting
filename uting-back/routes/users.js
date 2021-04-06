@@ -14,7 +14,7 @@ router.post('/sendEmail',async function(req, res, next) {
     host: 'smtp.gmail.com',
     auth: {
       user:'uting4u@gmail.com',
-      pass:''
+      pass:'utingforyou'
     }
   }));
   var mailOptions = {
@@ -53,18 +53,24 @@ router.post('/signup',function(req,res,next){
 
 router.post('/signin',function(req,res,next){
   console.log("로그인백")
+  let check=false;
   User.find(function(err,user){
     user.forEach(per=>{
       console.log(per)
       if(per.email===req.body.email && per.password===req.body.password){
+        check=true;
         res.send(per);
-      }
-      else{
-        res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
+        
       }
     })
+    if(check===false){
+      res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
+    }
   })
 
 })
+
+
+
 
 module.exports = router;
