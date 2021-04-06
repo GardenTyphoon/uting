@@ -5,7 +5,7 @@ import {dbService,authService,firebaseInstand} from "../firebase"
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
 import axios from 'axios';
-import SignIn from './user/SignIn';
+import SignIn from '../components/user/SignIn';
 
 const Intro = () => {
   const [init,setInit]=useState(false);

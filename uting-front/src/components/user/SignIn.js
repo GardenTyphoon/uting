@@ -47,8 +47,6 @@ const SignIn = () => {
    }
    else{
     try {
-      let authdata;
-      authdata = await authService.signInWithEmailAndPassword(email, password);
       setIslogined(true);
       sessionStorage.setItem('email', email);
       alert("로그인 되었습니다.")

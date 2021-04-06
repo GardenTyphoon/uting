@@ -67,11 +67,6 @@ const SignUp = () => {
 
       const res = await axios.post('http://localhost:3001/users/signup',data);
       console.log(res.data)
-      let authdata;
-      authdata = await authService.createUserWithEmailAndPassword(
-        userinfo.email,
-        userinfo.password
-      );
       
       setUserinfo({
           name:"",
