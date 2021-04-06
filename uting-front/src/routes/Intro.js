@@ -1,7 +1,6 @@
 import React,{useEffect, useState} from "react";
 import { Route, Link,Switch,Router } from 'react-router-dom';
 
-import {dbService,authService,firebaseInstand} from "../firebase"
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
 import axios from 'axios';
