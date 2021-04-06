@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import MyProfile from '../components/MyProfile';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
+import RoomListForm from '../components/room/RoomListForm'
 const Main = () => {
 
   const [toggleprofile,setToggleProfile]=useState(false);
@@ -21,7 +22,7 @@ const Main = () => {
           </CardBody>
         </Card>
       </Collapse>
-      
+      <RoomListForm />
     </div>
   );
 };
