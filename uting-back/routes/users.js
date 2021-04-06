@@ -52,19 +52,37 @@ router.post('/signup',function(req,res,next){
 })
 
 router.post('/signin',function(req,res,next){
-  console.log("로그인백")
+  let ismember=false;
   User.find(function(err,user){
     user.forEach(per=>{
       console.log(per)
       if(per.email===req.body.email && per.password===req.body.password){
+        ismember=true;
         res.send(per);
-      }
-      else{
-        res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
+        
       }
     })
+    if(ismember===false){
+      res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
+    }
   })
 
 })
+router.post('/viewMyProfile',function(req,res,next){
+  console.log(req.body.sessionUser);
+  User.find(function(err, user){
+    user.forEach(per=>{
+      if(req.body.sessionUser === per.email){
+        res.send(per);
+      }
+    })
+  })
+})
 
+router.post('/modifyMyProfile',function(req,res,next){
+  console.log(req.body);
+  User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname}},(err,us)=>{
+    console.log(req.body._id);
+  })
+})
 module.exports = router;
