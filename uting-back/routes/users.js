@@ -14,7 +14,7 @@ router.post('/sendEmail',async function(req, res, next) {
     host: 'smtp.gmail.com',
     auth: {
       user:'uting4u@gmail.com',
-      pass:''
+      pass:'utingforyou'
     }
   }));
   var mailOptions = {
@@ -66,5 +66,21 @@ router.post('/signin',function(req,res,next){
   })
 
 })
+router.post('/viewMyProfile',function(req,res,next){
+  console.log(req.body.sessionUser);
+  User.find(function(err, user){
+    user.forEach(per=>{
+      if(req.body.sessionUser === per.email){
+        res.send(per);
+      }
+    })
+  })
+})
 
+router.post('/modifyMyProfile',function(req,res,next){
+  console.log(req.body);
+  User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname}},(err,us)=>{
+    console.log(req.body._id);
+  })
+})
 module.exports = router;
