@@ -52,17 +52,19 @@ router.post('/signup',function(req,res,next){
 })
 
 router.post('/signin',function(req,res,next){
-  console.log("로그인백")
+  let ismember=false;
   User.find(function(err,user){
     user.forEach(per=>{
       console.log(per)
       if(per.email===req.body.email && per.password===req.body.password){
+        ismember=true;
         res.send(per);
-      }
-      else{
-        res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
+        
       }
     })
+    if(ismember===false){
+      res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
+    }
   })
 
 })
