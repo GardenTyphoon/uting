@@ -52,9 +52,10 @@ router.post('/signup',function(req,res,next){
 })
 
 router.post('/signin',function(req,res,next){
-  
+  console.log("로그인백")
   User.find(function(err,user){
     user.forEach(per=>{
+      console.log(per)
       if(per.email===req.body.email && per.password===req.body.password){
         res.send(per);
       }
