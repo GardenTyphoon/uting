@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import {authService, firebaseInstance} from "../firebase";
-
+import MyProfile from "../components/MyProfile"
 const Main = () => {
   
   return (
     <div>
       <h5>메인</h5>
+      <button>MyProfile</button>
+      <MyProfile />
     </div>
   );
 };

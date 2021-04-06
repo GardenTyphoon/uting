@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter, Router, Route, Switch } from "react-router-dom";
 
 // import IntroPage from './component/IntroPage'
-import SignUp from './routes/user/SignUp'
+import SignUp from './routes/SignUp'
 import Intro from './routes/Intro'
 import Main from './routes/Main'
 import Room from './routes/Room'
