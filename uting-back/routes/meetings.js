@@ -4,7 +4,9 @@ const { Meeting }=require('../model');
 
 // GET meetings list 
 router.get('/', async function(req, res, next) {
-  const meetings = await Meeting.find();
+  Meeting.find({}).then((meetings)=>{ 
+    res.json(meetings);
+  });
   //res.json(meetings);
 });
 

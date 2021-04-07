@@ -35,7 +35,15 @@ const User = new Schema({
 // User.plugin(autoInc.plugin, 'user');
 
 const Meeting = new Schema({
-    name : {
+    title : {
+        type:String,
+        required:true
+    },
+    num : {
+        type:Number,
+        required:true
+    },
+    status : {
         type:String,
         required:true
     },
