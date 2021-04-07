@@ -17,7 +17,7 @@ export default function Meeting() {
     };
     const makeRoom = async(e) => {
         e.preventDefault();
-        const res = await axios.post('http://localhost:3001/meetings',room);
+        await axios.post('http://localhost:3001/meetings',room);
     }
     return (
         <React.Fragment>

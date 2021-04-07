@@ -1,13 +1,7 @@
-import React, { Component } from 'react';
-import { useState } from 'react';
-import { render } from 'react-dom';
+import React, { useState,useEffect } from 'react';
+import axios from 'axios';
 
 export default function MeetingList() {
-    const [room, setRoom] = useState({
-        title: '',
-        num: 0,
-        status: '대기'
-    })
     const [viewRoomList, setView] = useState([]);
     const attendRoomByID = (room, index) => {
         const newroom = { title: room.title, num: room.num, status: '미팅중' };
@@ -19,6 +13,15 @@ export default function MeetingList() {
         )
         console.log(viewRoomList);
     };
+
+    useEffect(() => {
+        axios
+        .get('http://localhost:3001/meetings')
+        .then(({data}) =>setView(data))
+        .catch((err)=>{});
+      },[]);
+
+
     return (//tr map 한다음에 key넣어주기
         <React.Fragment>
             <h2>방리스트</h2>
@@ -26,17 +29,16 @@ export default function MeetingList() {
                 <th>남/여</th>
                 <th>방제목</th>
                 <th>상태</th>
-                {viewRoomList.map((room, index) => {
-                    if (room.status == '대기') {
-                        <tr>
-                            <td>{room.num}:{room.num}</td>
-                            <td>{room.title}</td>
-                            <td>{room.status}</td>
-                            <td><button onClick={() => attendRoomByID(room, index)}>참가</button></td>
-                        </tr>
-                    }
-                }
-                )}
+                {console.log(viewRoomList)}
+                {viewRoomList.map((room,index)=>
+                    <tr>
+                        <td>{room.num}:{room.num}</td>
+                        <td>{room.title}</td>
+                        <td>{room.status}</td>
+                        <td>{room.status==='대기'?
+                    (<button onClick={()=>attendRoomByID(room,index)}>참가</button>):(<div>-</div>)}</td>
+                    </tr>
+                    )}
             </table>
         </React.Fragment>
     )
