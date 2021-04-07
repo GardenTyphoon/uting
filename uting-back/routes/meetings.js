@@ -16,9 +16,15 @@ router.get('/:id', async function(req, res, next) {
 
 // POST write one meeting
 router.post('/', function(req, res,next){
-  const meeting = new Meeting(req.body);
-  meeting.save();
-  //res.json(meeting);
+  const meeting = new Meeting({
+    title:req.body.title,
+    num:req.body.num,
+    status:req.body.status
+  });
+
+  meeting.save((err)=>{
+    res.send("방을 생성하였습니다.")
+  });
 })
 
 // PUT edit one meeting
