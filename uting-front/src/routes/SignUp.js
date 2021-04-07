@@ -2,6 +2,7 @@ import React,{useEffect, useState} from "react";
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 const SignUpBox = styled.div`
   border: 1.5px solid rgb(221, 221, 221);;
@@ -14,7 +15,7 @@ const SignUpBox = styled.div`
 `;
 
 const SignUp = () => {
-
+  let history = useHistory();
   /*사용자 정보*/
   const [userinfo,setUserinfo]=useState({
     name:"",
@@ -23,6 +24,7 @@ const SignUp = () => {
     birth:"",
     email:"",
     password:"",
+    phone:"",
   })
   /*U-TING이 제공한 인증코드*/
   const [code,setCode]=useState('');
@@ -33,7 +35,11 @@ const SignUp = () => {
   /*인증코드 옳은지 확인용*/
   const [checkcode,setCheckcode]=useState(false);
 
+  /*본인인증과 연관된 가맹점 내부 주문번호*/
+  const [merchantid,setMerchantid]=useState(`mid_${new Date().getTime()}`);
 
+  /*본인인증 성공 여부*/
+  const [identity,setIdentity]=useState('');
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
@@ -53,7 +59,7 @@ const SignUp = () => {
   let onSignupSubmit = async(e) => {
     e.preventDefault();
     console.log(userinfo)
-    if(checkcode===true&&userinfo.name!==""&&userinfo.nickname!==""&&userinfo.gender!==""&&userinfo.birth!==""&&userinfo.email!==""&&userinfo.password!==""){
+    if(checkcode===true&&userinfo.name!==""&&userinfo.nickname!==""&&userinfo.gender!==""&&userinfo.birth!==""&&userinfo.email!==""&&userinfo.password!==""&&(identity!=='false'&&identity!=='')){
 
       let data = {
         name:userinfo.name,
@@ -61,7 +67,8 @@ const SignUp = () => {
         gender:userinfo.gender,
         birth:userinfo.birth,
         email:userinfo.email,
-        password:userinfo.password
+        password:userinfo.password,
+        phone:userinfo.phone,
       }
 
       const res = await axios.post('http://localhost:3001/users/signup',data);
@@ -74,6 +81,8 @@ const SignUp = () => {
           birth:"",
           email:"",
           password:"",
+          phone:"",
+
       })
       alert("회원가입이 안료되었습니다.");
       window.location.href = 'http://localhost:3000/';
@@ -115,6 +124,52 @@ const SignUp = () => {
       alert("인증코드가 틀렸습니다.")
     }
   }
+
+
+  /*본인인증*/
+  function onClickCertification() {
+    /* 1. 가맹점 식별하기 */
+    const { IMP } = window;
+    IMP.init('');
+    console.log(userinfo)
+    const data = {
+      merchant_uid:merchantid,
+      name:userinfo.name,
+      phone:userinfo.phone,
+    };
+    /* 4. 본인인증 창 호출하기 */
+    IMP.certification(data, callback);
+  }
+
+  /* 3. 콜백 함수 정의하기 */
+  function callback(response) {
+
+    console.log("콜백함수")
+    console.log(response)
+    const {
+      success,
+      merchantid,
+      name,
+      phone,
+      error_msg,
+    
+    } = response;
+    if (success) {
+      setIdentity('true');
+    } else {
+      setIdentity('false');
+
+    }
+  }
+
+  useEffect(()=>{
+    if(identity==='true'){
+      alert("본인인증 성공 !")
+    }
+    else if(identity==='false'){
+      alert('본인인증 실패');
+    }
+  },[identity])
    
   return (
     <div>
@@ -125,6 +180,18 @@ const SignUp = () => {
             <Input type="text" name="name"placeholder="이름"
             onChange={(e) => onChangehandler(e)} />
         </SignUpBox>
+        <SignUpBox>
+            <div>전화번호</div>
+            <Input type="text" name="phone"placeholder="01000000000"
+            onChange={(e) => onChangehandler(e)} />
+        </SignUpBox>
+        {identity!=='true'?<Button onClick={onClickCertification}>본인인증 하기</Button>:<div >본인 인증 성공 ! </div>}
+        
+        <SignUpBox>
+          <div>생년월일</div>
+            <Input type="text" name="birth"placeholder="yyyymmdd" onChange={(e) => onChangehandler(e)}/>
+        </SignUpBox>
+
         <SignUpBox>
           <div>닉네임</div>
             <Input type="text" name="nickname"placeholder="닉네임" onChange={(e) => onChangehandler(e)} />
@@ -137,10 +204,8 @@ const SignUp = () => {
           <option value="man">남</option>
         </Input>
         </SignUpBox>
-        <SignUpBox>
-          <div>생년월일</div>
-            <Input type="text" name="birth"placeholder="yyyymmdd" onChange={(e) => onChangehandler(e)}/>
-        </SignUpBox>
+        
+        
         <SignUpBox>
           <div>이메일</div>
             <Input type="email" name="email"placeholder="이메일" onChange={(e) => onChangehandler(e)}/>

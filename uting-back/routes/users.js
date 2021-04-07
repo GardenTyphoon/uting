@@ -42,7 +42,8 @@ router.post('/signup',function(req,res,next){
     gender:req.body.gender,
     birth:req.body.birth,
     email:req.body.email,
-    password:req.body.password
+    password:req.body.password,
+    phone:req.body.phone
   })
 
   user.save((err)=>{
