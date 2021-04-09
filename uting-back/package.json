@@ -9,7 +9,6 @@
     "dev": "concurrently \"npm run back\" \"npm run front\""
   },
   "dependencies": {
-<<<<<<< Updated upstream
     "concurrently": "^6.0.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -24,7 +23,6 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.7",
     "npm-check": "^5.9.2",
-=======
     "blob": "^0.1.0",
     "concurrently": "^6.0.0",
     "cookie-parser": "^1.4.5",
@@ -45,7 +43,6 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.7",
     "path": "^0.12.7",
->>>>>>> Stashed changes
     "pug": "^2.0.4"
   },
   "main": "app.js",

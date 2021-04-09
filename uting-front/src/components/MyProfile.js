@@ -7,6 +7,7 @@ const MyProfile = () => {
     const [imgServerURL, setImgServerURL    ] = useState("");
     const [imgFile, setImgFile] = useState(null);
     const [check, setCheck] = useState(false);
+    const [staticpath,setStaticpath]=useState('http://localhost:3001');
     const [ProfileInfo, setProfileInfo] = useState({
         id: "",
         name: "",
@@ -27,6 +28,10 @@ const MyProfile = () => {
         let sessionObject = { "sessionUser": sessionUser };
 
         const res = await axios.post('http://localhost:3001/users/viewMyProfile', sessionObject);
+
+        if(res.data.imgURL!==""){
+            setImgBase64(staticpath+res.data.imgURL)
+        }
         let data = {
             _id: res.data._id,
             name: res.data.name,
@@ -41,12 +46,6 @@ const MyProfile = () => {
         };
         setProfileInfo(data);
         
-        if (data.imgURL != undefined ) { //imgURL이 ""이 아니면 서버에서 이미지 가지고 와야하므로
-           // let imgObj = {imgURL : data.imgURL};
-           // let res = await axios.post("http://localhost:3001/users/viewMyProfileImg", imgObj);
-            console.log(res);
-        }
-        console.log(data);
     }
     const onClick = async () => {
         if (btn === "프로필 편집") { // 프로필 편집할 수 있도록 활성화
