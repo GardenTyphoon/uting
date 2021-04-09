@@ -42,8 +42,7 @@ router.post('/signup',function(req,res,next){
     gender:req.body.gender,
     birth:req.body.birth,
     email:req.body.email,
-    password:req.body.password,
-    phone:req.body.phone
+    password:req.body.password
   })
 
   user.save((err)=>{
@@ -82,8 +81,15 @@ router.post('/viewMyProfile',function(req,res,next){
 
 router.post('/modifyMyProfile',function(req,res,next){
   console.log(req.body);
-  User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname}},(err,us)=>{
+  User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname,
+  introduce : req.body.introduce, mbti:req.body.mbti, imgURL : req.body.imgURL}},(err,us)=>{
     console.log(req.body._id);
   })
 })
+
+router.post('/modifyMyProfileImg', upload.single('img'), (req, res) => {
+  res.json({ url : `/uploads/${req.file.filename}`});
+})
+
+
 module.exports = router;
