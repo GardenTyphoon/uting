@@ -27,6 +27,7 @@ const Intro = () => {
     <div>
       {isLoggedIn===false?
       <div>
+        <Link to="/admin">관리자페이지</Link>
         <SignIn/>
       </div>
       

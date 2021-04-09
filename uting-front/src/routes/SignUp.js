@@ -130,8 +130,7 @@ const SignUp = () => {
   function onClickCertification() {
     /* 1. 가맹점 식별하기 */
     const { IMP } = window;
-    IMP.init('');
-    console.log(userinfo)
+    IMP.init('imp10391932');
     const data = {
       merchant_uid:merchantid,
       name:userinfo.name,
