@@ -35,6 +35,15 @@ const User = new Schema({
         type:String,
         required:false
     },
+    mbti : {
+        type:String,
+        required:false
+    },
+    imgURL :{
+        type:String,
+        required:false
+    }
+    
 })
 // User.plugin(autoInc.plugin, 'user');
 

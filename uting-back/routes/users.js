@@ -1,9 +1,31 @@
 var express = require('express');
 var router = express.Router();
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 const { User }=require('../model');
 let nodemailer = require('nodemailer'); 
 let smtpTransport = require('nodemailer-smtp-transport')
 
+fs.readdir('uploads', (error) => {
+  // uploads 폴더 없으면 생성
+  if (error) {
+      fs.mkdirSync('uploads');
+  }
+})
+const upload = multer({
+  storage: multer.diskStorage({
+      destination(req, file, cb) {
+          cb(null, 'uploads/');
+      },
+      filename(req, file, cb) {
+        
+          const ext = path.extname(file.originalname);
+          cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+      },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+})
 /* GET users listing. */
 router.post('/sendEmail',async function(req, res, next) {
   let user_email = req.body.email;
@@ -43,7 +65,8 @@ router.post('/signup',function(req,res,next){
     birth:req.body.birth,
     email:req.body.email,
     password:req.body.password,
-    phone:req.body.phone
+    phone:req.body.phone,
+    imgURL:""
   })
 
   user.save((err)=>{
@@ -82,8 +105,14 @@ router.post('/viewMyProfile',function(req,res,next){
 
 router.post('/modifyMyProfile',function(req,res,next){
   console.log(req.body);
-  User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname}},(err,us)=>{
+  User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname,
+  introduce : req.body.introduce, mbti:req.body.mbti, imgURL : req.body.imgURL}},(err,us)=>{
     console.log(req.body._id);
   })
 })
+
+router.post('/modifyMyProfileImg', upload.single('img'), (req, res) => {
+  res.json({ url : `/uploads/${req.file.filename}`});
+})
+
 module.exports = router;
