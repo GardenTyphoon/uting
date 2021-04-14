@@ -21,7 +21,12 @@ router.post('/', function(req, res,next){
   const meeting = new Meeting({
     title:req.body.title,
     num:req.body.num,
-    status:req.body.status
+    status:req.body.status,
+    avgManner:req.body.avgManner,
+    avgAge:req.body.avgAge,
+    users:req.body.users,
+    numOfWoman:req.body.numOfWoman,
+    numOfMan : req.body.numOfMan
   });
 
   meeting.save((err)=>{

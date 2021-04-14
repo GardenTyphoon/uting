@@ -20,8 +20,7 @@ export default function MeetingList() {
         .then(({data}) =>setView(data))
         .catch((err)=>{});
       },[]);
-
-
+     
     return (//tr map 한다음에 key넣어주기
         <React.Fragment>
             <h2>방리스트</h2>
@@ -41,6 +40,7 @@ export default function MeetingList() {
                     )}
             </table>
         </React.Fragment>
+        
     )
 }
 

@@ -1,3 +1,5 @@
+const { Int32 } = require("bson");
+const { Double } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const autoInc = require('mongoose-auto-increment');
@@ -35,13 +37,17 @@ const User = new Schema({
         type:String,
         required:false
     },
-    mbti : {
-        type:String,
-        required:false
-    },
     imgURL :{
         type:String,
         required:false
+    },
+    mannerCredit :{
+        type:Number,
+        required:true
+    },
+    Umoney :{
+        type:Number,
+        required:true
     }
     
 })
@@ -60,16 +66,33 @@ const Meeting = new Schema({
         type:String,
         required:true
     },
+    roomImg : {
+        type:String,
+        required:false
+    },
+    avgManner : {
+        type:Number,
+        required:true
+    },
+    avgAge : {
+        type:Number,
+        required:true
+    },
+    users : {
+        type:Object,
+        required:true
+    },
+    numOfWoman:{
+        type:Number,
+        required:true
+    },
+    numOfMan:{
+        type:Number,
+        required:true
+    }
 })
 // Meeting.plugin(autoInc.plugin, 'meeting');
 
-const Group = new Schema({
-    name : {
-        type:String,
-        required:true
-    },
-})
-// Group.plugin(autoInc.plugin, 'group');
 
 const Ad = new Schema({
     name : {
@@ -93,7 +116,6 @@ const Report = new Schema({
 module.exports = {
     User : mongoose.model('user', User),
     Meeting : mongoose.model('meeting', Meeting),
-    Group : mongoose.model('group', Group),
     Ad : mongoose.model('ad', Ad),
     Report : mongoose.model('report', Report)
 }

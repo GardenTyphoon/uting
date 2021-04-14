@@ -66,7 +66,9 @@ router.post('/signup',function(req,res,next){
     email:req.body.email,
     password:req.body.password,
     phone:req.body.phone,
-    imgURL:""
+    imgURL:"",
+    mannerCredit: (3.5),
+    Umoney:Number(0)
   })
 
   user.save((err)=>{
