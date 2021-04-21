@@ -16,7 +16,6 @@ export default function MeetingListForm() {
         
     return(
         <React.Fragment>
-            <Meeting/>
             <MeetingList/>
             <button>빠른매칭</button>
             <button>설정</button>

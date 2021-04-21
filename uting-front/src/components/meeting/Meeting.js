@@ -24,13 +24,12 @@ const Meeting = () => {
     }
 
     return (
-       <div>여기에 미팅방 생성 입력폼 만들거임</div>
-       /* <React.Fragment>
-            <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
-            <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num'/>
-            <button onClick={makeRoom}>방만들기</button>
-        </React.Fragment>*/
-
+       <div>
+           <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
+           <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num'/>
+           <button onClick={makeRoom}>방만들기</button>
+       </div>
+       
     )
 };
 export default Meeting;

@@ -32,8 +32,7 @@ const Main = () => {
             <Meeting />
         </ModalBody>
         <ModalFooter isOpen = {toggleMakeMeeting}>
-          <Button color="primary" >Do Something</Button>{' '}
-          <Button color="secondary" onClick = {toggleMakeMeetingBtn}>Cancel</Button>
+          <Button color="secondary" onClick = {toggleMakeMeetingBtn}>Close</Button>
         </ModalFooter>
       </Modal>
     </div>

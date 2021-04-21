@@ -72,23 +72,23 @@ const Meeting = new Schema({
     },
     avgManner : {
         type:Number,
-        required:true
+        required:false
     },
     avgAge : {
         type:Number,
-        required:true
+        required:false
     },
     users : {
         type:Object,
-        required:true
+        required:false
     },
     numOfWoman:{
         type:Number,
-        required:true
+        required:false
     },
     numOfMan:{
         type:Number,
-        required:true
+        required:false
     }
 })
 // Meeting.plugin(autoInc.plugin, 'meeting');
