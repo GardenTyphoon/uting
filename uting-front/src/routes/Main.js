@@ -3,7 +3,7 @@ import axios from 'axios';
 import MyProfile from '../components/profile/MyProfile';
 import { Button,Collapse, CardBody, Card,  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Meeting from "../components/meeting/Meeting";
-import MeetingListForm from '../components/meeting/MeetingListForm'
+import MeetingList from '../components/meeting/MeetingList'
 const Main = () => {
   
   const [toggleprofile,setToggleProfile]=useState(false);
@@ -24,7 +24,6 @@ const Main = () => {
           </CardBody>
         </Card>
       </Collapse>
-      <MeetingListForm />
 
       <button onClick={(e)=>{toggleMakeMeetingBtn(e)}}>방만들기</button>
       <Modal isOpen = {toggleMakeMeeting}>
@@ -35,6 +34,7 @@ const Main = () => {
           <Button color="secondary" onClick = {toggleMakeMeetingBtn}>Close</Button>
         </ModalFooter>
       </Modal>
+      <MeetingList/>
     </div>
   );
 };

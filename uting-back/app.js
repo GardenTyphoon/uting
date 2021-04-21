@@ -8,6 +8,7 @@ const mongoose=require('mongoose');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var meetingsRouter = require('./routes/meetings');
+var groupsRouter = require('./routes/groups');
 var adsRouter = require('./routes/ads');
 var reportsRouter = require('./routes/reports');
 
@@ -38,6 +39,7 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 app.use('/api', indexRouter);
 app.use('/users', usersRouter);
 app.use('/meetings', meetingsRouter);
+app.use('/groups',groupsRouter);
 app.use('/ads', adsRouter);
 app.use('/reports', reportsRouter);
 

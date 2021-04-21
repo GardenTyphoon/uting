@@ -96,9 +96,11 @@ router.post('/signin',function(req,res,next){
 })
 router.post('/viewMyProfile',function(req,res,next){
   console.log(req.body.sessionUser);
+  console.log(req.body);
   User.find(function(err, user){
     user.forEach(per=>{
       if(req.body.sessionUser === per.email){
+        
         res.send(per);
       }
     })

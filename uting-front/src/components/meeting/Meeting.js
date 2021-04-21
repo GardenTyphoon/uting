@@ -1,16 +1,26 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const Meeting = () => {
-    
-  
+    const myGroupId="607fdec1a1037a1b1c668488"; //내가 속한 그룹의 아이디 가져오는 거 구현해야 함
     const [room, setRoom] = useState({
-        title:'', //방제
+        title:"", //방제
         num:0,    // 전체 방인원수 나누기 2
-        status:'대기'  // 참가버튼 누르면 미팅중
+        status:'대기',  // 참가버튼 누르면 미팅중
+        roomImg : "",
+        avgManner:"",
+        avgAge:"",
+        users:"",
+        numOfWoman:"",
+        numOfMan:""
     })
+    const temp = async() => {
+        let GroupId = { "groupId": myGroupId };
+        console.log("hihi");
+        const res = await axios.post('http://localhost:3001/groups/', GroupId);
+        console.log(res);
+    }
     const onChangehandler = e => {
         const { name, value } = e.target;
         setRoom({
@@ -19,10 +29,13 @@ const Meeting = () => {
         })
     };
     const makeRoom = async(e) => {
-        e.preventDefault();
+        //e.preventDefault();
+     
         await axios.post('http://localhost:3001/meetings',room);
     }
-
+    useEffect(() => {
+        temp();
+    }, [])
     return (
        <div>
            <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />

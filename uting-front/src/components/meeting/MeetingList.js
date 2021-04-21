@@ -28,6 +28,8 @@ export default function MeetingList() {
                 <th>남/여</th>
                 <th>방제목</th>
                 <th>상태</th>
+                <th>평균매너학점</th>
+                <th>평균나이</th>
                 {console.log(viewRoomList)}
                 {viewRoomList.map((room,index)=>
                     <tr>

@@ -93,7 +93,12 @@ const Meeting = new Schema({
 })
 // Meeting.plugin(autoInc.plugin, 'meeting');
 
-
+const Group = new Schema({
+    group_members_id:{
+        type:Array,
+        required:false
+    } 
+})
 const Ad = new Schema({
     name : {
         type:String,
@@ -116,6 +121,7 @@ const Report = new Schema({
 module.exports = {
     User : mongoose.model('user', User),
     Meeting : mongoose.model('meeting', Meeting),
+    Group : mongoose.model('group',Group),
     Ad : mongoose.model('ad', Ad),
     Report : mongoose.model('report', Report)
 }
