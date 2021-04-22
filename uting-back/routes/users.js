@@ -106,7 +106,15 @@ router.post('/viewMyProfile',function(req,res,next){
     })
   })
 })
-
+router.post('/userInfo', function(req, res, next) {
+  User.find(function(err, user){
+    user.forEach(per=>{
+      if(req.body.userId === per._id.toString()){
+        res.send(per);
+      }
+    })
+  })
+})
 router.post('/modifyMyProfile',function(req,res,next){
   console.log(req.body);
   User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname,

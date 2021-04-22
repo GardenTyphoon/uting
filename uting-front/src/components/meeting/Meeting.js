@@ -2,18 +2,16 @@ import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+function birthToAge(birth){
+    let year = birth.slice(0,4);
+    return 2021-Number(year)+1;
+}
 const Meeting = () => {
     const myGroupId="607fdec1a1037a1b1c668488"; //내가 속한 그룹의 아이디 가져오는 거 구현해야 함
     const [room, setRoom] = useState({
         title:"", //방제
-        num:0,    // 전체 방인원수 나누기 2
+        num:0, //성별당 최대인원
         status:'대기',  // 참가버튼 누르면 미팅중
-        roomImg : "",
-        avgManner:"",
-        avgAge:"",
-        users:"",
-        numOfWoman:"",
-        numOfMan:""
     })
     const onChangehandler = e => {
         const { name, value } = e.target;
@@ -23,12 +21,46 @@ const Meeting = () => {
         })
     };
     const makeRoom = async(e) => {
-        //e.preventDefault();
+        e.preventDefault();
+
+        //내가 속한 그룹의 그룹원들 id 받아오기
         let GroupId = { "groupId": myGroupId };
-        console.log("hihi");
-        const res = await axios.post('http://localhost:3001/groups/getMyGroup', GroupId);
-        console.log(res.data);
-        await axios.post('http://localhost:3001/meetings',room);
+        let res = await axios.post('http://localhost:3001/groups/getMyGroup', GroupId);
+        setRoom({...room, ["users"] : res.data});
+        //평균 나이, 평균 학점, 현재 남녀 수 구하기
+        let avgManner = 0 ;
+        let avgAge = 0;
+        let nowOfWoman = 0;
+        let nowOfMan = 0;
+        for(let i=0;i<res.data.length;i++){
+            let UserId = {"userId" : res.data[i]};
+            let userInfo = await axios.post('http://localhost:3001/users/userInfo',UserId);
+            avgManner += userInfo.data.mannerCredit;
+            avgAge += birthToAge(userInfo.data.birth);
+            if (userInfo.data.gender === "woman"){
+                nowOfWoman += 1;
+            }
+            else nowOfMan += 1;
+            
+        }
+        avgManner /= res.data.length;
+        avgAge /= res.data.length;
+        //방 생성
+        
+        let data = {
+            title:room.title,
+            maxNum:Number(room.num),
+            status:room.status,
+            users:res.data,
+            avgManner:avgManner,
+            avgAge:avgAge,
+            numOfWoman:nowOfWoman,
+            numOfMan:nowOfMan      
+        };
+
+        console.log(data);
+        console.log(typeof(data.maxNum));
+        await axios.post('http://localhost:3001/meetings',data);
     }
     return (
        <div>

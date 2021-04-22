@@ -29,6 +29,7 @@ const MyProfile = () => {
         let sessionObject = { "sessionUser": sessionUser };
 
         const res = await axios.post('http://localhost:3001/users/viewMyProfile', sessionObject);
+        console.log(sessionObject);
         console.log(res);
         if(res.data.imgURL!==""){
             setImgBase64(staticpath+res.data.imgURL)

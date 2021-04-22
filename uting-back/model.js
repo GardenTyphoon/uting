@@ -58,7 +58,7 @@ const Meeting = new Schema({
         type:String,
         required:true
     },
-    num : {
+    maxNum : {
         type:Number,
         required:true
     },
