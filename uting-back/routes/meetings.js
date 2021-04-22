@@ -28,7 +28,6 @@ router.post('/', function(req, res,next){
     numOfWoman:req.body.numOfWoman,
     numOfMan : req.body.numOfMan
   });
-  console.log(meeting);
   meeting.save((err)=>{
     res.send("방을 생성하였습니다.")
   });

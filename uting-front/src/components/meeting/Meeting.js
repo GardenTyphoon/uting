@@ -15,12 +15,6 @@ const Meeting = () => {
         numOfWoman:"",
         numOfMan:""
     })
-    const temp = async() => {
-        let GroupId = { "groupId": myGroupId };
-        console.log("hihi");
-        const res = await axios.post('http://localhost:3001/groups/', GroupId);
-        console.log(res);
-    }
     const onChangehandler = e => {
         const { name, value } = e.target;
         setRoom({
@@ -30,12 +24,12 @@ const Meeting = () => {
     };
     const makeRoom = async(e) => {
         //e.preventDefault();
-     
+        let GroupId = { "groupId": myGroupId };
+        console.log("hihi");
+        const res = await axios.post('http://localhost:3001/groups/getMyGroup', GroupId);
+        console.log(res.data);
         await axios.post('http://localhost:3001/meetings',room);
     }
-    useEffect(() => {
-        temp();
-    }, [])
     return (
        <div>
            <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />

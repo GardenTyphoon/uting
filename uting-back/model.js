@@ -96,7 +96,7 @@ const Meeting = new Schema({
 const Group = new Schema({
     group_members_id:{
         type:Array,
-        required:false
+        required:true
     } 
 })
 const Ad = new Schema({
