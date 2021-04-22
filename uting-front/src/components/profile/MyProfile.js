@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ProfileNoImage from "../img/ProfileNoImage.jpg";
+import ProfileNoImage from "../../img/ProfileNoImage.jpg"
 import axios from "axios";
 import FormData from "form-data";
 const MyProfile = () => {
     const [imgBase64, setImgBase64] = useState("");
-    const [imgServerURL, setImgServerURL    ] = useState("");
     const [imgFile, setImgFile] = useState(null);
     const [check, setCheck] = useState(false);
     const [staticpath,setStaticpath]=useState('http://localhost:3001');
@@ -18,7 +17,9 @@ const MyProfile = () => {
         univ: "",
         introduce: "",
         mbti: "",
-        imgURL: ""
+        imgURL: "",
+        mannerCredit:"",
+        Umoney:"",
     });
 
     const [btn, setBtn] = useState("프로필 편집");
@@ -28,7 +29,8 @@ const MyProfile = () => {
         let sessionObject = { "sessionUser": sessionUser };
 
         const res = await axios.post('http://localhost:3001/users/viewMyProfile', sessionObject);
-
+        console.log(sessionObject);
+        console.log(res);
         if(res.data.imgURL!==""){
             setImgBase64(staticpath+res.data.imgURL)
         }
@@ -42,13 +44,15 @@ const MyProfile = () => {
             imgURL: res.data.imgURL,
             univ: res.data.email.split('@')[1].replace(".ac.kr", "") + "_univ",
             introduce: res.data.introduce,
-            mbti: res.data.mbti,
+            mannerCredit : res.data.mannerCredit,
+            Umoney :res.data.Umoney
         };
         setProfileInfo(data);
         
     }
     const onClick = async () => {
         if (btn === "프로필 편집") { // 프로필 편집할 수 있도록 활성화
+            
             setBtn("저장");
             setCheck(true);
             var inputs = document.getElementsByClassName('modify');
@@ -177,14 +181,11 @@ const MyProfile = () => {
                     onChange={onChange}
                     readOnly />
             </div>
-            <div class="mbti">
-                <input
-                    type="text"
-                    name="mbti"
-                    class="modify"
-                    value={ProfileInfo.mbti}
-                    onChange={onChange}
-                    readOnly />
+            <div class="mannerCredit">
+                {ProfileInfo.mannerCredit}
+            </div>
+            <div class="Umoney">
+                {ProfileInfo.Umoney}
             </div>
             <button onClick={onClick}>{btn}</button>
         </div>

@@ -18,12 +18,18 @@ router.get('/:id', async function(req, res, next) {
 
 // POST write one meeting
 router.post('/', function(req, res,next){
+  console.log("REQ : " + req.body);
   const meeting = new Meeting({
     title:req.body.title,
-    num:req.body.num,
-    status:req.body.status
+    maxNum:req.body.maxNum,
+    status:req.body.status,
+    avgManner:req.body.avgManner,
+    avgAge:req.body.avgAge,
+    users:req.body.users,
+    numOfWoman:req.body.numOfWoman,
+    numOfMan : req.body.numOfMan
   });
-
+  console.log("MEETING : " + meeting);
   meeting.save((err)=>{
     res.send("방을 생성하였습니다.")
   });

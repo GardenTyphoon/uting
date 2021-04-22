@@ -66,7 +66,9 @@ router.post('/signup',function(req,res,next){
     email:req.body.email,
     password:req.body.password,
     phone:req.body.phone,
-    imgURL:""
+    imgURL:"",
+    mannerCredit: (3.5),
+    Umoney:Number(0)
   })
 
   user.save((err)=>{
@@ -94,15 +96,25 @@ router.post('/signin',function(req,res,next){
 })
 router.post('/viewMyProfile',function(req,res,next){
   console.log(req.body.sessionUser);
+  console.log(req.body);
   User.find(function(err, user){
     user.forEach(per=>{
       if(req.body.sessionUser === per.email){
+        
         res.send(per);
       }
     })
   })
 })
-
+router.post('/userInfo', function(req, res, next) {
+  User.find(function(err, user){
+    user.forEach(per=>{
+      if(req.body.userId === per._id.toString()){
+        res.send(per);
+      }
+    })
+  })
+})
 router.post('/modifyMyProfile',function(req,res,next){
   console.log(req.body);
   User.findByIdAndUpdate(req.body._id,{$set:{nickname:req.body.nickname,

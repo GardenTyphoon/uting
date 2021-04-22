@@ -39,7 +39,7 @@ app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
 app.use('/api', indexRouter);
 app.use('/users', usersRouter);
 app.use('/meetings', meetingsRouter);
-app.use('/groups', groupsRouter);
+app.use('/groups',groupsRouter);
 app.use('/ads', adsRouter);
 app.use('/reports', reportsRouter);
 
