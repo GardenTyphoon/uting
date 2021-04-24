@@ -1,0 +1,15 @@
+@font-face{
+    font-family:'NanumSquare_acR';
+    src:url('./../../ttf/NanumSquare_acR.ttf');
+}
+.MeetingRoom{
+    font-family: NanumSquare_acR;
+    width:700px;
+    background-color: white;
+    display : flex;
+    flex-direction : row;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding:15px;
+    margin:15px;
+}

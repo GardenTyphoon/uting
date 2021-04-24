@@ -1,0 +1,27 @@
+@font-face{
+    font-family:'NanumSquare_acR';
+    src:url('./../../ttf/NanumSquare_acR.ttf');
+}
+
+.SignInContainer{
+    background-color:white;
+    width:350px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    font-family : NanumSquare_acR;
+    padding:20px;
+    border-radius: 20px;
+}
+.InputContainer{
+    display:flex;
+    flex-direction: column;
+    width:200px;
+}
+.DoSignIn{
+    margin-left:30px;
+    border:none;
+    
+    color:black;
+    background-color: #F6CDCD;
+}

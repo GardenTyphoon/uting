@@ -1,0 +1,26 @@
+@font-face{
+    font-family:'NanumSquare_acR';
+    src:url('../ttf/NanumSquare_acR.ttf');
+}
+
+.IntroContainer{
+    background-color: #F6CDCD;
+}
+.SignInBtn{
+    width:100px;
+    height:30px;
+    font-family: NanumSquare_acR;
+    border-radius:10px;
+    background-color: white;
+    color:#E18A88;
+    border:none;
+}
+.SignUpBtn{
+    width:200px;
+    font-family:NanumSquare_acR ;
+    border-radius:10px;
+    color : white;
+    border:none;
+    padding:10px;
+    background: linear-gradient(to bottom, #FF9A51, #FF6994);
+}

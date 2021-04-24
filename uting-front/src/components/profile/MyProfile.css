@@ -23,7 +23,7 @@
 .ProfileCenter{
     display : flex;
     flex-direction:row;
-    align-items : space-between;
+    justify-content: space-around;
     font-weight: bolder;
 }
 .ProfileImgAndName{

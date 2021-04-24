@@ -4,6 +4,7 @@ import MyProfile from '../components/profile/MyProfile';
 import { Button,Collapse, CardBody, Card,  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from '../components/meeting/MeetingList'
+import './Main.css'
 const Main = () => {
   
   const [toggleprofile,setToggleProfile]=useState(false);
@@ -14,7 +15,7 @@ const Main = () => {
   
  
   return (
-    <div>
+    <div className="mainContainer">
       <h5>메인</h5>
       <button onClick={(e)=>{toggleProfileBtn(e)}}>my프로필</button>
       <Collapse isOpen={toggleprofile}>
