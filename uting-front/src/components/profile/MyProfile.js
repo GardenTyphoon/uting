@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ProfileNoImage from "../../img/ProfileNoImage.jpg"
+import ajou_logo from "../../img/ajou_logo.png"
 import axios from "axios";
 import FormData from "form-data";
+import "./MyProfile.css"
 const MyProfile = () => {
     const [imgBase64, setImgBase64] = useState("");
     const [imgFile, setImgFile] = useState(null);
     const [check, setCheck] = useState(false);
-    const [staticpath,setStaticpath]=useState('http://localhost:3001');
+    const [staticpath, setStaticpath] = useState('http://localhost:3001');
     const [ProfileInfo, setProfileInfo] = useState({
         id: "",
         name: "",
@@ -18,8 +20,8 @@ const MyProfile = () => {
         introduce: "",
         mbti: "",
         imgURL: "",
-        mannerCredit:"",
-        Umoney:"",
+        mannerCredit: "",
+        Umoney: "",
     });
 
     const [btn, setBtn] = useState("프로필 편집");
@@ -31,8 +33,8 @@ const MyProfile = () => {
         const res = await axios.post('http://localhost:3001/users/viewMyProfile', sessionObject);
         console.log(sessionObject);
         console.log(res);
-        if(res.data.imgURL!==""){
-            setImgBase64(staticpath+res.data.imgURL)
+        if (res.data.imgURL !== "") {
+            setImgBase64(staticpath + res.data.imgURL)
         }
         let data = {
             _id: res.data._id,
@@ -44,15 +46,15 @@ const MyProfile = () => {
             imgURL: res.data.imgURL,
             univ: res.data.email.split('@')[1].replace(".ac.kr", "") + "_univ",
             introduce: res.data.introduce,
-            mannerCredit : res.data.mannerCredit,
-            Umoney :res.data.Umoney
+            mannerCredit: res.data.mannerCredit,
+            Umoney: res.data.Umoney
         };
         setProfileInfo(data);
-        
+
     }
     const onClick = async () => {
         if (btn === "프로필 편집") { // 프로필 편집할 수 있도록 활성화
-            
+
             setBtn("저장");
             setCheck(true);
             var inputs = document.getElementsByClassName('modify');
@@ -110,84 +112,93 @@ const MyProfile = () => {
     }, [])
 
     return (
-        <div name="Profile">
-            <div>
-                {imgBase64 === "" ?
-                    <img style={{ width: "130px", height: "130px" }} src={ProfileNoImage} />
-                    :
-                    <img style={{ width: "130px", height: "130px" }} src={imgBase64} />}
+        <div className="ProfileContainer">
+            <div class="ProfileTop">
+                <img style={{ width: "30px", height: "30px", marginRight: "10px" }} src={ajou_logo} />
+                {ProfileInfo.univ}
+            </div>
+            <div className="ProfileCenter">
 
-            </div>
-            <div>
-                {check === true ? <input type="file" class="profile" accept="image/*" name="imgFile" id="imgFile" onChange={onChangeImg} />
-                    : ""}
+                <div className="ProfileOthers">
+                    <div >
+                        nickname
+                        <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600"}}
+                            type="text"
+                            name="nickname"
+                            class="modify" // 닉네임은 변경 가능
+                            value={ProfileInfo.nickname}
+                            onChange={onChange}
+                            readOnly />
+                    </div>
+                    <div>
+                        gender
+                        <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            type="text"
+                            name="gender"
+                            class="persistent" // 성별은 변경 못 함
+                            value={ProfileInfo.gender}
+                            readOnly />
+                    </div>
+                    <div >
+                        birth
+                        <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            type="text"
+                            name="birthday"
+                            class="persistent" // 생일은 변경 못 함
+                            value={ProfileInfo.birthday}
+                            readOnly />
+                    </div>
+                    <div>
+                        e-mail
+                        <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            type="text"
+                            name="email"
+                            class="persistent" // 이메일은 변경 못 함
+                            value={ProfileInfo.email}
+                            readOnly />
+                    </div>
+                    <div>
+                        introduce
+                        <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px" , fontWeight:"600"}}
+                            type="text"
+                            name="introduce"
+                            class="modify"
+                            value={ProfileInfo.introduce}
+                            onChange={onChange}
+                            readOnly />
+                    </div>
+                    <div class="mannerCredit">
+                        manner
+                        <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            type="text"
+                            name="manner"
+                            class="persistent"
+                            value={ProfileInfo.mannerCredit}
+                            readOnly />
+                    </div>
+                </div>
+                <div className="ProfileImgAndName">
 
+                    {imgBase64 === "" ?
+                        <img style={{ width: "120px", height: "120px", margin: "10px" }} src={ProfileNoImage} />
+                        :
+                        <img style={{ width: "120px", height: "120px", margin: "10px" }} src={imgBase64} />}
+
+                    {check === true ? <input style={{width:"150px"}} type="file" class="profile" accept="image/*" name="imgFile" id="imgFile" onChange={onChangeImg} />
+                        : ""}
+
+                    {ProfileInfo.name}
+                </div>
             </div>
-            <div class="name">
-                <input
-                    type="text"
-                    name="name"
-                    class="persistent" // 이름은 변경 못 함
-                    value={ProfileInfo.name}
-                    readOnly />
-            </div>
-            <div class="nickname">
-                <input
-                    type="text"
-                    name="nickname"
-                    class="modify" // 닉네임은 변경 가능
-                    value={ProfileInfo.nickname}
-                    onChange={onChange}
-                    readOnly />
-            </div>
-            <div class="gender">
-                <input
-                    type="text"
-                    name="gender"
-                    class="persistent" // 성별은 변경 못 함
-                    value={ProfileInfo.gender}
-                    readOnly />
-            </div>
-            <div class="birthday">
-                <input
-                    type="text"
-                    name="birthday"
-                    class="persistent" // 생일은 변경 못 함
-                    value={ProfileInfo.birthday}
-                    readOnly />
-            </div>
-            <div class="email">
-                <input
-                    type="text"
-                    name="email"
-                    class="persistent" // 이메일은 변경 못 함
-                    value={ProfileInfo.email}
-                    readOnly />
-            </div>
-            <div class="univ">
-                <input
-                    type="text"
-                    name="udniv"
-                    class="persistent" // 대학은 변경 못 함
-                    value={ProfileInfo.univ}
-                    readOnly />
-            </div>
-            <div class="introduce">
-                <input
-                    type="text"
-                    name="introduce"
-                    class="modify"
-                    value={ProfileInfo.introduce}
-                    onChange={onChange}
-                    readOnly />
-            </div>
-            <div class="mannerCredit">
-                {ProfileInfo.mannerCredit}
-            </div>
-            <div class="Umoney">
-                {ProfileInfo.Umoney}
-            </div>
-            <button onClick={onClick}>{btn}</button>
+
+
+            <button className="ProfileBtn" onClick={onClick}>{btn}</button>
         </div>
     )
 }
