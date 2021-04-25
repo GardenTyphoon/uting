@@ -11,6 +11,9 @@
     width : 100vw;
 }
 .SignInBtn{
+    position:absolute;
+    top:5%;
+    left:90%;
     width:100px;
     height:30px;
     font-family: NanumSquare_acR;
@@ -20,6 +23,9 @@
     border:none;
 }
 .SignUpBtn{
+    position:absolute;
+    left:45%;
+    top:60%;
     width:200px;
     font-family:NanumSquare_acR ;
     border-radius:10px;

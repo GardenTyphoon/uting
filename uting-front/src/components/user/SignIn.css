@@ -5,23 +5,29 @@
 
 .SignInContainer{
     background-color:white;
-    width:350px;
+    width:80%;
     display:flex;
     flex-direction: row;
     align-items: center;
     font-family : NanumSquare_acR;
-    padding:20px;
+    padding:3%;
     border-radius: 20px;
 }
 .InputContainer{
     display:flex;
     flex-direction: column;
-    width:200px;
+    width:50%;
+}
+.SignInBtnContainer{
+    display: flex;
+    align-items:center;
 }
 .DoSignIn{
-    margin-left:30px;
+    width:100%;
     border:none;
-    
     color:black;
     background-color: #F6CDCD;
+    border-radius: 10px;
+    padding-top:15%;
+    padding-bottom:15%;
 }

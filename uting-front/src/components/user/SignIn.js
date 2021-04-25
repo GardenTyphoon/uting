@@ -3,7 +3,7 @@ import { Route, Link, Switch, Router } from 'react-router-dom';
 import "./SignIn.css"
 import axios from 'axios';
 import { Button } from 'reactstrap';
-
+import { Container, Row, Col } from 'reactstrap';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -57,10 +57,11 @@ const SignIn = () => {
     }
   };
   return (
-    <div className="SignInContainer">
-        <div className="InputContainer">
+    <Container className="SignInContainer">
+      <Row >
+        <Col className="InputContainer">
           <input
-            style={{backgroundColor:"#F6CDCD", border:"none", margin:"10px", padding:"3px"}}
+            style={{ backgroundColor: "#F6CDCD", border: "none", margin: "10px", padding: "3px" }}
             name="email"
             type="email"
             placeholder="ID"
@@ -69,7 +70,7 @@ const SignIn = () => {
             onChange={(e) => onChangehandler(e)}
           />
           <input
-            style={{backgroundColor:"#F6CDCD", border:"none", margin:"10px", padding:"3px"}}
+            style={{ backgroundColor: "#F6CDCD", border: "none", margin: "10px", padding: "3px" }}
             name="password"
             type="password"
             placeholder="Password"
@@ -77,9 +78,12 @@ const SignIn = () => {
             value={password}
             onChange={(e) => onChangehandler(e)}
           />
-        </div>
-        <Button className="DoSignIn" onClick={(e) => onSubmit(e)}>로그인</Button>
-    </div>
+        </Col>
+        <Col className="SignInBtnContainer">
+          <button className="DoSignIn" onClick={(e) => onSubmit(e)}>로그인</ button>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 export default SignIn;
