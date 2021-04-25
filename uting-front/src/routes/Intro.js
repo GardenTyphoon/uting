@@ -33,11 +33,8 @@ const Intro = () => {
     <div className="IntroContainer">
       {isLoggedIn === false ?
         <div>
-          <Link to="/admin">관리자페이지</Link>
-
-
           <button className="SignInBtn" onClick={(e) => { toggleSignInBtn(e) }}>로그인</button>
-
+          
           <Container>
             <Modal isOpen={toggleSignIn} style={{ width: "30%" }}>
               <ModalBody isOpen={toggleSignIn}>
