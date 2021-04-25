@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import woman from '../../img/woman.png'
 import man from '../../img/man.png'
+import './MeetingList.css'
 function mannerCredit(avgManner){
     if(avgManner === 4.5) return "A+";
     else if(avgManner<4.5 && avgManner >=4.0) return "A0";
@@ -34,9 +35,9 @@ export default function MeetingList() {
       },[]);
      
     return (//tr map 한다음에 key넣어주기
-        <div>
+        <div >
             {viewRoomList.map((room,index)=>
-                <div>
+                <div className="MeetingRoom">
                     <div>{room.title}</div>
                     <div>{room.avgManner}</div>
                     

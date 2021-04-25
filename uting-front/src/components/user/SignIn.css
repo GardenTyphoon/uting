@@ -1,0 +1,33 @@
+@font-face{
+    font-family:'NanumSquare_acR';
+    src:url('./../../ttf/NanumSquare_acR.ttf');
+}
+
+.SignInContainer{
+    background-color:white;
+    width:80%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    font-family : NanumSquare_acR;
+    padding:3%;
+    border-radius: 20px;
+}
+.InputContainer{
+    display:flex;
+    flex-direction: column;
+    width:50%;
+}
+.SignInBtnContainer{
+    display: flex;
+    align-items:center;
+}
+.DoSignIn{
+    width:100%;
+    border:none;
+    color:black;
+    background-color: #F6CDCD;
+    border-radius: 10px;
+    padding-top:15%;
+    padding-bottom:15%;
+}
