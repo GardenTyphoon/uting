@@ -5,6 +5,10 @@
 
 .IntroContainer{
     background-color: #F6CDCD;
+    background-image: url('../img/Intro이미지.png');
+    background-size:cover;
+    height : 100vh;
+    width : 100vw;
 }
 .SignInBtn{
     width:100px;

@@ -18,9 +18,9 @@ const Main = () => {
     <div className="mainContainer">
       <h5>메인</h5>
       <button onClick={(e)=>{toggleProfileBtn(e)}}>my프로필</button>
-      <Collapse isOpen={toggleprofile}>
-        <Card>
-          <CardBody>
+      <Collapse isOpen={toggleprofile} style={{width:"40%"}}>
+        <Card style={{border:"0px"}}>
+          <CardBody style={{padding:"0%"}}>
             {toggleprofile===true?<MyProfile></MyProfile>:""}
           </CardBody>
         </Card>

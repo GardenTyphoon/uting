@@ -5,35 +5,41 @@
 
 
 .ProfileContainer{
-    width: 500px;
+    width:10%;
     background-color: #FFB4AC;  
     border-radius: 5px;
     display: flex;
     flex-direction:column;
     align-items: center;
     font-family: NanumSquare_acR;
-    padding: 20px;
-    font-size:15px;
+    padding: 2%;
+    font-size:13px;
 
 }
 .ProfileTop{
-    margin-bottom:10px;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
     font-weight: bolder;
 }
 .ProfileCenter{
-    display : flex;
-    flex-direction:row;
-    justify-content: space-around;
-    font-weight: bolder;
+    width:100%;
 }
 .ProfileImgAndName{
+    height:20%;
     display : flex;
     flex-direction:column;
     align-items:center;
+    font-weight:bolder;
 }
 .ProfileOthers{
     color:#454545;
     font-weight: normal;
+    display:flex;
+    flex-direction:column;
+
+    justify-content: space-around;
+    font-size:80%;
 }
 .ProfileBtn{
     background: linear-gradient(to bottom, #FF9A51, #FF6994);
@@ -42,4 +48,16 @@
     color : white;
     padding-left : 10px;
     padding-right : 10px;
+}
+.introduce{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+}
+.scrollBar::-webkit-scrollbar{
+    display:none;
+}
+.scrollBar{
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
 }

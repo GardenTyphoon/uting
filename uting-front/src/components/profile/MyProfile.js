@@ -4,6 +4,7 @@ import ajou_logo from "../../img/ajou_logo.png"
 import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css"
+import { Container, Row, Col } from 'reactstrap';
 const MyProfile = () => {
     const [imgBase64, setImgBase64] = useState("");
     const [imgFile, setImgFile] = useState(null);
@@ -112,18 +113,17 @@ const MyProfile = () => {
     }, [])
 
     return (
-        <div className="ProfileContainer">
-            <div class="ProfileTop">
+        <Container className="ProfileContainer">
+            <Row className="ProfileTop">
                 <img style={{ width: "30px", height: "30px", marginRight: "10px" }} src={ajou_logo} />
                 {ProfileInfo.univ}
-            </div>
-            <div className="ProfileCenter">
-
-                <div className="ProfileOthers">
+            </Row>
+            <Row className="ProfileCenter">
+                <Col className="ProfileOthers">
                     <div >
                         nickname
-                        <input
-                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600"}}
+                         <input
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight: "600", width:"50%" }}
                             type="text"
                             name="nickname"
                             class="modify" // 닉네임은 변경 가능
@@ -134,7 +134,7 @@ const MyProfile = () => {
                     <div>
                         gender
                         <input
-                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight: "600", width:"50%" }}
                             type="text"
                             name="gender"
                             class="persistent" // 성별은 변경 못 함
@@ -144,7 +144,7 @@ const MyProfile = () => {
                     <div >
                         birth
                         <input
-                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight: "600", width:"50%" }}
                             type="text"
                             name="birthday"
                             class="persistent" // 생일은 변경 못 함
@@ -154,17 +154,18 @@ const MyProfile = () => {
                     <div>
                         e-mail
                         <input
-                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight: "600", width:"70%" }}
                             type="text"
                             name="email"
                             class="persistent" // 이메일은 변경 못 함
                             value={ProfileInfo.email}
                             readOnly />
                     </div>
-                    <div>
+                    <div className="introduce">
                         introduce
-                        <input
-                            style={{ border: "none", background: "transparent", marginLeft: "10px" , fontWeight:"600"}}
+                        <textarea
+                            className="scrollBar"
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight: "600", width:"100%"}}
                             type="text"
                             name="introduce"
                             class="modify"
@@ -175,31 +176,34 @@ const MyProfile = () => {
                     <div class="mannerCredit">
                         manner
                         <input
-                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight:"600" }}
+                            style={{ border: "none", background: "transparent", marginLeft: "10px", fontWeight: "600", width:"50%" }}
                             type="text"
                             name="manner"
                             class="persistent"
                             value={ProfileInfo.mannerCredit}
                             readOnly />
                     </div>
-                </div>
-                <div className="ProfileImgAndName">
 
+                </Col>
+                <Col className="ProfileImgAndName">
                     {imgBase64 === "" ?
                         <img style={{ width: "120px", height: "120px", margin: "10px" }} src={ProfileNoImage} />
                         :
                         <img style={{ width: "120px", height: "120px", margin: "10px" }} src={imgBase64} />}
 
-                    {check === true ? <input style={{width:"150px"}} type="file" class="profile" accept="image/*" name="imgFile" id="imgFile" onChange={onChangeImg} />
+                    {check === true ? <input style={{ width: "150px" }} type="file" class="profile" accept="image/*" name="imgFile" id="imgFile" onChange={onChangeImg} />
                         : ""}
-
                     {ProfileInfo.name}
-                </div>
-            </div>
 
+                </Col>
 
-            <button className="ProfileBtn" onClick={onClick}>{btn}</button>
-        </div>
+            </Row>
+
+            <Row>
+                <button className="ProfileBtn" onClick={onClick}>{btn}</button>
+            </Row>
+
+        </Container>
     )
 }
 export default MyProfile;
