@@ -3,10 +3,22 @@ import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import MyProfile from '../components/profile/MyProfile';
 import { Button,Collapse, CardBody, Card,  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import styled from 'styled-components';
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from '../components/meeting/MeetingList'
 import Groups from '../components/group/Groups'
 import './Main.css'
+
+const profileButton = styled.button`
+  font-family:Jua;
+  font-size:20px;
+  margin-right:20px;
+  width:200px;
+  height:50px;
+  padding-left: 40%;
+  padding-top:5%;
+`;
+
 const Main = () => {
   const history = useHistory();
   const [toggleprofile,setToggleProfile]=useState(false);
@@ -22,10 +34,10 @@ const Main = () => {
     })
   }
   return (
-    <div className="mainContainer">
+    <div className="mainContainer" style={{backgroundColor:"#ffe4e1"}}>
       <h5>메인</h5>
       {sessionUser === "admin@ajou.ac.kr" ? <button onClick={gotoAdminPage}>관리자페이지</button> : ""}
-      <button onClick={(e)=>{toggleProfileBtn(e)}}>my프로필</button>
+      <button  onClick={(e)=>{toggleProfileBtn(e)}}>my프로필</button>
       <Collapse isOpen={toggleprofile} style={{width:"40%"}}>
         <Card style={{border:"0px"}}>
           <CardBody style={{padding:"0%"}}>

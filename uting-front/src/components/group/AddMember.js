@@ -2,13 +2,38 @@ import React,{useEffect, useState} from "react";
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input, Form, FormGroup, Label, FormText ,Badge,Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import axios from 'axios';
+import socketio from 'socket.io-client';
+
+
 
 
 const AddMember = ({currentUser,modalState,checkMember,prevMember}) => {
 
     const [newmember,setNewmember] = useState("")
     const [prevMem,setPrevMem]=useState(prevMember)
-  
+    const [socketCnt,setSocketCnt]=useState(false);
+    const socket = socketio.connect('http://localhost:3001');
+
+    useEffect(()=>{
+      console.log("socket 전")
+      socket.on('connect',function(){
+        console.log("connection server");
+        socket.emit('login',{uid:currentUser})
+        socket.emit('login',{uid:newmember})
+      })
+    },[]) 
+    if(socketCnt===true){
+      socket.on('message', function (msg) {
+        console.log("message 소켓")
+        console.log(msg)
+        alert(msg)
+        //document.write(msg);
+      });
+      socket.emit('message special user', { uid:newmember, msg:'그룹 생성이 될 예정입니다.' });
+
+    }
+   
+    
 
 
     let onChangehandler = (e) => {
@@ -37,6 +62,7 @@ const AddMember = ({currentUser,modalState,checkMember,prevMember}) => {
         if(prevMem===false){
           checkMember(true);
         }
+
         
       }
       else{

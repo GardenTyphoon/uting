@@ -4,6 +4,9 @@ import { InputGroup, InputGroupAddon, InputGroupText, Input, Form, FormGroup, La
 import axios from 'axios';
 import AddMember from './AddMember';
 import '../../App.css'
+import socketio from 'socket.io-client';
+
+const socket = socketio.connect('http://localhost:3001');
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);;
@@ -63,7 +66,16 @@ const Groups = () => {
   const [groupMember,setGroupMember] = useState([]);
   const [checkMem,setCheckMem] = useState(false);
   let [modalStatus,setModalStatus]=useState(false);
-
+  // useEffect(()=>{
+  //   console.log("socket 전")
+  //   socket.on('connect',function(){
+  //     console.log("connection server");
+  //     //socket.emit('login',{uid:newmember})
+  //     socket.emit('login',{uid:currentUser})
+  //     //socket.emit('login',{uid:newmember})
+  //     //socket.emit('login',"hihi")
+  //   })
+  // },[addMemberModal])
 
   const getGroupInfo = async (e) => {
     let sessionUser = sessionStorage.getItem('nickname');

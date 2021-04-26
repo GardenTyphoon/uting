@@ -12,8 +12,12 @@ var groupsRouter = require('./routes/groups');
 var adsRouter = require('./routes/ads');
 var reportsRouter = require('./routes/reports');
 
+var clients = [];
+var members = [];
 // PORT => 3001
 var app = express();
+
+
 
  mongoose.connect("mongodb://localhost:27017/uting", {
    useNewUrlParser: true,
@@ -43,6 +47,7 @@ app.use('/groups',groupsRouter);
 app.use('/ads', adsRouter);
 app.use('/reports', reportsRouter);
 
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -58,5 +63,21 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+app.io = require('socket.io')();
 
+app.io.on('connection',function(socket){
+  console.log("Connected !");
+  socket.on('login', function(data) {
+    var clientInfo = new Object();
+    clientInfo.uid = data.uid;
+    clientInfo.id = socket.id;
+    clients.push(clientInfo);
+    console.log(clients)
+  });
+  
+
+  socket.on('disconnect',function(){
+    console.log('user disconnected');
+  });
+});
 module.exports = app;

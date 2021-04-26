@@ -16,7 +16,7 @@ const Intro = () => {
 
     })
   }
-  const toggleSignInBtn = () => {
+  const toggleSignInBtn = (e) => {
     setToggleSignIn(!toggleSignIn)
   }
   //컴포넌트가 mount 될 때 실행되는 것
