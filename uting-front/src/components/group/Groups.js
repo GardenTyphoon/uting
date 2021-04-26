@@ -116,7 +116,7 @@ const Groups = () => {
 
         <PlusIcon onClick={toggelAddMember}>+</PlusIcon>
         <Modal isOpen={addMemberModal} >
-           <ModalHeader toggle={toggelAddMember}>그룹 생성</ModalHeader>
+           <ModalHeader toggle={toggelAddMember} style={{fontFamily:"Jua",fontSize:"20px"}}>그룹 생성</ModalHeader>
             <AddMember prevMember = {checkMem} checkMember={e=>toggleCheckMem(e)} modalState={e => toggleModalStatus(e)} currentUser={currentUser}></AddMember>
         </Modal>
           
