@@ -5,6 +5,7 @@ import MyProfile from '../components/profile/MyProfile';
 import { Button,Collapse, CardBody, Card,  Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from '../components/meeting/MeetingList'
+import Groups from '../components/group/Groups'
 import './Main.css'
 const Main = () => {
   const history = useHistory();
@@ -43,6 +44,7 @@ const Main = () => {
         </ModalFooter>
       </Modal>
       <MeetingList/>
+      <Groups ></Groups>
     </div>
   );
 };

@@ -45,9 +45,13 @@ const User = new Schema({
         type:Number,
         required:true
     },
-    Umoney :{
+    ucoin:{
         type:Number,
         required:true
+    },
+    status:{
+        type:Boolean,
+        requried:true,
     }
     
 })
@@ -97,7 +101,11 @@ const Group = new Schema({
     group_members_id:{
         type:Array,
         required:true
-    } 
+    },
+    member : {
+        type:Array,
+        required:true
+    }
 })
 const Ad = new Schema({
     name : {
