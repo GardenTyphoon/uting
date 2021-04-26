@@ -1,36 +1,36 @@
-@font-face{
-    font-family:'NanumSquare_acR';
-    src:url('../ttf/NanumSquare_acR.ttf');
+@font-face {
+  font-family: "NanumSquare_acR";
+  src: url("../ttf/NanumSquare_acR.ttf");
 }
 
-.IntroContainer{
-    background-color: #F6CDCD;
-    background-image: url('../img/Intro이미지.png');
-    background-size:cover;
-    height : 100vh;
-    width : 100vw;
+.IntroContainer {
+  background-color: #f6cdcd;
+  background-image: url("../img/Intro이미지.png");
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
 }
-.SignInBtn{
-    position:absolute;
-    top:5%;
-    left:90%;
-    width:100px;
-    height:30px;
-    font-family: NanumSquare_acR;
-    border-radius:10px;
-    background-color: white;
-    color:#E18A88;
-    border:none;
+.LogInOutBtn {
+  position: absolute;
+  top: 5%;
+  left: 90%;
+  width: 100px;
+  height: 30px;
+  font-family: NanumSquare_acR;
+  border-radius: 10px;
+  background-color: white;
+  color: #e18a88;
+  border: none;
 }
-.SignUpBtn{
-    position:absolute;
-    left:45%;
-    top:60%;
-    width:200px;
-    font-family:NanumSquare_acR ;
-    border-radius:10px;
-    color : white;
-    border:none;
-    padding:10px;
-    background: linear-gradient(to bottom, #FF9A51, #FF6994);
+.MiddleBtn {
+  position: absolute;
+  left: 45%;
+  top: 60%;
+  width: 200px;
+  font-family: NanumSquare_acR;
+  border-radius: 10px;
+  color: white;
+  border: none;
+  padding: 10px;
+  background: linear-gradient(to bottom, #ff9a51, #ff6994);
 }
