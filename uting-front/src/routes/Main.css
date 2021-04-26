@@ -1,3 +1,10 @@
-.mainContainer{
-    background-color: #FFE4E1;
+.mainContainer {
+  background-color: #ffe4e1;
+}
+.profile {
+  display: flex;
+  align-items: center;
+}
+.profileModal {
+  background-color: #ffb4ac;
 }
