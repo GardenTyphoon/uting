@@ -51,9 +51,11 @@ const AddMember = ({currentUser,modalState,checkMember,prevMember}) => {
 
       
       <ModalBody>
-              <div>추가할 사용자의 닉네임을 기입하시오.</div>
-              <Input onChange={(e)=>onChangehandler(e)} type ="text"/>
-              <Button color="danger" onClick={(e)=>addGroupMember(e)} >추가</Button>
+              <div style={{textAlign:"center",marginBottom:"2%",fontFamily:"Jua",fontSize:"20px"}}>추가할 사용자의 닉네임을 기입하시오.</div>
+                <Input style={{width:"80%",display:"inline"}} onChange={(e)=>onChangehandler(e)} type ="text"/>
+                <Button style={{display:"inline",marginLeft:"5%",marginBottom:"2%"}}  color="danger" onClick={(e)=>addGroupMember(e)} >추가</Button>
+                
+              
       </ModalBody>
 
     </div>
