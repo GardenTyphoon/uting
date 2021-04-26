@@ -40,7 +40,7 @@ const SignIn = () => {
     }
     const res = await axios.post('http://localhost:3001/users/signin', data);
     console.log(res)
-
+    sessionStorage.setItem('nickname', res.data.nickname);
     if (res.data === "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.") {
       setIslogined(false);
       alert("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")

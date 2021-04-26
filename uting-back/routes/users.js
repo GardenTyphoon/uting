@@ -127,4 +127,23 @@ router.post('/modifyMyProfileImg', upload.single('img'), (req, res) => {
   res.json({ url : `/uploads/${req.file.filename}`});
 })
 
+router.post('/logined',function(req,res,next){
+  console.log("logined 백")
+  let ismember=false;
+  User.find(function(err,user){
+    //console.log(user)
+    user.forEach(per=>{
+      if(req.body.addMember === per.nickname){
+        console.log(per)
+        ismember=true;
+        res.send(per);
+      } 
+    })
+    if(ismember===false){
+      res.send("no")
+    }
+
+  })
+})
+
 module.exports = router;
