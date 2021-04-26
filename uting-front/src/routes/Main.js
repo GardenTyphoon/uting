@@ -3,6 +3,7 @@ import axios from 'axios';
 import MyProfile from '../components/MyProfile';
 import { Collapse, Button, CardBody, Card } from 'reactstrap';
 import MeetingListForm from '../components/meeting/MeetingListForm'
+import Groups from '../components/group/Groups'
 const Main = () => {
 
   const [toggleprofile,setToggleProfile]=useState(false);
@@ -12,7 +13,7 @@ const Main = () => {
   
  
   return (
-    <div>
+    <div style={{backgroundColor:"#ffe4e1"}}>
       <h5>메인</h5>
       <button onClick={(e)=>{toggleProfile(e)}}>my프로필</button>
       <Collapse isOpen={toggleprofile}>
@@ -23,6 +24,7 @@ const Main = () => {
         </Card>
       </Collapse>
       <MeetingListForm />
+      <Groups ></Groups>
     </div>
   );
 };

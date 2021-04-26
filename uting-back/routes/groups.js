@@ -15,10 +15,60 @@ router.get('/:id', async function(req, res, next) {
 });
 
 // POST write one group
+router.post('/info', function(req, res,next){
+  console.log(req.body.sessionUser)
+  console.log("info백")
+  let ismember=false;
+  Group.find(function(err,group){
+    group.forEach(per=>{
+      per.member.forEach(mem=>{
+        if(req.body.sessionUser === mem){
+          ismember=true;
+          res.send(per);
+        } 
+      })
+      
+    })
+    if(ismember===false){
+      res.send("no")
+    }
+
+  })
+  
+})
+
+// POST write one group
 router.post('/', function(req, res,next){
-  const group = new Group(req.body);
-  group.save();
-  //res.json(group);
+    let exist=false;
+  let foundPer;
+  Group.find(function(err,group){
+    group.forEach(per=>{
+      per.member.forEach(mem=>{
+        if(req.body.host === mem){
+          console.log(mem)
+          exist=true;
+          foundPer=per;
+        } 
+      })
+    })
+    console.log(foundPer)
+    if(exist===true){
+      Group.findByIdAndUpdate(foundPer._id,{$push:{member:req.body.memberNickname}},(err,gr)=>{
+          console.log(foundPer._id);
+      })
+    }
+    if(exist===false){
+      const group2 = new Group({
+        member:[req.body.host,req.body.memberNickname]
+      })
+      group2.save((err)=>{
+      res.send("그룹 생성이 완료 되었습니다.")
+      })
+      
+    }
+
+  })
+
 })
 
 // PUT edit one group

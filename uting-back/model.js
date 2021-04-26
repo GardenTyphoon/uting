@@ -42,6 +42,18 @@ const User = new Schema({
     imgURL :{
         type:String,
         required:false
+    },
+    mannerCredit:{
+        type:Number,
+        required:true
+    },
+    ucoin:{
+        type:Number,
+        required:true
+    },
+    status:{
+        type:Boolean,
+        requried:true,
     }
     
 })
@@ -64,8 +76,8 @@ const Meeting = new Schema({
 // Meeting.plugin(autoInc.plugin, 'meeting');
 
 const Group = new Schema({
-    name : {
-        type:String,
+    member : {
+        type:Array,
         required:true
     },
 })

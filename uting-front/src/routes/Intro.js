@@ -24,11 +24,11 @@ const Intro = () => {
   },[])
   
   return (
-    <div>
+    <div style={{backgroundColor:"#ffe4e1"}} >
       {isLoggedIn===false?
-      <div>
+      <div >
         <Link to="/admin">관리자페이지</Link>
-        <SignIn/>
+        < SignIn/>
       </div>
       
       :<Main/>

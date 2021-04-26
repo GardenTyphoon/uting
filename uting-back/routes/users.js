@@ -66,7 +66,10 @@ router.post('/signup',function(req,res,next){
     email:req.body.email,
     password:req.body.password,
     phone:req.body.phone,
-    imgURL:""
+    imgURL:"",
+    mannerCredit:Number(3.0),
+    ucoin:Number(0),
+    status:false
   })
 
   user.save((err)=>{
@@ -82,6 +85,10 @@ router.post('/signin',function(req,res,next){
       console.log(per)
       if(per.email===req.body.email && per.password===req.body.password){
         ismember=true;
+        //로그인시 사용자 상태 on으로 바꾸기
+        User.findByIdAndUpdate(per._id,{$set:{status:true}},(err,us)=>{
+            console.log(req.body._id);
+        })
         res.send(per);
         
       }
@@ -113,6 +120,22 @@ router.post('/modifyMyProfile',function(req,res,next){
 
 router.post('/modifyMyProfileImg', upload.single('img'), (req, res) => {
   res.json({ url : `/uploads/${req.file.filename}`});
+})
+
+router.post('/logined',function(req,res,next){
+  let ismember=false;
+  User.find(function(err,user){
+    user.forEach(per=>{
+      if(req.body.addMember === per.nickname){
+        ismember=true;
+        res.send(per);
+      } 
+    })
+    if(ismember===false){
+      res.send("no")
+    }
+
+  })
 })
 
 module.exports = router;
