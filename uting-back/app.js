@@ -74,8 +74,6 @@ app.io.on('connection',function(socket){
     clients.push(clientInfo);
     console.log(clients)
   });
-  
-
   socket.on('disconnect',function(){
     console.log('user disconnected');
   });

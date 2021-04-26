@@ -21,21 +21,9 @@ const AddMember = ({currentUser,modalState,checkMember,prevMember}) => {
         socket.emit('login',{uid:currentUser})
         socket.emit('login',{uid:newmember})
       })
-    },[]) 
-    if(socketCnt===true){
-      socket.on('message', function (msg) {
-        console.log("message 소켓")
-        console.log(msg)
-        alert(msg)
-        //document.write(msg);
-      });
-      socket.emit('message special user', { uid:newmember, msg:'그룹 생성이 될 예정입니다.' });
-
-    }
+    },[])    
+  
    
-    
-
-
     let onChangehandler = (e) => {
       let { name, value } = e.target;
       setNewmember(value)    
