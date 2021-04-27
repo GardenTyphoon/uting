@@ -163,16 +163,16 @@ router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
   res.json({ url: `/uploads/${req.file.filename}` });
 });
 
+// 그룹 생성시 온라인 유저인지 확인
 router.post("/logined", function (req, res, next) {
   console.log("logined 백");
   let ismember = false;
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
-      if (req.body.addMember === per.nickname) {
+      if (req.body.addMember === per.nickname && per.status===true) {
         console.log(per);
         ismember = true;
-        
         res.send(per);
       }
     });
