@@ -12,21 +12,41 @@ const AddMember = ({currentUser,modalState,checkMember,prevMember}) => {
     const [newmember,setNewmember] = useState("")
     const [prevMem,setPrevMem]=useState(prevMember)
     const [socketCnt,setSocketCnt]=useState(false);
-    const socket = socketio.connect('http://localhost:3001');
+    //const socket = socketio.connect('http://localhost:3001');
 
     useEffect(()=>{
-      console.log("socket 전")
-      socket.on('connect',function(){
-        console.log("connection server");
-        socket.emit('login',{uid:currentUser})
-        socket.emit('login',{uid:newmember})
-      })
-    },[])    
+      // console.log("socket 전")
+      // socket.on('connect',function(){
+      //   console.log("connection server");
+      //   socket.emit('login',{uid:currentUser})
+      //   //socket.emit('login',{uid:newmember})
+        
+      // })
+      
+    },[])
+    
+    let sendMessage = ()=>{
+      console.log("sendMessage 함수!")
+      // socket.on('message', function (msg) {
+      //   console.log("message 소켓 프론트")
+      //   socket.emit('message', { newuid:newmember, msg:'그룹이 생성 될 예정입니다.' });
+      //   document.write(msg);
+      // });
+      
+    }
   
    
     let onChangehandler = (e) => {
       let { name, value } = e.target;
-      setNewmember(value)    
+      setNewmember(value)   
+      // socket.on('connect',function(){
+      //   console.log("connection server");
+      //   socket.emit('login',{newuid:newmember})
+      //   //socket.emit('login',{uid:newmember})
+      // })
+
+      //socket.emit('login',{newuid:newmember})
+      
     };
     const addGroupMember = async (e)=>{
       let data ={
@@ -50,11 +70,11 @@ const AddMember = ({currentUser,modalState,checkMember,prevMember}) => {
         if(prevMem===false){
           checkMember(true);
         }
-
+        sendMessage();
         
       }
       else{
-        alert("현재 접속 중인 사용자가 아니거나, 닉네임이 옳바르지 않습니다.")
+        alert("현재 접속 중인 사용자가 아니거나, 닉네임이 올바르지 않습니다.")
         modalState(true);
       }
         //가입된 사용자가 맞는지, 현재 로그인한 사용자가 맞는지 

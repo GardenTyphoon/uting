@@ -17,6 +17,7 @@ import Meeting from "../components/meeting/Meeting";
 import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
 import "./Main.css";
+import socketio from 'socket.io-client';
 
 const Main = () => {
   const history = useHistory();
@@ -35,6 +36,10 @@ const Main = () => {
   let sessionUser = sessionStorage.getItem("email");
   let userNickname = sessionStorage.getItem("nickname");
 
+  const [socketCheck,setSocketCheck]=useState(false);
+  const [socketId,setSocketId]=useState("");
+  const socket = socketio.connect('http://localhost:3001');
+
   const gotoAdminPage = () => {
     history.push({
       pathname: `/admin`,
@@ -51,7 +56,36 @@ const Main = () => {
 
   useEffect(() => {
     getProfile();
+
+    socket.on('connect',function(){
+      console.log("connection server");
+      socket.emit('login',{uid:sessionStorage.getItem('nickname')})
+      setSocketCheck(true)
+
+
+    })
+    
+    socket.on('clientid', function async(id) {
+      setSocketId(id)
+      console.log(id)
+    })
+    
+    
   }, []);
+  
+  let putSocketid = async(e)=>{
+    let data={
+      "currentUser":sessionStorage.getItem('nickname'),
+      "currentSocketId":socketId
+    }
+    const res = await axios.post("http://localhost:3001/users/savesocketid",data);
+    console.log(res)
+  }
+  useEffect(()=>{
+    putSocketid()
+    
+  },[socketId])
+
 
   const getProfile = async (e) => {
     const res = await axios.post("http://localhost:3001/users/viewMyProfile", {

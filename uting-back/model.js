@@ -52,7 +52,12 @@ const User = new Schema({
     status:{
         type:Boolean,
         requried:true,
+    },
+    socketid:{
+        type:String,
+        requried:false,
     }
+
     
 })
 // User.plugin(autoInc.plugin, 'user');
