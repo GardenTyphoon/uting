@@ -4,7 +4,6 @@
 }
 .MeetingRoom{
     font-family: NanumSquare_acR;
-    width:700px;
     background-color: white;
     display : flex;
     flex-direction : row;
@@ -12,4 +11,15 @@
     border-radius: 10px;
     padding:15px;
     margin:15px;
+}
+
+.joinBtn{
+    font-weight: bold;
+    margin-bottom:10%;
+    margin-left:20%;
+    border-radius: 15px;
+    width:60%;
+    color:white;
+    background-color:#68D2FF;
+    border:none;
 }

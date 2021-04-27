@@ -21,10 +21,8 @@ const Main = () => {
     });
   };
   return (
-    <div className="mainContainer">
-      <div className="Logo">
-        <h5>메인</h5>
-      </div>
+    <div className="mainContainer" style={{backgroundColor:"#ffe4e1", width:"100vw", height:"100vh"}}>
+      
       {sessionUser === "admin@ajou.ac.kr" ? (
         <button onClick={gotoAdminPage}>관리자페이지</button>
       ) : (
@@ -51,8 +49,12 @@ const Main = () => {
         </ModalFooter>
       </Modal>
       <Profile />
+      <div style={{display:"flex", flexDirection:"row", justifyContent:"space-evenly"}}>
+      <div style={{}}>학교 랭킹 넣는 자리 </div>
       <MeetingList />
       <Groups />
+      </div>
+      
     </div>
   );
 };
