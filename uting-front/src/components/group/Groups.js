@@ -78,16 +78,7 @@ const Groups = () => {
   const [groupMember,setGroupMember] = useState([]);
   const [checkMem,setCheckMem] = useState(false);
   let [modalStatus,setModalStatus]=useState(false);
-  // useEffect(()=>{
-  //   console.log("socket 전")
-  //   socket.on('connect',function(){
-  //     console.log("connection server");
-  //     //socket.emit('login',{uid:newmember})
-  //     socket.emit('login',{uid:currentUser})
-  //     //socket.emit('login',{uid:newmember})
-  //     //socket.emit('login',"hihi")
-  //   })
-  // },[addMemberModal])
+ 
 
   const getGroupInfo = async (e) => {
     let sessionUser = sessionStorage.getItem("nickname");

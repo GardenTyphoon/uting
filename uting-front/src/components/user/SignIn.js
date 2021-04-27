@@ -4,18 +4,22 @@ import "./SignIn.css"
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
+import socketio from 'socket.io-client';
+
+
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [islogined, setIslogined] = useState(false);
   const [error, setError] = useState("");
-
+  
 
   /*컴포넌트 마운트 될 때마다 로그인 했는지 안했는지 확인*/
   useEffect(() => {
     if (sessionStorage.getItem("email")) {
       setIslogined(true)
+      
     }
     else {
       setIslogined(false)
@@ -48,8 +52,12 @@ const SignIn = () => {
     else {
       try {
         setIslogined(true);
+        
         sessionStorage.setItem('email', email);
         alert("로그인 되었습니다.")
+        //소켓
+        
+
         window.location.href = 'http://localhost:3000/main';
       } catch (error) {
         setError(error.message);
