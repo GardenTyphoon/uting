@@ -70,6 +70,8 @@ router.post("/signup", function (req, res, next) {
     phone: req.body.phone,
     imgURL: "",
     mannerCredit: 3.5,
+    status:false,
+    socketid:"",
     ucoin: Number(0),
   });
 
@@ -80,19 +82,45 @@ router.post("/signup", function (req, res, next) {
 
 router.post("/signin", function (req, res, next) {
   let ismember = false;
+  let perObj={};
+
   User.find(function (err, user) {
     user.forEach((per) => {
-      console.log(per);
       if (per.email === req.body.email && per.password === req.body.password) {
         ismember = true;
-        res.send(per);
+        perObj=per;
       }
     });
+    if(ismember===true){
+      console.log(perObj._id)
+      User.findByIdAndUpdate(perObj._id, {$set: {
+        status: true,
+        _id:perObj._id,
+        name: perObj.name,
+        nickname: perObj.nickname,
+        gender: perObj.gender,
+        birth: perObj.birth,
+        email: perObj.email,
+        password: perObj.password,
+        phone: perObj.phone,
+        imgURL: perObj.imgURL,
+        mannerCredit: perObj.mannerCredit,
+        socketid:perObj.socketid,
+        ucoin: perObj.ucoin
+      
+      }}, (err, u)=>{
+        res.send(perObj)
+      });
+      //res.send(per)
+
+    }
     if (ismember === false) {
       res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
     }
+    
   });
 });
+
 router.post("/viewMyProfile", function (req, res, next) {
   console.log(req.body.sessionUser);
   console.log(req.body);
@@ -144,9 +172,52 @@ router.post("/logined", function (req, res, next) {
       if (req.body.addMember === per.nickname) {
         console.log(per);
         ismember = true;
+        
         res.send(per);
       }
     });
+    if (ismember === false) {
+      res.send("no");
+    }
+  });
+});
+
+router.post("/savesocketid", function (req, res, next) {
+  let ismember =false;
+  let perObj = {};
+  console.log(req.body.currentSocketId.id)
+  User.find(function (err, user) {
+    //console.log(user)
+    user.forEach((per) => {
+      if (req.body.currentUser === per.nickname) {
+        console.log(per);
+        ismember = true;
+        perObj=per;
+      }
+    });
+    if(ismember===true){
+      User.findByIdAndUpdate(perObj._id, {$set: {
+        status: perObj.status,
+        _id:perObj._id,
+        name: perObj.name,
+        nickname: perObj.nickname,
+        gender: perObj.gender,
+        birth: perObj.birth,
+        email: perObj.email,
+        password: perObj.password,
+        phone: perObj.phone,
+        imgURL: perObj.imgURL,
+        mannerCredit: perObj.mannerCredit,
+        ucoin: perObj.ucoin,
+        socketid:req.body.currentSocketId.id,
+      
+      }}, (err, u)=>{
+        console.log(perObj)
+        res.send(perObj)
+      });
+      //res.send(per)
+
+    }
     if (ismember === false) {
       res.send("no");
     }
