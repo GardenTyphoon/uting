@@ -14,6 +14,7 @@ import "./Intro.css";
 import SignIn from "../components/user/SignIn";
 import Main from "./Main";
 import { Container, Row, Col } from "reactstrap";
+import axios from "axios";
 
 const Intro = () => {
   const history = useHistory();
@@ -29,6 +30,21 @@ const Intro = () => {
       pathname: `/main`,
     });
   };
+
+  let logout = async(e)=>{
+    
+    let data={email:sessionStorage.getItem("email")}
+    console.log(data)
+    const res = await axios.post('http://localhost:3001/users/logout',data)
+    if(res.data==="success"){
+      sessionStorage.clear();
+      window.location.href = "http://localhost:3000/";
+    }
+    if(res.data==="no"){
+      alert("Error")
+    }
+  }
+
   const toggleSignInBtn = (e) => {
     setToggleSignIn(!toggleSignIn);
   };
@@ -60,7 +76,7 @@ const Intro = () => {
         </div>
       ) : (
         <div>
-          <button className="LogInOutBtn">logout</button>
+          <button onClick={(e)=>logout(e)} className="LogInOutBtn">logout</button>
           <button className="MiddleBtn" onClick={goMain}>
             미팅 즐기러 가기
           </button>
