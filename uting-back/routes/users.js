@@ -186,17 +186,19 @@ router.post("/logined", function (req, res, next) {
 router.post("/savesocketid", function (req, res, next) {
   let ismember =false;
   let perObj = {};
-  console.log(req.body.currentSocketId.id)
+  console.log("sosocket",req.body.currentSocketId.id)
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
       if (req.body.currentUser === per.nickname) {
-        console.log(per);
+        console.log("savesocketid !!",per);
+        console.log("sosocket",req.body.currentSocketId.id)
         ismember = true;
         perObj=per;
       }
     });
     if(ismember===true){
+      console.log("tureture!",req.body.currentSocketId.id)
       User.findByIdAndUpdate(perObj._id, {$set: {
         status: perObj.status,
         _id:perObj._id,
@@ -213,10 +215,9 @@ router.post("/savesocketid", function (req, res, next) {
         socketid:req.body.currentSocketId.id,
       
       }}, (err, u)=>{
-        console.log(perObj)
         res.send(perObj)
       });
-      //res.send(per)
+      //res.send(perObj)
 
     }
     if (ismember === false) {

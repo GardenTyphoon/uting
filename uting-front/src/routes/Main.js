@@ -29,7 +29,6 @@ const Main = () => {
     console.log("sendMember")
     alert(data);
     window.location.href = "http://localhost:3000/main";
-    
   })
 
   useEffect(() => {
@@ -43,7 +42,7 @@ const Main = () => {
       console.log(id)
     })
 
-
+    console.log(socketId)
   }, []);
 
   let putSocketid = async (e) => {
