@@ -69,7 +69,7 @@ const GroupTitle = styled.div`
   padding-top: 5%;
 `;
 
-const Groups = () => {
+const Groups = ({currentsocketId}) => {
   const [groups, setGroups] = useState([]);
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
@@ -137,6 +137,7 @@ const Groups = () => {
           그룹 생성
         </ModalHeader>
         <AddMember
+          currentsocketId={currentsocketId}
           prevMember={checkMem}
           checkMember={(e) => toggleCheckMem(e)}
           modalState={(e) => toggleModalStatus(e)}

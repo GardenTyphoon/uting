@@ -19,12 +19,13 @@ import {
 import axios from "axios";
 import socketio from "socket.io-client";
 
-const AddMember = ({ currentUser, modalState, checkMember, prevMember }) => {
+const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId }) => {
  
   const [newmember,setNewmember] = useState("")
   const [prevMem,setPrevMem]=useState(prevMember)
   const [socketCnt,setSocketCnt]=useState(false);
-  
+  const [socketId,setSocketId]=useState("");
+  const socket = socketio.connect('http://localhost:3001');
  
   let onChangehandler = (e) => {
     let { name, value } = e.target;
@@ -38,6 +39,8 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember }) => {
     const res = await axios.post('http://localhost:3001/users/logined', data);
     console.log(res.data)
     if(res.data.status===true){
+      console.log(res.data.socketid)
+      setSocketId(res.data.socketid)
       let groupData={
         "host":currentUser,
         "memberNickname":res.data.nickname
@@ -46,6 +49,8 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember }) => {
       console.log(groupData)
       const resgroup = await axios.post('http://localhost:3001/groups/',groupData);
       console.log(resgroup)
+      setSocketCnt(true);
+
       modalState(true);
       if(prevMem===true){
         checkMember(false);
@@ -62,6 +67,15 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember }) => {
       //가입된 사용자가 맞는지, 현재 로그인한 사용자가 맞는지 
 
   }
+
+  useEffect(()=>{
+    socket.on('connect',function(){
+      console.log("message")
+      socket.emit('message',{"socketid":socketId})
+    })
+
+  },[socketCnt])
+
 return (
   <div>
 

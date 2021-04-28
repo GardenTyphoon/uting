@@ -24,13 +24,21 @@ const Main = () => {
     });
   };
 
+  socket.on("sendMember",function(data){
+    console.log("sendMember")
+    alert(data);
+    window.location.href = "http://localhost:3000/main";
+    
+  })
+
   useEffect(() => {
     socket.on('connect',function(){
       console.log("connection server");
       socket.emit('login',{uid:sessionStorage.getItem('nickname')})
     })
     
-    socket.on('clientid', function async(id) {
+    socket.on('clientid', function (id) {
+      console.log("Main clientid 소켓")
       setSocketId(id)
       console.log(id)
     })
@@ -83,7 +91,7 @@ const Main = () => {
       </Modal>
       <Profile />
       <MeetingList />
-      <Groups />
+      <Groups currentsocketId={socketId} />
     </div>
   );
 };

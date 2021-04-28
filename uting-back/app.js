@@ -78,6 +78,19 @@ app.io.on('connection',function(socket){
     socket.emit("clientid",{"id":clients[clients.length-1].id});
   });
 
+  socket.on('message',function(msg){
+    //console.log("alarm")
+    socket.emit("message",{"id":msg.socketid});
+    console.log("message",msg.socketid)
+    let data = "그룹에 초대 되었습니다 ^0^"
+    app.io.to(msg.socketid).emit("sendMember",data)
+    //socket.emit('sendMember', { id:msg.socketid, msg:data });
+    //socket.emit("sendMember",{message:data});
+    console.log("***************")
+    console.log(msg.socketid,data)
+    console.log("***************")
+  })
+
   
     //socket.emit("clientid",{"id":clients[clients.length-1].id});
 
