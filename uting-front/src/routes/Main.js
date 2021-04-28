@@ -25,6 +25,13 @@ const Main = () => {
     });
   };
 
+  socket.on("sendMember",function(data){
+    console.log("sendMember")
+    alert(data);
+    window.location.href = "http://localhost:3000/main";
+    
+  })
+
   useEffect(() => {
     socket.on('connect', function () {
       console.log("connection server");
@@ -86,7 +93,7 @@ const Main = () => {
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList />
-        <Groups />
+        <Groups currentsocketId={socketId}/>
       </div>
 
     </div>
