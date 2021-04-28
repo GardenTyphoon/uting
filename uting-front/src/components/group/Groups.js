@@ -60,13 +60,14 @@ const GroupBox = styled.div`
 `;
 
 const GroupTitle = styled.div`
-  font-family: Jua;
-  font-size: 20px;
-  margin-right: 20px;
-  width: 200px;
-  height: 50px;
-  padding-left: 40%;
-  padding-top: 5%;
+
+  font-family: NanumSquare_acR;
+  font-size: medium;
+  color:#896E6E;
+  margin-left:20%;
+  margin-bottom:5%;
+  
+  
 `;
 
 const Groups = () => {
@@ -118,7 +119,7 @@ const Groups = () => {
 
   return (
     <GroupBox>
-      <GroupTitle>그룹</GroupTitle>
+      <GroupTitle>Group Member</GroupTitle>
       <Member>{currentUser}</Member>
       {groupMember === undefined
         ? ""

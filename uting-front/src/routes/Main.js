@@ -8,13 +8,14 @@ import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from 'socket.io-client';
-
+import utingLogo from '../img/utingLogo.png'
+import { Container, Row, Col } from "reactstrap";
 const Main = () => {
   const history = useHistory();
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
-  const [socketId,setSocketId]=useState("");
+  const [socketId, setSocketId] = useState("");
   const socket = socketio.connect('http://localhost:3001');
   let sessionUser = sessionStorage.getItem("email");
 
@@ -25,65 +26,69 @@ const Main = () => {
   };
 
   useEffect(() => {
-    socket.on('connect',function(){
+    socket.on('connect', function () {
       console.log("connection server");
-      socket.emit('login',{uid:sessionStorage.getItem('nickname')})
+      socket.emit('login', { uid: sessionStorage.getItem('nickname') })
     })
-    
+
     socket.on('clientid', function async(id) {
       setSocketId(id)
       console.log(id)
     })
-    
-    
+
+
   }, []);
-  
-  let putSocketid = async(e)=>{
-    let data={
-      "currentUser":sessionStorage.getItem('nickname'),
-      "currentSocketId":socketId
+
+  let putSocketid = async (e) => {
+    let data = {
+      "currentUser": sessionStorage.getItem('nickname'),
+      "currentSocketId": socketId
     }
-    const res = await axios.post("http://localhost:3001/users/savesocketid",data);
+    const res = await axios.post("http://localhost:3001/users/savesocketid", data);
     console.log(res)
   }
-  useEffect(()=>{
+  useEffect(() => {
     putSocketid()
-    
-  },[socketId])
+
+  }, [socketId])
 
   return (
-    <div className="mainContainer">
-      <div className="Logo">
-        <h5>메인</h5>
-      </div>
-      {sessionUser === "admin@ajou.ac.kr" ? (
-        <button onClick={gotoAdminPage}>관리자페이지</button>
-      ) : (
-        ""
-      )}
-      <div className="main">
+    <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <img style={{ width: "7%" }} src={utingLogo} />
+        {sessionUser === "admin@ajou.ac.kr" ? (
+          <button onClick={gotoAdminPage}>관리자페이지</button>
+        ) : (
+          ""
+        )}
         <button
+
+          className="makeRoomBtn"
           onClick={(e) => {
             toggleMakeMeetingBtn(e);
           }}
-          style={{ float: "right" }}
         >
-          방만들기
+          방 생성
         </button>
-      </div>
-      <Modal isOpen={toggleMakeMeeting}>
-        <ModalBody isOpen={toggleMakeMeeting}>
-          <Meeting />
-        </ModalBody>
-        <ModalFooter isOpen={toggleMakeMeeting}>
-          <Button color="secondary" onClick={toggleMakeMeetingBtn}>
-            Close
+       
+        <Modal isOpen={toggleMakeMeeting}>
+          <ModalBody isOpen={toggleMakeMeeting}>
+            <Meeting />
+          </ModalBody>
+          <ModalFooter isOpen={toggleMakeMeeting}>
+            <Button color="secondary" onClick={toggleMakeMeetingBtn}>
+              Close
           </Button>
-        </ModalFooter>
-      </Modal>
-      <Profile />
-      <MeetingList />
-      <Groups />
+          </ModalFooter>
+        </Modal>
+        <Profile />
+      </div>
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
+        <div style={{}}>학교 랭킹 넣는 자리 </div>
+        <MeetingList />
+        <Groups />
+      </div>
+
     </div>
   );
 };
