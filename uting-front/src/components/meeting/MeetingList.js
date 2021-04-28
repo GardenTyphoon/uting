@@ -65,12 +65,12 @@ export default function MeetingList() {
     }, []);
 
     return (//tr map 한다음에 key넣어주기
-        <div style={{width:"50%"}}>
+        <div style={{width:"60%"}}>
             {viewRoomList.map((room, index) =>
                 <Container className="MeetingRoom">
                     <Row style={{width:"100%"}}>
                         
-                            <img src={MeetingRoom} style={{width:"11%", borderRadius:"50%"}}/>
+                        <img src={MeetingRoom} style={{padding:"1%", width:"10%", borderRadius:"50%", marginRight:"5%"}}/>
                        
                         <Col xs="5" style={{display:"flex", alignItems:"center"}}>{room.title}</Col>
                         <Col xs="2">
@@ -80,12 +80,12 @@ export default function MeetingList() {
                             </div>
                             <div style={{display:"flex", justifyContent:"center", color:"#9A7D7D", fontSize:"small"}}>{room.avgAge}살</div>
                         </Col>
-                        <Col >
+                        <Col xs="3">
                             <button className="joinBtn" onClick={() => attendRoomByID(room, index)}>참가</button>
                             <Col style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
                                 <img style={{ width: "10%", height: "15%", marginRight:"8%"}} src={woman} />
                                 <img style={{ width: "13%", height: "22%",  marginRight:"8%" }} src={man} />
-                                {room.numOfWoman}   |  {room.numOfMan}
+                                <div> {room.numOfWoman}   |  {room.numOfMan} </div>
                                 </Col>
                              
                             

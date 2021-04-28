@@ -58,29 +58,29 @@ const Profile = () => {
   };
 
   return (
-    <div style={{fontFamily:"NanumSquare_acR", display:"flex", flexDirection:"row", alignItems:"center"}}>
+    <div style={{ fontFamily: "NanumSquare_acR", display: "flex", flexDirection: "row", alignItems: "center", width:"15%" }}>
       <button
         onClick={(e) => {
           toggleProfileBtn(e);
         }}
-        style={{borderRadius:"12px", padding:"0%", borderColor:"#FF6895"}}
+        style={{ borderRadius: "16px", padding: "0%", borderColor: "#FF6895" }}
       >
         {imgBase64 === "" ? (
-          <img src={ProfileNoImage} alt="profile img" height="60" width="60" style={{borderWidth:"3%"}}/>
+          <img src={ProfileNoImage} alt="profile img" height="60" width="60" style={{ borderRadius: "15px" }} />
         ) : (
-          <img src={imgBase64} alt="profile img" height="60" width="60"  style={{borderRadius:"10px"}} />
+          <img src={imgBase64} alt="profile img" height="60" width="60" style={{ borderRadius: "15px" }} />
         )}
       </button>
-      <div style={{display:"flex", flexDirection:"column"}}>
-        <div style={{marginLeft:"2%"}}>{ProfileInfo.nickname}</div>
-        <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
-        <img style={{width:"7%", marginRight:"1%"}}src={ucoin}></img>  
-        <div >{ProfileInfo.ucoin}</div>
-        <button onClick={coinWindow} style={{border:"none", borderRadius:"10px", padding:"5px", fontSize:"small", marginLeft:"1%"}}>
-          충전
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ width:"100%", marginLeft: "15%", color: "#896E6E" }}>{ProfileInfo.nickname}</div>
+        <div style={{ width:"100%", marginLeft:"8%", display: "flex", flexDirection: "row", alignItems: "center"}}>
+          <img style={{ width: "30%", marginRight: "3%" }} src={ucoin}></img>
+          <div style={{ color: "#896E6E" }}>{ProfileInfo.ucoin}</div>
+          <button onClick={coinWindow} style={{ border: "none", borderRadius: "10px", padding: "5px", fontSize: "small", marginLeft: "1%"}}>
+            충전
         </button>
         </div>
-        </div>
+      </div>
       <Modal isOpen={toggleprofile}>
         <ModalBody isOpen={toggleprofile} className="profileModal">
           <Row>
