@@ -73,54 +73,15 @@ app.io.on('connection',function(socket){
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
     clients.push(clientInfo);
-    console.log(clients)
-    console.log(clients[clients.length-1].id)
     socket.emit("clientid",{"id":clients[clients.length-1].id});
   });
 
   socket.on('message',function(msg){
-    //console.log("alarm")
     socket.emit("message",{"id":msg.socketid});
-    console.log("message",msg.socketid)
     let data = "그룹에 초대 되었습니다 ^0^"
     app.io.to(msg.socketid).emit("sendMember",data)
-    //socket.emit('sendMember', { id:msg.socketid, msg:data });
-    //socket.emit("sendMember",{message:data});
-    console.log("***************")
-    console.log(msg.socketid,data)
-    console.log("***************")
   })
 
-  
-    //socket.emit("clientid",{"id":clients[clients.length-1].id});
-
-
-  // socket.on('message', (msg) => {
-  //   console.log("message 백!")
-  //   msg='그룹이 생성 될 예정입니다.';
-  //   app.io.emit('message', msg);
-  // });
-
-  // socket.on('message', function(data) {
-  //   // 클라이언트 소켓 아이디를 통해서 그 소켓을 가진 클라이언트에만 메세지를 전송
-  //   console.log("-------------")
-  //   console.log(clients)
-  //   console.log("-------------")
-
-  //   console.log("**************")
-  //   console.log(data)
-  //   console.log("**************")
-
-  //   for (var i=0; i < clients.length; i++) {
-  //       var client = clients[i];
-  //       console.log('client.uid = '+ client.newuid);
-  //       if (client.newuid == data.uid) {
-  //         //app.io.socket(client.newuid).send(data.msg);
-  //         console.log("미리아이디",client.newuid)
-  //         break;
-  //       }
-  //     }
-  //   });
 
   socket.on('disconnect',function(){
     console.log('user disconnected');

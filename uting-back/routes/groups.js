@@ -42,6 +42,9 @@ router.post('/info', function(req, res,next){
     let foundPer;
     let memID=[];
     let newMemId;
+    let memList=[];
+    let memIdList=[];
+    
     User.find(function(err,user){
         user.forEach(per=>{
             if(req.body.host===per.nickname){
@@ -58,24 +61,23 @@ router.post('/info', function(req, res,next){
       group.forEach(per=>{
         per.member.forEach(mem=>{
           if(req.body.host === mem){
-            console.log(mem)
             exist=true;
             foundPer=per;
-            memID=[newMemId]
           } 
         })
       })
-      console.log(foundPer)
       if(exist===true){
-        console.log(memID)
-        Group.findByIdAndUpdate(foundPer._id,{$push:{member:req.body.memberNickname,group_members_id:memID}},(err,gr)=>{
-            console.log(foundPer._id);
+        foundPer.member.push(req.body.memberNickname)
+        foundPer.group_members_id.push(newMemId)
+        Group.findByIdAndUpdate(foundPer._id,{$set:{member:foundPer.member,group_members_id:foundPer.group_members_id}},(err,gr)=>{
+            res.send(foundPer._id);
         })
       }
       if(exist===false){
+        memID.push(newMemId)
         const group2 = new Group({
-          member:[req.body.host,req.body.memberNickname],
-          group_members_id:memID
+          group_members_id:memID,
+          member:[req.body.host,req.body.memberNickname]
         })
         group2.save((err)=>{
         res.send("그룹 생성이 완료 되었습니다.")

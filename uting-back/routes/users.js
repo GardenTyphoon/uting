@@ -182,20 +182,23 @@ router.post("/logined", function (req, res, next) {
   });
 });
 
+//소켓아이디저장
 router.post("/savesocketid", function (req, res, next) {
   let ismember =false;
   let perObj = {};
-  console.log(req.body.currentSocketId.id)
+  console.log("sosocket",req.body.currentSocketId.id)
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
       if (req.body.currentUser === per.nickname) {
-        console.log(per);
+        console.log("savesocketid !!",per);
+        console.log("sosocket",req.body.currentSocketId.id)
         ismember = true;
         perObj=per;
       }
     });
     if(ismember===true){
+      console.log("tureture!",req.body.currentSocketId.id)
       User.findByIdAndUpdate(perObj._id, {$set: {
         status: perObj.status,
         _id:perObj._id,
@@ -212,13 +215,51 @@ router.post("/savesocketid", function (req, res, next) {
         socketid:req.body.currentSocketId.id,
       
       }}, (err, u)=>{
-        console.log(perObj)
         res.send(perObj)
       });
-      //res.send(per)
+      //res.send(perObj)
 
     }
     if (ismember === false) {
+      res.send("no");
+    }
+  });
+});
+
+router.post("/logout", function (req, res, next) {
+  let ismember = false;
+  let perObj={};
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (req.body.email === per.email) {
+        ismember = true;
+        perObj=per;
+        console.log("로그아웃",per)
+      }
+    });
+    if(ismember===true){
+      User.findByIdAndUpdate(perObj._id, {$set: {
+        status: false,
+        _id:perObj._id,
+        name: perObj.name,
+        nickname: perObj.nickname,
+        gender: perObj.gender,
+        birth: perObj.birth,
+        email: perObj.email,
+        password: perObj.password,
+        phone: perObj.phone,
+        imgURL: perObj.imgURL,
+        mannerCredit: perObj.mannerCredit,
+        ucoin: perObj.ucoin,
+        socketid:perObj.socketid,
+      
+      }}, (err, u)=>{
+        console.log(perObj)
+        res.send("success")
+      });
+    }
+    if (ismember === false) {
+      console.log("no!")
       res.send("no");
     }
   });
