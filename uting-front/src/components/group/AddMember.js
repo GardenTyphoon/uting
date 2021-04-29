@@ -37,18 +37,16 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
       "addMember":newmember
     }
     const res = await axios.post('http://localhost:3001/users/logined', data);
-    console.log(res.data)
+ 
     if(res.data.status===true){
-      console.log(res.data.socketid)
       setSocketId(res.data.socketid)
       let groupData={
         "host":currentUser,
         "memberNickname":res.data.nickname
         
       }
-      console.log(groupData)
       const resgroup = await axios.post('http://localhost:3001/groups/',groupData);
-      console.log(resgroup)
+
       setSocketCnt(true);
 
       modalState(true);
