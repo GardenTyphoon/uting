@@ -142,7 +142,6 @@ router.post("/userInfo", function (req, res, next) {
   });
 });
 router.post("/modifyMyProfile", function (req, res, next) {
-  
   User.findByIdAndUpdate(
     req.body._id,
     {
@@ -154,6 +153,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
       },
     },
     (err, us) => {
+      
     }
   );
 });

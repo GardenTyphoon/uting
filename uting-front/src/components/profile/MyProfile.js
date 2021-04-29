@@ -11,6 +11,7 @@ const MyProfile = () => {
   const [check, setCheck] = useState(false);
   const [staticpath, setStaticpath] = useState("http://localhost:3001");
   const [ProfileInfo, setProfileInfo] = useState({
+    _id:"",
     name: "",
     nickname: "",
     gender: "",
@@ -38,6 +39,7 @@ const MyProfile = () => {
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {
+      _id : res.data._id,
       name: res.data.name,
       nickname: res.data.nickname,
       gender: res.data.gender,
