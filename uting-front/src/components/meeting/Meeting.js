@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import socketio from 'socket.io-client';
 
 function birthToAge(birth) {
     
@@ -10,9 +11,11 @@ function birthToAge(birth) {
 }
 const Meeting = ({ checkFunc }) => {
     let sessionUser = sessionStorage.getItem("nickname");
-
+    const socket = socketio.connect('http://localhost:3001');
     const [groupMembers, setGroupMembers] = useState("");
     const [toggleWarningMess, setToggleWarningMess] = useState(false);
+    const [socketOn, setSocketOn] = useState(false);
+    let groupMembersSocketId=[];
     const [room, setRoom] = useState({
         title: "", //방제
         num: 0, //성별당 최대인원
@@ -47,9 +50,8 @@ const Meeting = ({ checkFunc }) => {
     }
     useEffect(() => {
         getMyGroupMember();
-    })
+    },[])
     const makeRoom = async (e) => {
-
         e.preventDefault();
         if (toggleWarningMess === false) {
             //내가 속한 그룹의 그룹원들 닉네임 받아오기
@@ -61,7 +63,9 @@ const Meeting = ({ checkFunc }) => {
             let nowOfMan = 0;
             for (let i = 0; i < groupMembers.data.length; i++) {
                 let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
-
+                if(userInfo.data.nickname != sessionUser){
+                    groupMembersSocketId.push(userInfo.data.socketid);
+                }
                 avgManner += userInfo.data.mannerCredit;
                 avgAge += birthToAge(userInfo.data.birth);
                 if (userInfo.data.gender === "woman") {
@@ -70,6 +74,7 @@ const Meeting = ({ checkFunc }) => {
                 else nowOfMan += 1;
 
             }
+            setSocketOn(groupMembersSocketId);
             avgManner /= groupMembers.data.length;
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
@@ -85,12 +90,18 @@ const Meeting = ({ checkFunc }) => {
                 numOfWoman: nowOfWoman,
                 numOfMan: nowOfMan
             };
-            console.log(data);
             await axios.post('http://localhost:3001/meetings', data);
+
 
             checkFunc(true)
         }
     }
+    useEffect(()=>{
+        socket.on('connect',function(){
+            console.log(socketOn);
+            socket.emit('makeMeetingRoomMsg',{"groupMembersSocketId":socketOn}) 
+        })
+    },[socketOn])
     return (
         <div>
             <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />

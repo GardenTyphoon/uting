@@ -34,25 +34,26 @@ const Main = () => {
     }
     
   }
-
   socket.on("sendMember",function(data){
-    console.log("sendMember")
+ 
     alert(data);
     window.location.href = "http://localhost:3000/main";
   })
 
+  socket.on("makeMeetingRoomMsg", function(data){
+    alert(data)
+    window.location.href = "http://localhost:3000/main";
+  })
+  
   useEffect(() => {
     socket.on('connect', function () {
-      console.log("connection server");
       socket.emit('login', { uid: sessionStorage.getItem('nickname') })
     })
 
     socket.on('clientid', function async(id) {
       setSocketId(id)
-      console.log(id)
     })
 
-    console.log(socketId)
   }, []);
 
   let putSocketid = async (e) => {
@@ -61,7 +62,7 @@ const Main = () => {
       "currentSocketId": socketId
     }
     const res = await axios.post("http://localhost:3001/users/savesocketid", data);
-    console.log(res)
+
   }
   useEffect(() => {
     putSocketid()

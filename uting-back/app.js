@@ -70,7 +70,7 @@ app.io = require('socket.io')();
 app.io.on('connection',function(socket){
   //console.log("Connected !");
   socket.on('login', function(data) {
-    console.log('user login');
+    
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -84,7 +84,12 @@ app.io.on('connection',function(socket){
     app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
   })
 
-
+  socket.on('makeMeetingRoomMsg',function(data){
+    let msg = "그룹 호스트가 미팅방을 생성하였습니다."
+    for(let i=0;i<data.groupMembersSocketId.length;i++){
+      app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
+    };
+  })
   socket.on('disconnect',function(){
     console.log('user disconnected');
   });
