@@ -43,7 +43,7 @@ function mannerCredit(avgManner) {
         return "F";
     }
 }
-export default function MeetingList() {
+export default function MeetingList({checkState}) {
     
     const [viewRoomList, setView] = useState([]);
     const attendRoomByID = (room, index) => {
@@ -63,6 +63,13 @@ export default function MeetingList() {
             .then(({ data }) => setView(data))
             .catch((err) => { });
     }, []);
+
+    useEffect(()=>{
+        axios
+        .get('http://localhost:3001/meetings')
+        .then(({ data }) => setView(data))
+        .catch((err) => { });
+    },[checkState])
 
     return (//tr map 한다음에 key넣어주기
         <div style={{width:"60%"}}>

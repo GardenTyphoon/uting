@@ -13,7 +13,9 @@ import { Container, Row, Col } from "reactstrap";
 const Main = () => {
   const history = useHistory();
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
+  const [checkRoomList,setCheckRoomList]=useState(false);
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
+
 
   const [socketId, setSocketId] = useState("");
   const socket = socketio.connect('http://localhost:3001');
@@ -24,6 +26,14 @@ const Main = () => {
       pathname: `/admin`,
     });
   };
+
+  let checkList = (e) =>{
+    if(e===true){
+      setCheckRoomList(true)
+      setToggleMakeMeeting(false)
+    }
+    
+  }
 
   socket.on("sendMember",function(data){
     console.log("sendMember")
@@ -79,7 +89,7 @@ const Main = () => {
        
         <Modal isOpen={toggleMakeMeeting}>
           <ModalBody isOpen={toggleMakeMeeting}>
-            <Meeting />
+            <Meeting checkFunc={(e)=>checkList(e)}/>
           </ModalBody>
           <ModalFooter isOpen={toggleMakeMeeting}>
             <Button color="secondary" onClick={toggleMakeMeetingBtn}>
@@ -91,7 +101,7 @@ const Main = () => {
       </div>
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
         <div style={{}}>학교 랭킹 넣는 자리 </div>
-        <MeetingList />
+        <MeetingList checkState={checkRoomList} />
         <Groups currentsocketId={socketId}/>
       </div>
 
