@@ -122,8 +122,7 @@ router.post("/signin", function (req, res, next) {
 });
 
 router.post("/viewMyProfile", function (req, res, next) {
-  console.log(req.body.sessionUser);
-  console.log(req.body);
+  
   User.find(function (err, user) {
     user.forEach((per) => {
       if (req.body.sessionUser === per.email) {
@@ -133,16 +132,17 @@ router.post("/viewMyProfile", function (req, res, next) {
   });
 });
 router.post("/userInfo", function (req, res, next) {
+  console.log(req.body.userId);
   User.find(function (err, user) {
     user.forEach((per) => {
-      if (req.body.userId === per._id.toString()) {
+      if (req.body.userId === per._id.toString() || req.body.userId === per.nickname) {
         res.send(per);
       }
     });
   });
 });
 router.post("/modifyMyProfile", function (req, res, next) {
-  console.log(req.body);
+  
   User.findByIdAndUpdate(
     req.body._id,
     {
@@ -154,7 +154,6 @@ router.post("/modifyMyProfile", function (req, res, next) {
       },
     },
     (err, us) => {
-      console.log(req.body._id);
     }
   );
 });

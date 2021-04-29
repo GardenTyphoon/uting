@@ -3,20 +3,24 @@ var router = express.Router();
 const { Group } = require('../model');
 const { User } = require('../model');
 
-router.post('/getMyGroup', function (req, res, next) {
+
+
+router.post('/getMyGroupMember', function (req, res, next) {
+  
+  
     Group.find(function (err, group) {
         group.forEach(gr => {
-           
-            if (req.body.groupId === gr._id.toString()) {
+           gr.member.forEach(nickname=>{
+              if (req.body.sessionUser === nickname) {
                
-                res.send(gr.group_members_id);
-            }
+                res.send(gr.member);
+               }
+            })
         })
     })
 })
 // POST write one group
 router.post('/info', function(req, res,next){
-    console.log(req.body.sessionUser)
     let ismember=false;
     Group.find(function(err,group){
       group.forEach(per=>{
