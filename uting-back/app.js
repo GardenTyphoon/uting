@@ -11,6 +11,7 @@ var meetingsRouter = require('./routes/meetings');
 var groupsRouter = require('./routes/groups');
 var adsRouter = require('./routes/ads');
 var reportsRouter = require('./routes/reports');
+var mcsRouter = require('./routes/mcs');
 
 var clients = [];
 var members = [];
@@ -46,6 +47,7 @@ app.use('/meetings', meetingsRouter);
 app.use('/groups',groupsRouter);
 app.use('/ads', adsRouter);
 app.use('/reports', reportsRouter);
+app.use('/mcs',mcsRouter)
 
 
 // catch 404 and forward to error handler
@@ -77,9 +79,9 @@ app.io.on('connection',function(socket){
   });
 
   socket.on('message',function(msg){
-    socket.emit("message",{"id":msg.socketid});
+    //socket.emit("message",{"id":msg.socketid});
     let data = "그룹에 초대 되었습니다 ^0^"
-    app.io.to(msg.socketid).emit("sendMember",data)
+    app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
   })
 
 

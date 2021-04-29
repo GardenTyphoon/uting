@@ -2,6 +2,9 @@ import React, { useState,useEffect } from 'react';
 import { Route, Link,Switch,Router } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import classnames from 'classnames';
+import Conversation from './Conversation'
+import GameRecom from './GameRcom'
 import {Button,
     ButtonGroup,
     Card,
@@ -21,7 +24,7 @@ import {Button,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Row, } from 'reactstrap';
+    Row,TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
 
 
     const RightButton = styled.div`
@@ -36,9 +39,16 @@ import {Button,
 
 const AdminMc = () => {
     const [open, setOpen] = useState(false);
+    const [activeTab, setActiveTab] = useState('1');
+
     let isOpen = () => {
         setOpen(!open);
       };
+      
+    const toggle = tab => {
+      if(activeTab !== tab) setActiveTab(tab);
+    }
+      
   return (
     <Card>
     <CardHeader>
@@ -52,6 +62,32 @@ const AdminMc = () => {
     <Collapse isOpen={open}>
       <CardBody>
         mc봇에 대화추천 게임추천 데이터 CRUD할 예정
+        <Nav tabs>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === '1' })}
+            onClick={() => { toggle('1'); }}
+          >
+            대화
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={classnames({ active: activeTab === '2' })}
+            onClick={() => { toggle('2'); }}
+          >
+            게임
+          </NavLink>
+        </NavItem>
+      </Nav>
+      <TabContent activeTab={activeTab}>
+        <TabPane tabId="1">
+          <Conversation></Conversation>
+        </TabPane>
+        <TabPane tabId="2">
+          <GameRecom></GameRecom>
+        </TabPane>
+      </TabContent>
       </CardBody>
     </Collapse>
   </Card>
