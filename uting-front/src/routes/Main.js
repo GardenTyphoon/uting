@@ -14,6 +14,9 @@ const Main = () => {
   const history = useHistory();
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
   const [checkRoomList,setCheckRoomList]=useState(false);
+  const [checkGroup,setCheckGroup]=useState(false)
+  const [checkAnother,setCheckAnother]=useState(false);
+  const [addEvent,setAddEvent]=useState(false);
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
 
@@ -34,16 +37,35 @@ const Main = () => {
     }
     
   }
-  socket.on("sendMember",function(data){
+
+  let preMessage = (e)=>{
+    if(e===true){
+      setAddEvent(true)
+    }
+  }
+
+  useEffect(()=>{
+
+  },[addEvent])
  
+  socket.on("sendMember",function(data){
     alert(data);
-    window.location.href = "http://localhost:3000/main";
+    setCheckGroup(true);
   })
 
   socket.on("makeMeetingRoomMsg", function(data){
     alert(data)
     window.location.href = "http://localhost:3000/main";
   })
+
+  //다른 그룹원 추가
+  socket.on("premessage", function(data){
+    setTimeout(() => {
+      alert(data)
+      setCheckAnother(true);
+    }, 5000);
+  })
+  
   
   useEffect(() => {
     socket.on('connect', function () {
@@ -103,7 +125,7 @@ const Main = () => {
       <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList checkState={checkRoomList} />
-        <Groups currentsocketId={socketId}/>
+        <Groups currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
       </div>
 
     </div>

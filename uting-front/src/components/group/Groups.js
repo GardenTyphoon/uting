@@ -70,14 +70,14 @@ const GroupTitle = styled.div`
   
 `;
 
-const Groups = ({currentsocketId}) => {
-  const [groups, setGroups] = useState([]);
+const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
   );
   const [addMemberModal, setAddMemberModal] = useState(false);
   const [groupMember,setGroupMember] = useState([]);
   const [checkMem,setCheckMem] = useState(false);
+  const [groupSocketIdList,setGroupSocketIdList]=useState([]);
   let [modalStatus,setModalStatus]=useState(false);
  
 
@@ -89,9 +89,23 @@ const Groups = ({currentsocketId}) => {
       "http://localhost:3001/groups/info",
       sessionObject
     );
-    console.log(res);
     setGroupMember(res.data.member);
+    console.log("member!",res.data.member)
   };
+
+  let saveGroupSocketId = async()=>{
+    let data={
+      preMember:groupMember
+    }
+    const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
+    
+    console.log(groupMember)
+    if(res.data!=="undefined"){
+      setGroupSocketIdList(res.data)
+    }
+    
+    console.log(res.data)
+  }
 
   const toggelAddMember = (e) => {
     setAddMemberModal(!addMemberModal);
@@ -113,6 +127,16 @@ const Groups = ({currentsocketId}) => {
     getGroupInfo();
   }, []);
 
+  useEffect(()=>{
+      saveGroupSocketId()
+  },[groupMember])
+
+  useEffect(()=>{
+    getGroupInfo();
+  },[checkGroup])
+  useEffect(()=>{
+    getGroupInfo();
+  },[checkAnother])
   useEffect(() => {
     getGroupInfo();
   }, [checkMem]);
@@ -143,6 +167,8 @@ const Groups = ({currentsocketId}) => {
           checkMember={(e) => toggleCheckMem(e)}
           modalState={(e) => toggleModalStatus(e)}
           currentUser={currentUser}
+          preMemSocketIdList={groupSocketIdList}
+          groupMemList={groupMember}
         ></AddMember>
       </Modal>
     </GroupBox>
