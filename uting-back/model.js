@@ -103,10 +103,6 @@ const Meeting = new Schema({
 // Meeting.plugin(autoInc.plugin, 'meeting');
 
 const Group = new Schema({
-    group_members_id:{
-        type:Array,
-        required:true
-    },
     member : {
         type:Array,
         required:true
