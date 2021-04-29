@@ -6,7 +6,7 @@ function birthToAge(birth) {
     let year = birth.slice(0, 4);
     return 2021 - Number(year) + 1;
 }
-const Meeting = () => {
+const Meeting = ({checkFunc}) => {
     let sessionUser = sessionStorage.getItem("nickname");
 
     const [room, setRoom] = useState({
@@ -25,7 +25,6 @@ const Meeting = () => {
         e.preventDefault();
         //내가 속한 그룹의 그룹원들 닉네임 받아오기
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-
         setRoom({ ...room, ["users"]: res.data });
         //평균 나이, 평균 학점, 현재 남녀 수 구하기
         let avgManner = 0;
@@ -59,6 +58,8 @@ const Meeting = () => {
             numOfMan: nowOfMan
         };
         await axios.post('http://localhost:3001/meetings', data);
+        
+        checkFunc(true)
     }
     return (
         <div>
