@@ -124,6 +124,17 @@ const Report = new Schema({
 })
 // Report.plugin(autoInc.plugin, 'report');
 
+const Mc = new Schema({
+    type : {
+        type:String,
+        required:true
+    },
+    content : {
+        type:String,
+        required:true
+    },
+})
+
 
 // autoInc.initialize(mongoose.connection);
 
@@ -132,5 +143,6 @@ module.exports = {
     Meeting : mongoose.model('meeting', Meeting),
     Group : mongoose.model('group',Group),
     Ad : mongoose.model('ad', Ad),
-    Report : mongoose.model('report', Report)
+    Report : mongoose.model('report', Report),
+    Mc:mongoose.model('mc',Mc)
 }

@@ -3,7 +3,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 
 function birthToAge(birth) {
+    
     let year = birth.slice(0, 4);
+    console.log("year",year)
     return 2021 - Number(year) + 1;
 }
 const Meeting = ({ checkFunc }) => {
