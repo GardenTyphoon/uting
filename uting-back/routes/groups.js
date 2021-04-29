@@ -6,7 +6,6 @@ const { User } = require('../model');
 
 
 router.post('/getMyGroupMember', function (req, res, next) {
-  console.log(req.body)
     Group.find(function (err, group) {
         group.forEach(gr => {
            gr.member.forEach(nickname=>{
