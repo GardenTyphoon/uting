@@ -71,7 +71,6 @@ const GroupTitle = styled.div`
 `;
 
 const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
-  const [groups, setGroups] = useState([]);
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
   );

@@ -22,7 +22,6 @@ import socketio from "socket.io-client";
 const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId,preMemSocketIdList }) => {
  
   const [newmember,setNewmember] = useState("")
-  const [prevMem,setPrevMem]=useState(prevMember)
   const [socketCnt,setSocketCnt]=useState(false);
   const [socketId,setSocketId]=useState("");
   const [precheck,setPrecheck]=useState(false);
@@ -33,13 +32,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
     setNewmember(value)   
    
   };
-//
-  let checkGroupMem = async(e)=>{
-    
-  }
-
   const addGroupMember = async (e)=>{
-    
     let data ={
       "addMember":newmember
     }
@@ -57,14 +50,12 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
       setSocketCnt(true);
 
       modalState(true);
-      if(prevMem===true){
+      if(prevMember===true){
         checkMember(false);
       }
-      if(prevMem===false){
+      if(prevMember===false){
         checkMember(true);
       }
-      
-      
     }
     else{
       alert("현재 접속 중인 사용자가 아니거나, 닉네임이 올바르지 않습니다.")
@@ -80,13 +71,8 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
     socket.on('connect',function(){
       console.log("message")
       socket.emit('message',{"socketid":socketId})
-      
     })
     setPrecheck(true);
-    
-    
-    
-
   },[socketCnt])
 
   useEffect(()=>{
@@ -101,9 +87,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         }
       }
       if(check===true){
-        console.log("여기여기",preMemSocketIdList)
         socket.on('connect',function(){
-        
           socket.emit('premessage',{"socketidList":preMemSocketIdList})
         })
 

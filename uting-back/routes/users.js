@@ -265,7 +265,6 @@ router.post("/logout", function (req, res, next) {
 });
 
 router.post('/preMemSocketid',function(req,res,next){
-  let ismember = false;
   let socketidList=[]
   if(req.body.preMember===undefined){
     res.send("undefined")
