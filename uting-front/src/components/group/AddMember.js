@@ -48,7 +48,6 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
       const resgroup = await axios.post('http://localhost:3001/groups/',groupData);
       
       setSocketCnt(true);
-
       modalState(true);
       if(prevMember===true){
         checkMember(false);
@@ -77,7 +76,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
 
   useEffect(()=>{
 
-    setTimeout(()=>{
+   
       let check=false;
       for(let i =0;i<preMemSocketIdList.length;i++){
         if(preMemSocketIdList[i]===currentsocketId.id){
@@ -92,7 +91,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         })
 
       }
-    },10)
+ 
     
   },[precheck])
 
