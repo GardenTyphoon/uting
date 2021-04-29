@@ -24,7 +24,12 @@ import {Button,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Row,TabContent, TabPane, Nav, NavItem, NavLink, } from 'reactstrap';
+    Row,TabContent,
+    TabPane,
+    Nav,
+    NavItem,
+    NavLink,
+  } from 'reactstrap';
 
 
     const RightButton = styled.div`

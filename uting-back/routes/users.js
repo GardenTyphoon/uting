@@ -264,4 +264,27 @@ router.post("/logout", function (req, res, next) {
   });
 });
 
+router.post('/preMemSocketid',function(req,res,next){
+  let ismember = false;
+  let socketidList=[]
+  if(req.body.preMember===undefined){
+    res.send("undefined")
+  }
+  else{
+    User.find(function (err, user) {
+      user.forEach((per) => {
+        req.body.preMember.forEach((mem)=>{
+          if(mem===per.nickname){
+            socketidList.push(per.socketid)
+          }
+        })
+        
+      });
+      res.send(socketidList)
+    });
+  }
+ 
+
+})
+
 module.exports = router;

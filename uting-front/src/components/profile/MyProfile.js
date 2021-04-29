@@ -39,11 +39,7 @@ const MyProfile = () => {
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {
-<<<<<<< HEAD
-      _id:res.data._id,
-=======
       _id : res.data._id,
->>>>>>> 45d712009c2b19c33fb7d4a588a585803a32be30
       name: res.data.name,
       nickname: res.data.nickname,
       gender: res.data.gender,

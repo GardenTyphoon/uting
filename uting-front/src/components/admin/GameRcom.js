@@ -22,18 +22,13 @@ import {Button,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Row,TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
+    Row,TabContent,
+    TabPane,
+    Nav,
+    NavItem,
+    NavLink
+  } from 'reactstrap';
 
-
-    const RightButton = styled.div`
-    position: relative;
-    padding: 1rem 1rem;
-    margin: -1rem -1rem -1rem auto;
-  `;
-
-  const FlexBox = styled.div`
-  display: flex;
-`;
 
 const GameRecom = () => {
   const [addModal, setAddModal] = useState(false);
@@ -56,7 +51,6 @@ const GameRecom = () => {
       content : newGame
     }
     const res = await axios.post("http://localhost:3001/mcs/",data);
-    console.log(data)
     setAddModal(false)
     setCheck(!check)
   }
@@ -66,7 +60,6 @@ const GameRecom = () => {
       type:"game"
     }
     const res = await axios.post("http://localhost:3001/mcs/list",data)
-    console.log(res.data)
     setGameList(res.data);
   }
 
@@ -80,7 +73,6 @@ const GameRecom = () => {
 
   return (
     <div>
-        게임주제
         <Button onClick={toggle}>게임 주제 생성</Button>
       < Modal isOpen={addModal} toggle={toggle} >
           <ModalHeader toggle={toggle}>게임 주제 생성 폼</ModalHeader>

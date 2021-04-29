@@ -83,6 +83,15 @@ app.io.on('connection',function(socket){
     let data = "그룹에 초대 되었습니다 ^0^"
     app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
   })
+  socket.on('premessage',function(msg){
+    //socket.emit("message",{"id":msg.socketid});
+    let data = "그룹에 다른 사용자가 추가되었습니다 ^0^"
+    
+    for(let i=0;i<msg.socketidList.length;i++){
+      app.io.to(msg.socketidList[i]).emit("premessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+    }
+   
+  })
 
   socket.on('makeMeetingRoomMsg',function(data){
     let msg = "그룹 호스트가 미팅방을 생성하였습니다."

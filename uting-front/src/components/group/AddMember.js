@@ -19,12 +19,13 @@ import {
 import axios from "axios";
 import socketio from "socket.io-client";
 
-const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId }) => {
+const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId,preMemSocketIdList }) => {
  
   const [newmember,setNewmember] = useState("")
   const [prevMem,setPrevMem]=useState(prevMember)
   const [socketCnt,setSocketCnt]=useState(false);
   const [socketId,setSocketId]=useState("");
+  const [precheck,setPrecheck]=useState(false);
   const socket = socketio.connect('http://localhost:3001');
  
   let onChangehandler = (e) => {
@@ -32,7 +33,13 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
     setNewmember(value)   
    
   };
+//
+  let checkGroupMem = async(e)=>{
+    
+  }
+
   const addGroupMember = async (e)=>{
+    
     let data ={
       "addMember":newmember
     }
@@ -46,7 +53,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         
       }
       const resgroup = await axios.post('http://localhost:3001/groups/',groupData);
-
+      
       setSocketCnt(true);
 
       modalState(true);
@@ -56,6 +63,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
       if(prevMem===false){
         checkMember(true);
       }
+      
       
     }
     else{
@@ -67,12 +75,42 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
   }
 
   useEffect(()=>{
+    
+    console.log(preMemSocketIdList)
     socket.on('connect',function(){
       console.log("message")
       socket.emit('message',{"socketid":socketId})
+      
     })
+    setPrecheck(true);
+    
+    
+    
 
   },[socketCnt])
+
+  useEffect(()=>{
+
+    setTimeout(()=>{
+      let check=false;
+      for(let i =0;i<preMemSocketIdList.length;i++){
+        if(preMemSocketIdList[i]===currentsocketId.id){
+          preMemSocketIdList.splice(i,1)
+          check=true;
+          i--;
+        }
+      }
+      if(check===true){
+        console.log("여기여기",preMemSocketIdList)
+        socket.on('connect',function(){
+        
+          socket.emit('premessage',{"socketidList":preMemSocketIdList})
+        })
+
+      }
+    },10)
+    
+  },[precheck])
 
 return (
   <div>

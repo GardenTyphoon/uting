@@ -22,18 +22,13 @@ import {Button,
     ModalBody,
     ModalFooter,
     ModalHeader,
-    Row,TabContent, TabPane, Nav, NavItem, NavLink} from 'reactstrap';
+    Row,TabContent,
+    TabPane,
+    Nav,
+    NavItem,
+    NavLink
+  } from 'reactstrap';
 
-
-    const RightButton = styled.div`
-    position: relative;
-    padding: 1rem 1rem;
-    margin: -1rem -1rem -1rem auto;
-  `;
-
-  const FlexBox = styled.div`
-  display: flex;
-`;
 
 const Conversation = () => {
   const [addModal, setAddModal] = useState(false);
@@ -54,7 +49,6 @@ const Conversation = () => {
       content : newConversation
     }
     const res = await axios.post("http://localhost:3001/mcs/",data);
-    console.log(data)
     setAddModal(false)
     setCheck(!check)
   }
@@ -64,7 +58,6 @@ const Conversation = () => {
       type:"conversation"
     }
     const res = await axios.post("http://localhost:3001/mcs/list",data)
-    console.log(res.data)
     setConversationList(res.data);
   }
 
@@ -78,7 +71,6 @@ const Conversation = () => {
 
   return (
     <div>
-        대화주제
         <Button onClick={toggle}>대화 주제 생성</Button>
       < Modal isOpen={addModal} toggle={toggle} >
           <ModalHeader toggle={toggle}>대화 주제 생성 폼</ModalHeader>
