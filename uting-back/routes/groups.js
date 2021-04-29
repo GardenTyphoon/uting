@@ -40,23 +40,8 @@ router.post('/info', function(req, res,next){
   router.post('/', function(req, res,next){
     let exist=false;
     let foundPer;
-    let memID=[];
-    let newMemId;
     let memList=[];
-    let memIdList=[];
     
-    User.find(function(err,user){
-        user.forEach(per=>{
-            if(req.body.host===per.nickname){
-                memID.push(per._id);
-            }
-            if(req.body.memberNickname===per.nickname){
-                memID.push(per._id);
-                newMemId=per._id;
-            }
-        })
-    })
-
     Group.find(function(err,group){
       group.forEach(per=>{
         per.member.forEach(mem=>{
@@ -68,15 +53,12 @@ router.post('/info', function(req, res,next){
       })
       if(exist===true){
         foundPer.member.push(req.body.memberNickname)
-        foundPer.group_members_id.push(newMemId)
-        Group.findByIdAndUpdate(foundPer._id,{$set:{member:foundPer.member,group_members_id:foundPer.group_members_id}},(err,gr)=>{
+        Group.findByIdAndUpdate(foundPer._id,{$set:{member:foundPer.member}},(err,gr)=>{
             res.send(foundPer._id);
         })
       }
       if(exist===false){
-        memID.push(newMemId)
         const group2 = new Group({
-          group_members_id:memID,
           member:[req.body.host,req.body.memberNickname]
         })
         group2.save((err)=>{
