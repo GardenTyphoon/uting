@@ -8,8 +8,7 @@ import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from 'socket.io-client';
-import utingLogo from '../img/utingLogo.png'
-import { Container, Row, Col } from "reactstrap";
+import utingLogo from '../img/utingLogo.png';
 const Main = () => {
   const history = useHistory();
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
@@ -127,7 +126,6 @@ const Main = () => {
         <MeetingList checkState={checkRoomList} />
         <Groups currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
       </div>
-
     </div>
   );
 };

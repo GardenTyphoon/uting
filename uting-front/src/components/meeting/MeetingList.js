@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import axios from 'axios';
 import woman from '../../img/woman.png'
 import man from '../../img/man.png'
@@ -45,16 +46,12 @@ function mannerCredit(avgManner) {
 }
 export default function MeetingList({checkState}) {
     
+    const history = useHistory();
     const [viewRoomList, setView] = useState([]);
     const attendRoomByID = (room, index) => {
-        const newroom = { title: room.title, num: room.num, status: '미팅중' };
-        setView({
-            ...viewRoomList.slice(0, index),
-            newroom,
-            ...viewRoomList.slice(index + 1)
-        }
-        )
-        console.log(viewRoomList);
+        history.push({
+            pathname: `/room`,
+        });
     };
     
     useEffect(() => {

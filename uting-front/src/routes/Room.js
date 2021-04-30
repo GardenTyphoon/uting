@@ -9,8 +9,8 @@ const Room = () => {
 
 
   return (
-    <div>
-      Room
+    <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
+      
       <McBot></McBot>
     </div>
   );
