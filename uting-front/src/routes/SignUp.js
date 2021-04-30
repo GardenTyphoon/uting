@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Input, Button, Table } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { is } from "date-fns/locale";
 
 const SignUpBox = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
@@ -42,6 +43,9 @@ const SignUp = () => {
   /*본인인증 성공 여부*/
   const [identity, setIdentity] = useState("");
 
+  /*닉네임 중복 확인*/
+  const [checkNickname,setCheckNickname]=useState(false);
+
   let onChangehandler = (e) => {
     let { name, value } = e.target;
     if (name === "check-email") {
@@ -67,7 +71,8 @@ const SignUp = () => {
       userinfo.email !== "" &&
       userinfo.password !== "" &&
       identity !== "false" &&
-      identity !== ""
+      identity !== ""&&
+      checkNickname===true
     ) {
       let data = {
         name: userinfo.name,
@@ -129,6 +134,21 @@ const SignUp = () => {
       alert("인증코드가 틀렸습니다.");
     }
   };
+
+  let overlapNickname = async(e)=>{
+    let data={
+      nickname:userinfo.nickname
+    }
+
+    const res = await axios.post("http://localhost:3001/users/checknickname",data)
+    if(res.data==="exist"){
+      alert("이미 존재하는 닉네임입니다.")
+    }
+    if(res.data==="no"){
+      setCheckNickname(true)
+      alert("사용가능한 닉네임입니다.")
+    }
+  }
 
   /*본인인증*/
   function onClickCertification() {
@@ -210,6 +230,7 @@ const SignUp = () => {
           placeholder="닉네임"
           onChange={(e) => onChangehandler(e)}
         />
+        <Button onClick={(e)=>overlapNickname()}>중복확인</Button>
       </SignUpBox>
       <SignUpBox>
         <div>성별</div>

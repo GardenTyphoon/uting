@@ -121,6 +121,24 @@ router.post("/signin", function (req, res, next) {
   });
 });
 
+router.post("/checknickname", function (req, res, next) {
+  let ismember = false;
+  console.log(req.body.nickname)
+  User.find(function (err, user) {
+    //console.log(user)
+    user.forEach((per) => {
+      if (req.body.nickname === per.nickname ) {
+        console.log(per);
+        ismember = true;
+        res.send("exist");
+      }
+    });
+    if (ismember === false) {
+      res.send("no");
+    }
+  });
+});
+
 router.post("/viewMyProfile", function (req, res, next) {
   
   User.find(function (err, user) {
