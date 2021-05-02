@@ -18,11 +18,17 @@ router.post('/list', function(req, res,next){
         mc.forEach((one) => {
           if (req.body.type === one.type) {
               list.push(one.content)
+
           }
         });
+        console.log("list",list)
         res.send(list)
+        
     });
 })
+
+
+
 
 
 module.exports = router;
