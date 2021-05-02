@@ -4,23 +4,83 @@ import axios from "axios";
 
 const Ucoin = () => {
   const [ProfileInfo, setProfileInfo] = useState({
+    _id: "",
     nickname: "",
-    ucoin: "",
+    ucoin: Number(0),
+    name: "",
+    phone: "",
+    email: "",
   });
   const [cost, setCost] = useState(0);
   const [chargingCoin, setChargingCoin] = useState(0);
+  var IMP = window.IMP;
+  IMP.init("imp28864295");
 
   useEffect(() => {
     getProfile();
   }, []);
+
+  const requestPay = () => {
+    // IMP.request_pay(param, callback) 호출
+    if (chargingCoin == 0) {
+      alert("결제할 코인을 선택하세요!");
+    } else {
+      IMP.request_pay(
+        {
+          // param
+          pg: "html5_inicis",
+          pay_method: "card",
+          merchant_uid: `ucoin_${ProfileInfo.nickname}_${new Date().getTime}`,
+          name: `Ucoin ${chargingCoin}개`,
+          amount: cost,
+          buyer_email: ProfileInfo.email,
+          buyer_name: ProfileInfo.name,
+          buyer_tel: ProfileInfo.phone,
+          //buyer_addr: "서울특별시 강남구 신사동",
+          //buyer_postcode: "01181",
+        },
+        async (rsp) => {
+          // callback
+          if (rsp.success) {
+            await addUcoin();
+            var msg = "결제가 완료되었습니다.";
+            msg += "\n구매 : " + rsp.name;
+            msg += "\n결제 금액 : " + rsp.paid_amount + "원";
+            alert(msg);
+            window.close();
+            // 결제 성공 시 로직,
+          } else {
+            var msg = "결제에 실패하였습니다.";
+            msg += "\n에러내용 : " + rsp.error_msg;
+            alert(msg);
+
+            // 결제 실패 시 로직,
+          }
+        }
+      );
+    }
+  };
+
+  const addUcoin = () => {
+    console.log(ProfileInfo._id);
+    const res = axios.post("http://localhost:3001/users/addUcoin", {
+      userId: ProfileInfo._id,
+      ucoin: ProfileInfo.ucoin,
+      chargingCoin: chargingCoin,
+    });
+  };
 
   const getProfile = async (e) => {
     const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
       sessionUser: `${sessionStorage.getItem("email")}`,
     });
     let data = {
+      _id: res.data._id,
+      name: res.data.name,
       nickname: res.data.nickname,
       ucoin: res.data.ucoin,
+      email: res.data.email,
+      phone: res.data.phone,
     };
     setProfileInfo(data);
   };
@@ -109,7 +169,7 @@ const Ucoin = () => {
         <strong> {ProfileInfo.ucoin + chargingCoin} UCOIN</strong>
         <br />총 결제 금액 : <strong> {cost} 원</strong>
       </div>
-      <Button>결제하기</Button>
+      <Button onClick={requestPay}>결제하기</Button>
     </div>
   );
 };
