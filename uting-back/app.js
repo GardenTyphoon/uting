@@ -11,6 +11,7 @@ var meetingsRouter = require('./routes/meetings');
 var groupsRouter = require('./routes/groups');
 var adsRouter = require('./routes/ads');
 var reportsRouter = require('./routes/reports');
+var mcsRouter = require('./routes/mcs');
 
 var clients = [];
 var members = [];
@@ -46,6 +47,7 @@ app.use('/meetings', meetingsRouter);
 app.use('/groups',groupsRouter);
 app.use('/ads', adsRouter);
 app.use('/reports', reportsRouter);
+app.use('/mcs',mcsRouter)
 
 
 // catch 404 and forward to error handler
@@ -66,14 +68,34 @@ app.use(function(err, req, res, next) {
 app.io = require('socket.io')();
 
 app.io.on('connection',function(socket){
-  console.log("Connected !");
+  //console.log("Connected !");
   socket.on('login', function(data) {
+    
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
     clients.push(clientInfo);
-    console.log(clients)
+    socket.emit("clientid",{"id":clients[clients.length-1].id});
   });
+
+  socket.on('message',function(msg){
+    let data = "그룹에 초대 되었습니다 ^0^"
+    app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+  })
+  socket.on('premessage',function(msg){
+    let data = "그룹에 다른 사용자가 추가되었습니다 ^0^"
+    for(let i=0;i<msg.socketidList.length;i++){
+      app.io.to(msg.socketidList[i]).emit("premessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+    }
+   
+  })
+
+  socket.on('makeMeetingRoomMsg',function(data){
+    let msg = "그룹 호스트가 미팅방을 생성하였습니다."
+    for(let i=0;i<data.groupMembersSocketId.length;i++){
+      app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
+    };
+  })
   socket.on('disconnect',function(){
     console.log('user disconnected');
   });

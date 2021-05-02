@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import MyProfile from "./MyProfile";
 import ProfileNoImage from "../../img/ProfileNoImage.jpg";
+import ucoin from "../../img/ucoin.png"
 import {
   Button,
   CardBody,
@@ -57,27 +58,29 @@ const Profile = () => {
   };
 
   return (
-    <div className="profile">
+    <div style={{ fontFamily: "NanumSquare_acR", display: "flex", flexDirection: "row", alignItems: "center", width:"15%" }}>
       <button
         onClick={(e) => {
           toggleProfileBtn(e);
         }}
-        style={{ float: "left" }}
+        style={{ borderRadius: "16px", padding: "0%", borderColor: "#FF6895" }}
       >
         {imgBase64 === "" ? (
-          <img src={ProfileNoImage} alt="profile img" height="70" width="70" />
+          <img src={ProfileNoImage} alt="profile img" height="60" width="60" style={{ borderRadius: "15px" }} />
         ) : (
-          <img src={imgBase64} alt="profile img" height="70" width="70" />
+          <img src={imgBase64} alt="profile img" height="60" width="60" style={{ borderRadius: "15px" }} />
         )}
       </button>
-      <span>
-        <strong>{ProfileInfo.nickname}</strong>
-        <br />
-        <strong> {ProfileInfo.ucoin}Ucoin</strong>
-        <button onClick={coinWindow} style={{ float: "right" }}>
-          Ucoin충전
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <div style={{ width:"100%", marginLeft: "15%", color: "#896E6E" }}>{ProfileInfo.nickname}</div>
+        <div style={{ width:"100%", marginLeft:"8%", display: "flex", flexDirection: "row", alignItems: "center"}}>
+          <img style={{ width: "30%", marginRight: "3%" }} src={ucoin}></img>
+          <div style={{ color: "#896E6E" }}>{ProfileInfo.ucoin}</div>
+          <button onClick={coinWindow} style={{ border: "none", borderRadius: "10px", padding: "5px", fontSize: "small", marginLeft: "1%"}}>
+            충전
         </button>
-      </span>
+        </div>
+      </div>
       <Modal isOpen={toggleprofile}>
         <ModalBody isOpen={toggleprofile} className="profileModal">
           <Row>

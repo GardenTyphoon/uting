@@ -52,7 +52,12 @@ const User = new Schema({
     status:{
         type:Boolean,
         requried:true,
+    },
+    socketid:{
+        type:String,
+        requried:false,
     }
+
     
 })
 // User.plugin(autoInc.plugin, 'user');
@@ -98,10 +103,6 @@ const Meeting = new Schema({
 // Meeting.plugin(autoInc.plugin, 'meeting');
 
 const Group = new Schema({
-    group_members_id:{
-        type:Array,
-        required:true
-    },
     member : {
         type:Array,
         required:true
@@ -123,6 +124,17 @@ const Report = new Schema({
 })
 // Report.plugin(autoInc.plugin, 'report');
 
+const Mc = new Schema({
+    type : {
+        type:String,
+        required:true
+    },
+    content : {
+        type:String,
+        required:true
+    },
+})
+
 
 // autoInc.initialize(mongoose.connection);
 
@@ -131,5 +143,6 @@ module.exports = {
     Meeting : mongoose.model('meeting', Meeting),
     Group : mongoose.model('group',Group),
     Ad : mongoose.model('ad', Ad),
-    Report : mongoose.model('report', Report)
+    Report : mongoose.model('report', Report),
+    Mc:mongoose.model('mc',Mc)
 }

@@ -1,74 +1,117 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import socketio from 'socket.io-client';
 
-function birthToAge(birth){
-    let year = birth.slice(0,4);
-    return 2021-Number(year)+1;
+function birthToAge(birth) {
+    
+    let year = birth.slice(0, 4);
+    console.log("year",year)
+    return 2021 - Number(year) + 1;
 }
-const Meeting = () => {
-    const myGroupId="607fdec1a1037a1b1c668488"; //내가 속한 그룹의 아이디 가져오는 거 구현해야 함
+const Meeting = ({ checkFunc }) => {
+    let sessionUser = sessionStorage.getItem("nickname");
+    const socket = socketio.connect('http://localhost:3001');
+    const [groupMembers, setGroupMembers] = useState("");
+    const [toggleWarningMess, setToggleWarningMess] = useState(false);
+    const [socketOn, setSocketOn] = useState(false);
+    let groupMembersSocketId=[];
     const [room, setRoom] = useState({
-        title:"", //방제
-        num:0, //성별당 최대인원
-        status:'대기',  // 참가버튼 누르면 미팅중
+        title: "", //방제
+        num: 0, //성별당 최대인원
+        status: '대기',  // 참가버튼 누르면 미팅중
     })
     const onChangehandler = e => {
+
         const { name, value } = e.target;
-        setRoom({
-            ...room,
-            [name]: value
-        })
-    };
-    const makeRoom = async(e) => {
-        e.preventDefault();
-
-        //내가 속한 그룹의 그룹원들 id 받아오기
-        let GroupId = { "groupId": myGroupId };
-        let res = await axios.post('http://localhost:3001/groups/getMyGroup', GroupId);
-        setRoom({...room, ["users"] : res.data});
-        //평균 나이, 평균 학점, 현재 남녀 수 구하기
-        let avgManner = 0 ;
-        let avgAge = 0;
-        let nowOfWoman = 0;
-        let nowOfMan = 0;
-        for(let i=0;i<res.data.length;i++){
-            let UserId = {"userId" : res.data[i]};
-            let userInfo = await axios.post('http://localhost:3001/users/userInfo',UserId);
-            avgManner += userInfo.data.mannerCredit;
-            avgAge += birthToAge(userInfo.data.birth);
-            if (userInfo.data.gender === "woman"){
-                nowOfWoman += 1;
-            }
-            else nowOfMan += 1;
-            
+        if (name === 'title') {
+            setRoom({
+                ...room,
+                [name]: value
+            })
         }
-        avgManner /= res.data.length;
-        avgAge /= res.data.length;
-        //방 생성
-        
-        let data = {
-            title:room.title,
-            maxNum:Number(room.num),
-            status:room.status,
-            users:res.data,
-            avgManner:avgManner,
-            avgAge:avgAge,
-            numOfWoman:nowOfWoman,
-            numOfMan:nowOfMan      
-        };
+        else {
+            if (name === 'num' && value >= groupMembers.data.length && value <= 4) {
 
-        console.log(data);
-        console.log(typeof(data.maxNum));
-        await axios.post('http://localhost:3001/meetings',data);
+                setRoom({
+                    ...room,
+                    [name]: value
+                })
+                setToggleWarningMess(false);
+            }
+            else {
+                setToggleWarningMess(true);
+            }
+        }
+    };
+    const getMyGroupMember = async (e) => {
+        let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
+        setGroupMembers(res);
     }
+    useEffect(() => {
+        getMyGroupMember();
+    },[])
+    const makeRoom = async (e) => {
+        e.preventDefault();
+        if (toggleWarningMess === false) {
+            //내가 속한 그룹의 그룹원들 닉네임 받아오기
+            setRoom({ ...room, ["users"]: groupMembers });
+            //평균 나이, 평균 학점, 현재 남녀 수 구하기
+            let avgManner = 0;
+            let avgAge = 0;
+            let nowOfWoman = 0;
+            let nowOfMan = 0;
+            for (let i = 0; i < groupMembers.data.length; i++) {
+                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
+                if(userInfo.data.nickname != sessionUser){
+                    groupMembersSocketId.push(userInfo.data.socketid);
+                }
+                avgManner += userInfo.data.mannerCredit;
+                avgAge += birthToAge(userInfo.data.birth);
+                if (userInfo.data.gender === "woman") {
+                    nowOfWoman += 1;
+                }
+                else nowOfMan += 1;
+
+            }
+            setSocketOn(groupMembersSocketId);
+            avgManner /= groupMembers.data.length;
+            avgAge /= groupMembers.data.length;
+            avgAge = parseInt(avgAge);
+            //방 생성
+
+            let data = {
+                title: room.title,
+                maxNum: Number(room.num),
+                status: room.status,
+                users: room.users,
+                avgManner: avgManner,
+                avgAge: avgAge,
+                numOfWoman: nowOfWoman,
+                numOfMan: nowOfMan
+            };
+            await axios.post('http://localhost:3001/meetings', data);
+
+
+            checkFunc(true)
+        }
+    }
+    useEffect(()=>{
+        socket.on('connect',function(){
+            console.log(socketOn);
+            socket.emit('makeMeetingRoomMsg',{"groupMembersSocketId":socketOn}) 
+        })
+    },[socketOn])
     return (
-       <div>
-           <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
-           <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num'/>
-           <button onClick={makeRoom}>방만들기</button>
-       </div>
-       
+        <div>
+            <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
+            <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num' />
+            <button onClick={makeRoom}>방만들기</button>
+            {toggleWarningMess === true ?
+                <div style={{ marginTop: "10px", fontFamily: "NanumSquare_acR", color: "#FF6994", fontSize: "small" }}>*성별 당 인원수는 적어도 {groupMembers.data.length}명 이상, 4명 이하여야 합니다.</div>
+                : ""}
+        </div>
+
     )
 };
 export default Meeting;

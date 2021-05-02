@@ -20,6 +20,7 @@ function App() {
           <Route path="/room:id" component={Room}></Route>
           <Route path="/admin" component={Admin}></Route>
           <Route path="/ucoin" component={Ucoin}></Route>
+          <Route path="/room" component={Room}></Route>
         </Switch>
       </BrowserRouter>
     </div>

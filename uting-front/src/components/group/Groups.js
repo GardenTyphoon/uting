@@ -60,34 +60,26 @@ const GroupBox = styled.div`
 `;
 
 const GroupTitle = styled.div`
-  font-family: Jua;
-  font-size: 20px;
-  margin-right: 20px;
-  width: 200px;
-  height: 50px;
-  padding-left: 40%;
-  padding-top: 5%;
+
+  font-family: NanumSquare_acR;
+  font-size: medium;
+  color:#896E6E;
+  margin-left:20%;
+  margin-bottom:5%;
+  
+  
 `;
 
-const Groups = () => {
-  const [groups, setGroups] = useState([]);
+const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
   );
   const [addMemberModal, setAddMemberModal] = useState(false);
   const [groupMember,setGroupMember] = useState([]);
   const [checkMem,setCheckMem] = useState(false);
+  const [groupSocketIdList,setGroupSocketIdList]=useState([]);
   let [modalStatus,setModalStatus]=useState(false);
-  // useEffect(()=>{
-  //   console.log("socket 전")
-  //   socket.on('connect',function(){
-  //     console.log("connection server");
-  //     //socket.emit('login',{uid:newmember})
-  //     socket.emit('login',{uid:currentUser})
-  //     //socket.emit('login',{uid:newmember})
-  //     //socket.emit('login',"hihi")
-  //   })
-  // },[addMemberModal])
+ 
 
   const getGroupInfo = async (e) => {
     let sessionUser = sessionStorage.getItem("nickname");
@@ -97,9 +89,23 @@ const Groups = () => {
       "http://localhost:3001/groups/info",
       sessionObject
     );
-    console.log(res);
     setGroupMember(res.data.member);
+    console.log("member!",res.data.member)
   };
+
+  let saveGroupSocketId = async()=>{
+    let data={
+      preMember:groupMember
+    }
+    const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
+    
+    console.log(groupMember)
+    if(res.data!=="undefined"){
+      setGroupSocketIdList(res.data)
+    }
+    
+    console.log(res.data)
+  }
 
   const toggelAddMember = (e) => {
     setAddMemberModal(!addMemberModal);
@@ -121,13 +127,23 @@ const Groups = () => {
     getGroupInfo();
   }, []);
 
+  useEffect(()=>{
+      saveGroupSocketId()
+  },[groupMember])
+
+  useEffect(()=>{
+    getGroupInfo();
+  },[checkGroup])
+  useEffect(()=>{
+    getGroupInfo();
+  },[checkAnother])
   useEffect(() => {
     getGroupInfo();
   }, [checkMem]);
 
   return (
     <GroupBox>
-      <GroupTitle>그룹</GroupTitle>
+      <GroupTitle>Group Member</GroupTitle>
       <Member>{currentUser}</Member>
       {groupMember === undefined
         ? ""
@@ -146,10 +162,13 @@ const Groups = () => {
           그룹 생성
         </ModalHeader>
         <AddMember
+          currentsocketId={currentsocketId}
           prevMember={checkMem}
           checkMember={(e) => toggleCheckMem(e)}
           modalState={(e) => toggleModalStatus(e)}
           currentUser={currentUser}
+          preMemSocketIdList={groupSocketIdList}
+          groupMemList={groupMember}
         ></AddMember>
       </Modal>
     </GroupBox>
