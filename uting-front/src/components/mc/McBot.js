@@ -20,18 +20,22 @@ const Box = styled.div`
 `;
 const McBot = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [gameFade, setGameFade] = useState(false);
-  const [topicFade, setTopicFade] = useState(false);
   const [contentFade, setContentFade] = useState(false);
   
   const [number,setNumber]=useState("");
   const [content,setContent] = useState("")
 
-  const toggle = (e) => setDropdownOpen(prevState => !prevState);
+  const toggle = (e) => {
+    setDropdownOpen(prevState => !prevState)
+    if(dropdownOpen===true){
+      setContentFade(true)
+    }
+    if(dropdownOpen===false){
+      setContentFade(false)
+    }
+  };
   
   let back =(e)=>{
-    setGameFade(false)
-    setTopicFade(false)
     setContentFade(false)
     setDropdownOpen(true)
   }
