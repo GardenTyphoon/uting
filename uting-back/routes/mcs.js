@@ -21,8 +21,12 @@ router.post('/list', function(req, res,next){
           }
         });
         res.send(list)
+        
     });
 })
+
+
+
 
 
 module.exports = router;
