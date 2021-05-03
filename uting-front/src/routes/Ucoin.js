@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "reactstrap";
 import axios from "axios";
+import "./Ucoin.css";
 
 const Ucoin = () => {
   const [ProfileInfo, setProfileInfo] = useState({
@@ -92,9 +93,23 @@ const Ucoin = () => {
   };
 
   return (
-    <div>
-      코인 충전
-      <dl>
+    <div
+      style={{
+        backgroundColor: "#ffe4e1",
+        width: "100vw",
+        height: "100vh",
+        padding: "2%",
+      }}
+    >
+      <h1>코인 충전</h1>
+      <dl
+        style={{
+          margin: "0 0 30px 0",
+          padding: "16px 0 0 17px",
+          height: "80px",
+          background: "white",
+        }}
+      >
         <dt>{ProfileInfo.nickname} 님</dt>
         <dd>
           현재 보유 Ucoin : <strong> {ProfileInfo.ucoin} UCOIN</strong>
@@ -164,12 +179,22 @@ const Ucoin = () => {
           </tr>
         </tbody>
       </Table>
-      <div>
+      <div
+        style={{
+          background: "white",
+          margin: "0 0 30px 0",
+          padding: "16px 0 0 17px",
+          height: "80px",
+          width: "40%",
+        }}
+      >
         충전 후 Ucoin :{" "}
         <strong> {ProfileInfo.ucoin + chargingCoin} UCOIN</strong>
         <br />총 결제 금액 : <strong> {cost} 원</strong>
       </div>
-      <Button onClick={requestPay}>결제하기</Button>
+      <Button onClick={requestPay} className="payBtn">
+        결제하기
+      </Button>
     </div>
   );
 };
