@@ -48,9 +48,10 @@ export default function MeetingList({checkState}) {
     
     const history = useHistory();
     const [viewRoomList, setView] = useState([]);
+    //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
     const attendRoomByID = (room, index) => {
         history.push({
-            pathname: `/room`,
+            pathname: `/room/randomroomid~!`,
         });
     };
     
