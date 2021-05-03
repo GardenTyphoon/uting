@@ -35,6 +35,24 @@ router.post('/', function(req, res,next){
   });
 })
 
+router.post('/savemember', function(req, res,next){
+  Meeting.findByIdAndUpdate(
+    req.body.room._id,
+    {
+      $set: {
+        title:req.body.room.title,
+        maxNum:req.body.room.maxNum,
+        status:req.body.room.status,
+        avgManner:req.body.room.avgManner,
+        numOfWoman:req.body.room.numOfWoman,
+        numOfMan:req.body.room.numOfMan,
+        users:req.body.member
+      },
+    },
+    (err, us) => {}
+  );
+})
+
 // PUT edit one meeting
 router.put('/:id', async function(req,res,next){
   const meeting = await Meeting.findByIdAndUpdate(req.params.id, req.body);
