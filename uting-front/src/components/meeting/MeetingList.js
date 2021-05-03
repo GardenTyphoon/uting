@@ -48,18 +48,32 @@ export default function MeetingList({checkState}) {
     
     const history = useHistory();
     const [viewRoomList, setView] = useState([]);
+    const [state, setState] = useState(false);
+    const [title, setTitle] = useState("");
     const attendRoomByID = (room, index) => {
         history.push({
             pathname: `/room`,
         });
     };
     
-    useEffect(() => {
+    const toggleParticipantsInfo = (title) =>{
+        
+        if(state===true){
+            setState(false);
+            setTitle("");
+        }
+        else{
+            setState(true);
+            setTitle(title);
+        }
+    }
+     useEffect(() => {
         axios
             .get('http://localhost:3001/meetings')
             .then(({ data }) => setView(data))
             .catch((err) => { });
     }, []);
+
 
     useEffect(()=>{
         axios
@@ -71,11 +85,18 @@ export default function MeetingList({checkState}) {
     return (//tr map 한다음에 key넣어주기
         <div style={{width:"60%"}}>
             {viewRoomList.map((room, index) =>
+           
+                <div>
                 <Container className="MeetingRoom">
                     <Row style={{width:"100%"}}>
                         
-                        <img src={MeetingRoom} style={{padding:"1%", width:"10%", borderRadius:"50%", marginRight:"5%"}}/>
-                       
+                        <img src={MeetingRoom} 
+                        style={{padding:"1%", width:"10%", borderRadius:"50%", marginRight:"5%"}}
+                        onMouseOver={(e)=>toggleParticipantsInfo(room.title)}
+                        onMouseOut={(e)=>toggleParticipantsInfo(room.title)}/>
+
+                        
+
                         <Col xs="5" style={{display:"flex", alignItems:"center"}}>{room.title}</Col>
                         <Col xs="2">
                             <div style={{display:"flex", justifyContent:"center", color:mannerColor, marginTop:"15%"}}>
@@ -95,7 +116,23 @@ export default function MeetingList({checkState}) {
                             
                         </Col>
                     </Row>
+                    
                 </Container>
+                {title===room.title && state===true ? 
+                    <div>
+                        {room.users.map(user=>
+                        <div>
+                        {user.nickname}
+                        {user.introduce}
+                        
+                        {user.mannerCredit}
+                        
+                        {user.age}
+                        </div>
+                        )}
+                    </div>
+                : ""}
+                </div>
             )}
         </div>
 

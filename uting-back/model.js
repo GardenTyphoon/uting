@@ -88,7 +88,7 @@ const Meeting = new Schema({
         required:false
     },
     users : {
-        type:Object,
+        type:Array,
         required:false
     },
     numOfWoman:{

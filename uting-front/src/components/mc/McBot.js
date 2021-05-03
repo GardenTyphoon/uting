@@ -45,6 +45,7 @@ const McBot = () => {
       type:"game"
     }
     const res = await axios.post("http://localhost:3001/mcs/list",data)
+
     //랜덤값생성
     let index = Math.floor(Math.random()*res.data.length)
     setContent(res.data[index])

@@ -11,7 +11,7 @@ router.post('/', function(req, res,next){
         res.send("저장완료")
     })
 })
-
+    
 router.post('/list', function(req, res,next){
     let list = [];
     Mc.find(function (err, mc) {

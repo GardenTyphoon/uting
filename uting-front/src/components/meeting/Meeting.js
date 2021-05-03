@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react';
 import socketio from 'socket.io-client';
 
 function birthToAge(birth) {
-    
+
     let year = birth.slice(0, 4);
-    console.log("year",year)
     return 2021 - Number(year) + 1;
 }
 const Meeting = ({ checkFunc }) => {
@@ -15,11 +14,13 @@ const Meeting = ({ checkFunc }) => {
     const [groupMembers, setGroupMembers] = useState("");
     const [toggleWarningMess, setToggleWarningMess] = useState(false);
     const [socketOn, setSocketOn] = useState(false);
-    let groupMembersSocketId=[];
+    let groupMembersSocketId = [];
+    let groupMembersInfo = [];
     const [room, setRoom] = useState({
         title: "", //방제
         num: 0, //성별당 최대인원
         status: '대기',  // 참가버튼 누르면 미팅중
+        users: [],
     })
     const onChangehandler = e => {
 
@@ -46,16 +47,16 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
+
         setGroupMembers(res);
     }
     useEffect(() => {
         getMyGroupMember();
-    },[])
+    }, [])
     const makeRoom = async (e) => {
         e.preventDefault();
         if (toggleWarningMess === false) {
             //내가 속한 그룹의 그룹원들 닉네임 받아오기
-            setRoom({ ...room, ["users"]: groupMembers });
             //평균 나이, 평균 학점, 현재 남녀 수 구하기
             let avgManner = 0;
             let avgAge = 0;
@@ -63,7 +64,13 @@ const Meeting = ({ checkFunc }) => {
             let nowOfMan = 0;
             for (let i = 0; i < groupMembers.data.length; i++) {
                 let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
-                if(userInfo.data.nickname != sessionUser){
+                groupMembersInfo.push({
+                    "nickname": userInfo.data.nickname,
+                    "introduce": userInfo.data.introduce,
+                    "mannerCredit": userInfo.data.mannerCredit,
+                    "age": birthToAge(userInfo.data.birth)
+                });
+                if (userInfo.data.nickname != sessionUser) {
                     groupMembersSocketId.push(userInfo.data.socketid);
                 }
                 avgManner += userInfo.data.mannerCredit;
@@ -73,35 +80,36 @@ const Meeting = ({ checkFunc }) => {
                 }
                 else nowOfMan += 1;
 
+
             }
             setSocketOn(groupMembersSocketId);
             avgManner /= groupMembers.data.length;
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
             //방 생성
-
             let data = {
                 title: room.title,
                 maxNum: Number(room.num),
                 status: room.status,
-                users: room.users,
                 avgManner: avgManner,
                 avgAge: avgAge,
                 numOfWoman: nowOfWoman,
                 numOfMan: nowOfMan
             };
+            data.users = groupMembersInfo;
+            console.log(data);
             await axios.post('http://localhost:3001/meetings', data);
 
 
             checkFunc(true)
         }
     }
-    useEffect(()=>{
-        socket.on('connect',function(){
-            console.log(socketOn);
-            socket.emit('makeMeetingRoomMsg',{"groupMembersSocketId":socketOn}) 
+    useEffect(() => {
+        socket.on('connect', function () {
+
+            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn })
         })
-    },[socketOn])
+    }, [socketOn])
     return (
         <div>
             <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
