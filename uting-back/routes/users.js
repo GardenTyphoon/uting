@@ -37,7 +37,7 @@ router.post("/sendEmail", async function (req, res, next) {
       host: "smtp.gmail.com",
       auth: {
         user: "uting4u@gmail.com",
-        pass: "utingforyou",
+        pass: "uuttiinngg0515!",
       },
     })
   );

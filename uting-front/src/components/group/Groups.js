@@ -96,16 +96,17 @@ const Groups = ({currentsocketId,checkGroup,checkAnother,groupSocket}) => {
       preMember:groupMember
     }
     const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
+ 
     
     if(res.data!=="undefined"){
       setGroupSocketIdList(res.data)
       groupSocket(res.data)
     }
+    
   }
 
   const toggelAddMember = (e) => {
     setAddMemberModal(!addMemberModal);
-    console.log(checkMem);
   };
 
   let toggleModalStatus = (e) => {
