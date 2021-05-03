@@ -70,7 +70,7 @@ const GroupTitle = styled.div`
   
 `;
 
-const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
+const Groups = ({currentsocketId,checkGroup,checkAnother,groupSocket}) => {
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
   );
@@ -97,8 +97,10 @@ const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
     }
     const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
  
+    
     if(res.data!=="undefined"){
       setGroupSocketIdList(res.data)
+      groupSocket(res.data)
     }
     
   }

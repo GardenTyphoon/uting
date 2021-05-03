@@ -10,12 +10,13 @@
 .profileModal {
   background-color: #ffb4ac;
 }
-.makeRoomBtn {
+.payBtn {
   font-family: NanumSquare_acR;
-  width: 8%;
+  width: 20%;
   height: 5%;
   background: linear-gradient(to bottom, #ff9a51, #ff6994);
   border: none;
   border-radius: 10px;
   color: white;
+  float: right;
 }

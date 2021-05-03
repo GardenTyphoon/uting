@@ -76,7 +76,7 @@ const McBot = () => {
     }
     if(e===4 && contentFade===false){
       //실시간게임
-      setContent("실시간게임!")
+      setContent("마피아할거임~~~~~~~~~~~~?")
     }
   }
   return (
