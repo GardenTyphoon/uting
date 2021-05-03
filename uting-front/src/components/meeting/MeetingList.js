@@ -6,6 +6,7 @@ import man from '../../img/man.png'
 import MeetingRoom from '../../img/MeetingRoom.png'
 import './MeetingList.css'
 import { Container, Row, Col } from 'reactstrap';
+import socketio from "socket.io-client";
 let mannerColor;
 function mannerCredit(avgManner) {
     if (avgManner === 4.5){
@@ -44,15 +45,38 @@ function mannerCredit(avgManner) {
         return "F";
     }
 }
-export default function MeetingList({checkState}) {
+export default function MeetingList({checkState,groupSocketList,currentsocketId}) {
     
     const history = useHistory();
     const [viewRoomList, setView] = useState([]);
+    const [groupMember,setGroupMember]=useState([]);
+    const [memberSocketIdList,setMemberSocketIdList]=useState([]);
+    const [flag,setFlag]=useState(false)
+    const socket = socketio.connect('http://localhost:3001');
+    //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
     const attendRoomByID = (room, index) => {
-        history.push({
-            pathname: `/room`,
-        });
+        //getGroupMember();
+        setFlag(true)
+        //현재 그룹원 모두에게 방 타이틀로 이동하는 메시지 띄우고 리다이렉트시키기
+        
+        
     };
+    useEffect(()=>{
+        console.log(groupSocketList)
+        console.log("요깅")
+        groupSocketList.push(currentsocketId.id)
+        console.log(groupSocketList)
+        socket.on('connect',function(){
+            socket.emit('entermessage',{"socketidList":groupSocketList,"roomid":"roomid~!"})
+            //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
+        })
+        
+       
+       
+        
+    },[flag])
+
+
     
     useEffect(() => {
         axios
