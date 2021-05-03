@@ -80,10 +80,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     }, [groupMember])
     useEffect(() => {
-        console.log(groupSocketList)
-        console.log("요깅")
+        
         groupSocketList.push(currentsocketId.id)
-        console.log(groupSocketList)
+        
         socket.on('connect', function () {
             socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!" })
             //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
