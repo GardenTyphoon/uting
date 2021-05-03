@@ -7,8 +7,8 @@ import Meeting from "../components/meeting/Meeting";
 import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
 import "./Main.css";
-import socketio from 'socket.io-client';
-import utingLogo from '../img/utingLogo.png';
+import socketio from "socket.io-client";
+import utingLogo from "../img/utingLogo.png";
 const Main = () => {
   const history = useHistory();
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
@@ -19,9 +19,8 @@ const Main = () => {
   const [groupSocketList,setGroupSocketList]=useState([])
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
-
   const [socketId, setSocketId] = useState("");
-  const socket = socketio.connect('http://localhost:3001');
+  const socket = socketio.connect("http://localhost:3001");
   let sessionUser = sessionStorage.getItem("email");
 
   const gotoAdminPage = () => {
@@ -30,13 +29,12 @@ const Main = () => {
     });
   };
 
-  let checkList = (e) =>{
-    if(e===true){
-      setCheckRoomList(true)
-      setToggleMakeMeeting(false)
+  let checkList = (e) => {
+    if (e === true) {
+      setCheckRoomList(true);
+      setToggleMakeMeeting(false);
     }
-    
-  }
+  };
 
   let groupSocket = (e) =>{
     setGroupSocketList(e)
@@ -46,26 +44,24 @@ const Main = () => {
     if(e===true){
       setAddEvent(true)
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {}, [addEvent]);
 
-  },[addEvent])
- 
-  socket.on("sendMember",function(data){
+  socket.on("sendMember", function (data) {
     alert(data);
     setCheckGroup(true);
-  })
+  });
 
-  socket.on("makeMeetingRoomMsg", function(data){
-    alert(data)
+  socket.on("makeMeetingRoomMsg", function (data) {
+    alert(data);
     window.location.href = "http://localhost:3000/main";
-  })
+  });
 
   //다른 그룹원 추가
-  socket.on("premessage", function(data){
+  socket.on("premessage", function (data) {
     setTimeout(() => {
-      alert(data)
+      alert(data);
       setCheckAnother(true);
     }, 5000);
   })
@@ -74,7 +70,7 @@ const Main = () => {
     alert(data.message)
     window.location.href = "http://localhost:3000/room/"+data.roomid;
   })
-/*
+  /*
   socket.on("hostentermessage",function(data){
     alert(data.message)
     window.location.href = "http://localhost:3000/room/"+data.roomid;
@@ -82,31 +78,39 @@ const Main = () => {
   */
   
   useEffect(() => {
-    socket.on('connect', function () {
-      socket.emit('login', { uid: sessionStorage.getItem('nickname') })
-    })
+    socket.on("connect", function () {
+      socket.emit("login", { uid: sessionStorage.getItem("nickname") });
+    });
 
-    socket.on('clientid', function async(id) {
-      setSocketId(id)
-    })
+    socket.on("clientid", function async(id) {
+      setSocketId(id);
+    });
 
   }, []);
 
   let putSocketid = async (e) => {
     let data = {
-      "currentUser": sessionStorage.getItem('nickname'),
-      "currentSocketId": socketId
-    }
-    const res = await axios.post("http://localhost:3001/users/savesocketid", data);
-
-  }
+      currentUser: sessionStorage.getItem("nickname"),
+      currentSocketId: socketId,
+    };
+    const res = await axios.post(
+      "http://localhost:3001/users/savesocketid",
+      data
+    );
+  };
   useEffect(() => {
-    putSocketid()
-
-  }, [socketId])
+    putSocketid();
+  }, [socketId]);
 
   return (
-    <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
+    <div
+      style={{
+        backgroundColor: "#ffe4e1",
+        width: "100vw",
+        height: "100vh",
+        padding: "2%",
+      }}
+    >
       <div style={{ display: "flex", flexDirection: "row" }}>
         <img style={{ width: "7%" }} src={utingLogo} />
         {sessionUser === "admin@ajou.ac.kr" ? (
@@ -115,7 +119,6 @@ const Main = () => {
           ""
         )}
         <button
-
           className="makeRoomBtn"
           onClick={(e) => {
             toggleMakeMeetingBtn(e);
@@ -123,20 +126,26 @@ const Main = () => {
         >
           방 생성
         </button>
-       
+
         <Modal isOpen={toggleMakeMeeting}>
           <ModalBody isOpen={toggleMakeMeeting}>
-            <Meeting checkFunc={(e)=>checkList(e)}/>
+            <Meeting checkFunc={(e) => checkList(e)} />
           </ModalBody>
           <ModalFooter isOpen={toggleMakeMeeting}>
             <Button color="secondary" onClick={toggleMakeMeetingBtn}>
               Close
-          </Button>
+            </Button>
           </ModalFooter>
         </Modal>
         <Profile />
       </div>
-      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-evenly" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+        }}
+      >
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
         <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
