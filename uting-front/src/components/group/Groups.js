@@ -70,7 +70,7 @@ const GroupTitle = styled.div`
   
 `;
 
-const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
+const Groups = ({currentsocketId,checkGroup,checkAnother,groupSocket}) => {
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
   );
@@ -84,13 +84,11 @@ const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
   const getGroupInfo = async (e) => {
     let sessionUser = sessionStorage.getItem("nickname");
     let sessionObject = { sessionUser: sessionUser };
-    console.log(sessionObject);
     const res = await axios.post(
       "http://localhost:3001/groups/info",
       sessionObject
     );
     setGroupMember(res.data.member);
-    console.log("member!",res.data.member)
   };
 
   let saveGroupSocketId = async()=>{
@@ -99,12 +97,10 @@ const Groups = ({currentsocketId,checkGroup,checkAnother}) => {
     }
     const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
     
-    console.log(groupMember)
     if(res.data!=="undefined"){
       setGroupSocketIdList(res.data)
+      groupSocket(res.data)
     }
-    
-    console.log(res.data)
   }
 
   const toggelAddMember = (e) => {
