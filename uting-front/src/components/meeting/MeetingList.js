@@ -50,17 +50,31 @@ export default function MeetingList({checkState,groupSocketList,currentsocketId}
     const history = useHistory();
     const [viewRoomList, setView] = useState([]);
     const [groupMember,setGroupMember]=useState([]);
-    const [memberSocketIdList,setMemberSocketIdList]=useState([]);
     const [flag,setFlag]=useState(false)
+    const [roomObj,setRoomObj]=useState({})
     const socket = socketio.connect('http://localhost:3001');
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
-    const attendRoomByID = (room, index) => {
+    const attendRoomByID = async(room, index) => {
         //getGroupMember();
+        getGroupInfo()
+        setRoomObj(room)
         setFlag(true)
         //현재 그룹원 모두에게 방 타이틀로 이동하는 메시지 띄우고 리다이렉트시키기
-        
-        
     };
+
+    let saveMeetingUsers = async(e)=>{
+        let data={
+            member:groupMember,
+            room:roomObj
+        }
+        const res = await axios.post("http://localhost:3001/meetings/savemember",data)
+        console.log(res)
+    }
+
+    useEffect(()=>{
+        saveMeetingUsers()
+
+    },[groupMember])
     useEffect(()=>{
         console.log(groupSocketList)
         console.log("요깅")
@@ -70,13 +84,17 @@ export default function MeetingList({checkState,groupSocketList,currentsocketId}
             socket.emit('entermessage',{"socketidList":groupSocketList,"roomid":"roomid~!"})
             //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
         })
-        
-       
-       
-        
     },[flag])
 
-
+    const getGroupInfo = async (e) => {
+        let sessionUser = sessionStorage.getItem("nickname");
+        let sessionObject = { sessionUser: sessionUser };
+        const res = await axios.post(
+          "http://localhost:3001/groups/info",
+          sessionObject
+        );
+        setGroupMember(res.data.member);
+    };
     
     useEffect(() => {
         axios
