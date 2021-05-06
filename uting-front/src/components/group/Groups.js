@@ -149,7 +149,6 @@ const Groups = ({currentsocketId,checkGroup,checkAnother,groupSocket}) => {
               return <Member>{data}</Member>;
             }
           })}
-
       <PlusIcon onClick={toggelAddMember}>+</PlusIcon>
       <Modal isOpen={addMemberModal}>
         <ModalHeader
