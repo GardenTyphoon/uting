@@ -69,6 +69,7 @@ const Main = () => {
   socket.on("entermessage",function(data){
     console.log("entermessage");
     alert(data.message)
+    console.log(data._id)
     socket.emit("joinRoom", data.roomid);
     history.push({
       pathname: `/room/`+data.roomid,
