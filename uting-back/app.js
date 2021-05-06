@@ -91,9 +91,12 @@ app.io.on('connection',function(socket){
   })
 
   socket.on('entermessage',function(msg){
+
+    console.log(msg._id)
     let data = {
       message:"호스트에의해 선택한 미팅방에 입장합니다 ^_^",
-      roomid:msg.roomid
+      roomid:msg.roomid,
+      _id:msg._id
     }
     console.log("socketidList~!~!~!~",msg.socketidList)
     if(msg.socketidList.length!==1){

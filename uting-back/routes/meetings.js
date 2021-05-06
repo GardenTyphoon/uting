@@ -53,6 +53,20 @@ router.post('/savemember', function(req, res,next){
   );
 })
 
+router.post('/getparticipants', function(req,res,next){
+
+  Meeting.find(function(err,meeting){
+    meeting.forEach((obj)=>{
+      if(obj._id.toString()===req.body._id){
+        res.send(obj.users);
+      }
+    }
+  )
+  })
+});
+
+
+
 // PUT edit one meeting
 router.put('/:id', async function(req,res,next){
   const meeting = await Meeting.findByIdAndUpdate(req.params.id, req.body);

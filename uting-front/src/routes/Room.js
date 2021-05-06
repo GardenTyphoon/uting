@@ -1,5 +1,6 @@
 import React,{useEffect, useState} from "react";
 import styled from 'styled-components';
+import { useLocation, useHistory } from "react-router";
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
 import axios from 'axios';
 import McBot from '../components/mc/McBot'
@@ -7,10 +8,12 @@ import socketio from "socket.io-client";
 import ReactAudioPlayer from 'react-audio-player';
 
 const Room = () => {
+  const location = useLocation();
+  const history = useHistory();
   const socket = socketio.connect("http://localhost:3001");
   const [socketId, setSocketId] = useState("");
-  const [meetingSocketIdList,setMeetingSocketIdList]=useState([]);
-  const [groupMember,setGroupMember] = useState([]);
+  const [participantsSocketId,setParticipantsSocketId]=useState([]);
+  const [participants,setParticipants] = useState([]);
   const [socketFlag,setSocketFlag]=useState(false);
   const [musicsrc,setMusicsrc]=useState("")
 
@@ -40,26 +43,33 @@ const Room = () => {
     });
   }, []);
 
-
-  const getGroupInfo = async (e) => {
+/*
+  const getparticipants  = async (e) => {
     let sessionUser = sessionStorage.getItem("nickname");
     let sessionObject = { sessionUser: sessionUser };
     const res = await axios.post(
       "http://localhost:3001/groups/info",
       sessionObject
     );
-    setGroupMember(res.data.member);
-  };
+    setParticipants(res.data.member);
+  };*/
 
-  let saveMeetingSocketId = async()=>{
+  const getparticipants = async () => {
+    const _id = location.state._id;
+    const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: _id })
+    
+    setParticipants(res.data);
+  }
+
+  let saveParticipantsSocketId = async()=>{
     let data={
-      preMember:groupMember
+      preMember:participants
     }
     const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
  
     
     if(res.data!=="undefined"){
-      setMeetingSocketIdList(res.data)
+      setParticipantsSocketId(res.data)
     }
     
   }
@@ -82,20 +92,20 @@ const Room = () => {
 
   useEffect(()=>{
     setTimeout(()=>{
-      getGroupInfo()
+      getparticipants()
     },5000)
     
   },[socketFlag])
 
   useEffect(()=>{
-    saveMeetingSocketId()
-  },[groupMember])
+    saveParticipantsSocketId()
+  },[participants])
 
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
-        <ReactAudioPlayer id="audio" src={musicsrc} controls/>
-      <McBot meetingSocketIdList={meetingSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
+        <ReactAudioPlayer id="audio" src={musicsrc}  controls/>
+      <McBot participantsSocketId={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
       
     </div>
   );
