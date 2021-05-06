@@ -18,6 +18,8 @@ const Room = () => {
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
   const [socketList, setSocketList] = useState();
+  const [groupSocketIdList,setGroupSocketIdList]=useState([]);
+  const [groupMember,setGroupMember] = useState([]);
   const [participants, setParticipants] = useState([]);
   const [isVote, setIsVote] = useState(false);
   const [flag, setFlag] = useState(false);
@@ -33,12 +35,23 @@ const Room = () => {
     );
     setSocketFlag(!socketFlag)
   };
+  let saveGroupSocketId = async()=>{
+    let data={
+      preMember:groupMember
+    }
+    const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
+ 
+    
+    if(res.data!=="undefined"){
+      setGroupSocketIdList(res.data)
+    }
+    
+  }
   function conditionEndMeeting(){
     if (numOfAgree > participants.length / 2) return true;
     else return false;
   }
   function doneVote(){
-    console.log("doneVote?");
     if (startVote===true &&  numOfAgree + numOfDisagree === participants.length) return true;
     else return false;
   }
@@ -47,7 +60,7 @@ const Room = () => {
     setNumOfAgree(0);
     setNumOfDisagree(0);
     setIsVote(false);
-    setMyDecision();
+    setMyDecision("");
   }
   const onClickEndMeetingBtn = (e) => {
     setToggleEndMeetingBtn(!toggleEndMeetingBtn)
@@ -58,7 +71,7 @@ const Room = () => {
     setFlag(true);
   }
   const onClickAgree = (e) => {
-    console.log(socketList)
+    
     socket.emit("endMeetingAgree", { socketList, numOfAgree: numOfAgree + 1 });
     setNumOfAgree(numOfAgree + 1);
     setIsVote(!isVote);
@@ -73,7 +86,7 @@ const Room = () => {
   const emitStartVote = async () => {
 
     let res = await axios.post("http://localhost:3001/users/usersSocketId", { users: participants });
-    console.log(res);
+    
     socket.emit("startVote", { socketidList: res.data });
     setSocketList(res.data);
 
@@ -85,13 +98,22 @@ const Room = () => {
 
     setParticipants(res.data);
   }
+  const getGroupInfo = async (e) => {
+    let sessionUser = sessionStorage.getItem("nickname");
+    let sessionObject = { sessionUser: sessionUser };
+    const res = await axios.post(
+      "http://localhost:3001/groups/info",
+      sessionObject
+    );
+    setGroupMember(res.data.member);
+  };
 
 
 
   socket.on("startVote", function (data) {
 
     alert("미팅 종료를 위한 투표를 시작합니다.");
-    console.log("startVote");
+  
     setStartVote(true);
     setSocketList(data);
   })
@@ -102,6 +124,13 @@ const Room = () => {
     setNumOfDisagree(data);
   })
 
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      getGroupInfo()
+    },5000)
+    
+  },[socketFlag])
   useEffect(() => {
   }, [socketList]);
   useEffect(() => {
@@ -125,19 +154,18 @@ const Room = () => {
 
     getparticipants();
   }, [])
-
+  useEffect(()=>{
+    saveGroupSocketId()
+  },[groupMember])
   useEffect(() => {
     if (doneVote()) {
-      console.log("doneVote");
       if (conditionEndMeeting()) {
-        console.log("endMeeting");
         alert("투표가 종료되었습니다. 미팅을 종료합니다.")
         history.push({
           pathname: `/main`
         });
       }
       else {
-        console.log("continue");
         alert("투표가 종료되었습니다. 미팅을 계속합니다.")
         resetVote();
       }
@@ -147,7 +175,7 @@ const Room = () => {
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
 
-      <McBot></McBot>
+    <McBot groupSocketIdList={groupSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
       <button onClick={(e) => onClickEndMeetingBtn(e)}>미팅 종료</button>
       <Modal isOpen={toggleEndMeetingBtn}>
         <ModalBody>
