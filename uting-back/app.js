@@ -122,6 +122,22 @@ app.io.on('connection',function(socket){
     }}
 
   })
+
+  socket.on('musicpause',function(msg){
+    
+    if(Object.keys( msg.socketIdList).length>1){
+      for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
+        app.io.to(msg.socketIdList[i]).emit("musicpause","호스트가 음악을 정지 시켰습니다.") 
+      }}
+  })
+
+  socket.on('replay',function(msg){
+    
+    if(Object.keys( msg.socketIdList).length>1){
+      for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
+        app.io.to(msg.socketIdList[i]).emit("replay","호스트가 음악을 다시 재생 시켰습니다.") 
+      }}
+  })
 /*
   socket.on('hostentermessage',function(msg){
     let data = {

@@ -9,7 +9,7 @@ import ReactAudioPlayer from 'react-audio-player';
 const Room = () => {
   const socket = socketio.connect("http://localhost:3001");
   const [socketId, setSocketId] = useState("");
-  const [groupSocketIdList,setGroupSocketIdList]=useState([]);
+  const [meetingSocketIdList,setMeetingSocketIdList]=useState([]);
   const [groupMember,setGroupMember] = useState([]);
   const [socketFlag,setSocketFlag]=useState(false);
   const [musicsrc,setMusicsrc]=useState("")
@@ -51,7 +51,7 @@ const Room = () => {
     setGroupMember(res.data.member);
   };
 
-  let saveGroupSocketId = async()=>{
+  let saveMeetingSocketId = async()=>{
     let data={
       preMember:groupMember
     }
@@ -59,7 +59,7 @@ const Room = () => {
  
     
     if(res.data!=="undefined"){
-      setGroupSocketIdList(res.data)
+      setMeetingSocketIdList(res.data)
     }
     
   }
@@ -69,6 +69,18 @@ const Room = () => {
     
   })
 
+  socket.on('musicpause',function(data){
+    alert(data)
+    document.getElementById("audio").pause();
+  })
+
+  socket.on('replay',function(data){
+    alert(data)
+    document.getElementById("audio").play();
+  })
+
+ 
+
   useEffect(()=>{
     setTimeout(()=>{
       getGroupInfo()
@@ -77,14 +89,14 @@ const Room = () => {
   },[socketFlag])
 
   useEffect(()=>{
-    saveGroupSocketId()
+    saveMeetingSocketId()
   },[groupMember])
 
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
-        <ReactAudioPlayer src={musicsrc} autoPlay controls/>
-      <McBot groupSocketIdList={groupSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
+        <ReactAudioPlayer id="audio" src={musicsrc}  autoPlay controls/>
+      <McBot meetingSocketIdList={meetingSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
       
     </div>
   );

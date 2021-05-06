@@ -19,7 +19,7 @@ const Box = styled.div`
   width:200px;
   height:200px;
 `;
-const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
+const McBot = ({meetingSocketIdList,currentSocketId,groupMember}) => {
   const socket = socketio.connect("http://localhost:3001");
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -70,13 +70,23 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
     if(e===1){
       //console.log("신남")
       //소켓
-      console.log(groupSocketIdList)
+      console.log(meetingSocketIdList)
       
-        socket.emit('musicplay',{"socketIdList":groupSocketIdList,"src":"/music/신남/SellBuyMusic.mp3"})
+        socket.emit('musicplay',{"socketIdList":meetingSocketIdList,"src":"/music/신남/SellBuyMusic.mp3"})
       
       
       //setMusicpath("/music/신남/SellBuyMusic.mp3")
     }
+  }
+
+  let pause =()=>{
+    console.log("정지")
+    socket.emit('musicpause',{"socketIdList":meetingSocketIdList}) 
+  }
+
+  let play =()=>{
+    console.log("재생")
+    socket.emit('replay',{"socketIdList":meetingSocketIdList}) 
   }
 
   const FadeToggle =(e)=>{
@@ -90,7 +100,7 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
     }
     if(e===3 && contentFade===false){
       //음악
-      console.log(groupSocketIdList)
+      console.log(meetingSocketIdList)
      
       setContent("음악!")
     }
@@ -101,7 +111,7 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
   }
 
   useEffect(()=>{
-    console.log(groupSocketIdList)
+    console.log(meetingSocketIdList)
   },[])
 
   return (
@@ -130,7 +140,7 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
         :number===3?
           <div>
             <div><button onClick={(e)=>getMusicName(1)}>신남</button><button>설렘</button><button>잔잔</button></div>
-            
+            <button onClick={(e)=>pause()}>정지</button><button onClick={(e)=>play()}>재생</button>
         </div>
         :number===4?
         <div></div>
