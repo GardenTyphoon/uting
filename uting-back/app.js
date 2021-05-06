@@ -20,6 +20,7 @@ var app = express();
 
 
 
+
  mongoose.connect("mongodb://localhost:27017/uting", {
    useNewUrlParser: true,
    useUnifiedTopology: true,
@@ -77,7 +78,11 @@ app.io.on('connection',function(socket){
     clients.push(clientInfo);
     socket.emit("clientid",{"id":clients[clients.length-1].id});
   });
-
+  socket.on('currentSocketId', function(){
+    console.log('currentSocketId:' + socket.id);
+    let data = socket.id
+    app.io.to(socket.id).emit('currentSocketId',data)
+  })
   socket.on('message',function(msg){
     let data = "그룹에 초대 되었습니다 ^0^"
     app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
@@ -93,16 +98,26 @@ app.io.on('connection',function(socket){
   socket.on('entermessage',function(msg){
     let data = {
       message:"호스트에의해 선택한 미팅방에 입장합니다 ^_^",
-      roomid:msg.roomid
+      roomid:msg.roomid,
+      _id:msg._id
     }
-    console.log("socketidList~!~!~!~",msg.socketidList)
+   
     if(msg.socketidList.length!==1){
       for(let i=0;i<msg.socketidList.length;i++){
         app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
     }
+  })
+  socket.on('joinRoom', function(roomId){
+    socket.join('room'); // 'room' 부분 미팅방 방제로 수정 예정
     
-   
+  })
+  socket.on('startVote', function(data){
+    console.log(data.socketidList);
+    for(let i=0;i<data.socketidList.length;i++){
+      app.io.to(data.socketidList[i]).emit("startVote",data.socketidList);
+    }
+    //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
   })
 /*
   socket.on('hostentermessage',function(msg){
@@ -121,8 +136,19 @@ app.io.on('connection',function(socket){
       app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
     };
   })
-  socket.on('disconnect',function(){
-    console.log('user disconnected');
+  socket.on('endMeetingAgree',function(data){
+
+    for(let i=0;i<data.socketList.length;i++){
+      app.io.to(data.socketList[i]).emit("endMeetingAgree", data.numOfAgree);
+    }
+  })
+  socket.on('endMeetingDisagree',function(data){
+    for(let i=0;i<data.socketList.length;i++){
+      app.io.to(data.socketList[i]).emit("endMeetingDisagree", data.numOfDisagree);
+    }
+  }) 
+  socket.on('disconnect',function(reason){
+    console.log('user disconnected : ' + reason);
   });
 });
 module.exports = app;
