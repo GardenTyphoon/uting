@@ -12,13 +12,26 @@ router.get('/', async function(req, res, next) {
 
 // GET one meeting
 router.get('/:id', async function(req, res, next) {
+  
   const meeting = await Meeting.findOne({_id:req.params.id});
-  //res.json(meeting);
+   //res.json(meeting);
+});
+
+router.post('/getparticipants', function(req,res,next){
+
+  Meeting.find(function(err,meeting){
+    meeting.forEach((obj)=>{
+      if(obj._id.toString()===req.body._id){
+        res.send(obj.users);
+      }
+    }
+  )
+  })
 });
 
 // POST write one meeting
 router.post('/', function(req, res,next){
-  console.log("REQ : " + req.body);
+
   const meeting = new Meeting({
     title:req.body.title,
     maxNum:req.body.maxNum,
@@ -29,7 +42,6 @@ router.post('/', function(req, res,next){
     numOfWoman:req.body.numOfWoman,
     numOfMan : req.body.numOfMan
   });
-  console.log("MEETING : " + meeting);
   meeting.save((err)=>{
     res.send("방을 생성하였습니다.")
   });

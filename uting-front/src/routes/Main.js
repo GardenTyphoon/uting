@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Profile from "../components/profile/Profile";
-import { Button, Modal, ModalBody, ModalFooter,ModalHeader } from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter } from "reactstrap";
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
@@ -17,11 +17,8 @@ const Main = () => {
   const [checkAnother,setCheckAnother]=useState(false);
   const [addEvent,setAddEvent]=useState(false);
   const [groupSocketList,setGroupSocketList]=useState([])
-  const [modalFlag,setModalFlag]=useState(false)
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
-  const [modal, setModal] = useState(false);
 
-  const toggle = () => setModal(!modal);
   const [socketId, setSocketId] = useState("");
   const socket = socketio.connect("http://localhost:3001");
   let sessionUser = sessionStorage.getItem("email");
@@ -79,12 +76,7 @@ const Main = () => {
       state:{_id:data._id}
     });
   })
-  /*
-  socket.on("hostentermessage",function(data){
-    alert(data.message)
-    window.location.href = "http://localhost:3000/room/"+data.roomid;
-  })
-  */
+  
   
   useEffect(() => {
     socket.on("connect", function () {
@@ -159,8 +151,6 @@ const Main = () => {
         <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
         <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
       </div>
-      
-      
     </div>
   );
 };

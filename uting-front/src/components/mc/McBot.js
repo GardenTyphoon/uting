@@ -19,7 +19,7 @@ const Box = styled.div`
   width:200px;
   height:200px;
 `;
-const McBot = ({participantsSocketId,currentSocketId,participants}) => {
+const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   const socket = socketio.connect("http://localhost:3001");
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -70,9 +70,9 @@ const McBot = ({participantsSocketId,currentSocketId,participants}) => {
     if(e===1){
       //console.log("신남")
       //소켓
-      console.log(participantsSocketId)
+      console.log(participantsSocketIdList)
       
-        socket.emit('musicplay',{"socketIdList":participantsSocketId,"src":"/music/신남/SellBuyMusic.mp3"})
+      socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/신남/SellBuyMusic.mp3"})
       
       
       //setMusicpath("/music/신남/SellBuyMusic.mp3")
@@ -81,12 +81,12 @@ const McBot = ({participantsSocketId,currentSocketId,participants}) => {
 
   let pause =()=>{
     console.log("정지")
-    socket.emit('musicpause',{"socketIdList":participantsSocketId}) 
+    socket.emit('musicpause',{"socketIdList":participantsSocketIdList}) 
   }
 
   let play =()=>{
     console.log("재생")
-    socket.emit('replay',{"socketIdList":participantsSocketId}) 
+    socket.emit('replay',{"socketIdList":participantsSocketIdList}) 
   }
 
   const FadeToggle =(e)=>{
@@ -100,7 +100,7 @@ const McBot = ({participantsSocketId,currentSocketId,participants}) => {
     }
     if(e===3 && contentFade===false){
       //음악
-      console.log(participantsSocketId)
+      console.log(participantsSocketIdList)
      
       setContent("음악!")
     }
@@ -111,7 +111,7 @@ const McBot = ({participantsSocketId,currentSocketId,participants}) => {
   }
 
   useEffect(()=>{
-    console.log(participantsSocketId)
+    console.log(participantsSocketIdList)
   },[])
 
   return (

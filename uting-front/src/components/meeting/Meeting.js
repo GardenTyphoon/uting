@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import socketio from 'socket.io-client';
 
 function birthToAge(birth) {
@@ -9,6 +10,7 @@ function birthToAge(birth) {
     return 2021 - Number(year) + 1;
 }
 const Meeting = ({ checkFunc }) => {
+    const history = useHistory();
     let sessionUser = sessionStorage.getItem("nickname");
     const socket = socketio.connect('http://localhost:3001');
     const [groupMembers, setGroupMembers] = useState("");
@@ -100,8 +102,8 @@ const Meeting = ({ checkFunc }) => {
             console.log(data);
             await axios.post('http://localhost:3001/meetings', data);
 
-
             checkFunc(true)
+
         }
     }
     useEffect(() => {

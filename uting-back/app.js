@@ -20,6 +20,7 @@ var app = express();
 
 
 
+
  mongoose.connect("mongodb://localhost:27017/uting", {
    useNewUrlParser: true,
    useUnifiedTopology: true,
@@ -77,7 +78,11 @@ app.io.on('connection',function(socket){
     clients.push(clientInfo);
     socket.emit("clientid",{"id":clients[clients.length-1].id});
   });
-
+  socket.on('currentSocketId', function(){
+    console.log('currentSocketId:' + socket.id);
+    let data = socket.id
+    app.io.to(socket.id).emit('currentSocketId',data)
+  })
   socket.on('message',function(msg){
     let data = "그룹에 초대 되었습니다 ^0^"
     app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
@@ -98,19 +103,28 @@ app.io.on('connection',function(socket){
       roomid:msg.roomid,
       _id:msg._id
     }
-    console.log("socketidList~!~!~!~",msg.socketidList)
+   
     if(msg.socketidList.length!==1){
       for(let i=0;i<msg.socketidList.length;i++){
         app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
     }
+  })
+  socket.on('joinRoom', function(roomId){
+    socket.join('room'); // 'room' 부분 미팅방 방제로 수정 예정
     
-   
+  })
+  socket.on('startVote', function(data){
+    for(let i=0;i<data.socketidList.length;i++){
+      console.log(data.socketidList[i])
+      app.io.to(data.socketidList[i]).emit("startVote");
+    }
+    //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
   })
 
   socket.on('musicplay',function(msg){
 
-    console.log("음악!!!!!!!!!!!!!",msg.socketIdList.length)
+    
     console.log("음악!!!!!!!!!!!!!",Object.keys( msg.socketIdList).length)
     let data={
       src:msg.src,
@@ -122,6 +136,7 @@ app.io.on('connection',function(socket){
     if(Object.keys( msg.socketIdList).length>1){
     for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
       app.io.to(msg.socketIdList[i]).emit("musicplay",data) 
+      console.log(msg.socketIdList)
     }}
 
   })
@@ -148,8 +163,19 @@ app.io.on('connection',function(socket){
       app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
     };
   })
-  socket.on('disconnect',function(){
-    console.log('user disconnected');
+  socket.on('endMeetingAgree',function(data){
+
+    for(let i=0;i<data.socketList.length;i++){
+      app.io.to(data.socketList[i]).emit("endMeetingAgree", data.numOfAgree);
+    }
+  })
+  socket.on('endMeetingDisagree',function(data){
+    for(let i=0;i<data.socketList.length;i++){
+      app.io.to(data.socketList[i]).emit("endMeetingDisagree", data.numOfDisagree);
+    }
+  }) 
+  socket.on('disconnect',function(reason){
+    console.log('user disconnected : ' + reason);
   });
 });
 module.exports = app;
