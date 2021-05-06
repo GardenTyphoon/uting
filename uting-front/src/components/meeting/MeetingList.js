@@ -58,8 +58,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [roomObj, setRoomObj] = useState({})
     const socket = socketio.connect('http://localhost:3001');
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
-    const attendRoomByID = async (room, index) => {
-        //getGroupMember();
+    const attendRoomByID = async (room) => {
+        
         getGroupInfo()
         setRoomObj(room)
         setFlag(true)
@@ -84,7 +84,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         groupSocketList.push(currentsocketId.id)
         
         socket.on('connect', function () {
-            socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!" })
+            
+            
+            socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
             //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
         })
     }, [flag])
@@ -149,7 +151,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small" }}>{room.avgAge}살</div>
                             </Col>
                             <Col xs="3">
-                                <button className="joinBtn" onClick={() => attendRoomByID(room, index)}>참가</button>
+                                <button className="joinBtn" onClick={() => attendRoomByID(room)}>참가</button>
                                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <img style={{ width: "10%", height: "15%", marginRight: "8%" }} src={woman} />
                                     <img style={{ width: "13%", height: "22%", marginRight: "8%" }} src={man} />

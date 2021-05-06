@@ -153,7 +153,7 @@ router.post("/viewMyProfile", function (req, res, next) {
   });
 });
 router.post("/userInfo", function (req, res, next) {
-  console.log(req.body.userId);
+
   User.find(function (err, user) {
     user.forEach((per) => {
       if (
@@ -165,8 +165,22 @@ router.post("/userInfo", function (req, res, next) {
     });
   });
 });
+
+router.post("/usersSocketId", function (req, res, next) {
+  let data = [];
+  
+    User.find(function (err, user) {
+      user.forEach((per) => {
+        req.body.users.forEach((one)=>{
+        if (one === per._id.toString() || one === per.nickname) {
+          data.push(per.socketid);
+        }
+      });
+    });
+    res.send(data);
+  })
+});
 router.post("/modifyMyProfile", function (req, res, next) {
-  console.log(req.body);
   User.findByIdAndUpdate(
     req.body._id,
     {
@@ -186,10 +200,9 @@ router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
 });
 
 router.post("/addUcoin", function (req, res, next) {
-  console.log(req.body);
-  console.log(`Coin 결제`);
+  
   let newUcoin = req.body.ucoin + req.body.chargingCoin;
-  console.log(newUcoin);
+  
   User.findByIdAndUpdate(
     req.body.userId,
     {
@@ -203,7 +216,7 @@ router.post("/addUcoin", function (req, res, next) {
 
 // 그룹 생성시 온라인 유저인지 확인
 router.post("/logined", function (req, res, next) {
-  console.log("logined 백");
+
   let ismember = false;
   User.find(function (err, user) {
     //console.log(user)
@@ -224,19 +237,15 @@ router.post("/logined", function (req, res, next) {
 router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
-  console.log("sosocket", req.body.currentSocketId.id);
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
       if (req.body.currentUser === per.nickname) {
-        console.log("savesocketid !!", per);
-        console.log("sosocket", req.body.currentSocketId.id);
         ismember = true;
         perObj = per;
       }
     });
     if (ismember === true) {
-      console.log("tureture!", req.body.currentSocketId.id);
       User.findByIdAndUpdate(
         perObj._id,
         {
