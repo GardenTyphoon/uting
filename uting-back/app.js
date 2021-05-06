@@ -115,7 +115,7 @@ app.io.on('connection',function(socket){
   socket.on('startVote', function(data){
     console.log(data.socketidList);
     for(let i=0;i<data.socketidList.length;i++){
-      app.io.to(data.socketidList[i]).emit("startVote","좀돼라");
+      app.io.to(data.socketidList[i]).emit("startVote",data.socketidList);
     }
     //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
   })
