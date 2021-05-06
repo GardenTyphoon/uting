@@ -43,17 +43,6 @@ const Room = () => {
     });
   }, []);
 
-/*
-  const getparticipants  = async (e) => {
-    let sessionUser = sessionStorage.getItem("nickname");
-    let sessionObject = { sessionUser: sessionUser };
-    const res = await axios.post(
-      "http://localhost:3001/groups/info",
-      sessionObject
-    );
-    setParticipants(res.data.member);
-  };*/
-
   const getparticipants = async () => {
     const _id = location.state._id;
     const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: _id })
@@ -79,12 +68,12 @@ const Room = () => {
   })
 
   socket.on('musicpause',function(data){
-    alert(data)
+    //alert(data)
     document.getElementById("audio").pause();
   })
 
   socket.on('replay',function(data){
-    alert(data)
+    //alert(data)
     document.getElementById("audio").play();
   })
 
