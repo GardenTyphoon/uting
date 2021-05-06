@@ -138,16 +138,6 @@ app.io.on('connection',function(socket){
         app.io.to(msg.socketIdList[i]).emit("replay","호스트가 음악을 다시 재생 시켰습니다.") 
       }}
   })
-/*
-  socket.on('hostentermessage',function(msg){
-    let data = {
-      message:"선택한 미팅방에 입장합니다 ^_^",
-      roomid:msg.roomid
-    }
-    app.io.to(msg.socketid).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 
-    
-   
-  })*/
 
   socket.on('makeMeetingRoomMsg',function(data){
     let msg = "그룹 호스트가 미팅방을 생성하였습니다."

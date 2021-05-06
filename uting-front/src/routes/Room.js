@@ -64,7 +64,6 @@ const Room = () => {
     
   }
   socket.on("musicplay", function (data) {
-    alert("방 내 음악을 재생합니다. ><")
     setMusicsrc(data.src)
     
   })
@@ -95,7 +94,7 @@ const Room = () => {
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
-        <ReactAudioPlayer id="audio" src={musicsrc}  autoPlay controls/>
+        <ReactAudioPlayer id="audio" src={musicsrc} controls/>
       <McBot meetingSocketIdList={meetingSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
       
     </div>
