@@ -104,6 +104,24 @@ app.io.on('connection',function(socket){
     
    
   })
+
+  socket.on('musicplay',function(msg){
+
+    console.log("음악!!!!!!!!!!!!!",msg.socketIdList.length)
+    console.log("음악!!!!!!!!!!!!!",Object.keys( msg.socketIdList).length)
+    let data={
+      src:msg.src,
+      socketIdList:msg.socketIdList
+    }
+    console.log("각사용자소켓아이디~!~!~",msg.socketIdList)
+
+    
+    if(Object.keys( msg.socketIdList).length>1){
+    for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
+      app.io.to(msg.socketIdList[i]).emit("musicplay",data) 
+    }}
+
+  })
 /*
   socket.on('hostentermessage',function(msg){
     let data = {

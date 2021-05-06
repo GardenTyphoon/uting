@@ -4,6 +4,7 @@ import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGr
 import axios from 'axios';
 import McBot from '../components/mc/McBot'
 import socketio from "socket.io-client";
+import ReactAudioPlayer from 'react-audio-player';
 
 const Room = () => {
   const socket = socketio.connect("http://localhost:3001");
@@ -11,6 +12,7 @@ const Room = () => {
   const [groupSocketIdList,setGroupSocketIdList]=useState([]);
   const [groupMember,setGroupMember] = useState([]);
   const [socketFlag,setSocketFlag]=useState(false);
+  const [musicsrc,setMusicsrc]=useState("")
 
   let putSocketid = async (e) => {
     let data = {
@@ -36,9 +38,6 @@ const Room = () => {
     socket.on("clientid", function async(id) {
       setSocketId(id);
     });
-
-    
-
   }, []);
 
 
@@ -62,12 +61,13 @@ const Room = () => {
     if(res.data!=="undefined"){
       setGroupSocketIdList(res.data)
     }
-
-    console.log(res.data)
-    console.log(socketId)
-    console.log(groupMember)
     
   }
+  socket.on("musicplay", function (data) {
+    alert("방 내 음악을 재생합니다. ><")
+    setMusicsrc(data.src)
+    
+  })
 
   useEffect(()=>{
     setTimeout(()=>{
@@ -83,6 +83,7 @@ const Room = () => {
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
+        <ReactAudioPlayer src={musicsrc} autoPlay controls/>
       <McBot groupSocketIdList={groupSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
       
     </div>
