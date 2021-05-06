@@ -18,12 +18,14 @@ const Box = styled.div`
   width:200px;
   height:200px;
 `;
-const McBot = () => {
+const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
   
   const [number,setNumber]=useState("");
   const [content,setContent] = useState("")
+
+  
 
   const toggle = (e) => {
     setDropdownOpen(prevState => !prevState)

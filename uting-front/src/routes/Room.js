@@ -8,7 +8,10 @@ import socketio from "socket.io-client";
 const Room = () => {
   const socket = socketio.connect("http://localhost:3001");
   const [socketId, setSocketId] = useState("");
-  
+  const [groupSocketIdList,setGroupSocketIdList]=useState([]);
+  const [groupMember,setGroupMember] = useState([]);
+  const [socketFlag,setSocketFlag]=useState(false);
+
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -18,6 +21,7 @@ const Room = () => {
       "http://localhost:3001/users/savesocketid",
       data
     );
+    setSocketFlag(!socketFlag)
   };
 
   useEffect(() => {
@@ -32,11 +36,54 @@ const Room = () => {
     socket.on("clientid", function async(id) {
       setSocketId(id);
     });
+
+    
+
   }, []);
+
+
+  const getGroupInfo = async (e) => {
+    let sessionUser = sessionStorage.getItem("nickname");
+    let sessionObject = { sessionUser: sessionUser };
+    const res = await axios.post(
+      "http://localhost:3001/groups/info",
+      sessionObject
+    );
+    setGroupMember(res.data.member);
+  };
+
+  let saveGroupSocketId = async()=>{
+    let data={
+      preMember:groupMember
+    }
+    const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
+ 
+    
+    if(res.data!=="undefined"){
+      setGroupSocketIdList(res.data)
+    }
+
+    console.log(res.data)
+    console.log(socketId)
+    console.log(groupMember)
+    
+  }
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      getGroupInfo()
+    },5000)
+    
+  },[socketFlag])
+
+  useEffect(()=>{
+    saveGroupSocketId()
+  },[groupMember])
+
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
-      <McBot></McBot>
+      <McBot groupSocketIdList={groupSocketIdList} currentSocketId={socketId} groupMember={groupMember}></McBot>
       
     </div>
   );
