@@ -118,10 +118,6 @@ const Room = () => {
     saveParticipantsSocketId()
   },[participants])
 
-  socket.on('startVote',function(data){
-    alert(data)
-    //setStartVote(true)
-  })
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
