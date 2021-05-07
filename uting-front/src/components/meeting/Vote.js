@@ -92,6 +92,10 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
         }
     }, [flag])
 
+    useEffect(()=>{
+        console.log(participantsSocketIdList)
+    },[])
+
 
 
     useEffect(() => {

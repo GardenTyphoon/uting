@@ -66,6 +66,7 @@ const Room = () => {
   }, []);
 
   socket.on("musicplay", function (data) {
+    alert("호스트가 음악을 설정 하였습니다.")
     setMusicsrc(data.src)
   })
 
@@ -93,7 +94,10 @@ const Room = () => {
     saveParticipantsSocketId()
   },[participants])
 
-  
+  socket.on('startVote',function(data){
+    alert(data)
+    //setStartVote(true)
+  })
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
