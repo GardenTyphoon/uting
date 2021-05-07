@@ -100,6 +100,10 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         }
     }, [flag])
 
+    useEffect(()=>{
+        console.log(participantsSocketIdList)
+    },[])
+
 
     useEffect(() => {
         if (doneVote()) {

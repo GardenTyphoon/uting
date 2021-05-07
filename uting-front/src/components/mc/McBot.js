@@ -5,6 +5,8 @@ import styled from "styled-components";
 import McBotImg from '../../img/mc봇.png';
 import backImg from '../../img/뒤로가기.svg'
 import renewImg from '../../img/새로고침.svg'
+import playImg from '../../img/음악재생.svg'
+import pauseImg from '../../img/음악정지.png';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Modal,ModalBody,ModalHeader,Fade } from 'reactstrap';
 import ReactAudioPlayer from 'react-audio-player';
 import socketio from "socket.io-client";
@@ -19,6 +21,18 @@ const Box = styled.div`
   width:200px;
   height:200px;
 `;
+
+const HashTag = styled.span`
+  background-color: #f6cdcf;
+  border-radius: 5px;
+  font-size:18px;
+  margin-left:4%;
+  padding-left:1%;
+  padding-right:3%;
+  padding-bottom:1%;
+  padding-top:2%;
+  font-family:'Jua';
+`;
 const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   const socket = socketio.connect("http://localhost:3001");
 
@@ -32,9 +46,6 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
 
   const toggle = (e) => {
     setDropdownOpen(prevState => !prevState)
-    if(dropdownOpen===true){
-      setContentFade(true)
-    }
     if(dropdownOpen===false){
       setContentFade(false)
     }
@@ -68,14 +79,13 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
 
   let getMusicName = (e)=>{
     if(e===1){
-      //console.log("신남")
-      //소켓
-      console.log(participantsSocketIdList)
-      
-      socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/신남/SellBuyMusic.mp3"})
-      
-      
-      //setMusicpath("/music/신남/SellBuyMusic.mp3")
+      socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/신남/SellBuyMusic신남1.mp3"})
+    }
+    if(e===2){
+
+    }
+    if(e===3){
+      socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/잔잔/SellBuyMusic잔잔1.mp3"})
     }
   }
 
@@ -102,7 +112,7 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
       //음악
       console.log(participantsSocketIdList)
      
-      setContent("음악!")
+      setContent("")
     }
     if(e===4 && contentFade===false){
       //실시간게임
@@ -139,8 +149,16 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
         <img onClick={(e)=>getTopic(e)} src={renewImg} style={{width:"12%",marginLeft:"130px"}}></img>
         :number===3?
           <div>
-            <div><button onClick={(e)=>getMusicName(1)}>신남</button><button>설렘</button><button>잔잔</button></div>
-            <button onClick={(e)=>pause()}>정지</button><button onClick={(e)=>play()}>재생</button>
+            <div>
+              <HashTag onClick={(e)=>getMusicName(1)}>#신남</HashTag>
+              <HashTag>#설렘</HashTag>
+              <HashTag onClick={(e)=>getMusicName(3)}>#잔잔</HashTag>
+            </div>
+            <div style={{marginTop:"20%",marginLeft:"20%"}}>
+              <span onClick={(e)=>play()} ><img style={{width:"30%"}} src={playImg}></img></span>
+              <span onClick={(e)=>pause()}><img style={{width:"30%"}} src={pauseImg}></img></span>              
+            </div>
+            
         </div>
         :number===4?
         <div></div>
