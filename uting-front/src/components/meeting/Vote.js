@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import {useHistory } from "react-router";
 import styled from 'styled-components';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress } from 'reactstrap';
 import axios from 'axios';
 import socketio from "socket.io-client";
 
-const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
+const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     const history = useHistory();
     const socket = socketio.connect("http://localhost:3001");
@@ -16,7 +16,7 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
     const [numOfDisagree, setNumOfDisagree] = useState(0);
     const [isVote, setIsVote] = useState(false);
     const [flag, setFlag] = useState(false);
-    const [myDeicision, setMyDecision] = useState();
+    const [myDeicision, setMyDecision] = useState("");
 
     const onClickEndMeetingBtn = (e) => {
         setToggleEndMeetingBtn(!toggleEndMeetingBtn)
@@ -24,13 +24,13 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
     }
 
     const onClickStartVoteBtn = async (e) => {
+        
         setToggleEndMeetingBtn(!toggleEndMeetingBtn)
         setStartVote(true);
         setFlag(true);
     }
 
     const onClickAgree = (e) => {
-
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -45,25 +45,29 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
     }
 
 
-    socket.on("startVote", function (data) {
-        console.log("startVote");
-        alert("미팅 종료를 위한 투표를 시작합니다.");
-        setStartVote(true);
-    })
-    
-    socket.on("endMeetingAgree", function (data) {
-        setNumOfAgree(data);
-    })
-    socket.on("endMeetingDisagree", function (data) {
-        setNumOfDisagree(data);
-    })
-
-
     const emitStartVote = () => {
-
         socket.emit("startVote", { socketidList:participantsSocketIdList });
-        console.log(participantsSocketIdList)
+        console.log(participantsSocketIdList);
+        console.log("emitvote")
     }
+
+    useImperativeHandle(ref, () => ({
+        onStartVote(){
+            alert("미팅 종료를 위한 투표를 시작합니다.");
+            setStartVote(true);
+        },
+        onEndMeetingAgree(data){
+            if(startVote===true){
+            setNumOfAgree(data);
+            }
+        },
+        onEndMeetingDisagree(data){
+            if(startVote===true){
+            setNumOfDisagree(data);
+            }
+        }
+      }));
+
 
 
     function doneVote() {
@@ -77,17 +81,16 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
     }
 
     function resetVote() {
-        setStartVote(false);
         setNumOfAgree(0);
         setNumOfDisagree(0);
         setIsVote(false);
         setMyDecision("");
+        setFlag(false);
+        setStartVote(false);
     }
 
-
-
     useEffect(() => {
-        if (startVote === true) {
+        if (flag===true && startVote === true) {
             emitStartVote();
         }
     }, [flag])
@@ -97,18 +100,22 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
     },[])
 
 
-
     useEffect(() => {
         if (doneVote()) {
             if (conditionEndMeeting()) {
-                alert("투표가 종료되었습니다. 미팅을 종료합니다.")
+                setTimeout(()=>{
+                    alert("투표가 종료되었습니다. 미팅을 종료합니다.");
+                
                 history.push({
                     pathname: `/main`
                 });
+                },1000)
+              
             }
             else {
-                alert("투표가 종료되었습니다. 미팅을 계속합니다.")
-                resetVote();
+                setTimeout(()=>{resetVote();
+                    alert("투표가 종료되었습니다. 미팅을 계속합니다.")},1000)
+                
             }
         }
     }, [numOfAgree, numOfDisagree])
@@ -145,5 +152,5 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
                 : ""}
         </div>
     );
-};
+});
 export default Vote;

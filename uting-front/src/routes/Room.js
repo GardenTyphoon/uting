@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useHistory } from "react-router";
 import styled from 'styled-components';
 import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
@@ -10,6 +10,7 @@ import ReactAudioPlayer from 'react-audio-player';
 
 
 const Room = () => {
+  const voteRef = useRef();
   const location = useLocation();
   const history = useHistory();
   const socket = socketio.connect("http://localhost:3001");
@@ -17,6 +18,7 @@ const Room = () => {
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
   const [participantsSocketId,setParticipantsSocketId]=useState([]);
+  const [vote, setVote] = useState(false);
   const [participants,setParticipants] = useState([]);
   const [musicsrc,setMusicsrc]=useState("")
 
@@ -44,9 +46,11 @@ const Room = () => {
  
     
     if(res.data!=="undefined"){
+      console.log(res.data);
       setParticipantsSocketId(res.data)
     }
   }
+
 
   const getparticipants = async () => {
     const _id = location.state._id;
@@ -65,6 +69,26 @@ const Room = () => {
     });
   }, []);
 
+  socket.on("startVote", function (data) {
+    console.log("Room - startVote");
+    voteRef.current.onStartVote();
+  })
+  socket.on("endMeetingAgree", function (data) {
+    if(voteRef.current!=null){
+    console.log("Room - endMeetingAgree");
+    voteRef.current.onEndMeetingAgree(data);
+    }
+  })
+  socket.on("endMeetingDisagree", function (data) {
+    if(voteRef.current!=null){
+    console.log("Room - endMeetingDisagree");
+    voteRef.current.onEndMeetingDisagree(data);
+    }
+  })
+
+
+
+  
   socket.on("musicplay", function (data) {
     alert("호스트가 음악을 설정 하였습니다.")
     setMusicsrc(data.src)
@@ -94,17 +118,13 @@ const Room = () => {
     saveParticipantsSocketId()
   },[participants])
 
-  socket.on('startVote',function(data){
-    alert(data)
-    //setStartVote(true)
-  })
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
       <ReactAudioPlayer id="audio" src={musicsrc}  controls/>
     <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
     
-    <Vote participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></Vote>
+    <Vote ref={voteRef} participantsSocketIdList={participantsSocketId} participants={participants}></Vote>
     </div>
   );
 };

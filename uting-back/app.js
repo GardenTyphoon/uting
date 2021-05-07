@@ -105,7 +105,7 @@ app.io.on('connection',function(socket){
     }
    
     if(msg.socketidList.length!==1){
-      for(let i=0;i<msg.socketidList.length;i++){
+      for(let i=0;i<Object.keys(msg.socketidList).length;i++){
         app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
     }
@@ -115,7 +115,7 @@ app.io.on('connection',function(socket){
     
   })
   socket.on('startVote', function(data){
-    for(let i=0;i<data.socketidList.length;i++){
+    for(let i=0;i<Object.keys(data.socketidList).length;i++){
       console.log(data.socketidList[i])
       app.io.to(data.socketidList[i]).emit("startVote");
     }
@@ -165,13 +165,13 @@ app.io.on('connection',function(socket){
   })
   socket.on('endMeetingAgree',function(data){
 
-    for(let i=0;i<data.socketList.length;i++){
-      app.io.to(data.socketList[i]).emit("endMeetingAgree", data.numOfAgree);
+    for(let i=0;i<Object.keys(data.participantsSocketIdList).length;i++){
+      app.io.to(data.participantsSocketIdList[i]).emit("endMeetingAgree", data.numOfAgree);
     }
   })
   socket.on('endMeetingDisagree',function(data){
-    for(let i=0;i<data.socketList.length;i++){
-      app.io.to(data.socketList[i]).emit("endMeetingDisagree", data.numOfDisagree);
+    for(let i=0;i<Object.keys(data.participantsSocketIdList).length;i++){
+      app.io.to(data.participantsSocketIdList[i]).emit("endMeetingDisagree", data.numOfDisagree);
     }
   }) 
   socket.on('disconnect',function(reason){
