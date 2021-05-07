@@ -15,6 +15,7 @@ const Room = () => {
   const [socketId, setSocketId] = useState("");
   const [participants, setParticipants] = useState([]);
   const [participantsSocketId,setParticipantsSocketId]=useState([]);
+  const [vote, setVote] = useState(false);
 
   let putSocketid = async (e) => {
     let data = {
@@ -36,11 +37,17 @@ const Room = () => {
  
     
     if(res.data!=="undefined"){
+      console.log(res.data);
       setParticipantsSocketId(res.data)
     }
     
   }
 
+  socket.on("startVote", function (data) {
+    console.log("startVote");
+    alert("미팅 종료를 위한 투표를 시작합니다.");
+   
+  })
   const getparticipants = async () => {
     const _id = location.state._id;
     const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: _id })
@@ -85,7 +92,7 @@ const Room = () => {
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
     <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
     
-    <Vote participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></Vote>
+    <Vote participantsSocketIdList={participantsSocketId} participants={participants}></Vote>
     </div>
   );
 };

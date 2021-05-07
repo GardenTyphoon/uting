@@ -5,7 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress } from 're
 import axios from 'axios';
 import socketio from "socket.io-client";
 
-const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
+const Vote = ({participantsSocketIdList, participants}) => {
 
     const history = useHistory();
     const socket = socketio.connect("http://localhost:3001");
@@ -45,11 +45,6 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
     }
 
 
-    socket.on("startVote", function (data) {
-        console.log("startVote");
-        alert("미팅 종료를 위한 투표를 시작합니다.");
-        setStartVote(true);
-    })
     
     socket.on("endMeetingAgree", function (data) {
         setNumOfAgree(data);
@@ -84,14 +79,11 @@ const Vote = ({participantsSocketIdList, currentSocketId, participants}) => {
         setMyDecision("");
     }
 
-
-
     useEffect(() => {
         if (startVote === true) {
             emitStartVote();
         }
     }, [flag])
-
 
 
     useEffect(() => {
