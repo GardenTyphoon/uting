@@ -82,7 +82,7 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
       socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/신남/SellBuyMusic신남1.mp3"})
     }
     if(e===2){
-
+      socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/설렘/SellBuyMusic설렘1.mp3"})
     }
     if(e===3){
       socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/잔잔/SellBuyMusic잔잔1.mp3"})
@@ -151,7 +151,7 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
           <div>
             <div>
               <HashTag onClick={(e)=>getMusicName(1)}>#신남</HashTag>
-              <HashTag>#설렘</HashTag>
+              <HashTag onClick={(e)=>getMusicName(2)}>#설렘</HashTag>
               <HashTag onClick={(e)=>getMusicName(3)}>#잔잔</HashTag>
             </div>
             <div style={{marginTop:"20%",marginLeft:"20%"}}>
