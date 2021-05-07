@@ -24,6 +24,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickStartVoteBtn = async (e) => {
+        
         setToggleEndMeetingBtn(!toggleEndMeetingBtn)
         setStartVote(true);
         setFlag(true);
@@ -45,9 +46,9 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
 
     const emitStartVote = () => {
-
         socket.emit("startVote", { socketidList:participantsSocketIdList });
-        
+        console.log(participantsSocketIdList);
+        console.log("emitvote")
     }
 
     useImperativeHandle(ref, () => ({
@@ -89,7 +90,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     useEffect(() => {
-        if (startVote === true) {
+        if (flag===true && startVote === true) {
             emitStartVote();
         }
     }, [flag])
@@ -102,15 +103,19 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     useEffect(() => {
         if (doneVote()) {
             if (conditionEndMeeting()) {
-              alert("투표가 종료되었습니다. 미팅을 종료합니다.");
+                setTimeout(()=>{
+                    alert("투표가 종료되었습니다. 미팅을 종료합니다.");
                 
                 history.push({
                     pathname: `/main`
                 });
+                },1000)
+              
             }
             else {
-                resetVote();
-                alert("투표가 종료되었습니다. 미팅을 계속합니다.")
+                setTimeout(()=>{resetVote();
+                    alert("투표가 종료되었습니다. 미팅을 계속합니다.")},1000)
+                
             }
         }
     }, [numOfAgree, numOfDisagree])
