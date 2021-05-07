@@ -6,7 +6,8 @@ import McBotImg from '../../img/mc봇.png';
 import backImg from '../../img/뒤로가기.svg'
 import renewImg from '../../img/새로고침.svg'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Modal,ModalBody,ModalHeader,Fade } from 'reactstrap';
-
+import ReactAudioPlayer from 'react-audio-player';
+import socketio from "socket.io-client";
 const Box = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
@@ -18,12 +19,14 @@ const Box = styled.div`
   width:200px;
   height:200px;
 `;
-const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
+const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
+  const socket = socketio.connect("http://localhost:3001");
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
-  
   const [number,setNumber]=useState("");
   const [content,setContent] = useState("")
+  const [musicpath,setMusicpath]=useState("")
 
   
 
@@ -63,6 +66,29 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
     setContent(res.data[index])
   }
 
+  let getMusicName = (e)=>{
+    if(e===1){
+      //console.log("신남")
+      //소켓
+      console.log(participantsSocketIdList)
+      
+      socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/신남/SellBuyMusic.mp3"})
+      
+      
+      //setMusicpath("/music/신남/SellBuyMusic.mp3")
+    }
+  }
+
+  let pause =()=>{
+    console.log("정지")
+    socket.emit('musicpause',{"socketIdList":participantsSocketIdList}) 
+  }
+
+  let play =()=>{
+    console.log("재생")
+    socket.emit('replay',{"socketIdList":participantsSocketIdList}) 
+  }
+
   const FadeToggle =(e)=>{
     setNumber(e)
     setContentFade(!contentFade)
@@ -74,6 +100,8 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
     }
     if(e===3 && contentFade===false){
       //음악
+      console.log(participantsSocketIdList)
+     
       setContent("음악!")
     }
     if(e===4 && contentFade===false){
@@ -81,10 +109,15 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
       setContent("마피아할거임~~~~~~~~~~~~?")
     }
   }
+
+  useEffect(()=>{
+    console.log(participantsSocketIdList)
+  },[])
+
   return (
     <div>
 
-
+    
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle caret style={{ width:"15%", backgroundColor: "transparent", border: "0px" }}>
           <img src={McBotImg} style={{ width: "80%" }} />
@@ -105,7 +138,10 @@ const McBot = ({groupSocketIdList,currentSocketId,groupMember}) => {
       :number===2?
         <img onClick={(e)=>getTopic(e)} src={renewImg} style={{width:"12%",marginLeft:"130px"}}></img>
         :number===3?
-          <div></div>
+          <div>
+            <div><button onClick={(e)=>getMusicName(1)}>신남</button><button>설렘</button><button>잔잔</button></div>
+            <button onClick={(e)=>pause()}>정지</button><button onClick={(e)=>play()}>재생</button>
+        </div>
         :number===4?
         <div></div>
         :""
