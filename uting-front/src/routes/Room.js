@@ -35,6 +35,7 @@ const Room = () => {
   };
 
   useEffect(() => {
+    
     putSocketid();
   }, [socketId]);
 
@@ -60,6 +61,7 @@ const Room = () => {
   }
 
   useEffect(() => {
+    //window.location.reload();
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -85,9 +87,6 @@ const Room = () => {
     voteRef.current.onEndMeetingDisagree(data);
     }
   })
-
-
-
   
   socket.on("musicplay", function (data) {
     alert("호스트가 음악을 설정 하였습니다.")

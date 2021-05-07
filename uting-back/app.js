@@ -104,7 +104,7 @@ app.io.on('connection',function(socket){
       _id:msg._id
     }
    
-    if(msg.socketidList.length!==1){
+    if(Object.keys(msg.socketidList.length)!==1){
       for(let i=0;i<Object.keys(msg.socketidList).length;i++){
         app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
@@ -125,7 +125,6 @@ app.io.on('connection',function(socket){
   socket.on('musicplay',function(msg){
 
     
-    console.log("음악!!!!!!!!!!!!!",Object.keys( msg.socketIdList).length)
     let data={
       src:msg.src,
       socketIdList:msg.socketIdList
