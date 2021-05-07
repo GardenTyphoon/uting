@@ -79,16 +79,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         if (numOfAgree > participants.length / 2) return true;
         else return false;
     }
-
-    function resetVote() {
-        setNumOfAgree(0);
-        setNumOfDisagree(0);
-        setIsVote(false);
-        setMyDecision("");
-        setFlag(false);
-        setStartVote(false);
-    }
-
     useEffect(() => {
         if (flag===true && startVote === true) {
             emitStartVote();
@@ -113,9 +103,9 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
               
             }
             else {
-                setTimeout(()=>{resetVote();
-                    alert("투표가 종료되었습니다. 미팅을 계속합니다.")},1000)
-                
+                setTimeout(()=>{
+                    alert("투표가 종료되었습니다. 미팅을 계속합니다.")
+                    window.location.reload();},1000)
             }
         }
     }, [numOfAgree, numOfDisagree])
