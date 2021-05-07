@@ -46,9 +46,6 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
 
   const toggle = (e) => {
     setDropdownOpen(prevState => !prevState)
-    if(dropdownOpen===true){
-      setContentFade(true)
-    }
     if(dropdownOpen===false){
       setContentFade(false)
     }
