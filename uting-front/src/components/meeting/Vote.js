@@ -30,7 +30,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickAgree = (e) => {
-        console.log("찬성버튼누름")
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -38,7 +37,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickDisagree = (e) => {
-        console.log("반대버튼누름")
         socket.emit("endMeetingDisagree", { participantsSocketIdList, numOfDisagree: numOfDisagree + 1 });
         setNumOfDisagree(numOfDisagree + 1);
         setIsVote(!isVote);
@@ -49,25 +47,22 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     const emitStartVote = () => {
 
         socket.emit("startVote", { socketidList:participantsSocketIdList });
-        console.log(participantsSocketIdList)
+        
     }
 
     useImperativeHandle(ref, () => ({
         onStartVote(){
             alert("미팅 종료를 위한 투표를 시작합니다.");
             setStartVote(true);
-            console.log("투표시작 : " + numOfAgree, numOfDisagree, myDeicision, isVote, flag, startVote  );
         },
         onEndMeetingAgree(data){
             if(startVote===true){
             setNumOfAgree(data);
-            console.log("다른 사람이 찬성 : " + numOfAgree, numOfDisagree, myDeicision, isVote, flag, startVote  );
             }
         },
         onEndMeetingDisagree(data){
             if(startVote===true){
             setNumOfDisagree(data);
-            console.log("다른 사람이 거절 : " + numOfAgree, numOfDisagree, myDeicision, isVote, flag, startVote );
             }
         }
       }));
@@ -91,7 +86,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         setMyDecision("");
         setFlag(false);
         setStartVote(false);
-        console.log("resetVote");
     }
 
     useEffect(() => {
@@ -117,8 +111,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
             else {
                 resetVote();
                 alert("투표가 종료되었습니다. 미팅을 계속합니다.")
-                
-               
             }
         }
     }, [numOfAgree, numOfDisagree])
