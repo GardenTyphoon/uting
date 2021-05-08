@@ -12,11 +12,11 @@ import utingLogo from "../img/utingLogo.png";
 const Main = () => {
   const history = useHistory();
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
-  const [checkRoomList,setCheckRoomList]=useState(false);
-  const [checkGroup,setCheckGroup]=useState(false)
-  const [checkAnother,setCheckAnother]=useState(false);
-  const [addEvent,setAddEvent]=useState(false);
-  const [groupSocketList,setGroupSocketList]=useState([])
+  const [checkRoomList, setCheckRoomList] = useState(false);
+  const [checkGroup, setCheckGroup] = useState(false);
+  const [checkAnother, setCheckAnother] = useState(false);
+  const [addEvent, setAddEvent] = useState(false);
+  const [groupSocketList, setGroupSocketList] = useState([]);
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
   const [socketId, setSocketId] = useState("");
@@ -36,13 +36,14 @@ const Main = () => {
     }
   };
 
-  let groupSocket = (e) =>{
-    setGroupSocketList(e)
-  }
+  let groupSocket = (e) => {
+    console.log("groupSocket : " + e);
+    setGroupSocketList(e);
+  };
 
-  let preMessage = (e)=>{
-    if(e===true){
-      setAddEvent(true)
+  let preMessage = (e) => {
+    if (e === true) {
+      setAddEvent(true);
     }
   };
 
@@ -64,19 +65,18 @@ const Main = () => {
       alert(data);
       setCheckAnother(true);
     }, 5000);
-  })
+  });
 
-  socket.on("entermessage",function(data){
+  socket.on("entermessage", function (data) {
     console.log("entermessage");
-    alert(data.message)
+    alert(data.message);
     socket.emit("joinRoom", data.roomid);
     history.push({
-      pathname: `/room/`+data.roomid,
-      state:{_id:data._id}
+      pathname: `/room/` + data.roomid,
+      state: { _id: data._id },
     });
-  })
-  
-  
+  });
+
   useEffect(() => {
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
@@ -85,7 +85,6 @@ const Main = () => {
     socket.on("clientid", function async(id) {
       setSocketId(id);
     });
-
   }, []);
 
   let putSocketid = async (e) => {
@@ -147,8 +146,17 @@ const Main = () => {
         }}
       >
         <div style={{}}>학교 랭킹 넣는 자리 </div>
-        <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
-        <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
+        <MeetingList
+          currentsocketId={socketId}
+          groupSocketList={groupSocketList}
+          checkState={checkRoomList}
+        />
+        <Groups
+          groupSocket={(e) => groupSocket(e)}
+          currentsocketId={socketId}
+          checkGroup={checkGroup}
+          checkAnother={checkAnother}
+        />
       </div>
     </div>
   );

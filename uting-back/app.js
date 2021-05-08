@@ -1,125 +1,120 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var cors = require('cors');
-const mongoose=require('mongoose');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var meetingsRouter = require('./routes/meetings');
-var groupsRouter = require('./routes/groups');
-var adsRouter = require('./routes/ads');
-var reportsRouter = require('./routes/reports');
-var mcsRouter = require('./routes/mcs');
+var createError = require("http-errors");
+var express = require("express");
+var path = require("path");
+var cookieParser = require("cookie-parser");
+var logger = require("morgan");
+var cors = require("cors");
+const mongoose = require("mongoose");
+var indexRouter = require("./routes/index");
+var usersRouter = require("./routes/users");
+var meetingsRouter = require("./routes/meetings");
+var groupsRouter = require("./routes/groups");
+var adsRouter = require("./routes/ads");
+var reportsRouter = require("./routes/reports");
+var mcsRouter = require("./routes/mcs");
 
 var clients = [];
 var members = [];
 // PORT => 3001
 var app = express();
 
-
-
-
- mongoose.connect("mongodb://localhost:27017/uting", {
-   useNewUrlParser: true,
-   useUnifiedTopology: true,
-   useCreateIndex: true,
-   useFindAndModify: false,
- }).then(()=>console.log("Connect MongoDB"));
- //autoIncrement.initialize(mongoose.connection);
+mongoose
+  .connect("mongodb://localhost:27017/uting", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
+  .then(() => console.log("Connect MongoDB"));
+//autoIncrement.initialize(mongoose.connection);
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "jade");
 
 app.use(cors());
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'uploads')));
-app.use('/uploads',express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use('/api', indexRouter);
-app.use('/users', usersRouter);
-app.use('/meetings', meetingsRouter);
-app.use('/groups',groupsRouter);
-app.use('/ads', adsRouter);
-app.use('/reports', reportsRouter);
-app.use('/mcs',mcsRouter)
-
+app.use("/api", indexRouter);
+app.use("/users", usersRouter);
+app.use("/meetings", meetingsRouter);
+app.use("/groups", groupsRouter);
+app.use("/ads", adsRouter);
+app.use("/reports", reportsRouter);
+app.use("/mcs", mcsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render("error");
 });
-app.io = require('socket.io')();
+app.io = require("socket.io")();
 
-app.io.on('connection',function(socket){
+app.io.on("connection", function (socket) {
   //console.log("Connected !");
-  socket.on('login', function(data) {
-    
+  socket.on("login", function (data) {
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
     clients.push(clientInfo);
-    socket.emit("clientid",{"id":clients[clients.length-1].id});
+    socket.emit("clientid", { id: clients[clients.length - 1].id });
   });
-  socket.on('currentSocketId', function(){
-    console.log('currentSocketId:' + socket.id);
-    let data = socket.id
-    app.io.to(socket.id).emit('currentSocketId',data)
-  })
-  socket.on('message',function(msg){
-    let data = "그룹에 초대 되었습니다 ^0^"
-    app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
-  })
-  socket.on('premessage',function(msg){
-    let data = "그룹에 다른 사용자가 추가되었습니다 ^0^"
-    for(let i=0;i<msg.socketidList.length;i++){
-      app.io.to(msg.socketidList[i]).emit("premessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+  socket.on("currentSocketId", function () {
+    console.log("currentSocketId:" + socket.id);
+    let data = socket.id;
+    app.io.to(socket.id).emit("currentSocketId", data);
+  });
+  socket.on("message", function (msg) {
+    let data = "그룹에 초대 되었습니다 ^0^";
+    app.io.to(msg.socketid).emit("sendMember", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+  });
+  socket.on("premessage", function (msg) {
+    let data = "그룹에 다른 사용자가 추가되었습니다 ^0^";
+    for (let i = 0; i < msg.socketidList.length; i++) {
+      app.io.to(msg.socketidList[i]).emit("premessage", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
     }
-   
-  })
+  });
 
-  socket.on('entermessage',function(msg){
+  socket.on("entermessage", function (msg) {
     let data = {
-      message:"호스트에의해 선택한 미팅방에 입장합니다 ^_^",
-      roomid:msg.roomid,
-      _id:msg._id
-    }
-   
-    if(msg.socketidList.length!==1){
-      for(let i=0;i<msg.socketidList.length;i++){
-        app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+      message: "호스트에의해 선택한 미팅방에 입장합니다 ^_^",
+      roomid: msg.roomid,
+      _id: msg._id,
+    };
+
+    if (msg.socketidList.length !== 1) {
+      for (let i = 0; i < msg.socketidList.length; i++) {
+        app.io.to(msg.socketidList[i]).emit("entermessage", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
     }
-  })
-  socket.on('joinRoom', function(roomId){
-    socket.join('room'); // 'room' 부분 미팅방 방제로 수정 예정
-    
-  })
-  socket.on('startVote', function(data){
+  });
+  socket.on("joinRoom", function (roomId) {
+    socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
+  });
+  socket.on("startVote", function (data) {
     console.log(data.socketidList);
-    for(let i=0;i<data.socketidList.length;i++){
-      app.io.to(data.socketidList[i]).emit("startVote",data.socketidList);
+    for (let i = 0; i < data.socketidList.length; i++) {
+      app.io.to(data.socketidList[i]).emit("startVote", data.socketidList);
     }
     //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
-  })
-/*
+  });
+  /*
   socket.on('hostentermessage',function(msg){
     let data = {
       message:"선택한 미팅방에 입장합니다 ^_^",
@@ -130,25 +125,45 @@ app.io.on('connection',function(socket){
    
   })*/
 
-  socket.on('makeMeetingRoomMsg',function(data){
-    let msg = "그룹 호스트가 미팅방을 생성하였습니다."
-    for(let i=0;i<data.groupMembersSocketId.length;i++){
+  socket.on("makeMeetingRoomMsg", function (data) {
+    let msg = "그룹 호스트가 미팅방을 생성하였습니다.";
+    for (let i = 0; i < data.groupMembersSocketId.length; i++) {
       app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
-    };
-  })
-  socket.on('endMeetingAgree',function(data){
-
-    for(let i=0;i<data.socketList.length;i++){
+    }
+  });
+  socket.on("endMeetingAgree", function (data) {
+    for (let i = 0; i < data.socketList.length; i++) {
       app.io.to(data.socketList[i]).emit("endMeetingAgree", data.numOfAgree);
     }
-  })
-  socket.on('endMeetingDisagree',function(data){
-    for(let i=0;i<data.socketList.length;i++){
-      app.io.to(data.socketList[i]).emit("endMeetingDisagree", data.numOfDisagree);
+  });
+  socket.on("endMeetingDisagree", function (data) {
+    for (let i = 0; i < data.socketList.length; i++) {
+      app.io
+        .to(data.socketList[i])
+        .emit("endMeetingDisagree", data.numOfDisagree);
     }
-  }) 
-  socket.on('disconnect',function(reason){
-    console.log('user disconnected : ' + reason);
+  });
+  socket.on("disconnect", function (reason) {
+    console.log("user disconnected : " + reason);
+  });
+  socket.on("notifyTurn", (data) => {
+    console.log(socket.id);
+    console.log(data.socketIdList);
+    for (let i = 0; i < data.socketIdList.length; i++) {
+      //console.log(data.groupSocketIdList[i]);
+      app.io.to(data.socketIdList[i]).emit("notifyTurn", data.turn);
+      //app.io.to(socket.id).emit("notifyTurn", data.turn);
+    }
+  });
+  socket.on("notifyMember", (data) => {
+    console.log("data : " + data);
+    app.io.to(data.turnSocketId).emit("notifyTurn");
+  });
+  socket.on("test1", function () {
+    console.log("test1: " + socket.id);
+  });
+  socket.on("test2", function (msg) {
+    console.log("test2: " + socket.id);
   });
 });
 module.exports = app;
