@@ -13,7 +13,7 @@ const Meeting = ({ checkFunc }) => {
     const history = useHistory();
     let sessionUser = sessionStorage.getItem("nickname");
     const socket = socketio.connect('http://localhost:3001');
-    const [groupMembers, setGroupMembers] = useState("");
+    const [groupMembers, setGroupMembers] = useState([]);
     const [toggleWarningMess, setToggleWarningMess] = useState(false);
     const [socketOn, setSocketOn] = useState(false);
     let groupMembersSocketId = [];
@@ -34,6 +34,7 @@ const Meeting = ({ checkFunc }) => {
             })
         }
         else {
+            console.log(groupMembers);
             if (name === 'num' && value >= groupMembers.data.length && value <= 4) {
 
                 setRoom({
@@ -49,7 +50,8 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-
+        console.log("back group")
+        console.log(res);
         setGroupMembers(res);
     }
     useEffect(() => {

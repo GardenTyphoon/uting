@@ -7,7 +7,7 @@ import McBot from '../components/mc/McBot'
 import Vote from '../components/meeting/Vote'
 import socketio from "socket.io-client";
 import ReactAudioPlayer from 'react-audio-player';
-
+import MeetingRoom from '../components/meeting/MeetingRoom';
 
 const Room = () => {
   const voteRef = useRef();
@@ -120,10 +120,10 @@ const Room = () => {
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
+      <MeetingRoom />
       <ReactAudioPlayer id="audio" src={musicsrc}  controls/>
-    <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
-    
-    <Vote ref={voteRef} participantsSocketIdList={participantsSocketId} participants={participants}></Vote>
+      <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
+      <Vote ref={voteRef} participantsSocketIdList={participantsSocketId} participants={participants}></Vote>
     </div>
   );
 };

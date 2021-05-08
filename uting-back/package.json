@@ -9,6 +9,7 @@
     "dev": "concurrently \"npm run back\" \"npm run front\""
   },
   "dependencies": {
+    "aws-sdk": "^2.903.0",
     "blob": "^0.1.0",
     "concurrently": "^6.0.0",
     "cookie-parser": "^1.4.5",
@@ -31,7 +32,7 @@
     "npm-check": "^5.9.2",
     "path": "^0.12.7",
     "pug": "^2.0.4",
-    "socket.io": "^4.0.1"
+    "socket.io": "^4.0.2"
   },
   "main": "app.js",
   "author": "",

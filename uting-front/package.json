@@ -8,6 +8,8 @@
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "FormData": "^0.10.1",
+    "amazon-chime-sdk-component-library-react": "^2.3.0",
+    "amazon-chime-sdk-js": "^2.8.0",
     "antd": "^4.15.0",
     "axios": "^0.21.1",
     "babel-plugin-import": "^1.13.3",
@@ -34,6 +36,7 @@
     "soundcloud": "^3.3.2",
     "spotify-web-api-node": "^5.0.2",
     "styled-components": "^5.2.3",
+    "styled-system": "^5.1.5",
     "useragent": "^2.3.0",
     "web-vitals": "^1.1.1"
   },

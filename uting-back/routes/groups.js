@@ -16,6 +16,7 @@ router.post('/getMyGroupMember', function (req, res, next) {
         })
     })
 })
+
 // POST write one group
 router.post('/info', function(req, res,next){
     let ismember=false;
