@@ -113,7 +113,7 @@ router.post('/join', async function(req, res, next){
   });
 
   const title = meeting.title;
-  const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기
+  const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기 임시로 이렇게 넣어 놓은 것임.
   const region = "us-east-1"
   
   if (!meetingCache[title]){
@@ -139,13 +139,15 @@ router.post('/join', async function(req, res, next){
   attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
 
   
-  meeting.save((err)=>{
-    res.send("방을 생성하였습니다.")
-  });
+  
   res.statusCode = 201;
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(joinInfo), 'utf8');
-  res.end();
+  // meeting.save((err) => {
+  //   res.send("방을 생성하였습니다.")
+  // });
+  meeting.save();
+  res.end(); // res.json 또는 res.send 없으면 안써도돼
 })
 
 router.post('/savemember', function(req, res,next){
@@ -167,14 +169,12 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
-
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
       if(obj._id.toString()===req.body._id){
         res.send(obj.users);
       }
-    }
-  )
+    })
   })
 });
 

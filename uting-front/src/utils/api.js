@@ -1,7 +1,7 @@
-import routes from '../constants/routes';
+// import routes from '../constants/routes';
 import axios from 'axios'
 
-export const BASE_URL = routes.HOME;
+export const BASE_URL = '/';
 
 // interface MeetingResponse { // .ts 로 작성되었을때 리턴 타입을 Promise로 정의하려고 사용하는 부분임.
 //     JoinInfo: {
@@ -10,8 +10,7 @@ export const BASE_URL = routes.HOME;
 //     };
 // }
 
-export async function fetchMeeting(meetingId, room){
-    // console.log(room)
+export async function fetchMeeting(meetingId, data){
     const response = await fetch(
         `http://localhost:3001/meetings/join`,
         {
@@ -19,15 +18,15 @@ export async function fetchMeeting(meetingId, room){
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(room),
+            body: JSON.stringify(data),
         },
     );
-    const data = await response.json();
+    const resData = await response.json();
 
-    if(data.error){
-        throw new Error(`Server error: ${data.error}`);
+    if(resData.error){
+        throw new Error(`Server error: ${resData.error}`);
     }
-    return data;
+    return resData;
 }
 
 export function createGetAttendeeCallback(meetingId){

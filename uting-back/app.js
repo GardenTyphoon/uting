@@ -17,16 +17,12 @@ var clients = [];
 var members = [];
 // PORT => 3001
 var app = express();
-
-
-
-
- mongoose.connect("mongodb://localhost:27017/uting", {
-   useNewUrlParser: true,
-   useUnifiedTopology: true,
-   useCreateIndex: true,
-   useFindAndModify: false,
- }).then(()=>console.log("Connect MongoDB"));
+mongoose.connect("mongodb://localhost:27017/uting", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+}).then(()=>console.log("Connect MongoDB"));
  //autoIncrement.initialize(mongoose.connection);
 
 // view engine setup
@@ -68,6 +64,14 @@ app.use(function(err, req, res, next) {
 });
 app.io = require('socket.io')();
 
+// 대충 써봣는데 되는지 모름. 테스트 해보자구
+// app.io = require('socket.io')(app, {
+//   cors: {
+//     origin: ["127.0.0.1:3000"],
+//     methods: ["GET", "POST"],
+//   }
+// });
+
 app.io.on('connection',function(socket){
   //console.log("Connected !");
   socket.on('login', function(data) {
@@ -92,7 +96,6 @@ app.io.on('connection',function(socket){
     for(let i=0;i<msg.socketidList.length;i++){
       app.io.to(msg.socketidList[i]).emit("premessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
     }
-   
   })
 
   socket.on('entermessage',function(msg){
@@ -103,7 +106,7 @@ app.io.on('connection',function(socket){
       roomid:msg.roomid,
       _id:msg._id
     }
-   
+
     if(Object.keys(msg.socketidList.length)!==1){
       for(let i=0;i<Object.keys(msg.socketidList).length;i++){
         app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.

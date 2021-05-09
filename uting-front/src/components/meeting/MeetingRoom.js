@@ -31,7 +31,7 @@ export default function Rooms() {
                     replaceAll: true
                 }
             });
-            history.push('/');
+            history.push('/main');
         }
     }, [meetingStatus]);
 

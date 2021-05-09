@@ -11,7 +11,7 @@ import React, {
 import { useLocation } from 'react-router-dom';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 
-import routes from '../constants/routes';
+// import routes from '../constants/routes';
 
 // export type NavigationContextType = {
 //   showNavbar: boolean;
@@ -55,7 +55,7 @@ const NavigationProvider = ({ children }) => {
   const meetingManager = useMeetingManager();
 
   useEffect(() => {
-    if (location.pathname.includes(routes.MEETING)) {
+    if (location.pathname.includes('/room')) {
       return () => {
         meetingManager.leave();
       };

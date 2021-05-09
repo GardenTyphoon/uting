@@ -4,7 +4,7 @@
 import React from 'react';
 import { Heading } from 'amazon-chime-sdk-component-library-react';
 
-// import JoinMeetingDetails from '../container/MeetingJoinDetails';
+import MeetingJoinDetails from '../meeting/MeetingJoinDetails';
 import DeviceSelection from './DeviceSelection/DeviceSelection';
 
 const DeviceSetup = () => (
@@ -13,7 +13,7 @@ const DeviceSetup = () => (
       Device settings
     </Heading>
     <DeviceSelection />
-    <JoinMeetingDetails />
+    <MeetingJoinDetails />
   </div>
 );
 

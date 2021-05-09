@@ -8,6 +8,7 @@ import Vote from '../components/meeting/Vote'
 import socketio from "socket.io-client";
 import ReactAudioPlayer from 'react-audio-player';
 import MeetingRoom from '../components/meeting/MeetingRoom';
+import { useAppState } from '../providers/AppStateProvider';
 
 const Room = () => {
   const voteRef = useRef();
@@ -21,6 +22,8 @@ const Room = () => {
   const [vote, setVote] = useState(false);
   const [participants,setParticipants] = useState([]);
   const [musicsrc,setMusicsrc]=useState("")
+
+  const { meetingId: appMeetingId } = useAppState();
 
   let putSocketid = async (e) => {
     let data = {
@@ -44,7 +47,7 @@ const Room = () => {
       preMember:participants
     }
     const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
- 
+
     
     if(res.data!=="undefined"){
       console.log(res.data);
@@ -54,7 +57,11 @@ const Room = () => {
 
 
   const getparticipants = async () => {
-    const _id = location.state._id;
+    // const _id = location.state._id;
+    // location.state를 쓰려면 순차적으로 넘어갈때만 가능
+    // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
+    // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
+    const _id = appMeetingId;
     const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: _id })
     
     setParticipants(res.data);
