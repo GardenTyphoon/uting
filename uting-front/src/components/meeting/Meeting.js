@@ -3,6 +3,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import socketio from 'socket.io-client';
+import { useAppState } from '../../providers/AppStateProvider';
+import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
+import { createGetAttendeeCallback, fetchMeeting } from '../../utils/api';
 
 function birthToAge(birth) {
 
@@ -11,9 +14,11 @@ function birthToAge(birth) {
 }
 const Meeting = ({ checkFunc }) => {
     const history = useHistory();
+    const meetingManager = useMeetingManager();
+    const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
     let sessionUser = sessionStorage.getItem("nickname");
     const socket = socketio.connect('http://localhost:3001');
-    const [groupMembers, setGroupMembers] = useState("");
+    const [groupMembers, setGroupMembers] = useState([]);
     const [toggleWarningMess, setToggleWarningMess] = useState(false);
     const [socketOn, setSocketOn] = useState(false);
     let groupMembersSocketId = [];
@@ -34,6 +39,7 @@ const Meeting = ({ checkFunc }) => {
             })
         }
         else {
+            console.log(groupMembers);
             if (name === 'num' && value >= groupMembers.data.length && value <= 4) {
 
                 setRoom({
@@ -49,7 +55,8 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-
+        console.log("back group")
+        console.log(res);
         setGroupMembers(res);
     }
     useEffect(() => {
@@ -89,8 +96,9 @@ const Meeting = ({ checkFunc }) => {
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
             //방 생성
+            const roomTitle = room.title.trim().toLocaleLowerCase()
             let data = {
-                title: room.title,
+                title: roomTitle,
                 maxNum: Number(room.num),
                 status: room.status,
                 avgManner: avgManner,
@@ -100,10 +108,26 @@ const Meeting = ({ checkFunc }) => {
             };
             data.users = groupMembersInfo;
             console.log(data);
-            await axios.post('http://localhost:3001/meetings', data);
 
+            // await axios.post('http://localhost:3001/meetings', data);
+            meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
             checkFunc(true)
 
+            try {
+                // 원래 형태는 id(title), 참여자이름, 지역임.
+                // const { JoinInfo } = await fetchMeeting(roomTitle, room);
+                const { JoinInfo } = await fetchMeeting(roomTitle, data);
+                await meetingManager.join({
+                    meetingInfo: JoinInfo.Meeting,
+                    attendeeInfo: JoinInfo.Attendee
+                });
+                // 디바이스 세팅하고 미팅 시작하는데 영향 끼치는 부분이라서
+                // 실제로는 중간 파라미터로 사용자 이름 넣어야함. sessionUser가 보니까 nickname string인거 같은데 그거 넣으면 될 듯 하다
+                setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
+                history.push('/deviceSetup');
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
     useEffect(() => {

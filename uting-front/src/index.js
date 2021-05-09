@@ -5,10 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import firebase from "./firebase";
 import 'bootstrap/dist/css/bootstrap.min.css';
-console.log(firebase)
+import { ThemeProvider } from 'styled-components';
+import { lightTheme } from 'amazon-chime-sdk-component-library-react';
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={lightTheme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

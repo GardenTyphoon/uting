@@ -7,15 +7,16 @@ const { User } = require('../model');
 
 router.post('/getMyGroupMember', function (req, res, next) {
     Group.find(function (err, group) {
-        group.forEach(gr => {
-           gr.member.forEach(nickname=>{
-              if (req.body.sessionUser === nickname) {
-                res.send(gr.member);
-               }
-            })
+      group.forEach(gr => {
+        gr.member.forEach(nickname=>{
+          if (req.body.sessionUser === nickname) {
+            res.send(gr.member);
+            }
         })
+      })
     })
 })
+
 // POST write one group
 router.post('/info', function(req, res,next){
     let ismember=false;

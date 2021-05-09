@@ -59,7 +59,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const socket = socketio.connect('http://localhost:3001');
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
     const attendRoomByID = async (room) => {
-        
         getGroupInfo()
         setRoomObj(room)
         setFlag(true)
@@ -169,9 +168,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                                 <div>
                                     {user.nickname}
                                     {user.introduce}
-
                                     {user.mannerCredit}
-
                                     {user.age}
                                 </div>
                             )}
