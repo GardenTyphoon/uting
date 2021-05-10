@@ -186,7 +186,10 @@ router.post('/getparticipants', function(req,res,next){
   })
 });
 
-
+router.post('/logs', function(req, res, next){
+  console.log('Writing logs to cloudwatch');
+  res.redirect('back');
+})
 
 // PUT edit one meeting
 router.put('/:id', async function(req,res,next){

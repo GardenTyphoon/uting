@@ -30,10 +30,10 @@ export async function fetchMeeting(data){
 }
 
 export function createGetAttendeeCallback(meetingId){
-    return async (chimeAttendeeId, externalUserId) => {
+    return async () => {
         const attendeeUrl = `http://localhost:3001/meetings/attendee?title=${encodeURIComponent(
             meetingId
-        )}$attendee=${encodeURIComponent(chimeAttendeeId)}`;
+        )}`;
         const res = await fetch(attendeeUrl, {
             method: 'GET',
         });
