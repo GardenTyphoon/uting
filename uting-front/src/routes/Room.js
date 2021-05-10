@@ -23,7 +23,7 @@ const Room = () => {
   const [participants,setParticipants] = useState([]);
   const [musicsrc,setMusicsrc]=useState("")
 
-  const { meetingId: appMeetingId } = useAppState();
+  const { meetingId } = useAppState();
 
   let putSocketid = async (e) => {
     let data = {
@@ -61,8 +61,9 @@ const Room = () => {
     // location.state를 쓰려면 순차적으로 넘어갈때만 가능
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
-    const _id = appMeetingId;
-    const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: _id })
+    const _id = meetingId;
+    console.log(meetingId)
+    const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: meetingId })
     
     setParticipants(res.data);
   }
@@ -113,6 +114,7 @@ const Room = () => {
  
 
   useEffect(()=>{
+    
     setTimeout(()=>{
       getparticipants()
     },5000)

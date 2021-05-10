@@ -21,8 +21,10 @@ const Meeting = ({ checkFunc }) => {
     const [groupMembers, setGroupMembers] = useState([]);
     const [toggleWarningMess, setToggleWarningMess] = useState(false);
     const [socketOn, setSocketOn] = useState(false);
+    //const [roomtitle,setRoomtitle]=useState("")
     let groupMembersSocketId = [];
     let groupMembersInfo = [];
+    let roomtitle="";
     const [room, setRoom] = useState({
         title: "", //방제
         num: 0, //성별당 최대인원
@@ -91,12 +93,15 @@ const Meeting = ({ checkFunc }) => {
 
 
             }
-            setSocketOn(groupMembersSocketId);
+            
             avgManner /= groupMembers.data.length;
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
             //방 생성
             const roomTitle = room.title.trim().toLocaleLowerCase()
+            roomtitle=roomTitle;
+            console.log(roomtitle)
+            setSocketOn(groupMembersSocketId);
             let data = {
                 title: roomTitle,
                 maxNum: Number(room.num),
@@ -131,9 +136,10 @@ const Meeting = ({ checkFunc }) => {
         }
     }
     useEffect(() => {
+        console.log(roomtitle)
         socket.on('connect', function () {
 
-            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn })
+            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })
         })
     }, [socketOn])
     return (

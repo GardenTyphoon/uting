@@ -46,6 +46,10 @@ const Main = () => {
     }
   };
 
+  let goMeetingRoom = async(e)=>{
+    
+  }
+
   useEffect(() => {}, [addEvent]);
 
   socket.on("sendMember", function (data) {
@@ -54,8 +58,10 @@ const Main = () => {
   });
 
   socket.on("makeMeetingRoomMsg", function (data) {
-    alert(data);
-    window.location.href = "http://localhost:3000/main";
+    alert(data.roomtitle);
+    //여깅
+    
+    window.location.href = "http://localhost:3000/room/"+data.roomtitle;
   });
 
   //다른 그룹원 추가
@@ -70,6 +76,7 @@ const Main = () => {
     console.log("entermessage");
     alert(data.message)
     console.log(data._id)
+    console.log(data.roomid)
     socket.emit("joinRoom", data.roomid);
     history.push({
       pathname: `/room/`+data.roomid,

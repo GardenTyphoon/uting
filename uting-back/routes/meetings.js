@@ -169,9 +169,12 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
+  console.log("getparticipants!!",req.body)
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
-      if(obj._id.toString()===req.body._id){
+      console.log("obj",obj.title)
+      if(obj.title===req.body._id){
+        console.log(obj.title)
         res.send(obj.users);
       }
     })

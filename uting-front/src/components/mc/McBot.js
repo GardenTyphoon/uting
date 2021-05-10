@@ -78,7 +78,10 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   }
 
   let getMusicName = (e)=>{
+    
     if(e===1){
+      console.log(e)
+      console.log(participantsSocketIdList)
       socket.emit('musicplay',{"socketIdList":participantsSocketIdList,"src":"/music/신남/SellBuyMusic신남1.mp3"})
     }
     if(e===2){
