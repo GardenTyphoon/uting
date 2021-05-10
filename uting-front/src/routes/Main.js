@@ -9,8 +9,17 @@ import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
+
+
+import { useAppState } from '../providers/AppStateProvider';
+import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
+import { createGetAttendeeCallback, fetchMeeting } from '../utils/api';
+
 const Main = () => {
   const history = useHistory();
+  const meetingManager = useMeetingManager();
+  const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
+
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
   const [checkRoomList,setCheckRoomList]=useState(false);
   const [checkGroup,setCheckGroup]=useState(false)
@@ -57,14 +66,29 @@ const Main = () => {
     setCheckGroup(true);
   });
 
-  socket.on("makeMeetingRoomMsg", function (data) {
-    console.log(data)
+  socket.on("makeMeetingRoomMsg", async function (data) {
+    let temp = {
+      title: data,
+    }
     //data가 방제....
     alert(data);
       //여깅
-      
-      window.location.href = "http://localhost:3000/room/"+data;
-   
+
+    meetingManager.getAttendee = createGetAttendeeCallback(data);
+  
+    try {
+      const { JoinInfo } = await fetchMeeting(temp);
+  
+      await meetingManager.join({
+        meetingInfo: JoinInfo.Meeting,
+        attendeeInfo: JoinInfo.Attendee
+      });
+  
+      setAppMeetingInfo(data, "Tester", "ap-northeast-2");
+      history.push("/deviceSetup");
+    } catch (error) {
+      console.log(error);
+    }    
   });
 
   //다른 그룹원 추가

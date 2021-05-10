@@ -10,7 +10,7 @@ import axios from 'axios'
 //     };
 // }
 
-export async function fetchMeeting(meetingId, data){
+export async function fetchMeeting(data){
     const response = await fetch(
         `http://localhost:3001/meetings/join`,
         {
