@@ -71,7 +71,6 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-        
         setGroupMembers(res);
     }
     useEffect(() => {

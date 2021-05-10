@@ -61,6 +61,37 @@ const Main = () => {
 
   useEffect(() => {}, [addEvent]);
 
+  
+  useEffect(() => {
+    socket.on("connect", function () {
+      socket.emit("login", { uid: sessionStorage.getItem("nickname") });
+    });
+
+    socket.on("clientid", function async(id) {
+      setSocketId(id);
+    });
+
+      //다른 그룹원 추가
+    socket.on("premessage", function (data) {
+      setTimeout(() => {
+        alert(data);
+        setCheckAnother(true);
+      }, 5000);
+    })
+
+  socket.on("entermessage",function(data){
+    console.log("entermessage");
+    alert(data.message)
+    console.log(data._id)
+    console.log(data.roomid)
+    socket.emit("joinRoom", data.roomid);
+    history.push({
+      pathname: `/room/`+data.roomid,
+      state:{_id:data._id}
+    });
+  })
+
+  
   socket.on("sendMember", function (data) {
     alert(data);
     setCheckGroup(true);
@@ -91,35 +122,16 @@ const Main = () => {
     }    
   });
 
-  //다른 그룹원 추가
-  socket.on("premessage", function (data) {
-    setTimeout(() => {
-      alert(data);
-      setCheckAnother(true);
-    }, 5000);
-  })
+  return ()=>{
+    socket.removeListener('connect')
+    socket.removeListener('clientid')
+    socket.removeListener('premessage')
+    socket.removeListener('entermessage')
+    socket.removeListener('sendMember')
+    socket.removeListener('makeMeetingRoomMsg')
 
-  socket.on("entermessage",function(data){
-    console.log("entermessage");
-    alert(data.message)
-    console.log(data._id)
-    console.log(data.roomid)
-    socket.emit("joinRoom", data.roomid);
-    history.push({
-      pathname: `/room/`+data.roomid,
-      state:{_id:data._id}
-    });
-  })
+  }
   
-  
-  useEffect(() => {
-    socket.on("connect", function () {
-      socket.emit("login", { uid: sessionStorage.getItem("nickname") });
-    });
-
-    socket.on("clientid", function async(id) {
-      setSocketId(id);
-    });
 
   }, []);
 

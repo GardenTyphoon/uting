@@ -70,7 +70,7 @@ const Room = () => {
   }
 
   useEffect(() => {
-    //window.location.reload();
+    
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -78,8 +78,8 @@ const Room = () => {
     socket.on("clientid", function async(id) {
       setSocketId(id);
     });
-  }, []);
 
+    
   socket.on("startVote", function (data) {
     console.log("Room - startVote");
     voteRef.current.onStartVote();
@@ -111,11 +111,20 @@ const Room = () => {
     //alert(data)
     document.getElementById("audio").play();
   })
+  return () => {
+    socket.removeListener('connect')
+    socket.removeListener('clientid')
+    socket.removeListener('startVote')
+    socket.removeListener('endMeetingAgree')
+    socket.removeListener('endMeetingDisagree')
+    socket.removeListener('musicplay')
+    socket.removeListener('musicpause')
+    socket.removeListener('replay')
 
- 
-
-  useEffect(()=>{
     
+  }
+  }, []);
+  useEffect(()=>{
     setTimeout(()=>{
       getparticipants()
     },5000)
