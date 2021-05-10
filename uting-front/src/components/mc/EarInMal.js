@@ -67,20 +67,14 @@ const EarInMal = ({
   const matchMemSckId = async (nickname) => {
     let tmp = [];
     tmp.push(nickname);
-    let res = await axios
-      .post("http://localhost:3001/users/usersSocketId", {
-        users: tmp,
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        {
-          console.log("data[0] : " + data);
-          toSendSckId = data;
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log("matchMem -ing ");
+    const res = await axios.post("http://localhost:3001/users/usersSocketId", {
+      users: tmp,
+    });
+    if (res.status == 200) {
+      console.log("data[0] : " + data);
+      toSendSckId = res.data;
+    }
   };
 
   useEffect(async () => {
@@ -108,21 +102,28 @@ const EarInMal = ({
   }, [nextTurnFlag]); //message받고나서
 
   const updateField = (e) => {
-    setMsg(e.target.value);
+    let { name, value } = e.target;
+    setMsg(value);
   };
   const sendMsg = async (e) => {
     e.preventDefault();
+    //console.log("nextTurnUser : " + nextTurnUser);
+
     await matchMemSckId(nextTurnUser);
+
     data = {
       user: turn,
       turnSocketId: toSendSckId,
       msg: msg,
     };
+    console.log("data : ");
+    console.log(data);
     socket.emit("sendMsg", data);
+    console.log("sendMsg");
     alert("전송완료!");
     //setMyTurnFlag(false);  <<이거 답변받고 false로 해야된다!
     setMsgModalFlag(false);
-    setIsAsked(true);
+    //setIsAsked(true);
   };
   const choosenextTurnUser = (e) => {
     setMsgModalFlag(true);
@@ -145,7 +146,7 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    socket.emit("sendMsg", data);
+    //socket.emit("sendMsg", data);
     alert("전송완료~!");
   };
 
@@ -159,6 +160,7 @@ const EarInMal = ({
             <div>
               {isAsked ? (
                 <div>
+                  질문 알려주기
                   {participants.map((member) => (
                     <button
                       key={member.index}
@@ -172,9 +174,9 @@ const EarInMal = ({
               ) : (
                 <div>
                   질문하기
-                  {participants.map((member) => (
+                  {participants.map((member, index) => (
                     <button
-                      key={member.index}
+                      key={index}
                       value={member}
                       onClick={choosenextTurnUser}
                     >
@@ -185,7 +187,7 @@ const EarInMal = ({
                     <form onSubmit={sendMsg}>
                       <label>
                         질문:
-                        <input name="msg" onChange={updateField} />
+                        <input name="msg" onChange={(e) => updateField(e)} />
                       </label>
                       <button>Submit</button>
                     </form>
@@ -201,8 +203,9 @@ const EarInMal = ({
             <div>
               {isNextTurn ? (
                 <div>
-                  {participants.map((member) => (
-                    <button key={member.index} value={member} onClick={respond}>
+                  질문에 응답하기
+                  {participants.map((member, index) => (
+                    <button key={index + 10} value={member} onClick={respond}>
                       {member}
                     </button>
                   ))}

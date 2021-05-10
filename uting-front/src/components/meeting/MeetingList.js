@@ -202,9 +202,7 @@ export default function MeetingList({
                 <div>
                   {user.nickname}
                   {user.introduce}
-
                   {user.mannerCredit}
-
                   {user.age}
                 </div>
               ))}

@@ -66,6 +66,14 @@ app.use(function (err, req, res, next) {
 });
 app.io = require("socket.io")();
 
+// 대충 써봣는데 되는지 모름. 테스트 해보자구
+// app.io = require('socket.io')(app, {
+//   cors: {
+//     origin: ["127.0.0.1:3000"],
+//     methods: ["GET", "POST"],
+//   }
+// });
+
 app.io.on("connection", function (socket) {
   //console.log("Connected !");
   socket.on("login", function (data) {
@@ -219,4 +227,5 @@ app.io.on("connection", function (socket) {
     }
   });
 });
+
 module.exports = app;

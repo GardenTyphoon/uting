@@ -167,8 +167,7 @@ router.post("/userInfo", function (req, res, next) {
 
 router.post("/usersSocketId", function (req, res, next) {
   let data = [];
-  console.log("uesrs spclet ID :");
-  console.log(req.body);
+  console.log("usersSocketId -ing");
   User.find(function (err, user) {
     user.forEach((per) => {
       req.body.users.forEach((one) => {
@@ -177,6 +176,7 @@ router.post("/usersSocketId", function (req, res, next) {
         }
       });
     });
+    console.log("usersSocketId -finished");
     res.send(data);
     console.log(data);
   });

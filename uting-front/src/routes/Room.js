@@ -18,6 +18,8 @@ import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
 import socketio from "socket.io-client";
 import ReactAudioPlayer from "react-audio-player";
+import MeetingRoom from "../components/meeting/MeetingRoom";
+import { useAppState } from "../providers/AppStateProvider";
 
 const Room = () => {
   const voteRef = useRef();
@@ -37,6 +39,8 @@ const Room = () => {
   const [nextTurnFlag, setNextTurnFlag] = useState(false);
   const [gameStartFlag, setGameStartFlag] = useState(false);
   const [gameTurn, setGameTurn] = useState();
+
+  const { meetingId: appMeetingId } = useAppState();
 
   let putSocketid = async (e) => {
     let data = {
@@ -64,6 +68,7 @@ const Room = () => {
     );
 
     if (res.data !== "undefined") {
+      console.log(res.data);
       setParticipantsSocketId(res.data);
     }
   };
@@ -155,6 +160,7 @@ const Room = () => {
         padding: "2%",
       }}
     >
+      <MeetingRoom />
       <ReactAudioPlayer id="audio" src={musicsrc} controls />
       <McBot
         participantsSocketIdList={participantsSocketId}
@@ -165,7 +171,6 @@ const Room = () => {
         gameStartFlag={gameStartFlag}
         gameTurn={gameTurn}
       ></McBot>
-
       <Vote
         ref={voteRef}
         participantsSocketIdList={participantsSocketId}
