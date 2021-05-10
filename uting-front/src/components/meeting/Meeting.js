@@ -40,7 +40,7 @@ const Meeting = ({ checkFunc }) => {
         }
         else {
             console.log(groupMembers);
-            if (name === 'num' && value >= groupMembers.data.length && value <= 4) {
+            if (name === 'num' && value >= (groupMembers.data).length && value <= 4) {
 
                 setRoom({
                     ...room,
@@ -71,7 +71,7 @@ const Meeting = ({ checkFunc }) => {
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
-            for (let i = 0; i < groupMembers.data.length; i++) {
+            for (let i = 0; i < (groupMembers.data).length; i++) {
                 let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
                 groupMembersInfo.push({
                     "nickname": userInfo.data.nickname,
@@ -92,8 +92,8 @@ const Meeting = ({ checkFunc }) => {
 
             }
             setSocketOn(groupMembersSocketId);
-            avgManner /= groupMembers.data.length;
-            avgAge /= groupMembers.data.length;
+            avgManner /= (groupMembers.data).length;
+            avgAge /= (groupMembers.data).length;
             avgAge = parseInt(avgAge);
             //방 생성
             const roomTitle = room.title.trim().toLocaleLowerCase()
@@ -142,7 +142,7 @@ const Meeting = ({ checkFunc }) => {
             <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num' />
             <button onClick={makeRoom}>방만들기</button>
             {toggleWarningMess === true ?
-                <div style={{ marginTop: "10px", fontFamily: "NanumSquare_acR", color: "#FF6994", fontSize: "small" }}>*성별 당 인원수는 적어도 {groupMembers.data.length}명 이상, 4명 이하여야 합니다.</div>
+                <div style={{ marginTop: "10px", fontFamily: "NanumSquare_acR", color: "#FF6994", fontSize: "small" }}>*성별 당 인원수는 적어도 {(groupMembers.data).length}명 이상, 4명 이하여야 합니다.</div>
                 : ""}
         </div>
 
