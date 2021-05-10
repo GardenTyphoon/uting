@@ -114,7 +114,6 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
     if(e===3 && contentFade===false){
       //음악
       console.log(participantsSocketIdList)
-     
       setContent("")
     }
     if(e===4 && contentFade===false){

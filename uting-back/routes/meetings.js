@@ -3,7 +3,7 @@ var router = express.Router();
 const { Meeting }=require('../model');
 
 const fs = require('fs');
-const uuid = require('uuid/v4');
+const {v4:uuid} = require('uuid');
 const AWS = require('aws-sdk');
 // const { response } = require('express');
 /* eslint-enable */
@@ -190,18 +190,18 @@ router.put('/:id', async function(req,res,next){
 })
 
 // DELETE one meeting
-router.delete('/:id', async function(req,res,next){
+router.delete('/end?', async function(req,res,next){
   const meeting = await Meeting.deleteOne({_id : req.params.id});
   //res.json(meeting);
 
-    // await chime
-  //   .deleteMeeting({
-  //     MeetingId: meetingCache[title].Meeting.MeetingId
-  //   })
-  //    .promise();
-  //   response.statusCode = 200;
-  //   response.end();
-  //   res.send("The meeting is terminated successful");
+  const title = req.query.title;
+  
+    await chime.deleteMeeting({
+      MeetingId: meetingCache[title].Meeting.MeetingId
+    }).promise();
+    res.statusCode = 200;
+    res.end();
+    // res.send("The meeting is terminated successful");
 });
 
 

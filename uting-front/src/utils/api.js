@@ -1,7 +1,7 @@
 // import routes from '../constants/routes';
 import axios from 'axios'
 
-export const BASE_URL = '/';
+// export const BASE_URL = '/';
 
 // interface MeetingResponse { // .ts 로 작성되었을때 리턴 타입을 Promise로 정의하려고 사용하는 부분임.
 //     JoinInfo: {
@@ -52,7 +52,7 @@ export function createGetAttendeeCallback(meetingId){
 
 export async function endMeeting(meetingId){
     const res = await fetch(
-        `${BASE_URL}end?title=${encodeURIComponent(meetingId)}`,
+        `http://localhost:3001/end?title=${encodeURIComponent(meetingId)}`,
         {
             method: 'POST'
         }
