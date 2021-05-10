@@ -58,10 +58,13 @@ const Main = () => {
   });
 
   socket.on("makeMeetingRoomMsg", function (data) {
-    alert(data.roomtitle);
-    //여깅
-    
-    window.location.href = "http://localhost:3000/room/"+data.roomtitle;
+    console.log(data)
+    //data가 방제....
+    alert(data);
+      //여깅
+      
+      window.location.href = "http://localhost:3000/room/"+data;
+   
   });
 
   //다른 그룹원 추가
