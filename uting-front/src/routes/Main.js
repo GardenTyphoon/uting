@@ -9,8 +9,17 @@ import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
+
+
+import { useAppState } from '../providers/AppStateProvider';
+import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
+import { createGetAttendeeCallback, fetchMeeting } from '../utils/api';
+
 const Main = () => {
   const history = useHistory();
+  const meetingManager = useMeetingManager();
+  const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
+
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
   const [checkRoomList,setCheckRoomList]=useState(false);
   const [checkGroup,setCheckGroup]=useState(false)
@@ -52,28 +61,23 @@ const Main = () => {
 
   useEffect(() => {}, [addEvent]);
 
-  socket.on("sendMember", function (data) {
-    alert(data);
-    setCheckGroup(true);
-  });
+  
+  useEffect(() => {
+    socket.on("connect", function () {
+      socket.emit("login", { uid: sessionStorage.getItem("nickname") });
+    });
 
-  socket.on("makeMeetingRoomMsg", function (data) {
-    console.log(data)
-    //data가 방제....
-    alert(data);
-      //여깅
-      
-      window.location.href = "http://localhost:3000/room/"+data;
-   
-  });
+    socket.on("clientid", function async(id) {
+      setSocketId(id);
+    });
 
-  //다른 그룹원 추가
-  socket.on("premessage", function (data) {
-    setTimeout(() => {
-      alert(data);
-      setCheckAnother(true);
-    }, 5000);
-  })
+      //다른 그룹원 추가
+    socket.on("premessage", function (data) {
+      setTimeout(() => {
+        alert(data);
+        setCheckAnother(true);
+      }, 5000);
+    })
 
   socket.on("entermessage",function(data){
     console.log("entermessage");
@@ -86,16 +90,48 @@ const Main = () => {
       state:{_id:data._id}
     });
   })
-  
-  
-  useEffect(() => {
-    socket.on("connect", function () {
-      socket.emit("login", { uid: sessionStorage.getItem("nickname") });
-    });
 
-    socket.on("clientid", function async(id) {
-      setSocketId(id);
-    });
+  
+  socket.on("sendMember", function (data) {
+    alert(data);
+    setCheckGroup(true);
+  });
+
+  socket.on("makeMeetingRoomMsg", async function (data) {
+    let temp = {
+      title: data,
+    }
+    //data가 방제....
+    alert(data);
+      //여깅
+
+    meetingManager.getAttendee = createGetAttendeeCallback(data);
+  
+    try {
+      const { JoinInfo } = await fetchMeeting(temp);
+  
+      await meetingManager.join({
+        meetingInfo: JoinInfo.Meeting,
+        attendeeInfo: JoinInfo.Attendee
+      });
+  
+      setAppMeetingInfo(data, "Tester", "ap-northeast-2");
+      history.push("/deviceSetup");
+    } catch (error) {
+      console.log(error);
+    }    
+  });
+
+  return ()=>{
+    socket.removeListener('connect')
+    socket.removeListener('clientid')
+    socket.removeListener('premessage')
+    socket.removeListener('entermessage')
+    socket.removeListener('sendMember')
+    socket.removeListener('makeMeetingRoomMsg')
+
+  }
+  
 
   }, []);
 

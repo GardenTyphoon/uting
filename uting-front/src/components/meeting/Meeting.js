@@ -133,7 +133,7 @@ const Meeting = ({ checkFunc }) => {
             try {
                 // 원래 형태는 id(title), 참여자이름, 지역임.
                 // const { JoinInfo } = await fetchMeeting(roomTitle, room);
-                const { JoinInfo } = await fetchMeeting(roomTitle, data);
+                const { JoinInfo } = await fetchMeeting(data);
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
                     attendeeInfo: JoinInfo.Attendee

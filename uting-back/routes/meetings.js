@@ -94,25 +94,31 @@ router.post('/', function(req, res,next){
 
 // POST CHIME one meeting
 router.post('/join', async function(req, res, next){
-  
+  const temp_title = await Meeting.findOne({title:req.body.title}, function(err){
+    if(err){
+      const meeting = new Meeting({
+        title:req.body.title,
+        maxNum:req.body.maxNum,
+        status:req.body.status,
+        avgManner:req.body.avgManner,
+        avgAge:req.body.avgAge,
+        users:req.body.users,
+        numOfWoman:req.body.numOfWoman,
+        numOfMan : req.body.numOfMan
+      });
+      meeting.save();
+    }
+  });
+  console.log(temp_title);
   // console.log(req.body);
   // const meeting = new Meeting({
   //   title:req.body.title,
   //   num:req.body.num,
   //   status:req.body.status
   // });
-  const meeting = new Meeting({
-    title:req.body.title,
-    maxNum:req.body.maxNum,
-    status:req.body.status,
-    avgManner:req.body.avgManner,
-    avgAge:req.body.avgAge,
-    users:req.body.users,
-    numOfWoman:req.body.numOfWoman,
-    numOfMan : req.body.numOfMan
-  });
 
-  const title = meeting.title;
+
+  const title = req.body.title;
   const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기 임시로 이렇게 넣어 놓은 것임.
   const region = "us-east-1"
   
@@ -146,7 +152,6 @@ router.post('/join', async function(req, res, next){
   // meeting.save((err) => {
   //   res.send("방을 생성하였습니다.")
   // });
-  meeting.save();
   res.end(); // res.json 또는 res.send 없으면 안써도돼
 })
 

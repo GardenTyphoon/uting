@@ -94,7 +94,6 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
  
     
   },[precheck])
-
 return (
   <div>
     <ModalBody>
