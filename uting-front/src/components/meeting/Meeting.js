@@ -33,13 +33,12 @@ const Meeting = ({ checkFunc }) => {
     const [groupMembers, setGroupMembers] = useState([]);
     const [toggleShowWarningMess, setToggleShowWarningMess] = useState(false);
     const [socketOn, setSocketOn] = useState(false);
-    
-    
+    const [roomtitle,setRoomtitle]=useState("");
+    //const [roomtitle,setRoomtitle]=useState("")
     let sessionUser = sessionStorage.getItem("nickname");
     let groupMembersSocketId = [];
     let groupMembersInfo = [];
-
-    
+    //let roomtitle="";
     const [room, setRoom] = useState({
         title: "", //방제
         num: 0, //성별당 최대인원
@@ -107,12 +106,15 @@ const Meeting = ({ checkFunc }) => {
 
 
             }
-            setSocketOn(groupMembersSocketId);
-            avgManner /= (groupMembers.data).length;
-            avgAge /= (groupMembers.data).length;
+            
+            avgManner /= groupMembers.data.length;
+            avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
             //방 생성
             const roomTitle = room.title.trim().toLocaleLowerCase()
+            setRoomtitle(roomTitle);
+            console.log(roomtitle)
+            setSocketOn(groupMembersSocketId);
             let data = {
                 title: roomTitle,
                 maxNum: Number(room.num),
@@ -147,11 +149,17 @@ const Meeting = ({ checkFunc }) => {
         }
     }
     useEffect(() => {
-        socket.on('connect', function () {
+        
+        if(roomtitle!==""){
+            console.log(typeof roomtitle)
+            socket.on('connect', function () {
 
-            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn })
-        })
+                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })
+            })
+        }
+        
     }, [socketOn])
+    
     return (
         <div>
             <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
