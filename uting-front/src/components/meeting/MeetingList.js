@@ -144,7 +144,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
                                 <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
-                                    <div style={{ marginRight: "7%" }}>{room.avgManner}</div>
+                                    <div style={{ marginRight: "7%" }}>{room.avgManner.toFixed(2)}</div>
                                     <div >{mannerCredit(room.avgManner)}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small" }}>{room.avgAge}살</div>
