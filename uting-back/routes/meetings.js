@@ -3,7 +3,7 @@ var router = express.Router();
 const { Meeting }=require('../model');
 
 const fs = require('fs');
-const uuid = require('uuid/v4');
+const {v4:uuid} = require('uuid');
 const AWS = require('aws-sdk');
 // const { response } = require('express');
 /* eslint-enable */
