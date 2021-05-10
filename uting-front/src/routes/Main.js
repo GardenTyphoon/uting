@@ -20,7 +20,9 @@ const Main = () => {
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
   const [socketId, setSocketId] = useState("");
-  const socket = socketio.connect("http://localhost:3001");
+  const socket = socketio.connect("http://localhost:3001", {
+    transports: ["websocket"],
+  });
   let sessionUser = sessionStorage.getItem("email");
 
   const gotoAdminPage = () => {
@@ -37,7 +39,6 @@ const Main = () => {
   };
 
   let groupSocket = (e) => {
-    console.log("groupSocket : " + e);
     setGroupSocketList(e);
   };
 
@@ -68,7 +69,6 @@ const Main = () => {
   });
 
   socket.on("entermessage", function (data) {
-    console.log("entermessage");
     alert(data.message);
     socket.emit("joinRoom", data.roomid);
     history.push({

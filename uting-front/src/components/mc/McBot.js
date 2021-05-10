@@ -5,9 +5,9 @@ import styled from "styled-components";
 import McBotImg from "../../img/mc봇.png";
 import backImg from "../../img/뒤로가기.svg";
 import renewImg from "../../img/새로고침.svg";
+import playImg from "../../img/음악재생.svg";
+import pauseImg from "../../img/음악정지.png";
 import EarInMal from "./EarInMal";
-import socketio from "socket.io-client";
-import { SocketContext } from "../../routes/context/socket";
 import {
   Dropdown,
   DropdownToggle,
@@ -18,7 +18,8 @@ import {
   ModalHeader,
   Fade,
 } from "reactstrap";
-
+import ReactAudioPlayer from "react-audio-player";
+import socketio from "socket.io-client";
 const Box = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
@@ -30,17 +31,40 @@ const Box = styled.div`
   width: 200px;
   height: 200px;
 `;
-const McBot = ({ groupSocketIdList, currentSocketId, groupMember, isTurn }) => {
+
+const HashTag = styled.span`
+  background-color: #f6cdcf;
+  border-radius: 5px;
+  font-size: 18px;
+  margin-left: 4%;
+  padding-left: 1%;
+  padding-right: 3%;
+  padding-bottom: 1%;
+  padding-top: 2%;
+  font-family: "Jua";
+`;
+const McBot = ({
+  participantsSocketIdList,
+  currentSocketId,
+  participants,
+  isTurn,
+  nextTurnFlag,
+  gameStartFlag,
+  gameTurn,
+}) => {
+  const socket = socketio.connect("http://localhost:3001", {
+    transports: ["websocket"],
+  });
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
   const [number, setNumber] = useState("");
   const [content, setContent] = useState("");
-  const socket = useContext(SocketContext);
+  const [musicpath, setMusicpath] = useState("");
+  const [gameStart, setGameStart] = useState(gameStartFlag);
+
   const toggle = (e) => {
     setDropdownOpen((prevState) => !prevState);
-    if (dropdownOpen === true) {
-      setContentFade(true);
-    }
     if (dropdownOpen === false) {
       setContentFade(false);
     }
@@ -71,7 +95,38 @@ const McBot = ({ groupSocketIdList, currentSocketId, groupMember, isTurn }) => {
     let index = Math.floor(Math.random() * res.data.length);
     setContent(res.data[index]);
   };
-  useEffect(() => {}, []);
+
+  let getMusicName = (e) => {
+    if (e === 1) {
+      socket.emit("musicplay", {
+        socketIdList: participantsSocketIdList,
+        src: "/music/신남/SellBuyMusic신남1.mp3",
+      });
+    }
+    if (e === 2) {
+      socket.emit("musicplay", {
+        socketIdList: participantsSocketIdList,
+        src: "/music/설렘/SellBuyMusic설렘1.mp3",
+      });
+    }
+    if (e === 3) {
+      socket.emit("musicplay", {
+        socketIdList: participantsSocketIdList,
+        src: "/music/잔잔/SellBuyMusic잔잔1.mp3",
+      });
+    }
+  };
+
+  let pause = () => {
+    console.log("정지");
+    socket.emit("musicpause", { socketIdList: participantsSocketIdList });
+  };
+
+  let play = () => {
+    console.log("재생");
+    socket.emit("replay", { socketIdList: participantsSocketIdList });
+  };
+
   const FadeToggle = (e) => {
     setNumber(e);
     setContentFade(!contentFade);
@@ -83,7 +138,9 @@ const McBot = ({ groupSocketIdList, currentSocketId, groupMember, isTurn }) => {
     }
     if (e === 3 && contentFade === false) {
       //음악
-      setContent("음악!");
+      console.log(participantsSocketIdList);
+
+      setContent("");
     }
     if (e === 4 && contentFade === false) {
       //실시간게임
@@ -91,6 +148,15 @@ const McBot = ({ groupSocketIdList, currentSocketId, groupMember, isTurn }) => {
       setContent("마피아할거임~~~~~~~~~~~~?");
     }
   };
+
+  useEffect(() => {
+    setGameStart(gameStartFlag);
+    if (gameStartFlag) {
+      setContentFade(true);
+      setNumber(4);
+    }
+  }, [gameStartFlag]);
+
   return (
     <div>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -134,14 +200,33 @@ const McBot = ({ groupSocketIdList, currentSocketId, groupMember, isTurn }) => {
               style={{ width: "12%", marginLeft: "130px" }}
             ></img>
           ) : number === 3 ? (
-            <div></div>
+            <div>
+              <div>
+                <HashTag onClick={(e) => getMusicName(1)}>#신남</HashTag>
+                <HashTag onClick={(e) => getMusicName(2)}>#설렘</HashTag>
+                <HashTag onClick={(e) => getMusicName(3)}>#잔잔</HashTag>
+              </div>
+              <div style={{ marginTop: "20%", marginLeft: "20%" }}>
+                <span onClick={(e) => play()}>
+                  <img style={{ width: "30%" }} src={playImg}></img>
+                </span>
+                <span onClick={(e) => pause()}>
+                  <img style={{ width: "30%" }} src={pauseImg}></img>
+                </span>
+              </div>
+            </div>
           ) : number === 4 ? (
-            <EarInMal
-              groupSocketIdList={groupSocketIdList}
-              currentSocketId={currentSocketId}
-              groupMember={groupMember}
-              isTurn={isTurn}
-            />
+            <div>
+              <EarInMal
+                participantsSocketIdList={participantsSocketIdList}
+                currentSocketId={currentSocketId}
+                participants={participants}
+                isTurn={isTurn}
+                nextTurnFlag={nextTurnFlag}
+                gameStartFlag={gameStart}
+                gameTurn={gameTurn}
+              />
+            </div>
           ) : (
             ""
           )}
