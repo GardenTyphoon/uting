@@ -56,7 +56,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [groupMember, setGroupMember] = useState([]);
     const [flag, setFlag] = useState(false)
     const [roomObj, setRoomObj] = useState({})
-    const socket = socketio.connect('http://localhost:3001');
+    
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
     const attendRoomByID = async (room) => {
         getGroupInfo()
@@ -81,13 +81,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     useEffect(() => {
         
         groupSocketList.push(currentsocketId.id)
-        
-        socket.on('connect', function () {
-            
-            
-            socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
+       const socket = socketio.connect('http://localhost:3001');
+        socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
             //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
-        })
+        
     }, [flag])
 
     const getGroupInfo = async (e) => {
