@@ -162,10 +162,13 @@ app.io.on('connection',function(socket){
     socket.join('room'); // 'room' 부분 미팅방 방제로 수정 예정
     
   })
-  socket.on('startVote', function(data){
-    for(let i=0;i<Object.keys(data.socketidList).length;i++){
-      console.log(data.socketidList[i])
-      app.io.to(data.socketidList[i]).emit("startVote");
+  socket.on('startVote', function(msg){
+    let data={
+      type:"startVote"
+    }
+    for(let i=0;i<Object.keys(msg.socketidList).length;i++){
+      console.log(msg.socketidList[i])
+      app.io.to(msg.socketidList[i]).emit("room",data);
     }
     //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
   })
@@ -175,46 +178,57 @@ app.io.on('connection',function(socket){
 
     
     let data={
+      type:"musicplay",
       src:msg.src,
       socketIdList:msg.socketIdList
     }
-    console.log("각사용자소켓아이디~!~!~",msg.socketIdList)
-
-    
     if(Object.keys( msg.socketIdList).length>1){
     for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
-      app.io.to(msg.socketIdList[i]).emit("musicplay",data) 
-      console.log(msg.socketIdList)
+      app.io.to(msg.socketIdList[i]).emit("room",data)
     }}
 
   })
 
   socket.on('musicpause',function(msg){
-    
+    let data={
+      type:"musicpause",
+      message:"호스트가 음악을 정지 시켰습니다."
+    }
     if(Object.keys( msg.socketIdList).length>1){
       for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
-        app.io.to(msg.socketIdList[i]).emit("musicpause","호스트가 음악을 정지 시켰습니다.") 
+        app.io.to(msg.socketIdList[i]).emit("room",data) 
       }}
   })
 
   socket.on('replay',function(msg){
-    
+    let data={
+      type:"replay",
+      message:"호스트가 음악을 다시 재생 시켰습니다."
+    }
     if(Object.keys( msg.socketIdList).length>1){
       for(let i=0;i<Object.keys( msg.socketIdList).length;i++){
-        app.io.to(msg.socketIdList[i]).emit("replay","호스트가 음악을 다시 재생 시켰습니다.") 
+        app.io.to(msg.socketIdList[i]).emit("room",data) 
       }}
   })
 
   
-  socket.on('endMeetingAgree',function(data){
+  socket.on('endMeetingAgree',function(msg){
 
-    for(let i=0;i<Object.keys(data.participantsSocketIdList).length;i++){
-      app.io.to(data.participantsSocketIdList[i]).emit("endMeetingAgree", data.numOfAgree);
+    let data={
+      type:"endMeetingAgree",
+      numOfAgree:msg.numOfAgree
+    }
+    for(let i=0;i<Object.keys(msg.participantsSocketIdList).length;i++){
+      app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
   })
-  socket.on('endMeetingDisagree',function(data){
-    for(let i=0;i<Object.keys(data.participantsSocketIdList).length;i++){
-      app.io.to(data.participantsSocketIdList[i]).emit("endMeetingDisagree", data.numOfDisagree);
+  socket.on('endMeetingDisagree',function(msg){
+    let data={
+      type:"endMeetingDisagree",
+      numOfDisagree:msg.numOfDisagree
+    }
+    for(let i=0;i<Object.keys(msg.participantsSocketIdList).length;i++){
+      app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
   }) 
   socket.on('disconnect',function(reason){

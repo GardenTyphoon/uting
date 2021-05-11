@@ -80,7 +80,40 @@ const Room = () => {
       setSocketId(id);
     });
 
-    
+    socket.on("room",function(data){
+      if(data.type==="startVote"){
+        console.log("Room - startVote");
+        voteRef.current.onStartVote();
+      }
+      else if(data.type==="endMeetingAgree"){
+        if(voteRef.current!=null){
+          console.log("Room - endMeetingAgree");
+          voteRef.current.onEndMeetingAgree(data.numOfAgree);
+          }
+      }
+      else if(data.type==="endMeetingDisagree"){
+        if(voteRef.current!=null){
+          console.log("Room - endMeetingDisagree");
+          voteRef.current.onEndMeetingDisagree(data.numOfDisagree);
+          }
+      }
+      else if(data.type==="musicplay"){
+        alert("호스트가 음악을 설정 하였습니다.")
+        setMusicsrc(data.src)
+      }
+
+      else if(data.type==="musicpause"){
+        alert(data.message)
+        document.getElementById("audio").pause();
+      }
+
+      else if(data.type==="replay"){
+        alert(data.message)
+        document.getElementById("audio").play();
+      }
+    })
+
+    /*
   socket.on("startVote", function (data) {
     console.log("Room - startVote");
     voteRef.current.onStartVote();
@@ -112,7 +145,9 @@ const Room = () => {
     //alert(data)
     document.getElementById("audio").play();
   })
+  */
   return () => {
+/*
     socket.removeListener('connect')
     socket.removeListener('clientid')
     socket.removeListener('startVote')
@@ -121,6 +156,8 @@ const Room = () => {
     socket.removeListener('musicplay')
     socket.removeListener('musicpause')
     socket.removeListener('replay')
+    */
+    socket.removeListener('room')
 
     
   }
