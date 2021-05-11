@@ -71,6 +71,7 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
+        console.log(res.data);
         setGroupMembers(res);
     }
     useEffect(() => {
@@ -124,7 +125,7 @@ const Meeting = ({ checkFunc }) => {
                 numOfMan: nowOfMan
             };
             data.users = groupMembersInfo;
-            console.log(data);
+           
 
             // await axios.post('http://localhost:3001/meetings', data);
             meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
@@ -150,7 +151,6 @@ const Meeting = ({ checkFunc }) => {
     useEffect(() => {
         
         if(roomtitle!==""){
-            console.log(typeof roomtitle)
             socket.on('connect', function () {
 
                 socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })

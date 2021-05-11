@@ -161,8 +161,7 @@ app.io.on('connection',function(socket){
 
   socket.on('makeMeetingRoomMsg',function(data){
     let msg = "그룹 호스트가 미팅방을 생성하였습니다."
-    console.log("!!!!!!!!!!!!!!!",data)
-    console.log("!!!!!!!!!!!!!!!",typeof data.roomtitle)
+    
     for(let i=0;i<data.groupMembersSocketId.length;i++){
       app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", data.roomtitle);
     };
