@@ -72,6 +72,29 @@ app.io = require('socket.io')();
 //   }
 // });
 
+/*
+Room.js
+connect
+clientid
+startVote
+endMeetingAgree
+endMeetingDisagree
+musicplay
+musicpause
+replay
+*/
+
+/*
+Main.js
+connect
+clientid
+premessage
+entermessage
+sendMember
+makeMeetingRoomMsg
+*/
+
+
 app.io.on('connection',function(socket){
   //console.log("Connected !");
   socket.on('login', function(data) {
@@ -82,19 +105,23 @@ app.io.on('connection',function(socket){
     clients.push(clientInfo);
     socket.emit("clientid",{"id":clients[clients.length-1].id});
   });
-  socket.on('currentSocketId', function(){
-    console.log('currentSocketId:' + socket.id);
-    let data = socket.id
-    app.io.to(socket.id).emit('currentSocketId',data)
-  })
+  
   socket.on('message',function(msg){
-    let data = "그룹에 초대 되었습니다 ^0^"
-    app.io.to(msg.socketid).emit("sendMember",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+    //let data = "그룹에 초대 되었습니다 ^0^"
+    let data={
+      type:"sendMember",
+      message:"그룹에 초대 되었습니다 ^0^"
+    }
+    app.io.to(msg.socketid).emit("main",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
   })
   socket.on('premessage',function(msg){
-    let data = "그룹에 다른 사용자가 추가되었습니다 ^0^"
+    //let data = "그룹에 다른 사용자가 추가되었습니다 ^0^"
+    let data={
+      type:"premessage",
+      message:"그룹에 다른 사용자가 추가되었습니다 ^0^"
+    }
     for(let i=0;i<msg.socketidList.length;i++){
-      app.io.to(msg.socketidList[i]).emit("premessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+      app.io.to(msg.socketidList[i]).emit("main",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
     }
   })
 
@@ -102,6 +129,7 @@ app.io.on('connection',function(socket){
 
     console.log(msg._id)
     let data = {
+      type:"entermessage",
       message:"호스트에의해 선택한 미팅방에 입장합니다 ^_^",
       roomid:msg.roomid,
       _id:msg._id
@@ -113,6 +141,23 @@ app.io.on('connection',function(socket){
       }
     }
   })
+  socket.on('makeMeetingRoomMsg',function(msg){
+    //let msg = "그룹 호스트가 미팅방을 생성하였습니다."
+    let data={
+      type:"makeMeetingRoomMsg",
+      roomtitle:"그룹 호스트가 미팅방을 생성하였습니다."
+    }
+    for(let i=0;i<msg.groupMembersSocketId.length;i++){
+      app.io.to(msg.groupMembersSocketId[i]).emit("main", data);
+    };
+  })
+
+  socket.on('currentSocketId', function(){
+    console.log('currentSocketId:' + socket.id);
+    let data = socket.id
+    app.io.to(socket.id).emit('currentSocketId',data)
+  })
+
   socket.on('joinRoom', function(roomId){
     socket.join('room'); // 'room' 부분 미팅방 방제로 수정 예정
     
@@ -124,6 +169,7 @@ app.io.on('connection',function(socket){
     }
     //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
   })
+
 
   socket.on('musicplay',function(msg){
 
@@ -159,14 +205,7 @@ app.io.on('connection',function(socket){
       }}
   })
 
-  socket.on('makeMeetingRoomMsg',function(data){
-    let msg = "그룹 호스트가 미팅방을 생성하였습니다."
-    console.log("!!!!!!!!!!!!!!!",data)
-    console.log("!!!!!!!!!!!!!!!",typeof data.roomtitle)
-    for(let i=0;i<data.groupMembersSocketId.length;i++){
-      app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", data.roomtitle);
-    };
-  })
+  
   socket.on('endMeetingAgree',function(data){
 
     for(let i=0;i<Object.keys(data.participantsSocketIdList).length;i++){

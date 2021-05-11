@@ -48,17 +48,6 @@ const Main = () => {
   let groupSocket = (e) =>{
     setGroupSocketList(e)
   }
-
-  let preMessage = (e)=>{
-    if(e===true){
-      setAddEvent(true)
-    }
-  };
-
-  let goMeetingRoom = async(e)=>{
-    
-  }
-
   useEffect(() => {}, [addEvent]);
 
   
@@ -72,6 +61,55 @@ const Main = () => {
       setSocketId(id);
     });
 
+    socket.on("main",async function(data){
+      if(data.type==="premessage"){
+        setTimeout(() => {
+          alert(data.message);
+          setCheckAnother(true);
+        }, 5000);
+      }
+
+      else if(data.type==="entermessage"){
+        alert(data.message)
+        socket.emit("joinRoom", data.roomid);
+        history.push({
+          pathname: `/room/`+data.roomid,
+          state:{_id:data._id}
+        });
+      }
+
+      else if(data.type==="sendMember"){
+        alert(data.message);
+        setCheckGroup(true);
+      }
+
+      else if(data.type==="makeMeetingRoomMsg"){
+        let temp = {
+          title: data.roomtitle,
+        }
+        //data가 방제....
+        alert(data.roomtitle);
+          //여깅
+    
+        meetingManager.getAttendee = createGetAttendeeCallback(data.roomtitle);
+      
+        try {
+          const { JoinInfo } = await fetchMeeting(temp);
+      
+          await meetingManager.join({
+            meetingInfo: JoinInfo.Meeting,
+            attendeeInfo: JoinInfo.Attendee
+          });
+      
+          setAppMeetingInfo(data.roomtitle, "Tester", "ap-northeast-2");
+          history.push("/deviceSetup");
+        } catch (error) {
+          console.log(error);
+        }  
+      }
+
+    })
+/*
       //다른 그룹원 추가
     socket.on("premessage", function (data) {
       setTimeout(() => {
@@ -119,14 +157,16 @@ const Main = () => {
       console.log(error);
     }    
   });
-
+*/
   return ()=>{
+    /*
     socket.removeListener('connect')
     socket.removeListener('clientid')
     socket.removeListener('premessage')
     socket.removeListener('entermessage')
     socket.removeListener('sendMember')
-    socket.removeListener('makeMeetingRoomMsg')
+    socket.removeListener('makeMeetingRoomMsg')*/
+    socket.removeListener('main')
 
   }
   
