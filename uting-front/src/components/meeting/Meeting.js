@@ -151,6 +151,7 @@ const Meeting = ({ checkFunc }) => {
         
         if(roomtitle!==""){
             console.log(typeof roomtitle)
+            console.log(roomtitle,socketOn)
             const socket = socketio.connect('http://localhost:3001');
             socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })
         }

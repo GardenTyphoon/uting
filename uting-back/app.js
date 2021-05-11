@@ -141,14 +141,11 @@ app.io.on('connection',function(socket){
       }
     }
   })
-  socket.on('makeMeetingRoomMsg',function(msg){
-    //let msg = "그룹 호스트가 미팅방을 생성하였습니다."
-    let data={
-      type:"makeMeetingRoomMsg",
-      roomtitle:"그룹 호스트가 미팅방을 생성하였습니다."
-    }
-    for(let i=0;i<msg.groupMembersSocketId.length;i++){
-      app.io.to(msg.groupMembersSocketId[i]).emit("main", data);
+  socket.on('makeMeetingRoomMsg',function(data){
+    let msg = "그룹 호스트가 미팅방을 생성하였습니다."
+    console.log("방제!!",data)
+    for(let i=0;i<data.groupMembersSocketId.length;i++){
+      app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", data.roomtitle);
     };
   })
 
