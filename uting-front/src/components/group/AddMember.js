@@ -25,7 +25,6 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
   const [socketCnt,setSocketCnt]=useState(false);
   const [socketId,setSocketId]=useState("");
   const [precheck,setPrecheck]=useState(false);
-  const socket = socketio.connect('http://localhost:3001');
  
   let onChangehandler = (e) => {
     let { name, value } = e.target;
@@ -67,10 +66,9 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
   useEffect(()=>{
     
     console.log(preMemSocketIdList)
-    socket.on('connect',function(){
-      console.log("message")
-      socket.emit('message',{"socketid":socketId})
-    })
+    const socket = socketio.connect('http://localhost:3001');
+    socket.emit('message',{"socketid":socketId})
+    
     setPrecheck(true);
   },[socketCnt])
 
@@ -86,9 +84,9 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         }
       }
       if(check===true){
-        socket.on('connect',function(){
+        const socket = socketio.connect('http://localhost:3001');
           socket.emit('premessage',{"socketidList":preMemSocketIdList})
-        })
+      
 
       }
  
