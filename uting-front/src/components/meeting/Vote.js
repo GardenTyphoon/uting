@@ -8,7 +8,7 @@ import socketio from "socket.io-client";
 const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     const history = useHistory();
-    const socket = socketio.connect("http://localhost:3001");
+    
 
     const [toggleEndMeetingBtn, setToggleEndMeetingBtn] = useState(false);
     const [startVote, setStartVote] = useState(false);
@@ -31,6 +31,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickAgree = (e) => {
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -38,6 +39,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickDisagree = (e) => {
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("endMeetingDisagree", { participantsSocketIdList, numOfDisagree: numOfDisagree + 1 });
         setNumOfDisagree(numOfDisagree + 1);
         setIsVote(!isVote);
@@ -46,6 +48,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
 
     const emitStartVote = () => {
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("startVote", { socketidList:participantsSocketIdList });
         console.log(participantsSocketIdList);
         console.log("emitvote")
