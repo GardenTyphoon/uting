@@ -14,7 +14,7 @@ const Room = () => {
   const voteRef = useRef();
   const location = useLocation();
   const history = useHistory();
-  const socket = socketio.connect("http://localhost:3001");
+  
 
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
@@ -41,6 +41,7 @@ const Room = () => {
   useEffect(() => {
     
     putSocketid();
+    console.log(socketId)
   }, [socketId]);
 
   let saveParticipantsSocketId = async()=>{
@@ -70,7 +71,7 @@ const Room = () => {
   }
 
   useEffect(() => {
-    
+    const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });

@@ -29,7 +29,7 @@ const Main = () => {
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
   const [socketId, setSocketId] = useState("");
-  const socket = socketio.connect("http://localhost:3001");
+  
   let sessionUser = sessionStorage.getItem("email");
 
   const gotoAdminPage = () => {
@@ -63,6 +63,7 @@ const Main = () => {
 
   
   useEffect(() => {
+    const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -80,10 +81,7 @@ const Main = () => {
     })
 
   socket.on("entermessage",function(data){
-    console.log("entermessage");
     alert(data.message)
-    console.log(data._id)
-    console.log(data.roomid)
     socket.emit("joinRoom", data.roomid);
     history.push({
       pathname: `/room/`+data.roomid,
