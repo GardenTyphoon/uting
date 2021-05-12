@@ -9,8 +9,8 @@ import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//import { ToastContainer, toast } from 'react-toastify';
+//import 'react-toastify/dist/ReactToastify.css';
 
 
 import { useAppState } from '../providers/AppStateProvider';
@@ -72,7 +72,8 @@ const Main = () => {
       }
 
       else if(data.type==="entermessage"){
-        toast(data.message);
+        //toast(data.message);
+        alert(data.message)
         socket.emit("joinRoom", data.roomid);
         history.push({
           pathname: `/room/`+data.roomid,
@@ -81,7 +82,8 @@ const Main = () => {
       }
 
       else if(data.type==="sendMember"){
-        toast(data.message);
+        //toast(data.message);
+        alert(data.message)
         setCheckGroup(true);
       }
     })
@@ -92,7 +94,8 @@ const Main = () => {
         title: data,
       }
       //data가 방제....
-      toast("'"+data+"'방에 초대되었습니다. >_<");
+      //toast("'"+data+"'방에 초대되었습니다. >_<");
+      alert("'"+data+"'방에 초대되었습니다. >_<")
         //여깅
   
       meetingManager.getAttendee = createGetAttendeeCallback(data);
@@ -175,10 +178,11 @@ const Main = () => {
         }}
       >
         
-        <ToastContainer />
+        
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
         <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
+    
       </div>
     </div>
   );

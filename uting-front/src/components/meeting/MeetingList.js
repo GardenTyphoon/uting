@@ -70,6 +70,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             member: groupMember,
             room: roomObj
         }
+        console.log("saveMeetingUsers",data)
         const res = await axios.post("http://localhost:3001/meetings/savemember", data)
         console.log(res)
     }
