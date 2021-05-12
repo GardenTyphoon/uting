@@ -151,7 +151,6 @@ const Meeting = ({ checkFunc }) => {
         }
     }
     useEffect(() => {
-
         if (roomtitle !== "") {
             console.log(typeof roomtitle)
             console.log(roomtitle, socketOn)
