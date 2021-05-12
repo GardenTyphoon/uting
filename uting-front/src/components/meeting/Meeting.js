@@ -28,7 +28,7 @@ const Meeting = ({ checkFunc }) => {
     const history = useHistory();
     const meetingManager = useMeetingManager();
     const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
-    const socket = socketio.connect('http://localhost:3001');
+    
     
     const [groupMembers, setGroupMembers] = useState([]);
     const [toggleShowWarningMess, setToggleShowWarningMess] = useState(false);
@@ -151,10 +151,10 @@ const Meeting = ({ checkFunc }) => {
     useEffect(() => {
         
         if(roomtitle!==""){
-            socket.on('connect', function () {
-
-                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })
-            })
+            console.log(typeof roomtitle)
+            console.log(roomtitle,socketOn)
+            const socket = socketio.connect('http://localhost:3001');
+            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })
         }
         
     }, [socketOn])

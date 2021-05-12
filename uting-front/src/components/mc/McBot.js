@@ -34,7 +34,7 @@ const HashTag = styled.span`
   font-family:'Jua';
 `;
 const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
-  const socket = socketio.connect("http://localhost:3001");
+  
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
@@ -78,7 +78,7 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   }
 
   let getMusicName = (e)=>{
-    
+    const socket = socketio.connect("http://localhost:3001");
     if(e===1){
       console.log(e)
       console.log(participantsSocketIdList)
@@ -93,12 +93,12 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   }
 
   let pause =()=>{
-    console.log("정지")
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit('musicpause',{"socketIdList":participantsSocketIdList}) 
   }
 
   let play =()=>{
-    console.log("재생")
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit('replay',{"socketIdList":participantsSocketIdList}) 
   }
 

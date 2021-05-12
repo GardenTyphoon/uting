@@ -164,23 +164,6 @@ router.post("/userInfo", function (req, res, next) {
     });
   });
 });
-router.post("/usersInfo", function (req, res, next) {
-  console.log(req.body);
-  let data = [];
-  User.find(function (err, user) {
-    user.forEach((per) => {
-      req.body.users.forEach((one) => {
-        if (
-          one === per._id.toString() ||
-          one === per.nickname
-        ) {
-          data.push(per);
-        }
-      });
-    });
-    res.send(data);
-  });
-});
 router.post("/usersSocketId", function (req, res, next) {
   let data = [];
 

@@ -29,7 +29,7 @@ const Main = () => {
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
 
   const [socketId, setSocketId] = useState("");
-  const socket = socketio.connect("http://localhost:3001");
+  
   let sessionUser = sessionStorage.getItem("email");
 
   const gotoAdminPage = () => {
@@ -48,21 +48,11 @@ const Main = () => {
   let groupSocket = (e) =>{
     setGroupSocketList(e)
   }
-
-  let preMessage = (e)=>{
-    if(e===true){
-      setAddEvent(true)
-    }
-  };
-
-  let goMeetingRoom = async(e)=>{
-    
-  }
-
   useEffect(() => {}, [addEvent]);
 
   
   useEffect(() => {
+    const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -71,6 +61,58 @@ const Main = () => {
       setSocketId(id);
     });
 
+    socket.on("main",function(data){
+      if(data.type==="premessage"){
+        setTimeout(() => {
+          alert(data.message);
+          setCheckAnother(true);
+        }, 5000);
+      }
+
+      else if(data.type==="entermessage"){
+        alert(data.message)
+        socket.emit("joinRoom", data.roomid);
+        history.push({
+          pathname: `/room/`+data.roomid,
+          state:{_id:data._id}
+        });
+      }
+
+      else if(data.type==="sendMember"){
+        alert(data.message);
+        setCheckGroup(true);
+      }
+
+      
+    })
+
+    socket.on("makeMeetingRoomMsg", async function (data) {
+      //alert("그룹 호스트가 미팅방을 생성하였습니다.")
+      let temp = {
+        title: data,
+      }
+      //data가 방제....
+      alert(data);
+        //여깅
+  
+      meetingManager.getAttendee = createGetAttendeeCallback(data);
+    
+      try {
+        const { JoinInfo } = await fetchMeeting(temp);
+    
+        await meetingManager.join({
+          meetingInfo: JoinInfo.Meeting,
+          attendeeInfo: JoinInfo.Attendee
+        });
+    
+        setAppMeetingInfo(data, "Tester", "ap-northeast-2");
+        history.push("/deviceSetup");
+      } catch (error) {
+        console.log(error);
+      }    
+    });
+
+/*
       //다른 그룹원 추가
     socket.on("premessage", function (data) {
       setTimeout(() => {
@@ -80,10 +122,7 @@ const Main = () => {
     })
 
   socket.on("entermessage",function(data){
-    console.log("entermessage");
     alert(data.message)
-    console.log(data._id)
-    console.log(data.roomid)
     socket.emit("joinRoom", data.roomid);
     history.push({
       pathname: `/room/`+data.roomid,
@@ -121,14 +160,17 @@ const Main = () => {
       console.log(error);
     }    
   });
-
+*/
   return ()=>{
+    /*
     socket.removeListener('connect')
     socket.removeListener('clientid')
     socket.removeListener('premessage')
     socket.removeListener('entermessage')
     socket.removeListener('sendMember')
+    */
     socket.removeListener('makeMeetingRoomMsg')
+    socket.removeListener('main')
 
   }
   
