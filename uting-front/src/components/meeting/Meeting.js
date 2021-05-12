@@ -6,20 +6,22 @@ import socketio from 'socket.io-client';
 import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting } from '../../utils/api';
+import "./Meeting.css";
+import { alignItems } from 'styled-system';
 
 function birthToAge(birth) {
 
     let year = birth.slice(0, 4);
     return 2021 - Number(year) + 1;
 }
-function limitNumOfParticipants (inputTag, inputValue, numOfGroupMember){
-    
-    if(inputTag==='num' && inputValue>=numOfGroupMember && inputValue<=4) return true;
+function limitNumOfParticipants(inputTag, inputValue, numOfGroupMember) {
+
+    if (inputTag === 'num' && inputValue >= numOfGroupMember && inputValue <= 4) return true;
     else return false;
 }
-function contidionMakingRoom (toggleShowWarningMess, roomTitle, roomNum){
-    
-    if(toggleShowWarningMess===false && roomTitle!="" && roomNum>0) return true;
+function contidionMakingRoom(toggleShowWarningMess, roomTitle, roomNum) {
+
+    if (toggleShowWarningMess === false && roomTitle != "" && roomNum > 0) return true;
     else return false;
 }
 
@@ -28,12 +30,12 @@ const Meeting = ({ checkFunc }) => {
     const history = useHistory();
     const meetingManager = useMeetingManager();
     const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
-    
-    
+
+
     const [groupMembers, setGroupMembers] = useState([]);
     const [toggleShowWarningMess, setToggleShowWarningMess] = useState(false);
     const [socketOn, setSocketOn] = useState(false);
-    const [roomtitle,setRoomtitle]=useState("");
+    const [roomtitle, setRoomtitle] = useState("");
     //const [roomtitle,setRoomtitle]=useState("")
     let sessionUser = sessionStorage.getItem("nickname");
     let groupMembersSocketId = [];
@@ -55,9 +57,9 @@ const Meeting = ({ checkFunc }) => {
                 [name]: value
             })
         }
-        else {            
+        else {
             if (limitNumOfParticipants(name, value, Object.keys(groupMembers.data).length)) {
-                
+
                 setRoom({
                     ...room,
                     [name]: value
@@ -71,6 +73,7 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
+        console.log(res.data);
         setGroupMembers(res);
     }
     useEffect(() => {
@@ -105,7 +108,7 @@ const Meeting = ({ checkFunc }) => {
 
 
             }
-            
+
             avgManner /= groupMembers.data.length;
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
@@ -124,7 +127,7 @@ const Meeting = ({ checkFunc }) => {
                 numOfMan: nowOfMan
             };
             data.users = groupMembersInfo;
-            console.log(data);
+
 
             // await axios.post('http://localhost:3001/meetings', data);
             meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
@@ -148,25 +151,39 @@ const Meeting = ({ checkFunc }) => {
         }
     }
     useEffect(() => {
-        
-        if(roomtitle!==""){
+
+        if (roomtitle !== "") {
             console.log(typeof roomtitle)
-            console.log(roomtitle,socketOn)
+            console.log(roomtitle, socketOn)
             const socket = socketio.connect('http://localhost:3001');
-            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn,"roomtitle":roomtitle })
+            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn, "roomtitle": roomtitle })
         }
-        
+
     }, [socketOn])
-    
+
     return (
-        <div>
-            <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
-            <input type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num'/>
-            <button onClick={makeRoom}>방만들기</button>
-            {toggleShowWarningMess === true ?
-                <div style={{ marginTop: "10px", fontFamily: "NanumSquare_acR", color: "#FF6994", fontSize: "small" }}>*성별 당 인원수는 적어도 {(groupMembers.data).length}명 이상, 4명 이하여야 합니다.</div>
-                : ""}
+        <div className="makeRoomContainer">
+            <div >
+            <div style={{display:"flex", flexDirection:"row", margin:"20px"}}>
+                
+                <div style={{marginRight:"15px"}}>미팅방 이름</div>
+                <input className="room-input" type='text' placeholder='방제목' onChange={onChangehandler} name='title' />
             
+            </div>
+           
+            <div style={{display:"flex", flexDirection:"row", margin:"20px", marginTop:"0px"}}>
+                
+                <div style={{marginRight:"15px"}}>성별당 명수</div>
+                <input className="num-input" type='number' min='1' max='4' placeholder='명수' onChange={onChangehandler} name='num' />
+                
+            </div>
+            {toggleShowWarningMess === true ?
+                <span className="warningMess">* 성별당 인원수는 {(groupMembers.data).length}명 이상, 4명 이하여야 합니다.</span>
+                : ""}
+            </div>
+            <button className="makeRoomBtn" onClick={makeRoom} style={{marginTop:"2 0px"}}>방만들기</button>
+           
+
         </div>
 
     )

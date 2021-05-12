@@ -153,7 +153,6 @@ router.post("/viewMyProfile", function (req, res, next) {
   });
 });
 router.post("/userInfo", function (req, res, next) {
-
   User.find(function (err, user) {
     user.forEach((per) => {
       if (
@@ -165,13 +164,12 @@ router.post("/userInfo", function (req, res, next) {
     });
   });
 });
-
 router.post("/usersSocketId", function (req, res, next) {
   let data = [];
-  
-    User.find(function (err, user) {
-      user.forEach((per) => {
-        req.body.users.forEach((one)=>{
+
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      req.body.users.forEach((one) => {
         if (one === per._id.toString() || one === per.nickname) {
           data.push(per.socketid);
         }
@@ -191,7 +189,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
         imgURL: req.body.imgURL,
       },
     },
-    (err, us) => {}
+    (err, us) => { }
   );
 });
 
@@ -200,9 +198,9 @@ router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
 });
 
 router.post("/addUcoin", function (req, res, next) {
-  
+
   let newUcoin = req.body.ucoin + req.body.chargingCoin;
-  
+
   User.findByIdAndUpdate(
     req.body.userId,
     {
@@ -210,7 +208,7 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => {}
+    (err, us) => { }
   );
 });
 

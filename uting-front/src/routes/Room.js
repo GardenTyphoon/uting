@@ -52,7 +52,6 @@ const Room = () => {
 
     
     if(res.data!=="undefined"){
-      console.log(res.data);
       setParticipantsSocketId(res.data)
     }
   }
@@ -64,9 +63,9 @@ const Room = () => {
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
     const _id = meetingId;
-    console.log(meetingId)
     const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: meetingId })
-    
+    console.log(" 참여자들 닉네임 : " + res.data);
+   
     setParticipants(res.data);
   }
 
@@ -115,18 +114,16 @@ const Room = () => {
 
     /*
   socket.on("startVote", function (data) {
-    console.log("Room - startVote");
+    
     voteRef.current.onStartVote();
   })
   socket.on("endMeetingAgree", function (data) {
     if(voteRef.current!=null){
-    console.log("Room - endMeetingAgree");
     voteRef.current.onEndMeetingAgree(data);
     }
   })
   socket.on("endMeetingDisagree", function (data) {
     if(voteRef.current!=null){
-    console.log("Room - endMeetingDisagree");
     voteRef.current.onEndMeetingDisagree(data);
     }
   })
