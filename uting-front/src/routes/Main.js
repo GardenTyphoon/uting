@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Profile from "../components/profile/Profile";
-import { Button, Modal, ModalBody, ModalFooter } from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter,ModalHeader } from "reactstrap";
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
@@ -217,14 +217,11 @@ const Main = () => {
         </button>
 
         <Modal isOpen={toggleMakeMeeting}>
+         <ModalHeader className="font" toggle={()=>setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
           <ModalBody isOpen={toggleMakeMeeting}>
             <Meeting checkFunc={(e) => checkList(e)} />
           </ModalBody>
-          <ModalFooter isOpen={toggleMakeMeeting}>
-            <Button color="secondary" onClick={toggleMakeMeetingBtn}>
-              Close
-            </Button>
-          </ModalFooter>
+
         </Modal>
         <Profile />
       </div>

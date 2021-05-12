@@ -2,7 +2,9 @@
   font-family: "NanumSquare_acR";
   src: url("../ttf/NanumSquare_acR.ttf");
 }
-
+.font{
+  font-family: NanumSquare_acR;
+}
 .profile {
   display: flex;
   align-items: center;
@@ -12,8 +14,8 @@
 }
 .makeRoomBtn {
   font-family: NanumSquare_acR;
-  width: 8%;
-  height: 5%;
+  width:100px;
+  height:30px;
   background: linear-gradient(to bottom, #ff9a51, #ff6994);
   border: none;
   border-radius: 10px;
