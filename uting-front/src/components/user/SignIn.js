@@ -4,8 +4,8 @@ import "./SignIn.css"
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
-import socketio from 'socket.io-client';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignIn = () => {
@@ -48,13 +48,16 @@ const SignIn = () => {
     if (res.data === "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.") {
       setIslogined(false);
       alert("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
+      //toast("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
+      
     }
     else {
       try {
         setIslogined(true);
         
         sessionStorage.setItem('email', email);
-        alert("로그인 되었습니다.")
+        //alert("로그인 되었습니다.")
+        toast("로그인 되었습니다.")
         //소켓
         
 
@@ -66,6 +69,7 @@ const SignIn = () => {
   };
   return (
     <Container className="SignInContainer">
+      <ToastContainer />
       <Row >
         <Col className="InputContainer">
           <input
