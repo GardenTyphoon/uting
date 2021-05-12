@@ -4,8 +4,8 @@ import "./SignIn.css"
 import axios from 'axios';
 import { Button } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+//import { ToastContainer, toast } from 'react-toastify';
+//import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignIn = () => {
@@ -56,8 +56,8 @@ const SignIn = () => {
         setIslogined(true);
         
         sessionStorage.setItem('email', email);
-        //alert("로그인 되었습니다.")
-        toast("로그인 되었습니다.")
+        alert("로그인 되었습니다.")
+        //toast("로그인 되었습니다.")
         //소켓
         
 
@@ -69,7 +69,6 @@ const SignIn = () => {
   };
   return (
     <Container className="SignInContainer">
-      <ToastContainer />
       <Row >
         <Col className="InputContainer">
           <input
