@@ -9,6 +9,8 @@ import socketio from "socket.io-client";
 import ReactAudioPlayer from 'react-audio-player';
 import MeetingRoom from '../components/meeting/MeetingRoom';
 import { useAppState } from '../providers/AppStateProvider';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Room = () => {
   const voteRef = useRef();
@@ -97,63 +99,23 @@ const Room = () => {
           }
       }
       else if(data.type==="musicplay"){
-        alert("호스트가 음악을 설정 하였습니다.")
+        toast("호스트가 음악을 설정 하였습니다.");
         setMusicsrc(data.src)
       }
 
       else if(data.type==="musicpause"){
-        alert(data.message)
+        toast(data.message);
         document.getElementById("audio").pause();
       }
 
       else if(data.type==="replay"){
-        alert(data.message)
+        toast(data.message)
         document.getElementById("audio").play();
       }
     })
 
-    /*
-  socket.on("startVote", function (data) {
-    
-    voteRef.current.onStartVote();
-  })
-  socket.on("endMeetingAgree", function (data) {
-    if(voteRef.current!=null){
-    voteRef.current.onEndMeetingAgree(data);
-    }
-  })
-  socket.on("endMeetingDisagree", function (data) {
-    if(voteRef.current!=null){
-    voteRef.current.onEndMeetingDisagree(data);
-    }
-  })
-  
-  socket.on("musicplay", function (data) {
-    alert("호스트가 음악을 설정 하였습니다.")
-    setMusicsrc(data.src)
-  })
-
-  socket.on('musicpause',function(data){
-    //alert(data)
-    document.getElementById("audio").pause();
-  })
-
-  socket.on('replay',function(data){
-    //alert(data)
-    document.getElementById("audio").play();
-  })
-  */
   return () => {
-/*
-    socket.removeListener('connect')
-    socket.removeListener('clientid')
-    socket.removeListener('startVote')
-    socket.removeListener('endMeetingAgree')
-    socket.removeListener('endMeetingDisagree')
-    socket.removeListener('musicplay')
-    socket.removeListener('musicpause')
-    socket.removeListener('replay')
-    */
+
     socket.removeListener('room')
 
     
@@ -174,6 +136,7 @@ const Room = () => {
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
+      <ToastContainer />
       <MeetingRoom />
       <ReactAudioPlayer id="audio" src={musicsrc}  controls/>
       <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
