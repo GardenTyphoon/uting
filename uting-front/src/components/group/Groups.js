@@ -60,7 +60,6 @@ const GroupBox = styled.div`
 `;
 
 const GroupTitle = styled.div`
-
   font-family: NanumSquare_acR;
   font-size: medium;
   color:#896E6E;

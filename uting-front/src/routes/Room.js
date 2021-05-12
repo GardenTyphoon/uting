@@ -54,7 +54,6 @@ const Room = () => {
 
     
     if(res.data!=="undefined"){
-      console.log(res.data);
       setParticipantsSocketId(res.data)
     }
   }
@@ -66,9 +65,9 @@ const Room = () => {
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
     const _id = meetingId;
-    console.log(meetingId)
     const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: meetingId })
-    
+    console.log(" 참여자들 닉네임 : " + res.data);
+   
     setParticipants(res.data);
   }
 
@@ -100,19 +99,16 @@ const Room = () => {
           }
       }
       else if(data.type==="musicplay"){
-        //alert("호스트가 음악을 설정 하였습니다.")
         toast("호스트가 음악을 설정 하였습니다.");
         setMusicsrc(data.src)
       }
 
       else if(data.type==="musicpause"){
-        //alert(data.message)
         toast(data.message);
         document.getElementById("audio").pause();
       }
 
       else if(data.type==="replay"){
-        //alert(data.message)
         toast(data.message)
         document.getElementById("audio").play();
       }
