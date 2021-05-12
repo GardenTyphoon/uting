@@ -115,10 +115,7 @@ const Room = () => {
     })
 
   return () => {
-
     socket.removeListener('room')
-
-    
   }
   }, []);
   useEffect(()=>{

@@ -72,7 +72,6 @@ const Main = () => {
       }
 
       else if(data.type==="entermessage"){
-        //alert(data.message)
         toast(data.message);
         socket.emit("joinRoom", data.roomid);
         history.push({
@@ -82,12 +81,9 @@ const Main = () => {
       }
 
       else if(data.type==="sendMember"){
-        //alert(data.message);
         toast(data.message);
         setCheckGroup(true);
       }
-
-      
     })
 
     socket.on("makeMeetingRoomMsg", async function (data) {
@@ -96,8 +92,7 @@ const Main = () => {
         title: data,
       }
       //data가 방제....
-      //alert(data);
-      toast(data);
+      toast("'"+data+"'방에 초대되었습니다. >_<");
         //여깅
   
       meetingManager.getAttendee = createGetAttendeeCallback(data);
@@ -116,64 +111,7 @@ const Main = () => {
         console.log(error);
       }    
     });
-
-/*
-      //다른 그룹원 추가
-    socket.on("premessage", function (data) {
-      setTimeout(() => {
-        alert(data);
-        setCheckAnother(true);
-      }, 5000);
-    })
-
-  socket.on("entermessage",function(data){
-    alert(data.message)
-    socket.emit("joinRoom", data.roomid);
-    history.push({
-      pathname: `/room/`+data.roomid,
-      state:{_id:data._id}
-    });
-  })
-
-  
-  socket.on("sendMember", function (data) {
-    alert(data);
-    setCheckGroup(true);
-  });
-
-  socket.on("makeMeetingRoomMsg", async function (data) {
-    let temp = {
-      title: data,
-    }
-    //data가 방제....
-    alert(data);
-      //여깅
-
-    meetingManager.getAttendee = createGetAttendeeCallback(data);
-  
-    try {
-      const { JoinInfo } = await fetchMeeting(temp);
-  
-      await meetingManager.join({
-        meetingInfo: JoinInfo.Meeting,
-        attendeeInfo: JoinInfo.Attendee
-      });
-  
-      setAppMeetingInfo(data, "Tester", "ap-northeast-2");
-      history.push("/deviceSetup");
-    } catch (error) {
-      console.log(error);
-    }    
-  });
-*/
   return ()=>{
-    /*
-    socket.removeListener('connect')
-    socket.removeListener('clientid')
-    socket.removeListener('premessage')
-    socket.removeListener('entermessage')
-    socket.removeListener('sendMember')
-    */
     socket.removeListener('makeMeetingRoomMsg')
     socket.removeListener('main')
 
@@ -181,7 +119,6 @@ const Main = () => {
   
 
   }, []);
-  //const notify = () => toast("Wow so easy!");
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
