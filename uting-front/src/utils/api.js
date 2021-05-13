@@ -31,7 +31,7 @@ export async function fetchMeeting(data){
 
 export function createGetAttendeeCallback(meetingId){
 
-    return(chimeAttendeeId)=>{
+    return (chimeAttendeeId)=>{
 
         let res
         let Name=""
@@ -43,13 +43,11 @@ export function createGetAttendeeCallback(meetingId){
                 attendee : chimeAttendeeId
             }
             res = await axios.post("http://localhost:3001/meetings/attendee",data)
-            console.log(res)
-            Name=res.data.Name
-            console.log(Name)
+            
             if(Name!==""){
                 console.log("Name",Name)
                 return{
-                    name:Name
+                    name: res.data.Name
                 }
             }
         }
