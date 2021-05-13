@@ -29,6 +29,7 @@ const SignUpBox = styled.div`
   padding:20px;
   background-color: white;
   width:50vw;
+  min-width:500px;
   font-weight:bold;
   font-size:large;
 `;
@@ -37,6 +38,7 @@ const InputandBtn = styled.div`
   flex-direction:row;
   align-items:center;
 `
+
 const SignUp = () => {
   let history = useHistory();
   /*사용자 정보*/
@@ -228,7 +230,7 @@ const SignUp = () => {
             type="text"
             name="phone"
             placeholder="01000000000"
-            style={{ width: "40vw", marginBottom: "20px" }}
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           {identity !== "true" ? (
@@ -252,7 +254,7 @@ const SignUp = () => {
             type="text"
             name="nickname"
             placeholder="닉네임"
-            style={{ width: "40vw", marginBottom: "20px" }}
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           <button className="gradientBtn" onClick={(e) => overlapNickname()} >중복확인</button>
@@ -269,13 +271,13 @@ const SignUp = () => {
           <option value="woman">여</option>
           <option value="man">남</option>
         </Input>
-        <div style={{ marginBottom: "10px" }}>이메일</div>
+        <div style={{ marginBottom: "10px" }}>대학 이메일</div>
         <InputandBtn>
           <Input
             type="email"
             name="email"
-            placeholder="이메일"
-            style={{ width: "40vw", marginBottom: "20px" }}
+            placeholder="대학 이메일"
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           <button className="gradientBtn" onClick={(e) => sendEmail(e)}>이메일 인증</button>
@@ -286,7 +288,7 @@ const SignUp = () => {
             type="text"
             name="check-email"
             placeholder="인증코드"
-            style={{ width: "40vw", marginBottom: "20px" }}
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           <button className="gradientBtn" onClick={(e) => check(e)}>확인</button>
@@ -303,7 +305,7 @@ const SignUp = () => {
       {checkcode === true ? (
         <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)}>가입</button>
       ) : (
-        <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)} disabled>가입</button>
+        <button className="gradientBtnDisabled" onClick={(e) => onSignupSubmit(e)} disabled >가입</button>
       )}
     </SignUpContainer>
   );
