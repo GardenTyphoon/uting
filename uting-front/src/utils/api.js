@@ -43,9 +43,7 @@ export function createGetAttendeeCallback(meetingId){
                 attendee : chimeAttendeeId
             }
             res = await axios.post("http://localhost:3001/meetings/attendee",data)
-            //console.log(res.data.AttendeeInfo.Name)
-            //Name=res.data.AttendeeInfo.Name
-            //console.log(Name)
+            
             if(Name!==""){
                 console.log("Name",Name)
                 return{

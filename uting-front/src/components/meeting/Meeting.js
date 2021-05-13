@@ -131,47 +131,35 @@ const Meeting = ({ checkFunc }) => {
 
             // await axios.post('http://localhost:3001/meetings', data);
             meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
-            //console.log(createGetAttendeeCallback(roomTitle))
-            //console.log(createGetAttendeeCallback(roomTitle))
-            /*
-            if(roomTitle!==undefined){
-                const socket = socketio.connect('http://localhost:3001');
-                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
-            }
-            */
+            
+            
             checkFunc(true)
 
             try {
                 // 원래 형태는 id(title), 참여자이름, 지역임.
                 // const { JoinInfo } = await fetchMeeting(roomTitle, room);
-                //setSocketOn(groupMembersSocketId);
                 
                 const { JoinInfo } = await fetchMeeting(data);
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
                     attendeeInfo: JoinInfo.Attendee
                 });
+
+                console.log(JoinInfo)
                 // 디바이스 세팅하고 미팅 시작하는데 영향 끼치는 부분이라서
                 // 실제로는 중간 파라미터로 사용자 이름 넣어야함. sessionUser가 보니까 nickname string인거 같은데 그거 넣으면 될 듯 하다
                 setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
-                
+                if(roomTitle!==undefined){
+                    const socket = socketio.connect('http://localhost:3001');
+                    socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+                }
+
                 history.push('/deviceSetup');
             } catch (error) {
                 console.log(error);
             }
         }
     }
-    /*
-    useEffect(() => {
-        
-        if (roomtitle !== "") {
-            console.log(typeof roomtitle)
-            console.log(roomtitle, socketOn)
-            const socket = socketio.connect('http://localhost:3001');
-            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn, "roomtitle": roomtitle })
-        }
-
-    }, [socketOn])*/
 
     return (
         <div className="makeRoomContainer">
