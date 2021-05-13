@@ -28,6 +28,7 @@ const Main = () => {
   const [checkAnother,setCheckAnother]=useState(false);
   const [addEvent,setAddEvent]=useState(false);
   const [groupSocketList,setGroupSocketList]=useState([])
+  const [roomtitle,setRoomtitle]=useState("")
   const [popup,setPopup]=useState("")
   const [popupmessage,setPopupmessage]=useState(false);
   const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
@@ -92,43 +93,62 @@ const Main = () => {
         setPopup(data.message)
         setCheckGroup(true);
       }
+      else if(data.type==="makeMeetingRoomMsg"){
+        console.log("여기깅")
+        let temp = {
+          title: data,
+        }
+        //data가 방제....
+        //toast("'"+data+"'방에 초대되었습니다. >_<");
+        //alert("'"+data+"'방에 초대되었습니다. >_<")
+        setPopup("'"+data.roomtitle+"'방에 초대되었습니다. >_<")
+          //여깅
+        setRoomtitle(data.roomtitle)
+          
+      }
     })
 
-    socket.on("makeMeetingRoomMsg", async function (data) {
-      //alert("그룹 호스트가 미팅방을 생성하였습니다.")
-      let temp = {
-        title: data,
-      }
-      //data가 방제....
-      //toast("'"+data+"'방에 초대되었습니다. >_<");
-      //alert("'"+data+"'방에 초대되었습니다. >_<")
-      setPopup("'"+data+"'방에 초대되었습니다. >_<")
-        //여깅
-  
-      meetingManager.getAttendee = createGetAttendeeCallback(data);
-    
-      try {
-        const { JoinInfo } = await fetchMeeting(temp);
-    
-        await meetingManager.join({
-          meetingInfo: JoinInfo.Meeting,
-          attendeeInfo: JoinInfo.Attendee
-        });
-    
-        setAppMeetingInfo(data, "Tester", "ap-northeast-2");
-        history.push("/deviceSetup");
-      } catch (error) {
-        console.log(error);
-      }    
-    });
   return ()=>{
-    socket.removeListener('makeMeetingRoomMsg')
+    //socket.removeListener('makeMeetingRoomMsg')
     socket.removeListener('main')
 
   }
   
 
   }, []);
+
+  useEffect(()=>{
+
+    if(roomtitle!==""){
+      goRoom()
+    }
+    
+  },[roomtitle])
+
+  let goRoom = async()=>{
+    let temp = {
+      title: roomtitle,
+    }
+
+    console.log("roomtitle",roomtitle)
+    meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
+      
+    try {
+        const {JoinInfo} = await fetchMeeting(temp);
+
+        await meetingManager.join({
+          meetingInfo: JoinInfo.Meeting,
+          attendeeInfo: JoinInfo.Attendee
+        });
+        setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
+        console.log(JoinInfo)
+        history.push("/deviceSetup");
+      
+    } catch (error) {
+      console.log(error);
+    }  
+  }
+
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),

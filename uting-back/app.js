@@ -137,15 +137,19 @@ app.io.on('connection',function(socket){
 
     if(Object.keys(msg.socketidList.length)!==1){
       for(let i=0;i<Object.keys(msg.socketidList).length;i++){
-        app.io.to(msg.socketidList[i]).emit("entermessage",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+        app.io.to(msg.socketidList[i]).emit("main",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
     }
   })
-  socket.on('makeMeetingRoomMsg',function(data){
-    let msg = "그룹 호스트가 미팅방을 생성하였습니다."
-    console.log("방제!!",data)
-    for(let i=0;i<data.groupMembersSocketId.length;i++){
-      app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", data.roomtitle);
+  socket.on('makeMeetingRoomMsg',function(msg){
+    //let msg = "그룹 호스트가 미팅방을 생성하였습니다."
+    //console.log("방제!!",data)
+    let data = {
+      type:"makeMeetingRoomMsg",
+      roomtitle:msg.roomtitle
+    };
+    for(let i=0;i<msg.groupMembersSocketId.length;i++){
+      app.io.to(msg.groupMembersSocketId[i]).emit("main", data);
     };
   })
 

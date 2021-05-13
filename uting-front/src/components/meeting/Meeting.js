@@ -113,10 +113,10 @@ const Meeting = ({ checkFunc }) => {
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
             //방 생성
-            const roomTitle = room.title.trim().toLocaleLowerCase()
-            setRoomtitle(roomTitle);
+            const roomTitle= room.title.trim().toLocaleLowerCase()
+            //setRoomtitle(roomTitle);
             console.log(roomtitle)
-            setSocketOn(groupMembersSocketId);
+            
             let data = {
                 title: roomTitle,
                 maxNum: Number(room.num),
@@ -132,11 +132,20 @@ const Meeting = ({ checkFunc }) => {
             // await axios.post('http://localhost:3001/meetings', data);
             meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
             //console.log(createGetAttendeeCallback(roomTitle))
+            //console.log(createGetAttendeeCallback(roomTitle))
+            /*
+            if(roomTitle!==undefined){
+                const socket = socketio.connect('http://localhost:3001');
+                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+            }
+            */
             checkFunc(true)
 
             try {
                 // 원래 형태는 id(title), 참여자이름, 지역임.
                 // const { JoinInfo } = await fetchMeeting(roomTitle, room);
+                //setSocketOn(groupMembersSocketId);
+                
                 const { JoinInfo } = await fetchMeeting(data);
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
@@ -145,13 +154,16 @@ const Meeting = ({ checkFunc }) => {
                 // 디바이스 세팅하고 미팅 시작하는데 영향 끼치는 부분이라서
                 // 실제로는 중간 파라미터로 사용자 이름 넣어야함. sessionUser가 보니까 nickname string인거 같은데 그거 넣으면 될 듯 하다
                 setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
+                
                 history.push('/deviceSetup');
             } catch (error) {
                 console.log(error);
             }
         }
     }
+    /*
     useEffect(() => {
+        
         if (roomtitle !== "") {
             console.log(typeof roomtitle)
             console.log(roomtitle, socketOn)
@@ -159,7 +171,7 @@ const Meeting = ({ checkFunc }) => {
             socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": socketOn, "roomtitle": roomtitle })
         }
 
-    }, [socketOn])
+    }, [socketOn])*/
 
     return (
         <div className="makeRoomContainer">
