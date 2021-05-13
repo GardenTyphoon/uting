@@ -131,6 +131,7 @@ const Meeting = ({ checkFunc }) => {
 
             // await axios.post('http://localhost:3001/meetings', data);
             meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
+            //console.log(createGetAttendeeCallback(roomTitle))
             checkFunc(true)
 
             try {

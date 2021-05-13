@@ -53,18 +53,20 @@ router.get('/:id', async function(req, res, next) {
 });
 
 // getAttendee
-router.get('/attendee?', async function (req, res, next) {
+router.post('/attendee', async function (req, res, next) {
   // const meeting = await Meeting.findOne({ _id: req.params.id });
-
-  const title = req.query.title;
-  const attendee = req.query.attendee;
+  console.log("Attendee!!!!!!!!!")
+  console.log(req.body)
+  const title = req.body.meetingId;
+  const attendee = req.body.attendee;
 
   const attendeeInfo = {
-    AttendeeInfo: {
+    
       AttendeeId: attendee,
       Name: attendeeCache[title][attendee]
-    }
+    
   };
+  res.send(JSON.stringify(attendeeInfo))
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(attendeeInfo), 'utf8');
