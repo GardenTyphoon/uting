@@ -30,10 +30,39 @@ export async function fetchMeeting(data){
 }
 
 export function createGetAttendeeCallback(meetingId){
-    return async () => {
+
+    return(chimeAttendeeId)=>{
+
+        let res
+        let Name=""
+        console.log("createGetAttendeeCallback")
+        let attendeeGet = async()=>{
+            console.log("attendeeGet")
+            let data={
+                meetingId : meetingId,
+                attendee : chimeAttendeeId
+            }
+            res = await axios.post("http://localhost:3001/meetings/attendee",data)
+            console.log(res)
+            Name=res.data.AttendeeInfo.Name
+            console.log(Name)
+            if(Name!==""){
+                console.log("Name",Name)
+                return{
+                    name:Name
+                }
+            }
+        }
+        attendeeGet()
+        
+        
+    }
+    
+/*
+    return async (chimeAttendeeId,externalUserId) => {
         const attendeeUrl = `http://localhost:3001/meetings/attendee?title=${encodeURIComponent(
             meetingId
-        )}`;
+        )}$attendee=${encodeURIComponent(chimeAttendeeId)}`;
         const res = await fetch(attendeeUrl, {
             method: 'GET',
         });
@@ -47,7 +76,7 @@ export function createGetAttendeeCallback(meetingId){
         return {
             name: data.AttendeeInfo.Name
         };
-    };
+    };*/
 }
 
 export async function endMeeting(meetingId){
