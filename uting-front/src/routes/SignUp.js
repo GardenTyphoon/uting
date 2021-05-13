@@ -137,8 +137,10 @@ const SignUp = () => {
         "http://localhost:3001/users/sendEmail",
         data
       );
+      alert("해당 이메일로 인증코드를 전송했습니다.")
       setCode(res.data);
       console.log(res);
+      
     } else {
       alert("대학교 이메일로만 가입이 가능합니다.");
     }
@@ -230,9 +232,9 @@ const SignUp = () => {
             onChange={(e) => onChangehandler(e)}
           />
           {identity !== "true" ? (
-            <button onClick={onClickCertification} className="gradientBtn">본인인증</button>
+            <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
           ) : (
-            <div>본인 인증 성공 ! </div>
+            <button onClick={onClickCertification} className="gradientBtn" disabled>본인인증</button>
           )}
         </InputandBtn>
 
@@ -299,7 +301,7 @@ const SignUp = () => {
         />
       </SignUpBox>
       {checkcode === true ? (
-        <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)} active>가입</button>
+        <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)}>가입</button>
       ) : (
         <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)} disabled>가입</button>
       )}
