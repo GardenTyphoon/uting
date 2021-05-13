@@ -1,0 +1,28 @@
+.gradientBtn{
+    font-family: NanumSquare_acR;
+    background: linear-gradient(to bottom, #ff9a51, #ff6994);
+    border:none;
+    border-radius: 10px;
+    color: white;
+    margin-left:10px;
+    margin-bottom: 20px;
+    font-size: small;
+    width:8vw;
+    min-width:78px;
+    padding:7px;
+}
+
+.gradientBtnDisabled{
+    font-family: NanumSquare_acR;
+    background: linear-gradient(to bottom, #FFA969, #FF7DA2);
+    border:none;
+    border-radius: 10px;
+    color: white;
+    margin-left:10px;
+    margin-bottom: 20px;
+    font-size: small;
+    width:8vw;
+    padding:5px;
+
+    min-width:78px;
+}

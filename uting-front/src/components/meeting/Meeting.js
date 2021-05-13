@@ -34,7 +34,6 @@ const Meeting = ({ checkFunc }) => {
 
     const [groupMembers, setGroupMembers] = useState([]);
     const [toggleShowWarningMess, setToggleShowWarningMess] = useState(false);
-    const [socketOn, setSocketOn] = useState(false);
     const [roomtitle, setRoomtitle] = useState("");
     //const [roomtitle,setRoomtitle]=useState("")
     let sessionUser = sessionStorage.getItem("nickname");

@@ -4,16 +4,40 @@ import { Input, Button, Table } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { is } from "date-fns/locale";
+import "./SignUp.css"
 
+const SignUpContainer = styled.div`
+  margin:0 auto; 
+  padding:10vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background-color:#FFE4E1;
+`;
+const SignUpTitle = styled.div`
+  font-family: NanumSquare_acR;
+  font-size:x-large;
+  font-weight:900;
+  font-color:
+`;
 const SignUpBox = styled.div`
+  font-family: NanumSquare_acR;
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
-  margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  margin-top: 15px;
+  margin-bottom:15px;
+  padding:20px;
   background-color: white;
+  width:50vw;
+  min-width:500px;
+  font-weight:bold;
+  font-size:large;
 `;
+const InputandBtn = styled.div`
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+`
 
 const SignUp = () => {
   let history = useHistory();
@@ -44,7 +68,7 @@ const SignUp = () => {
   const [identity, setIdentity] = useState("");
 
   /*닉네임 중복 확인*/
-  const [checkNickname,setCheckNickname]=useState(false);
+  const [checkNickname, setCheckNickname] = useState(false);
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
@@ -71,8 +95,8 @@ const SignUp = () => {
       userinfo.email !== "" &&
       userinfo.password !== "" &&
       identity !== "false" &&
-      identity !== ""&&
-      checkNickname===true
+      identity !== "" &&
+      checkNickname === true
     ) {
       let data = {
         name: userinfo.name,
@@ -115,8 +139,10 @@ const SignUp = () => {
         "http://localhost:3001/users/sendEmail",
         data
       );
+      alert("해당 이메일로 인증코드를 전송했습니다.")
       setCode(res.data);
       console.log(res);
+      
     } else {
       alert("대학교 이메일로만 가입이 가능합니다.");
     }
@@ -135,16 +161,16 @@ const SignUp = () => {
     }
   };
 
-  let overlapNickname = async(e)=>{
-    let data={
-      nickname:userinfo.nickname
+  let overlapNickname = async (e) => {
+    let data = {
+      nickname: userinfo.nickname
     }
 
-    const res = await axios.post("http://localhost:3001/users/checknickname",data)
-    if(res.data==="exist"){
+    const res = await axios.post("http://localhost:3001/users/checknickname", data)
+    if (res.data === "exist") {
       alert("이미 존재하는 닉네임입니다.")
     }
-    if(res.data==="no"){
+    if (res.data === "no") {
       setCheckNickname(true)
       alert("사용가능한 닉네임입니다.")
     }
@@ -185,97 +211,103 @@ const SignUp = () => {
   }, [identity]);
 
   return (
-    <div>
-      <strong>회원가입</strong>
+    <SignUpContainer>
+      <SignUpTitle>회원가입</SignUpTitle>
 
       <SignUpBox>
-        <div>이름</div>
+        <div style={{ marginBottom: "10px" }}>이름</div>
         <Input
           type="text"
           name="name"
           placeholder="이름"
+          style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />
-      </SignUpBox>
-      <SignUpBox>
-        <div>전화번호</div>
-        <Input
-          type="text"
-          name="phone"
-          placeholder="01000000000"
-          onChange={(e) => onChangehandler(e)}
-        />
-      </SignUpBox>
-      {identity !== "true" ? (
-        <Button onClick={onClickCertification}>본인인증 하기</Button>
-      ) : (
-        <div>본인 인증 성공 ! </div>
-      )}
 
-      <SignUpBox>
-        <div>생년월일</div>
+        <div style={{ marginBottom: "10px" }}>전화번호</div>
+        <InputandBtn>
+          <Input
+            type="text"
+            name="phone"
+            placeholder="01000000000"
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            onChange={(e) => onChangehandler(e)}
+          />
+          {identity !== "true" ? (
+            <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
+          ) : (
+            <button onClick={onClickCertification} className="gradientBtn" disabled>본인인증</button>
+          )}
+        </InputandBtn>
+
+        <div style={{ marginBottom: "10px" }} >생년월일</div>
         <Input
           type="text"
           name="birth"
           placeholder="yyyymmdd"
+          style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />
-      </SignUpBox>
-
-      <SignUpBox>
         <div>닉네임</div>
+        <InputandBtn >
+          <Input
+            type="text"
+            name="nickname"
+            placeholder="닉네임"
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            onChange={(e) => onChangehandler(e)}
+          />
+          <button className="gradientBtn" onClick={(e) => overlapNickname()} >중복확인</button>
+        </InputandBtn>
+
+
+        <div style={{ marginBottom: "10px" }}>성별</div>
         <Input
-          type="text"
-          name="nickname"
-          placeholder="닉네임"
-          onChange={(e) => onChangehandler(e)}
-        />
-        <Button onClick={(e)=>overlapNickname()}>중복확인</Button>
-      </SignUpBox>
-      <SignUpBox>
-        <div>성별</div>
-        <Input type="select" name="gender" onChange={(e) => onChangehandler(e)}>
+          type="select"
+          name="gender"
+          style={{ marginBottom: "20px" }}
+          onChange={(e) => onChangehandler(e)}>
           <option>선택해주세요.</option>
           <option value="woman">여</option>
           <option value="man">남</option>
         </Input>
-      </SignUpBox>
-
-      <SignUpBox>
-        <div>이메일</div>
-        <Input
-          type="email"
-          name="email"
-          placeholder="이메일"
-          onChange={(e) => onChangehandler(e)}
-        />
-        <Button onClick={(e) => sendEmail(e)}>이메일 인증하기</Button>
-      </SignUpBox>
-      <SignUpBox>
-        <div>인증번호</div>
-        <Input
-          type="text"
-          name="check-email"
-          placeholder="인증번호"
-          onChange={(e) => onChangehandler(e)}
-        />
-        <Button onClick={(e) => check(e)}>확인</Button>
-      </SignUpBox>
-      <SignUpBox>
-        <div>비밀번호</div>
+        <div style={{ marginBottom: "10px" }}>대학 이메일</div>
+        <InputandBtn>
+          <Input
+            type="email"
+            name="email"
+            placeholder="대학 이메일"
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            onChange={(e) => onChangehandler(e)}
+          />
+          <button className="gradientBtn" onClick={(e) => sendEmail(e)}>이메일 인증</button>
+        </InputandBtn>
+        <div style={{ marginBottom: "10px" }}>이메일 인증코드</div>
+        <InputandBtn >
+          <Input
+            type="text"
+            name="check-email"
+            placeholder="인증코드"
+            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            onChange={(e) => onChangehandler(e)}
+          />
+          <button className="gradientBtn" onClick={(e) => check(e)}>확인</button>
+        </InputandBtn>
+        <div style={{ marginBottom: "10px" }}>비밀번호</div>
         <Input
           type="password"
           name="password"
           placeholder="password"
+          style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />
       </SignUpBox>
       {checkcode === true ? (
-        <Button onClick={(e) => onSignupSubmit(e)}>가입</Button>
+        <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)}>가입</button>
       ) : (
-        ""
+        <button className="gradientBtnDisabled" onClick={(e) => onSignupSubmit(e)} disabled >가입</button>
       )}
-    </div>
+    </SignUpContainer>
   );
 };
 
