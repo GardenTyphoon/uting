@@ -28,8 +28,10 @@ const Main = () => {
   const [checkAnother,setCheckAnother]=useState(false);
   const [addEvent,setAddEvent]=useState(false);
   const [groupSocketList,setGroupSocketList]=useState([])
+  const [popup,setPopup]=useState("")
+  const [popupmessage,setPopupmessage]=useState(false);
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
-
+  const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
   const [socketId, setSocketId] = useState("");
   
   let sessionUser = sessionStorage.getItem("email");
@@ -66,14 +68,16 @@ const Main = () => {
     socket.on("main",function(data){
       if(data.type==="premessage"){
         setTimeout(() => {
-          alert(data.message);
+          //alert(data.message);
+          setPopup(data.message)
           setCheckAnother(true);
         }, 5000);
       }
 
       else if(data.type==="entermessage"){
         //toast(data.message);
-        alert(data.message)
+        setPopup(data.message)
+        //alert(data.message)
         socket.emit("joinRoom", data.roomid);
         history.push({
           pathname: `/room/`+data.roomid,
@@ -83,7 +87,8 @@ const Main = () => {
 
       else if(data.type==="sendMember"){
         //toast(data.message);
-        alert(data.message)
+        //alert(data.message)
+        setPopup(data.message)
         setCheckGroup(true);
       }
     })
@@ -95,7 +100,8 @@ const Main = () => {
       }
       //data가 방제....
       //toast("'"+data+"'방에 초대되었습니다. >_<");
-      alert("'"+data+"'방에 초대되었습니다. >_<")
+      //alert("'"+data+"'방에 초대되었습니다. >_<")
+      setPopup("'"+data+"'방에 초대되었습니다. >_<")
         //여깅
   
       meetingManager.getAttendee = createGetAttendeeCallback(data);
@@ -135,6 +141,13 @@ const Main = () => {
   useEffect(() => {
     putSocketid();
   }, [socketId]);
+
+  useEffect(()=>{
+    if(popup!==""){
+      setPopupmessage(!popupmessage)
+    }
+    
+  },[popup])
 
   return (
     <div
@@ -182,7 +195,12 @@ const Main = () => {
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
         <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-    
+        <Modal isOpen={popupmessage}>
+         <ModalHeader toggle={()=>togglePopupmessage(!popupmessage)}></ModalHeader>
+          <ModalBody isOpen={popupmessage}>
+            {popup}
+          </ModalBody>
+        </Modal>
       </div>
     </div>
   );
