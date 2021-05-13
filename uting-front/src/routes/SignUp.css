@@ -1,0 +1,12 @@
+.gradientBtn{
+    font-family: NanumSquare_acR;
+    background: linear-gradient(to bottom, #ff9a51, #ff6994);
+    border:none;
+    border-radius: 10px;
+    color: white;
+    margin-left:10px;
+    margin-bottom: 20px;
+    font-size: medium;
+    width:8vw;
+    padding:7px;
+}
