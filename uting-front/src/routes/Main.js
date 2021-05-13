@@ -12,6 +12,8 @@ import utingLogo from "../img/utingLogo.png";
 import Filter from "../components/main/Filter.js"
 //import { ToastContainer, toast } from 'react-toastify';
 //import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 import { useAppState } from '../providers/AppStateProvider';
@@ -29,6 +31,7 @@ const Main = () => {
   const [checkAnother,setCheckAnother]=useState(false);
   const [addEvent,setAddEvent]=useState(false);
   const [groupSocketList,setGroupSocketList]=useState([])
+  const [roomtitle,setRoomtitle]=useState("")
   const [popup,setPopup]=useState("")
   const [popupmessage,setPopupmessage]=useState(false);
   const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
@@ -71,15 +74,17 @@ const Main = () => {
       if(data.type==="premessage"){
         setTimeout(() => {
           //alert(data.message);
-          setPopup(data.message)
+          //setPopup(data.message)
+          toast(data.message)
           setCheckAnother(true);
         }, 5000);
       }
 
       else if(data.type==="entermessage"){
-        //toast(data.message);
-        setPopup(data.message)
+        toast(data.message);
+        //setPopup(data.message)
         //alert(data.message)
+
         socket.emit("joinRoom", data.roomid);
         history.push({
           pathname: `/room/`+data.roomid,
@@ -88,48 +93,63 @@ const Main = () => {
       }
 
       else if(data.type==="sendMember"){
-        //toast(data.message);
+        toast(data.message);
         //alert(data.message)
-        setPopup(data.message)
+        //setPopup(data.message)
         setCheckGroup(true);
+      }
+      else if(data.type==="makeMeetingRoomMsg"){
+        console.log("여기깅")
+        let temp = {
+          title: data,
+        }
+        //data가 방제....
+        toast("'"+data.roomtitle+"'방에 초대되었습니다. >_<");
+        setRoomtitle(data.roomtitle)
+          
       }
     })
 
-    socket.on("makeMeetingRoomMsg", async function (data) {
-      //alert("그룹 호스트가 미팅방을 생성하였습니다.")
-      let temp = {
-        title: data,
-      }
-      //data가 방제....
-      //toast("'"+data+"'방에 초대되었습니다. >_<");
-      //alert("'"+data+"'방에 초대되었습니다. >_<")
-      setPopup("'"+data+"'방에 초대되었습니다. >_<")
-        //여깅
-  
-      meetingManager.getAttendee = createGetAttendeeCallback(data);
-    
-      try {
-        const { JoinInfo } = await fetchMeeting(temp);
-    
-        await meetingManager.join({
-          meetingInfo: JoinInfo.Meeting,
-          attendeeInfo: JoinInfo.Attendee
-        });
-    
-        setAppMeetingInfo(data, "Tester", "ap-northeast-2");
-        history.push("/deviceSetup");
-      } catch (error) {
-        console.log(error);
-      }    
-    });
   return ()=>{
-    socket.removeListener('makeMeetingRoomMsg')
     socket.removeListener('main')
 
   }
   
 
   }, []);
+
+  useEffect(()=>{
+
+    if(roomtitle!==""){
+      goRoom()
+    }
+    
+  },[roomtitle])
+
+  let goRoom = async()=>{
+    let temp = {
+      title: roomtitle,
+    }
+
+    console.log("roomtitle",roomtitle)
+    meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
+      
+    try {
+        const {JoinInfo} = await fetchMeeting(temp);
+
+        await meetingManager.join({
+          meetingInfo: JoinInfo.Meeting,
+          attendeeInfo: JoinInfo.Attendee
+        });
+        setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
+        console.log(JoinInfo)
+        history.push("/deviceSetup");
+      
+    } catch (error) {
+      console.log(error);
+    }  
+  }
+
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -198,13 +218,15 @@ const Main = () => {
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
         <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-        <Modal isOpen={popupmessage}>
+        {/*
+      <Modal isOpen={popupmessage}>
          <ModalHeader toggle={()=>togglePopupmessage(!popupmessage)}></ModalHeader>
           <ModalBody isOpen={popupmessage}>
             {popup}
           </ModalBody>
-        </Modal>
+      </Modal>*/}
       </div>
+      <ToastContainer />
     </div>
   );
 };
