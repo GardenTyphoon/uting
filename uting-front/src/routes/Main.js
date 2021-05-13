@@ -30,8 +30,9 @@ const Main = () => {
   const [groupSocketList,setGroupSocketList]=useState([])
   const [popup,setPopup]=useState("")
   const [popupmessage,setPopupmessage]=useState(false);
-  const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
   const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
+  const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
+  
   const [socketId, setSocketId] = useState("");
   
   let sessionUser = sessionStorage.getItem("email");

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useHistory } from "react-router";
 import styled from 'styled-components';
-import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge} from 'reactstrap';
+import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGroup, Label, FormText ,Badge,Modal,ModalHeader,ModalBody} from 'reactstrap';
 import axios from 'axios';
 import McBot from '../components/mc/McBot'
 import Vote from '../components/meeting/Vote'
@@ -24,7 +24,9 @@ const Room = () => {
   const [vote, setVote] = useState(false);
   const [participants,setParticipants] = useState([]);
   const [musicsrc,setMusicsrc]=useState("")
-  
+  const [popup,setPopup]=useState("")
+  const [popupmessage,setPopupmessage]=useState(false);
+  const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
 
   const { meetingId } = useAppState();
 
@@ -82,6 +84,7 @@ const Room = () => {
     });
 
     socket.on("room",function(data){
+      
       if(data.type==="startVote"){
         console.log("Room - startVote");
         voteRef.current.onStartVote();
@@ -100,19 +103,22 @@ const Room = () => {
       }
       else if(data.type==="musicplay"){
         //toast("호스트가 음악을 설정 하였습니다.");
-        alert("호스트가 음악을 설정 하였습니다.")
+        //alert("호스트가 음악을 설정 하였습니다.")
+        setPopup("호스트가 음악을 설정 하였습니다.")
         setMusicsrc(data.src)
       }
 
       else if(data.type==="musicpause"){
         //toast(data.message);
-        alert(data.message)
+        //alert(data.message)
+        setPopup(data.message)
         document.getElementById("audio").pause();
       }
 
       else if(data.type==="replay"){
         //toast(data.message)
-        alert(data.message)
+        //alert(data.message)
+        setPopup(data.message)
         document.getElementById("audio").play();
       }
     })
@@ -133,6 +139,14 @@ const Room = () => {
     saveParticipantsSocketId()
   },[participants])
 
+  useEffect(()=>{
+    console.log(popup)
+    if(popup!==""){
+      console.log(popup)
+      setPopupmessage(!popupmessage)
+    }
+    
+  },[popup])
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
@@ -141,7 +155,12 @@ const Room = () => {
       <ReactAudioPlayer id="audio" src={musicsrc}  controls/>
       <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
       <Vote ref={voteRef} participantsSocketIdList={participantsSocketId} participants={participants}></Vote>
-      
+      <Modal isOpen={popupmessage}>
+         <ModalHeader toggle={()=>togglePopupmessage(!popupmessage)}></ModalHeader>
+          <ModalBody isOpen={popupmessage}>
+            {popup}
+          </ModalBody>
+      </Modal>
     </div>
   );
 };
