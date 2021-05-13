@@ -9,6 +9,7 @@ import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
+import Filter from "../components/main/Filter.js"
 //import { ToastContainer, toast } from 'react-toastify';
 //import 'react-toastify/dist/ReactToastify.css';
 
@@ -166,6 +167,7 @@ const Main = () => {
         ) : (
           ""
         )}
+        <Filter />
         <button
           className="makeRoomBtn"
           onClick={(e) => {
