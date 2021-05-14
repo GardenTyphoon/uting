@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Profile from "../components/profile/Profile";
-import { Button, Modal, ModalBody, ModalFooter,ModalHeader } from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
@@ -10,6 +10,8 @@ import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
 import Filter from "../components/main/Filter.js"
+
+import CollegeRanking from "../components/main/CollegeRanking.js";
 //import { ToastContainer, toast } from 'react-toastify';
 //import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
@@ -26,19 +28,19 @@ const Main = () => {
   const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
 
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
-  const [checkRoomList,setCheckRoomList]=useState(false);
-  const [checkGroup,setCheckGroup]=useState(false)
-  const [checkAnother,setCheckAnother]=useState(false);
-  const [addEvent,setAddEvent]=useState(false);
-  const [groupSocketList,setGroupSocketList]=useState([])
-  const [roomtitle,setRoomtitle]=useState("")
-  const [popup,setPopup]=useState("")
-  const [popupmessage,setPopupmessage]=useState(false);
+  const [checkRoomList, setCheckRoomList] = useState(false);
+  const [checkGroup, setCheckGroup] = useState(false)
+  const [checkAnother, setCheckAnother] = useState(false);
+  const [addEvent, setAddEvent] = useState(false);
+  const [groupSocketList, setGroupSocketList] = useState([])
+  const [roomtitle, setRoomtitle] = useState("")
+  const [popup, setPopup] = useState("")
+  const [popupmessage, setPopupmessage] = useState(false);
   const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
-  
+
   const [socketId, setSocketId] = useState("");
-  
+
   let sessionUser = sessionStorage.getItem("email");
 
   const gotoAdminPage = () => {
@@ -54,12 +56,12 @@ const Main = () => {
     }
   };
 
-  let groupSocket = (e) =>{
+  let groupSocket = (e) => {
     setGroupSocketList(e)
   }
-  useEffect(() => {}, [addEvent]);
+  useEffect(() => { }, [addEvent]);
 
-  
+
   useEffect(() => {
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
@@ -70,8 +72,8 @@ const Main = () => {
       setSocketId(id);
     });
 
-    socket.on("main",function(data){
-      if(data.type==="premessage"){
+    socket.on("main", function (data) {
+      if (data.type === "premessage") {
         setTimeout(() => {
           //alert(data.message);
           //setPopup(data.message)
@@ -80,74 +82,74 @@ const Main = () => {
         }, 5000);
       }
 
-      else if(data.type==="entermessage"){
+      else if (data.type === "entermessage") {
         toast(data.message);
         //setPopup(data.message)
         //alert(data.message)
 
         socket.emit("joinRoom", data.roomid);
         history.push({
-          pathname: `/room/`+data.roomid,
-          state:{_id:data._id}
+          pathname: `/room/` + data.roomid,
+          state: { _id: data._id }
         });
       }
 
-      else if(data.type==="sendMember"){
+      else if (data.type === "sendMember") {
         toast(data.message);
         //alert(data.message)
         //setPopup(data.message)
         setCheckGroup(true);
       }
-      else if(data.type==="makeMeetingRoomMsg"){
+      else if (data.type === "makeMeetingRoomMsg") {
         console.log("여기깅")
         let temp = {
           title: data,
         }
         //data가 방제....
-        toast("'"+data.roomtitle+"'방에 초대되었습니다. >_<");
+        toast("'" + data.roomtitle + "'방에 초대되었습니다. >_<");
         setRoomtitle(data.roomtitle)
-          
+
       }
     })
 
-  return ()=>{
-    socket.removeListener('main')
+    return () => {
+      socket.removeListener('main')
 
-  }
-  
+    }
+
 
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
 
-    if(roomtitle!==""){
+    if (roomtitle !== "") {
       goRoom()
     }
-    
-  },[roomtitle])
 
-  let goRoom = async()=>{
+  }, [roomtitle])
+
+  let goRoom = async () => {
     let temp = {
       title: roomtitle,
     }
 
-    console.log("roomtitle",roomtitle)
+    console.log("roomtitle", roomtitle)
     meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
-      
-    try {
-        const {JoinInfo} = await fetchMeeting(temp);
 
-        await meetingManager.join({
-          meetingInfo: JoinInfo.Meeting,
-          attendeeInfo: JoinInfo.Attendee
-        });
-        setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
-        console.log(JoinInfo)
-        history.push("/deviceSetup");
-      
+    try {
+      const { JoinInfo } = await fetchMeeting(temp);
+
+      await meetingManager.join({
+        meetingInfo: JoinInfo.Meeting,
+        attendeeInfo: JoinInfo.Attendee
+      });
+      setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
+      console.log(JoinInfo)
+      history.push("/deviceSetup");
+
     } catch (error) {
       console.log(error);
-    }  
+    }
   }
 
   let putSocketid = async (e) => {
@@ -164,69 +166,71 @@ const Main = () => {
     putSocketid();
   }, [socketId]);
 
-  useEffect(()=>{
-    if(popup!==""){
+  useEffect(() => {
+    if (popup !== "") {
       setPopupmessage(!popupmessage)
     }
-    
-  },[popup])
+
+  }, [popup])
 
   return (
-    <div
-      style={{
-        backgroundColor: "#ffe4e1",
-        width: "100vw",
-        height: "100vh",
-        padding: "2%",
-      }}
-    >
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <img style={{ width: "7%" }} src={utingLogo} />
+    <div className="mainContainer">
+
+
+
+      <div className="mainTop">
+        <img className="utingLogo" src={utingLogo} />
         {sessionUser === "admin@ajou.ac.kr" ? (
           <button onClick={gotoAdminPage}>관리자페이지</button>
         ) : (
           ""
         )}
-        <Filter />
-        <button
-          className="makeRoomBtn"
-          onClick={(e) => {
-            toggleMakeMeetingBtn(e);
-          }}
-        >
-          방 생성
-        </button>
-
-        <Modal isOpen={toggleMakeMeeting}>
-         <ModalHeader className="font" toggle={()=>setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
-          <ModalBody isOpen={toggleMakeMeeting}>
-            <Meeting checkFunc={(e) => checkList(e)} />
-          </ModalBody>
-
-        </Modal>
         <Profile />
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-        }}
-      >
-        
-        
-        <div style={{}}>학교 랭킹 넣는 자리 </div>
-        <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
-        <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-        {/*
-      <Modal isOpen={popupmessage}>
-         <ModalHeader toggle={()=>togglePopupmessage(!popupmessage)}></ModalHeader>
-          <ModalBody isOpen={popupmessage}>
-            {popup}
-          </ModalBody>
-      </Modal>*/}
+
+
+
+      <div className="mainBottom">
+        <div className="CollegeRanking">
+          <div style={{fontFamily:"NanumSquare_acR", fontWeight:"bolder"}}>학교별 매너학점 TOP10</div>
+          <CollegeRanking />
+        </div>
+
+
+        <div className="Room">
+          <div className="RoomTop">
+            <div>Room List</div>
+            <Filter />
+            <button
+              className="makeRoomBtn"
+              onClick={(e) => {
+                toggleMakeMeetingBtn(e);
+              }}
+            >
+              방 생성
+            </button>
+
+            <Modal isOpen={toggleMakeMeeting}>
+              <ModalHeader className="font" toggle={() => setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
+              <ModalBody isOpen={toggleMakeMeeting}>
+                <Meeting checkFunc={(e) => checkList(e)} />
+              </ModalBody>
+
+            </Modal>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
+          </div>
+        </div>
+        <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </div>
   );
 };

@@ -5,7 +5,7 @@ import "./Filter.css"
 const Filter = () => {
 
     return (
-        <button>Filterd by ▼</button>
+        <button className="FilteredBy">Filterd by ▼</button>
     )
 }
 export default Filter;
