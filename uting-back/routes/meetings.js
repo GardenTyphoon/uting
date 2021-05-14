@@ -66,7 +66,7 @@ router.post('/attendee', async function (req, res, next) {
       Name: attendeeCache[title][attendee]
   
   };
-  res.send(JSON.stringify(attendeeInfo))
+  // res.send(JSON.stringify(attendeeInfo))
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(attendeeInfo), 'utf8');
@@ -96,21 +96,19 @@ router.post('/', function(req, res,next){
 
 // POST CHIME one meeting
 router.post('/join', async function(req, res, next){
-  const temp_title = await Meeting.findOne({title:req.body.title}, function(err){
-    if(err){
-      const meeting = new Meeting({
-        title:req.body.title,
-        maxNum:req.body.maxNum,
-        status:req.body.status,
-        avgManner:req.body.avgManner,
-        avgAge:req.body.avgAge,
-        users:req.body.users,
-        numOfWoman:req.body.numOfWoman,
-        numOfMan : req.body.numOfMan
-      });
-      meeting.save();
-    }
+  const temp_title = await Meeting.findOne({title:req.body.title});
+  const meeting = new Meeting({
+    title:req.body.title,
+    maxNum:req.body.maxNum,
+    status:req.body.status,
+    avgManner:req.body.avgManner,
+    avgAge:req.body.avgAge,
+    users:req.body.users,
+    numOfWoman:req.body.numOfWoman,
+    numOfMan : req.body.numOfMan
   });
+  meeting.save();
+  
   console.log(temp_title);
   // console.log(req.body);
   // const meeting = new Meeting({
@@ -182,6 +180,7 @@ router.post('/getparticipants', function(req,res,next){
       console.log("obj",obj.title)
       if(obj.title===req.body._id){
         console.log(obj.title)
+        console.log(obj.users)
         res.send(obj.users);
       }
     })
@@ -200,18 +199,17 @@ router.put('/:id', async function(req,res,next){
 })
 
 // DELETE one meeting
-router.delete('/end?', async function(req,res,next){
-  const meeting = await Meeting.deleteOne({_id : req.params.id});
+router.post('/end', async function(req,res,next){
+  const title = req.body.meetingId;
+  const meeting = await Meeting.deleteOne({title : title});
   //res.json(meeting);
 
-  const title = req.query.title;
-  
-    await chime.deleteMeeting({
-      MeetingId: meetingCache[title].Meeting.MeetingId
-    }).promise();
-    res.statusCode = 200;
-    res.end();
-    // res.send("The meeting is terminated successful");
+  await chime.deleteMeeting({
+    MeetingId: meetingCache[title].Meeting.MeetingId
+  }).promise();
+  res.statusCode = 200;
+  res.end();
+  // res.send("The meeting is terminated successful");
 });
 
 

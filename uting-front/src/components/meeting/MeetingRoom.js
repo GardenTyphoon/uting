@@ -17,7 +17,7 @@ import {
 import MeetingControls from './MeetingControls';
 import MeetingDetails from './MeetingDetails';
 
-export default function Rooms() {
+export default function MeetingRoom() {
     const history = useHistory();
     const dispatch = useNotificationDispatch();
     const meetingStatus = useMeetingStatus();
