@@ -199,17 +199,17 @@ const Main = () => {
 
         <div className="Room">
           <div className="RoomTop">
-            <div>Room List</div>
+            <div className="RoomTop">
+            <div style={{fontFamily:"NanumSquare_acR", fontSize:"large", color:"#9A7D7D", marginRight:"25px"}}>Room List</div>
             <Filter />
+            </div>
             <button
               className="makeRoomBtn"
-              onClick={(e) => {
-                toggleMakeMeetingBtn(e);
-              }}
-            >
+              onClick={(e) => {toggleMakeMeetingBtn(e);}}
+             >
               방 생성
             </button>
-
+            
             <Modal isOpen={toggleMakeMeeting}>
               <ModalHeader className="font" toggle={() => setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
               <ModalBody isOpen={toggleMakeMeeting}>
@@ -223,6 +223,8 @@ const Main = () => {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-evenly",
+              
+              height:"70vh"
             }}
           >
             <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
