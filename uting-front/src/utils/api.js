@@ -34,7 +34,6 @@ export function createGetAttendeeCallback(meetingId){
     return (chimeAttendeeId)=>{
 
         let res
-        let Name=""
         console.log("createGetAttendeeCallback")
         let attendeeGet = async()=>{
             console.log("attendeeGet")
@@ -44,8 +43,7 @@ export function createGetAttendeeCallback(meetingId){
             }
             res = await axios.post("http://localhost:3001/meetings/attendee",data)
             
-            if(Name!==""){
-                console.log("Name",Name)
+            if(res.data.Name!==""){
                 return{
                     name: res.data.Name
                 }
@@ -55,26 +53,7 @@ export function createGetAttendeeCallback(meetingId){
         
         
     }
-    
-/*
-    return async (chimeAttendeeId,externalUserId) => {
-        const attendeeUrl = `http://localhost:3001/meetings/attendee?title=${encodeURIComponent(
-            meetingId
-        )}$attendee=${encodeURIComponent(chimeAttendeeId)}`;
-        const res = await fetch(attendeeUrl, {
-            method: 'GET',
-        });
 
-        if(!res.ok){
-            throw new Error('Invalid server response');
-        }
-
-        const data = await res.json();
-
-        return {
-            name: data.AttendeeInfo.Name
-        };
-    };*/
 }
 
 export async function endMeeting(meetingId){
