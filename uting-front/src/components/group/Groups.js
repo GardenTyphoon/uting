@@ -128,11 +128,17 @@ const Groups = ({currentsocketId,checkGroup,checkAnother,groupSocket}) => {
   },[groupMember])
 
   useEffect(()=>{
-    getGroupInfo();
+    if(checkGroup!==false){
+      getGroupInfo()
+    }
   },[checkGroup])
+
   useEffect(()=>{
-    getGroupInfo();
+    if(checkAnother!==false){
+      getGroupInfo();
+    }
   },[checkAnother])
+
   useEffect(() => {
     getGroupInfo();
   }, [checkMem]);
