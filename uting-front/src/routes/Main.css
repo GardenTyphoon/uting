@@ -12,6 +12,13 @@
 .profileModal {
   background-color: #ffb4ac;
 }
+.utingLogo{
+  width: 5vw;
+  height:5vw;
+  margin-left:20PX;
+  min-width:70px;
+  min-height: 70px; 
+}
 .makeRoomBtn {
   font-family: NanumSquare_acR;
   width:100px;
@@ -20,4 +27,42 @@
   border: none;
   border-radius: 10px;
   color: white;
+}
+.mainContainer{
+  background-color: #ffe4e1;
+  width:100vw;
+  height:100vh;
+  padding:20px;
+  padding-left:30px;
+  
+  padding-left:30px;
+  display: flex;
+  flex-direction: column;
+}
+.mainTop{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.mainBottom{
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  justify-content: space-around;
+}
+.RoomTop{
+  display: flex;
+  flex-direction: row;
+  width:50vw;
+}
+.CollegeRanking{
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+.Room{
+  width:50vw;
+  margin-left:5vw;
+  margin-right: 5vw;
 }

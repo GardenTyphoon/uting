@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import Profile from "../components/profile/Profile";
-import { Button, Modal, ModalBody, ModalFooter,ModalHeader } from "reactstrap";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Meeting from "../components/meeting/Meeting";
 import MeetingList from "../components/meeting/MeetingList";
 import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
+import Filter from "../components/main/Filter.js"
+
+import CollegeRanking from "../components/main/CollegeRanking.js";
+//import { ToastContainer, toast } from 'react-toastify';
+//import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -153,55 +158,64 @@ const Main = () => {
   }, [socketId]);
 
 
+
   return (
-    <div
-      style={{
-        backgroundColor: "#ffe4e1",
-        width: "100vw",
-        height: "100vh",
-        padding: "2%",
-      }}
-    >
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <img style={{ width: "7%" }} src={utingLogo} />
+    <div className="mainContainer">
+      <div className="mainTop">
+        <img className="utingLogo" src={utingLogo} />
         {sessionUser === "admin@ajou.ac.kr" ? (
           <button onClick={gotoAdminPage}>관리자페이지</button>
         ) : (
           ""
         )}
-        <button
-          className="makeRoomBtn"
-          onClick={(e) => {
-            toggleMakeMeetingBtn(e);
-          }}
-        >
-          방 생성
-        </button>
-
-        <Modal isOpen={toggleMakeMeeting}>
-         <ModalHeader className="font" toggle={()=>setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
-          <ModalBody isOpen={toggleMakeMeeting}>
-            <Meeting checkFunc={(e) => checkList(e)} />
-          </ModalBody>
-
-        </Modal>
         <Profile />
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-        }}
-      >
-        
-        
-        <div style={{}}>학교 랭킹 넣는 자리 </div>
-        <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
-        <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-        
+
+
+
+      <div className="mainBottom">
+        <div className="CollegeRanking">
+          <div style={{fontFamily:"NanumSquare_acR", fontWeight:"bolder"}}>학교별 매너학점 TOP10</div>
+          <CollegeRanking />
+        </div>
+
+
+        <div className="Room">
+          <div className="RoomTop">
+            <div className="RoomTop">
+            <div style={{fontFamily:"NanumSquare_acR", fontSize:"large", color:"#9A7D7D", marginRight:"25px"}}>Room List</div>
+            <Filter />
+            </div>
+            <button
+              className="makeRoomBtn"
+              onClick={(e) => {toggleMakeMeetingBtn(e);}}
+             >
+              방 생성
+            </button>
+            
+            <Modal isOpen={toggleMakeMeeting}>
+              <ModalHeader className="font" toggle={() => setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
+              <ModalBody isOpen={toggleMakeMeeting}>
+                <Meeting checkFunc={(e) => checkList(e)} />
+              </ModalBody>
+
+            </Modal>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              marginTop:"10px",
+              height:"70vh"
+            }}
+          >
+            <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
+          </div>
+        </div>
+        <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </div>
   );
 };
