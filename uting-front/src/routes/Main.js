@@ -29,9 +29,7 @@ const Main = () => {
   const [addEvent,setAddEvent]=useState(false);
   const [groupSocketList,setGroupSocketList]=useState([])
   const [roomtitle,setRoomtitle]=useState("")
-  const [popup,setPopup]=useState("")
-  const [popupmessage,setPopupmessage]=useState(false);
-  const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
+  
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
   
   const [socketId, setSocketId] = useState("");
@@ -70,8 +68,6 @@ const Main = () => {
     socket.on("main",function(data){
       if(data.type==="premessage"){
         setTimeout(() => {
-          //alert(data.message);
-          //setPopup(data.message)
           toast(data.message)
           setCheckAnother(true);
         }, 5000);
@@ -79,9 +75,6 @@ const Main = () => {
 
       else if(data.type==="entermessage"){
         toast(data.message);
-        //setPopup(data.message)
-        //alert(data.message)
-
         socket.emit("joinRoom", data.roomid);
         history.push({
           pathname: `/room/`+data.roomid,
@@ -91,8 +84,6 @@ const Main = () => {
 
       else if(data.type==="sendMember"){
         toast(data.message);
-        //alert(data.message)
-        //setPopup(data.message)
         setCheckGroup(true);
       }
       else if(data.type==="makeMeetingRoomMsg"){
@@ -161,12 +152,6 @@ const Main = () => {
     putSocketid();
   }, [socketId]);
 
-  useEffect(()=>{
-    if(popup!==""){
-      setPopupmessage(!popupmessage)
-    }
-    
-  },[popup])
 
   return (
     <div
@@ -214,13 +199,7 @@ const Main = () => {
         <div style={{}}>학교 랭킹 넣는 자리 </div>
         <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
         <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-        {/*
-      <Modal isOpen={popupmessage}>
-         <ModalHeader toggle={()=>togglePopupmessage(!popupmessage)}></ModalHeader>
-          <ModalBody isOpen={popupmessage}>
-            {popup}
-          </ModalBody>
-      </Modal>*/}
+        
       </div>
       <ToastContainer />
     </div>

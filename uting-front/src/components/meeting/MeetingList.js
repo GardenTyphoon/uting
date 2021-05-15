@@ -76,8 +76,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }
 
     useEffect(() => {
-        saveMeetingUsers()
-
+        if(groupMember.length!==0){
+            saveMeetingUsers()
+        }
     }, [groupMember])
     useEffect(() => {
         

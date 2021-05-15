@@ -107,7 +107,6 @@ app.io.on('connection',function(socket){
   });
   
   socket.on('message',function(msg){
-    //let data = "그룹에 초대 되었습니다 ^0^"
     let data={
       type:"sendMember",
       message:"그룹에 초대 되었습니다 ^0^"
@@ -115,7 +114,6 @@ app.io.on('connection',function(socket){
     app.io.to(msg.socketid).emit("main",data) // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
   })
   socket.on('premessage',function(msg){
-    //let data = "그룹에 다른 사용자가 추가되었습니다 ^0^"
     let data={
       type:"premessage",
       message:"그룹에 다른 사용자가 추가되었습니다 ^0^"
@@ -142,8 +140,6 @@ app.io.on('connection',function(socket){
     }
   })
   socket.on('makeMeetingRoomMsg',function(msg){
-    //let msg = "그룹 호스트가 미팅방을 생성하였습니다."
-    //console.log("방제!!",data)
     let data = {
       type:"makeMeetingRoomMsg",
       roomtitle:msg.roomtitle

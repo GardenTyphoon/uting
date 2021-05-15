@@ -24,9 +24,6 @@ const Room = () => {
   const [vote, setVote] = useState(false);
   const [participants,setParticipants] = useState([]);
   const [musicsrc,setMusicsrc]=useState("")
-  const [popup,setPopup]=useState("")
-  const [popupmessage,setPopupmessage]=useState(false);
-  const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
 
   const { meetingId } = useAppState();
 
@@ -53,7 +50,6 @@ const Room = () => {
       preMember:participants
     }
     const res = await axios.post("http://localhost:3001/users/preMemSocketid",data)
-
     
     if(res.data!=="undefined"){
       setParticipantsSocketId(res.data)
@@ -103,22 +99,16 @@ const Room = () => {
       }
       else if(data.type==="musicplay"){
         toast("호스트가 음악을 설정 하였습니다.");
-        //alert("호스트가 음악을 설정 하였습니다.")
-        //setPopup("호스트가 음악을 설정 하였습니다.")
         setMusicsrc(data.src)
       }
 
       else if(data.type==="musicpause"){
         toast(data.message);
-        //alert(data.message)
-        //setPopup(data.message)
         document.getElementById("audio").pause();
       }
 
       else if(data.type==="replay"){
         toast(data.message)
-        //alert(data.message)
-        //setPopup(data.message)
         document.getElementById("audio").play();
       }
     })
@@ -139,14 +129,6 @@ const Room = () => {
     saveParticipantsSocketId()
   },[participants])
 
-  useEffect(()=>{
-    console.log(popup)
-    if(popup!==""){
-      console.log(popup)
-      setPopupmessage(!popupmessage)
-    }
-    
-  },[popup])
 
   return (
     <div style={{ backgroundColor: "#ffe4e1", width: "100vw", height: "100vh", padding: "2%" }}>
@@ -155,13 +137,7 @@ const Room = () => {
       <ReactAudioPlayer id="audio" src={musicsrc}  controls/>
       <McBot participantsSocketIdList={participantsSocketId} currentSocketId={socketId} participants={participants}></McBot>
       <Vote ref={voteRef} participantsSocketIdList={participantsSocketId} participants={participants}></Vote>
-      {/*
-      <Modal isOpen={popupmessage}>
-         <ModalHeader toggle={()=>togglePopupmessage(!popupmessage)}></ModalHeader>
-          <ModalBody isOpen={popupmessage}>
-            {popup}
-          </ModalBody>
-      </Modal>*/}
+     
       <ToastContainer />
     </div>
   );
