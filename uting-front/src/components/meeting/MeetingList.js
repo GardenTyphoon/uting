@@ -126,7 +126,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [checkState])
 
     return (//tr map 한다음에 key넣어주기
-        <div style={{overflow: "auto"}}>
+        <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
 
                 <div style={{marginRight:"25px"}}>

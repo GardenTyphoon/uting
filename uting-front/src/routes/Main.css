@@ -13,11 +13,11 @@
   background-color: #ffb4ac;
 }
 .utingLogo{
-  width: 7vw;
-  height:7vw;
+  width: 5vw;
+  height:5vw;
   margin-left:20PX;
-  min-width:84px;
-  min-height: 84px; 
+  min-width:70px;
+  min-height: 70px; 
 }
 .makeRoomBtn {
   font-family: NanumSquare_acR;
@@ -32,7 +32,10 @@
   background-color: #ffe4e1;
   width:100vw;
   height:100vh;
-  padding:30px;
+  padding:20px;
+  padding-left:30px;
+  
+  padding-left:30px;
   display: flex;
   flex-direction: column;
 }

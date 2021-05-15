@@ -28,17 +28,6 @@ const Main = () => {
   const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
 
   const [toggleMakeMeeting, setToggleMakeMeeting] = useState(false);
-<<<<<<< HEAD
-  const [checkRoomList, setCheckRoomList] = useState(false);
-  const [checkGroup, setCheckGroup] = useState(false)
-  const [checkAnother, setCheckAnother] = useState(false);
-  const [addEvent, setAddEvent] = useState(false);
-  const [groupSocketList, setGroupSocketList] = useState([])
-  const [roomtitle, setRoomtitle] = useState("")
-  const [popup, setPopup] = useState("")
-  const [popupmessage, setPopupmessage] = useState(false);
-  const togglePopupmessage = (e) => setPopupmessage(!popupmessage)
-=======
   const [checkRoomList,setCheckRoomList]=useState(false);
   const [checkGroup,setCheckGroup]=useState(false)
   const [checkAnother,setCheckAnother]=useState(false);
@@ -46,11 +35,10 @@ const Main = () => {
   const [groupSocketList,setGroupSocketList]=useState([])
   const [roomtitle,setRoomtitle]=useState("")
   
->>>>>>> 76102f820d2c42f9df7be323ea11d5b34280f360
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
-
+  
   const [socketId, setSocketId] = useState("");
-
+  
   let sessionUser = sessionStorage.getItem("email");
 
   const gotoAdminPage = () => {
@@ -66,12 +54,12 @@ const Main = () => {
     }
   };
 
-  let groupSocket = (e) => {
+  let groupSocket = (e) =>{
     setGroupSocketList(e)
   }
-  useEffect(() => { }, [addEvent]);
+  useEffect(() => {}, [addEvent]);
 
-
+  
   useEffect(() => {
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
@@ -82,77 +70,77 @@ const Main = () => {
       setSocketId(id);
     });
 
-    socket.on("main", function (data) {
-      if (data.type === "premessage") {
+    socket.on("main",function(data){
+      if(data.type==="premessage"){
         setTimeout(() => {
           toast(data.message)
           setCheckAnother(true);
         }, 5000);
       }
 
-      else if (data.type === "entermessage") {
+      else if(data.type==="entermessage"){
         toast(data.message);
         socket.emit("joinRoom", data.roomid);
         history.push({
-          pathname: `/room/` + data.roomid,
-          state: { _id: data._id }
+          pathname: `/room/`+data.roomid,
+          state:{_id:data._id}
         });
       }
 
-      else if (data.type === "sendMember") {
+      else if(data.type==="sendMember"){
         toast(data.message);
         setCheckGroup(true);
       }
-      else if (data.type === "makeMeetingRoomMsg") {
+      else if(data.type==="makeMeetingRoomMsg"){
         console.log("여기깅")
         let temp = {
           title: data,
         }
         //data가 방제....
-        toast("'" + data.roomtitle + "'방에 초대되었습니다. >_<");
+        toast("'"+data.roomtitle+"'방에 초대되었습니다. >_<");
         setRoomtitle(data.roomtitle)
-
+          
       }
     })
 
-    return () => {
-      socket.removeListener('main')
+  return ()=>{
+    socket.removeListener('main')
 
-    }
-
+  }
+  
 
   }, []);
 
-  useEffect(() => {
+  useEffect(()=>{
 
-    if (roomtitle !== "") {
+    if(roomtitle!==""){
       goRoom()
     }
+    
+  },[roomtitle])
 
-  }, [roomtitle])
-
-  let goRoom = async () => {
+  let goRoom = async()=>{
     let temp = {
       title: roomtitle,
     }
 
-    console.log("roomtitle", roomtitle)
+    console.log("roomtitle",roomtitle)
     meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
-
+      
     try {
-      const { JoinInfo } = await fetchMeeting(temp);
+        const {JoinInfo} = await fetchMeeting(temp);
 
-      await meetingManager.join({
-        meetingInfo: JoinInfo.Meeting,
-        attendeeInfo: JoinInfo.Attendee
-      });
-      setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
-      console.log(JoinInfo)
-      history.push("/deviceSetup");
-
+        await meetingManager.join({
+          meetingInfo: JoinInfo.Meeting,
+          attendeeInfo: JoinInfo.Attendee
+        });
+        setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
+        console.log(JoinInfo)
+        history.push("/deviceSetup");
+      
     } catch (error) {
       console.log(error);
-    }
+    }  
   }
 
   let putSocketid = async (e) => {
@@ -169,21 +157,10 @@ const Main = () => {
     putSocketid();
   }, [socketId]);
 
-<<<<<<< HEAD
-  useEffect(() => {
-    if (popup !== "") {
-      setPopupmessage(!popupmessage)
-    }
 
-  }, [popup])
-=======
->>>>>>> 76102f820d2c42f9df7be323ea11d5b34280f360
 
   return (
     <div className="mainContainer">
-
-
-
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
         {sessionUser === "admin@ajou.ac.kr" ? (
@@ -193,7 +170,6 @@ const Main = () => {
         )}
         <Profile />
       </div>
-<<<<<<< HEAD
 
 
 
@@ -230,7 +206,7 @@ const Main = () => {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-evenly",
-              
+              marginTop:"10px",
               height:"70vh"
             }}
           >
@@ -239,21 +215,6 @@ const Main = () => {
         </div>
         <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
         <ToastContainer />
-=======
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-        }}
-      >
-        
-        
-        <div style={{}}>학교 랭킹 넣는 자리 </div>
-        <MeetingList currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
-        <Groups groupSocket={(e)=>groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-        
->>>>>>> 76102f820d2c42f9df7be323ea11d5b34280f360
       </div>
     </div>
   );
