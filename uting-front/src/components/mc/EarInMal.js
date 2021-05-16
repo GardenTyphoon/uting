@@ -18,13 +18,7 @@ const EarInMal = ({
   respondFormFlag,
   gameStartFlag,
   gameTurn,
-  ModalBody,
-  ModalHeader,
-  Modal,
-  ModalFooter,
 }) => {
-  const socket = socketio.connect("http://localhost:3001");
-
   //let sessionUser = sessionStorage.getItem("nickname");
   const [startButtonFade, setStartButtonFade] = useState(true); //시작버튼
   //const [content, setContent] = useState(false);
@@ -37,6 +31,8 @@ const EarInMal = ({
   const [flag, setFlag] = useState(false);
   const [gameStart, setGameStart] = useState(gameStartFlag);
   const [isAsked, setIsAsked] = useState(false);
+  const [questionedUser, setQuestionedUser] = useState();
+  const [participantsForTurn, setParticipantsForTurn] = useState(participants);
 
   let currentUser = sessionStorage.getItem("nickname");
   var data;
@@ -48,18 +44,22 @@ const EarInMal = ({
   }
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
-    setTurn(member[0]);
+    setTurn(member[rand]);
+    let tmp = participantsForTurn;
+    tmp.splice(rand, rand);
+    setParticipantsForTurn(tmp);
   };
 
   const start = () => {
     setStartButtonFade(false);
     setFlag(true);
-    determineTurn(participants);
+    determineTurn(participantsForTurn);
   };
 
   useEffect(() => {
     if (flag) {
       data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
+      const socket = socketio.connect("http://localhost:3001");
       socket.emit("gameStart", data);
     }
   }, [flag]);
@@ -96,6 +96,7 @@ const EarInMal = ({
       console.log(participants);
       console.log(participantsSocketIdList);
       data = { turn: turn, socketIdList: participantsSocketIdList };
+      const socket = socketio.connect("http://localhost:3001");
       socket.emit("notifyTurn", data);
       data = { turnSocketId: toSendSckId };
       socket.emit("notifyMember", data);
@@ -112,18 +113,20 @@ const EarInMal = ({
   }, [gameTurn]);
 
   useEffect(() => {
+    console.log("isNextTurn : " + isNextTurn);
     setIsNextTurn(nextTurnFlag);
   }, [nextTurnFlag]); //message받고나서
 
   const updateField = (e) => {
     let { name, value } = e.target;
+    console.log(value);
     setMsg(value);
   };
   const sendMsg = async (e) => {
     e.preventDefault();
-    //console.log("nextTurnUser : " + nextTurnUser);
+    console.log("nextTurnUser : " + questionedUser);
 
-    await matchMemSckId(nextTurnUser);
+    await matchMemSckId(questionedUser);
 
     data = {
       user: turn,
@@ -132,6 +135,7 @@ const EarInMal = ({
     };
     console.log("data : ");
     console.log(data);
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("sendMsg", data);
     console.log("sendMsg");
     alert("전송완료!");
@@ -140,16 +144,9 @@ const EarInMal = ({
     setIsAsked(true);
   };
 
-  const toggleMsgModalFlag = () => {
-    setMsgModalFlag(!msgModalFlag);
-  };
-
-  useEffect(() => {
-    setModal(true);
-  }, [msgModalFlag]);
   const choosenextTurnUser = (e) => {
     setMsgModalFlag(true);
-    setnextTurnUser(e.target.value);
+    setQuestionedUser(e.target.value);
   };
   const respond = async (e) => {
     data = {
@@ -157,6 +154,7 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       msg: e.target.value,
     };
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("respondMsg", data);
     alert("전송완료!");
     setIsNextTurn(false);
@@ -168,16 +166,14 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("sendMsg", data);
     alert("전송완료~!");
   };
 
   const giveTurn = () => {
     gameTurn = null;
-    let tmp = [];
-    tmp.push(participants[1]);
-    console.log("participants[1] : " + tmp);
-    determineTurn(tmp);
+    determineTurn(participantsForTurn);
 
     setIsAsked(false); //turn이었던 사람 state 초기화
     setMyTurnFlag(false);
@@ -186,15 +182,6 @@ const EarInMal = ({
 
   const ending = () => {};
 
-  const [modal, setModal] = useState(false);
-
-  const toogleERR = () => {
-    setModal(!modal);
-  };
-
-  useEffect(() => {
-    console.log("modal : " + modal);
-  }, [modal]);
   return (
     <div className="EarInMal">
       {startButtonFade ? (
@@ -219,7 +206,6 @@ const EarInMal = ({
                       </button>
                     ))}
                   </div>
-
                   <Button
                     outline
                     color="danger"

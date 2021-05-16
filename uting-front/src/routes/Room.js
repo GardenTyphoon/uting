@@ -127,15 +127,17 @@ const Room = () => {
         //setPopup(data.message)
         document.getElementById("audio").play();
       } else if (data.type === "notifyTurn") {
-        alert(`${data.turn}님의 차례입니다!`);
+        setNextTurnFlag(false); //에러 발생할수도 얘땜시
+        toast(`${data.turn}님의 차례입니다!`);
         setGameTurn(data.turn);
       } else if (data.type === "notifyMember") {
         setIsTurn(true);
       } else if (data.type === "receiveMsg") {
-        alert(`${data.mesg}`);
+        console.log("receiveMsg!!!");
+        toast(`${data.mesg}`);
         setNextTurnFlag(true);
       } else if (data.type === "gameStart") {
-        alert(data.message);
+        toast(data.message);
         setGameStartFlag(true);
       }
     });
@@ -154,6 +156,10 @@ const Room = () => {
   useEffect(() => {
     saveParticipantsSocketId();
   }, [participants]);
+
+  useEffect(() => {
+    console.log("nextTurnFlag : " + nextTurnFlag);
+  }, [nextTurnFlag]);
 
   return (
     <div
@@ -180,6 +186,7 @@ const Room = () => {
         participantsSocketIdList={participantsSocketId}
         participants={participants}
       ></Vote>
+      <ToastContainer />
     </div>
   );
 };
