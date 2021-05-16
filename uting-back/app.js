@@ -88,6 +88,7 @@ app.io.on("connection", function (socket) {
     let data = socket.id;
     app.io.to(socket.id).emit("currentSocketId", data);
   });
+
   socket.on("message", function (msg) {
     let data = "그룹에 초대 되었습니다 ^0^";
     app.io.to(msg.socketid).emit("sendMember", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
@@ -113,119 +114,128 @@ app.io.on("connection", function (socket) {
       }
     }
   });
-  socket.on("joinRoom", function (roomId) {
-    socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
-  });
-  socket.on("startVote", function (data) {
-    for (let i = 0; i < Object.keys(data.socketidList).length; i++) {
-      app.io.to(data.socketidList[i]).emit("startVote");
-    }
-    //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
-  });
-
-  socket.on("musicplay", function (msg) {
-    let data = {
-      src: msg.src,
-      socketIdList: msg.socketIdList,
-    };
-    console.log("각사용자소켓아이디~!~!~", msg.socketIdList);
-
-    if (Object.keys(msg.socketIdList).length > 1) {
-      for (let i = 0; i < Object.keys(msg.socketIdList).length; i++) {
-        app.io.to(msg.socketIdList[i]).emit("musicplay", data);
-        console.log(msg.socketIdList);
-      }
-    }
-  });
-
-  socket.on("musicpause", function (msg) {
-    if (Object.keys(msg.socketIdList).length > 1) {
-      for (let i = 0; i < Object.keys(msg.socketIdList).length; i++) {
-        app.io
-          .to(msg.socketIdList[i])
-          .emit("musicpause", "호스트가 음악을 정지 시켰습니다.");
-      }
-    }
-  });
-
-  socket.on("replay", function (msg) {
-    if (Object.keys(msg.socketIdList).length > 1) {
-      for (let i = 0; i < Object.keys(msg.socketIdList).length; i++) {
-        app.io
-          .to(msg.socketIdList[i])
-          .emit("replay", "호스트가 음악을 다시 재생 시켰습니다.");
-      }
-    }
-  });
-
   socket.on("makeMeetingRoomMsg", function (data) {
     let msg = "그룹 호스트가 미팅방을 생성하였습니다.";
     for (let i = 0; i < data.groupMembersSocketId.length; i++) {
       app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
     }
   });
-  socket.on("endMeetingAgree", function (data) {
-    for (
-      let i = 0;
-      i < Object.keys(data.participantsSocketIdList).length;
-      i++
-    ) {
-      app.io
-        .to(data.participantsSocketIdList[i])
-        .emit("endMeetingAgree", data.numOfAgree);
+
+  socket.on("currentSocketId", function () {
+    console.log("currentSocketId:" + socket.id);
+    let data = socket.id;
+    app.io.to(socket.id).emit("currentSocketId", data);
+  });
+  socket.on("joinRoom", function (roomId) {
+    socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
+  });
+
+  socket.on("startVote", function (msg) {
+    let data = {
+      type: "startVote",
+    };
+    for (let i = 0; i < Object.keys(msg.socketidList).length; i++) {
+      console.log(msg.socketidList[i]);
+      app.io.to(msg.socketidList[i]).emit("room", data);
+    }
+    //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
+  });
+
+  socket.on("musicplay", function (msg) {
+    let data = {
+      type: "musicplay",
+      src: msg.src,
+      socketIdList: msg.socketIdList,
+    };
+    if (Object.keys(msg.socketIdList).length > 1) {
+      for (let i = 0; i < Object.keys(msg.socketIdList).length; i++) {
+        app.io.to(msg.socketIdList[i]).emit("room", data);
+      }
     }
   });
-  socket.on("endMeetingDisagree", function (data) {
-    for (
-      let i = 0;
-      i < Object.keys(data.participantsSocketIdList).length;
-      i++
-    ) {
-      app.io
-        .to(data.participantsSocketIdList[i])
-        .emit("endMeetingDisagree", data.numOfDisagree);
+
+  socket.on("musicpause", function (msg) {
+    let data = {
+      type: "musicpause",
+      message: "호스트가 음악을 정지 시켰습니다.",
+    };
+    if (Object.keys(msg.socketIdList).length > 1) {
+      for (let i = 0; i < Object.keys(msg.socketIdList).length; i++) {
+        app.io.to(msg.socketIdList[i]).emit("room", data);
+      }
+    }
+  });
+
+  socket.on("replay", function (msg) {
+    let data = {
+      type: "replay",
+      message: "호스트가 음악을 다시 재생 시켰습니다.",
+    };
+    if (Object.keys(msg.socketIdList).length > 1) {
+      for (let i = 0; i < Object.keys(msg.socketIdList).length; i++) {
+        app.io.to(msg.socketIdList[i]).emit("room", data);
+      }
+    }
+  });
+  socket.on("endMeetingAgree", function (msg) {
+    let data = {
+      type: "endMeetingAgree",
+      numOfAgree: msg.numOfAgree,
+    };
+    for (let i = 0; i < Object.keys(msg.participantsSocketIdList).length; i++) {
+      app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
+    }
+  });
+  socket.on("endMeetingDisagree", function (msg) {
+    let data = {
+      type: "endMeetingDisagree",
+      numOfDisagree: msg.numOfDisagree,
+    };
+    for (let i = 0; i < Object.keys(msg.participantsSocketIdList).length; i++) {
+      app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
   });
   socket.on("disconnect", function (reason) {
     console.log("user disconnected : " + reason);
   });
-  socket.on("notifyTurn", (data) => {
-    console.log("Turn : ");
-    console.log(data);
-    for (let i = 0; i < data.socketIdList.length; i++) {
-      app.io.to(data.socketIdList[i]).emit("notifyTurn", data.turn);
+  socket.on("notifyTurn", (msg) => {
+    let data = { type: "notifyTurn", turn: msg.turn };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
     }
   });
-  socket.on("notifyMember", (data) => {
+  socket.on("notifyMember", (msg) => {
     console.log("notifyMember");
-    console.log(data);
-    if (data.turnSocketId != "undefined") {
-      app.io.to(data.turnSocketId).emit("notifyMember");
+    console.log(msg);
+    let data = { type: "notifyMember" };
+    if (msg.turnSocketId != "undefined") {
+      app.io.to(msg.turnSocketId).emit("room", data);
     }
   });
-  socket.on("sendMsg", (data) => {
+  socket.on("sendMsg", (msg) => {
     console.log("sendMsg : ");
-    console.log(data);
-    let res = { msg: data.msg, user: data.user };
-    app.io.to(data.turnSocketId).emit("receiveMsg", res);
+    console.log(msg);
+
+    let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
+    app.io.to(msg.turnSocketId).emit("room", data);
   });
-  socket.on("respondMsg", (data) => {
+  socket.on("respondMsg", (msg) => {
     console.log("respondMsg : ");
-    console.log(data);
-    let res = { msg: data.msg, user: data.user };
-    for (let i = 0; i < data.socketIdList.length; i++) {
-      app.io.to(data.socketIdList[i]).emit("receiveMsg", res);
+    console.log(msg);
+    let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
     }
   });
 
-  socket.on("gameStart", function (req) {
+  socket.on("gameStart", function (msg) {
     let data = {
-      message: `호스트에의해 ${req.gameName}이 시작합니다 ^_^`,
+      type: "gameStart",
+      message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
     };
-    for (let i = 0; i < req.socketIdList.length; i++) {
-      app.io.to(req.socketIdList[i]).emit("gameStart", data);
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
     }
   });
 });
-
 module.exports = app;

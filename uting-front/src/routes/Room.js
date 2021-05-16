@@ -20,14 +20,13 @@ import socketio from "socket.io-client";
 import ReactAudioPlayer from "react-audio-player";
 import MeetingRoom from "../components/meeting/MeetingRoom";
 import { useAppState } from "../providers/AppStateProvider";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Room = () => {
   const voteRef = useRef();
   const location = useLocation();
   const history = useHistory();
-  const socket = socketio.connect("http://localhost:3001", {
-    transports: ["websocket"],
-  });
 
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
@@ -40,7 +39,7 @@ const Room = () => {
   const [gameStartFlag, setGameStartFlag] = useState(false);
   const [gameTurn, setGameTurn] = useState();
 
-  const { meetingId: appMeetingId } = useAppState();
+  const { meetingId } = useAppState();
 
   let putSocketid = async (e) => {
     let data = {
@@ -75,6 +74,10 @@ const Room = () => {
 
   const getparticipants = async () => {
     const _id = location.state._id;
+    // location.state를 쓰려면 순차적으로 넘어갈때만 가능
+    // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
+    // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
+    //const _id = meetingId;
     const res = await axios.post(
       "http://localhost:3001/meetings/getparticipants",
       { _id: _id }
@@ -84,7 +87,7 @@ const Room = () => {
   };
 
   useEffect(() => {
-    //window.location.reload();
+    const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -92,55 +95,56 @@ const Room = () => {
     socket.on("clientid", function async(id) {
       setSocketId(id);
     });
+    socket.on("room", function (data) {
+      console.log("dadadad");
+      console.log(data);
+      if (data.type === "startVote") {
+        console.log("Room - startVote");
+        voteRef.current.onStartVote();
+      } else if (data.type === "endMeetingAgree") {
+        if (voteRef.current != null) {
+          console.log("Room - endMeetingAgree");
+          voteRef.current.onEndMeetingAgree(data.numOfAgree);
+        }
+      } else if (data.type === "endMeetingDisagree") {
+        if (voteRef.current != null) {
+          console.log("Room - endMeetingDisagree");
+          voteRef.current.onEndMeetingDisagree(data.numOfDisagree);
+        }
+      } else if (data.type === "musicplay") {
+        toast("호스트가 음악을 설정 하였습니다.");
+        //alert("호스트가 음악을 설정 하였습니다.")
+        //setPopup("호스트가 음악을 설정 하였습니다.")
+        setMusicsrc(data.src);
+      } else if (data.type === "musicpause") {
+        toast(data.message);
+        //alert(data.message)
+        //setPopup(data.message)
+        document.getElementById("audio").pause();
+      } else if (data.type === "replay") {
+        toast(data.message);
+        //alert(data.message)
+        //setPopup(data.message)
+        document.getElementById("audio").play();
+      } else if (data.type === "notifyTurn") {
+        alert(`${data.turn}님의 차례입니다!`);
+        setGameTurn(data.turn);
+      } else if (data.type === "notifyMember") {
+        setIsTurn(true);
+      } else if (data.type === "receiveMsg") {
+        alert(`${data.mesg}`);
+        setNextTurnFlag(true);
+      } else if (data.type === "gameStart") {
+        alert(data.message);
+        setGameStartFlag(true);
+      }
+    });
+
+    return () => {
+      socket.removeListener("room");
+    };
   }, []);
 
-  socket.on("startVote", function (data) {
-    console.log("Room - startVote");
-    voteRef.current.onStartVote();
-  });
-  socket.on("endMeetingAgree", function (data) {
-    if (voteRef.current != null) {
-      console.log("Room - endMeetingAgree");
-      voteRef.current.onEndMeetingAgree(data);
-    }
-  });
-  socket.on("endMeetingDisagree", function (data) {
-    if (voteRef.current != null) {
-      console.log("Room - endMeetingDisagree");
-      voteRef.current.onEndMeetingDisagree(data);
-    }
-  });
-
-  socket.on("musicplay", function (data) {
-    alert("호스트가 음악을 설정 하였습니다.");
-    setMusicsrc(data.src);
-  });
-
-  socket.on("musicpause", function (data) {
-    //alert(data)
-    document.getElementById("audio").pause();
-  });
-
-  socket.on("replay", function (data) {
-    //alert(data)
-    document.getElementById("audio").play();
-  });
-
-  socket.on("notifyTurn", function (turn) {
-    alert(`${turn}님의 차례입니다!`);
-    setGameTurn(turn);
-  });
-  socket.on("notifyMember", function (turn) {
-    setIsTurn(true);
-  });
-  socket.on("receiveMsg", function (data) {
-    alert(`${data.msg}`);
-    setNextTurnFlag(true);
-  });
-  socket.on("gameStart", function (data) {
-    alert(data.message);
-    setGameStartFlag(true);
-  });
   useEffect(() => {
     setTimeout(() => {
       getparticipants();

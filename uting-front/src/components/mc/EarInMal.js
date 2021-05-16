@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, Fragment } from "react";
 import { Route, Link, Switch, Router } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 import socketio, { Socket } from "socket.io-client";
-
+import { Button } from "reactstrap";
+import "./EarInMal.css";
+import { RealtimeVolumeIndicator } from "amazon-chime-sdk-js";
 //일단 필요한게 미팅원 전체의 socketid가 다필요하고 누른애랑 그 키값으로 가져와야할듯
 //키값으로 가져오면 해당애 검사 띡해서 socketㅑ
 
@@ -16,6 +18,10 @@ const EarInMal = ({
   respondFormFlag,
   gameStartFlag,
   gameTurn,
+  ModalBody,
+  ModalHeader,
+  Modal,
+  ModalFooter,
 }) => {
   const socket = socketio.connect("http://localhost:3001");
 
@@ -35,6 +41,7 @@ const EarInMal = ({
   let currentUser = sessionStorage.getItem("nickname");
   var data;
   let toSendSckId;
+
   function getRandomInt(min, max) {
     //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
@@ -68,6 +75,7 @@ const EarInMal = ({
     let tmp = [];
     tmp.push(nickname);
     console.log("matchMem -ing ");
+    console.log("tmp : " + tmp);
     const res = await axios.post("http://localhost:3001/users/usersSocketId", {
       users: tmp,
     });
@@ -78,8 +86,12 @@ const EarInMal = ({
   };
 
   useEffect(async () => {
-    if (turn && !gameTurn) {
+    console.log("turn & gameTurn : " + turn + " " + gameTurn);
+    if (turn) {
+      //(turn && !gameTurn)
       //게임 스타트를 직접 누른 경우에만 실행
+      console.log("뷁 ");
+
       await matchMemSckId(turn);
       console.log(participants);
       console.log(participantsSocketIdList);
@@ -94,7 +106,9 @@ const EarInMal = ({
     setMyTurnFlag(isTurn);
   }, [isTurn]);
   useEffect(() => {
-    setTurn(gameTurn);
+    if (gameTurn) {
+      setTurn(gameTurn);
+    }
   }, [gameTurn]);
 
   useEffect(() => {
@@ -122,9 +136,17 @@ const EarInMal = ({
     console.log("sendMsg");
     alert("전송완료!");
     //setMyTurnFlag(false);  <<이거 답변받고 false로 해야된다!
-    setMsgModalFlag(false);
-    //setIsAsked(true);
+    //toggleMsgModalFlag();
+    setIsAsked(true);
   };
+
+  const toggleMsgModalFlag = () => {
+    setMsgModalFlag(!msgModalFlag);
+  };
+
+  useEffect(() => {
+    setModal(true);
+  }, [msgModalFlag]);
   const choosenextTurnUser = (e) => {
     setMsgModalFlag(true);
     setnextTurnUser(e.target.value);
@@ -146,58 +168,107 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    //socket.emit("sendMsg", data);
+    socket.emit("sendMsg", data);
     alert("전송완료~!");
   };
 
+  const giveTurn = () => {
+    gameTurn = null;
+    let tmp = [];
+    tmp.push(participants[1]);
+    console.log("participants[1] : " + tmp);
+    determineTurn(tmp);
+
+    setIsAsked(false); //turn이었던 사람 state 초기화
+    setMyTurnFlag(false);
+    setIsNextTurn(false);
+  };
+
+  const ending = () => {};
+
+  const [modal, setModal] = useState(false);
+
+  const toogleERR = () => {
+    setModal(!modal);
+  };
+
+  useEffect(() => {
+    console.log("modal : " + modal);
+  }, [modal]);
   return (
-    <div>
+    <div className="EarInMal">
       {startButtonFade ? (
-        <button onClick={start}>귓속말게임시작</button>
+        <Button outline color="secondary" style={{ border: 0 }} onClick={start}>
+          귓속말게임시작
+        </Button>
       ) : (
         <div>
           {myturnFlag ? (
             <div>
               {isAsked ? (
-                <div>
-                  질문 알려주기
-                  {participants.map((member) => (
-                    <button
-                      key={member.index}
-                      value={member}
-                      onClick={notifyQuestion}
-                    >
-                      {member}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div>
-                  질문하기
-                  {participants.map((member, index) => (
-                    <button
-                      key={index}
-                      value={member}
-                      onClick={choosenextTurnUser}
-                    >
-                      {member}
-                    </button>
-                  ))}
-                  {msgModalFlag ? (
-                    <form onSubmit={sendMsg}>
-                      <label>
-                        질문:
-                        <input name="msg" onChange={(e) => updateField(e)} />
-                      </label>
-                      <button>Submit</button>
-                    </form>
-                  ) : (
-                    <div></div>
-                  )}
-                </div>
-              )}
+                <>
+                  <h5 style={{ fontSize: "small" }}>질문 알려주기</h5>
+                  <div>
+                    {participants.map((member) => (
+                      <button
+                        key={member.index}
+                        value={member}
+                        onClick={notifyQuestion}
+                      >
+                        {member}
+                      </button>
+                    ))}
+                  </div>
 
-              <button> 게임 끝내기 </button>
+                  <Button
+                    outline
+                    color="danger"
+                    style={{ border: 0, float: "left", padding: "5px" }}
+                    onClick={giveTurn}
+                  >
+                    턴 넘기기
+                  </Button>
+                  <Button
+                    outline
+                    color="danger"
+                    style={{ border: 0, float: "right", padding: "5px" }}
+                    onClick={ending}
+                  >
+                    게임 끝
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <h5 style={{ fontSize: "medium" }}>질문할 사용자 선택</h5>
+                  <div>
+                    {participants.map((member, index) => (
+                      <Button
+                        outline
+                        color="secondary"
+                        style={{ border: 0 }}
+                        key={index}
+                        value={member}
+                        onClick={choosenextTurnUser}
+                      >
+                        {member}
+                      </Button>
+                    ))}
+
+                    {msgModalFlag ? (
+                      <form onSubmit={sendMsg}>
+                        <label>
+                          질문:
+                          <input name="msg" onChange={(e) => updateField(e)} />
+                        </label>
+                        <button>Submit</button>
+                      </form>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </>
+              )}
+              <br />
             </div>
           ) : (
             <div>
@@ -212,7 +283,11 @@ const EarInMal = ({
                 </div>
               ) : (
                 <div>
-                  <div>Turn : {turn}님</div> 차례를 기다리세요~
+                  <div style={{ fontSize: "medium", float: "left" }}>
+                    Turn : {turn}님
+                  </div>
+                  <br />
+                  차례를 기다리세요
                 </div>
               )}
             </div>

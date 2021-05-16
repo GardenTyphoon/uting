@@ -17,17 +17,24 @@ import {
   ModalBody,
   ModalHeader,
   Fade,
+  ListGroup,
+  ListGroupItem,
+  ListGroupItemHeading,
+  Button,
+  ButtonGroup,
+  ModalFooter,
 } from "reactstrap";
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
+import { alignItems, paddingLeft } from "styled-system";
 const Box = styled.div`
-  border: 1.5px solid rgb(221, 221, 221);
+  border: 2px solid rgb(255, 255, 255);
   border-radius: 7px;
   margin-bottom: 10px;
   padding-left: 10px;
   padding-right: 10px;
   padding-bottom: 10px;
-  background-color: white;
+  background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
   height: 200px;
 `;
@@ -143,8 +150,6 @@ const McBot = ({
     }
     if (e === 4 && contentFade === false) {
       //실시간게임
-
-      setContent("마피아할거임~~~~~~~~~~~~?");
     }
   };
 
@@ -156,8 +161,31 @@ const McBot = ({
     }
   }, [gameStartFlag]);
 
+  const [modal, setModal] = useState(false);
+  const toogleERR = () => setModal(!modal);
+
   return (
     <div>
+      <Modal isOpen={modal} toggle={toogleERR}>
+        <ModalHeader toggle={toogleERR}>Modal title</ModalHeader>
+        <ModalBody>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toogleERR}>
+            Do Something
+          </Button>{" "}
+          <Button color="secondary" onClick={toogleERR}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
       <Dropdown isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle
           caret
@@ -187,11 +215,13 @@ const McBot = ({
             style={{ width: "12%" }}
           ></img>
           {number === 1 ? (
-            <img
-              onClick={(e) => getGame(e)}
-              src={renewImg}
-              style={{ width: "12%", marginLeft: "130px" }}
-            ></img>
+            <>
+              <img
+                onClick={(e) => getGame(e)}
+                src={renewImg}
+                style={{ width: "12%", marginLeft: "130px" }}
+              ></img>
+            </>
           ) : number === 2 ? (
             <img
               onClick={(e) => getTopic(e)}
@@ -200,6 +230,9 @@ const McBot = ({
             ></img>
           ) : number === 3 ? (
             <div>
+              <Button color="danger" onClick={toogleERR}>
+                asdasd
+              </Button>
               <div>
                 <HashTag onClick={(e) => getMusicName(1)}>#신남</HashTag>
                 <HashTag onClick={(e) => getMusicName(2)}>#설렘</HashTag>
@@ -215,16 +248,48 @@ const McBot = ({
               </div>
             </div>
           ) : number === 4 ? (
-            <div>
-              <EarInMal
-                participantsSocketIdList={participantsSocketIdList}
-                currentSocketId={currentSocketId}
-                participants={participants}
-                isTurn={isTurn}
-                nextTurnFlag={nextTurnFlag}
-                gameStartFlag={gameStart}
-                gameTurn={gameTurn}
-              />
+            <div style={{ alignItems: "center" }}>
+              <ButtonGroup vertical>
+                <EarInMal
+                  participantsSocketIdList={participantsSocketIdList}
+                  currentSocketId={currentSocketId}
+                  participants={participants}
+                  isTurn={isTurn}
+                  nextTurnFlag={nextTurnFlag}
+                  gameStartFlag={gameStart}
+                  gameTurn={gameTurn}
+                />
+                {!gameStart ? (
+                  <>
+                    <Button
+                      outline
+                      color="secondary"
+                      disabled
+                      style={{ border: 0 }}
+                    >
+                      왕게임
+                    </Button>
+                    <Button
+                      outline
+                      color="secondary"
+                      disabled
+                      style={{ border: 0 }}
+                    >
+                      라이어게임
+                    </Button>
+                    <Button
+                      outline
+                      color="secondary"
+                      disabled
+                      style={{ border: 0 }}
+                    >
+                      ...
+                    </Button>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </ButtonGroup>
             </div>
           ) : (
             ""
