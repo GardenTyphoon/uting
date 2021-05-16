@@ -96,29 +96,28 @@ router.post('/', function(req, res,next){
 
 // POST CHIME one meeting
 router.post('/join', async function(req, res, next){
-  const temp_title = await Meeting.findOne({title:req.body.title}, function(err){
-    if(err){
-      const meeting = new Meeting({
-        title:req.body.title,
-        maxNum:req.body.maxNum,
-        status:req.body.status,
-        avgManner:req.body.avgManner,
-        avgAge:req.body.avgAge,
-        users:req.body.users,
-        numOfWoman:req.body.numOfWoman,
-        numOfMan : req.body.numOfMan
-      });
-      meeting.save();
-    }
-  });
-  console.log(temp_title);
+  // const temp_title = await Meeting.findOne({title:req.body.title});
+  // console.log(temp_title);
   // console.log(req.body);
   // const meeting = new Meeting({
   //   title:req.body.title,
   //   num:req.body.num,
   //   status:req.body.status
   // });
-
+  const temp_room = await Meeting.findOne({title:req.body.title});
+  console.log('what meetingroom data')
+  console.log(temp_room)
+  const meeting = new Meeting({
+    title:req.body.title,
+    maxNum:req.body.maxNum,
+    status:req.body.status,
+    avgManner:req.body.avgManner,
+    avgAge:req.body.avgAge,
+    users:req.body.users,
+    numOfWoman:req.body.numOfWoman,
+    numOfMan : req.body.numOfMan
+  });
+  meeting.save();
 
   const title = req.body.title;
   const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기 임시로 이렇게 넣어 놓은 것임.
@@ -200,18 +199,17 @@ router.put('/:id', async function(req,res,next){
 })
 
 // DELETE one meeting
-router.delete('/end?', async function(req,res,next){
-  const meeting = await Meeting.deleteOne({_id : req.params.id});
+router.post('/end', async function(req,res,next){
+  const title = req.body.meetingId;
+  const meeting = await Meeting.deleteOne({title : title});
   //res.json(meeting);
 
-  const title = req.query.title;
-  
-    await chime.deleteMeeting({
-      MeetingId: meetingCache[title].Meeting.MeetingId
-    }).promise();
-    res.statusCode = 200;
-    res.end();
-    // res.send("The meeting is terminated successful");
+  await chime.deleteMeeting({
+    MeetingId: meetingCache[title].Meeting.MeetingId
+  }).promise();
+  res.statusCode = 200;
+  res.end();
+  // res.send("The meeting is terminated successful");
 });
 
 
