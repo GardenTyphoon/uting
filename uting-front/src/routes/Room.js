@@ -36,7 +36,7 @@ const Room = () => {
       "http://localhost:3001/users/savesocketid",
       data
     );
-    setSocketFlag(!socketFlag)
+    setSocketFlag(true)
   };
 
   useEffect(() => {
@@ -118,9 +118,12 @@ const Room = () => {
   }
   }, []);
   useEffect(()=>{
-    setTimeout(()=>{
-      getparticipants()
-    },5000)
+    if(socketFlag===true){
+      setTimeout(()=>{
+        getparticipants()
+      },5000)
+    }
+    
     
   },[socketFlag])
   
