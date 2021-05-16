@@ -124,7 +124,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             .get('http://localhost:3001/meetings')
             .then(({ data }) => setView(data))
             .catch((err) => { });
-        }     
+        }
     }, [checkState])
 
     return (//tr map 한다음에 key넣어주기
