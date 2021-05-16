@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 
 const CollegeRankingContainer = styled.div`
-margin-top:10px;
+    margin-top:10px;
   background : white;
   
   display:flex;
@@ -16,7 +16,7 @@ const CollegeContainer = styled.div`
     color:black;
     font-family: NanumSquare_acR;
     border-radius:10px;
-    width:13vw;
+    width:170px;
     min-width:13vw;
     padding:5px;
     margin:5px;
@@ -26,16 +26,16 @@ const CollegeContainer = styled.div`
 `;
 const CollegeRanking = () => {
     const collegeTop10 = ["아주대학교", "서울대학교", "서강대학교", "국민대학교", "연세대학교", "고려대학교", "한양대학교", "건국대학교", "동국대학교", "홍익대학교"];
-    const rankingColor = ["#FF9D93", "#FFADA4","#FBBCB5","FFFEFE"]
+    const rankingColor = ["#FF9D93", "#FFADA4", "#FBBCB5", "FFFEFE"]
     return (
         <CollegeRankingContainer>
-        {collegeTop10.map((college, index)=>
-            
-             <CollegeContainer style={{backgroundColor:rankingColor[index]}}>
-             {index+1}.{college}
-             </CollegeContainer>
-        )}
-            
+            {collegeTop10.map((college, index) =>
+
+                <CollegeContainer style={{ backgroundColor: rankingColor[index] }}>
+                    {index + 1}.{college}
+                </CollegeContainer>
+            )}
+
         </CollegeRankingContainer>
     )
 
