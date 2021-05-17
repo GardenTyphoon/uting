@@ -45,7 +45,7 @@ const EarInMal = ({
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-    let tmp = participantsForTurn;
+    let tmp = participantsForTurn.slice();
     tmp.splice(rand, rand);
     setParticipantsForTurn(tmp);
   };
@@ -113,8 +113,12 @@ const EarInMal = ({
   }, [gameTurn]);
 
   useEffect(() => {
-    console.log("isNextTurn : " + isNextTurn);
+    console.log("participatns : " + participants);
+  }, [participants]);
+
+  useEffect(() => {
     setIsNextTurn(nextTurnFlag);
+    console.log("isNextTurn : " + isNextTurn);
   }, [nextTurnFlag]); //message받고나서
 
   const updateField = (e) => {
