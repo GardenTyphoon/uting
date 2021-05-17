@@ -41,6 +41,7 @@ const Room = () => {
   const [nextTurnFlag, setNextTurnFlag] = useState(false);
   const [gameStartFlag, setGameStartFlag] = useState(false);
   const [gameTurn, setGameTurn] = useState();
+  const [question, setQuestion] = useState();
 
   const { meetingId } = useAppState();
 
@@ -150,7 +151,12 @@ const Room = () => {
       } else if (data.type === "receiveMsg") {
         console.log("receiveMsg!!!");
         toast(`${data.mesg}`);
+        //setNextTurnFlag(true);
+      } else if (data.type === "receiveQues") {
+        console.log("receiveQues!!!");
+        toast(`${data.mesg}`);
         setNextTurnFlag(true);
+        setQuestion(data.mesg);
       } else if (data.type === "gameStart") {
         alert(data.message);
         setGameStartFlag(true);
@@ -204,6 +210,7 @@ const Room = () => {
         nextTurnFlag={nextTurnFlag}
         gameStartFlag={gameStartFlag}
         gameTurn={gameTurn}
+        question={question}
       ></McBot>
       <Vote
         ref={voteRef}

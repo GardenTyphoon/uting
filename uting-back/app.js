@@ -260,6 +260,13 @@ app.io.on("connection", function (socket) {
     let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
     app.io.to(msg.turnSocketId).emit("room", data);
   });
+  socket.on("sendQues", function (msg) {
+    console.log("sendQue : ");
+    console.log(msg);
+
+    let data = { type: "receiveQues", mesg: msg.msg, user: msg.user };
+    app.io.to(msg.turnSocketId).emit("room", data);
+  });
   socket.on("respondMsg", function (msg) {
     console.log("respondMsg : ");
     console.log(msg);

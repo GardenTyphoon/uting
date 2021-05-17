@@ -62,6 +62,7 @@ const McBot = ({
   nextTurnFlag,
   gameStartFlag,
   gameTurn,
+  question,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
@@ -241,6 +242,7 @@ const McBot = ({
                   nextTurnFlag={nextTurnFlag}
                   gameStartFlag={gameStart}
                   gameTurn={gameTurn}
+                  question={question}
                 />
                 {!gameStart ? (
                   <>
