@@ -56,7 +56,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     useImperativeHandle(ref, () => ({
         onStartVote(){
-            alert("미팅 종료를 위한 투표를 시작합니다.");
+            alert("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
             setStartVote(true);
         },
         onEndMeetingAgree(data){
