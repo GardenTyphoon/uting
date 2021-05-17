@@ -46,6 +46,13 @@ function mannerCredit(avgManner) {
         return "F";
     }
 }
+
+function birthToAge(birth) {
+
+    let year = birth.slice(0, 4);
+    return 2021 - Number(year) + 1;
+}
+
 export default function MeetingList({ checkState, groupSocketList, currentsocketId }) {
 
     const history = useHistory();
@@ -59,11 +66,84 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
     const attendRoomByID = async (room) => {
-        getGroupInfo()
+
         setRoomObj(room)
         setFlag(true)
-        //현재 그룹원 모두에게 방 타이틀로 이동하는 메시지 띄우고 리다이렉트시키기
+        
+        let avgManner = room.sumManner;
+        let avgAge = 0;
+        let nowOfWoman = 0;
+        let nowOfMan = 0;
+
+        groupMembersInfo = []
+        groupMembersSocketId = []
+
+        for(let i = 0; i < groupMember.length; i++){
+            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
+            groupMembersInfo.push({
+                "nickname": userInfo.data.nickname,
+                "introduce": userInfo.data.introduce,
+                "mannerCredit": userInfo.data.mannerCredit,
+                "age": birthToAge(userInfo.data.birth)
+            });
+            if (userInfo.data.nickname != sessionUser) {
+                groupMembersSocketId.push(userInfo.data.socketid);
+            }
+            avgManner += userInfo.data.mannerCredit;
+            avgAge += birthToAge(userInfo.data.birth);
+            if (userInfo.data.gender === "woman") nowOfWoman += 1;
+            
+            else nowOfMan += 1;
+        }
+
+        avgManner /= groupMember.length;
+        avgAge /= groupMember.length;
+        avgAge = parseInt(avgAge);
+
+
+        new_numOfMan = numOfMan + room.numOfMan;
+        new_numOfWoman = numOfWoman + room.numOfWoman;
+
+        if((new_numOfMan + new_numOfWoman) === room.maxNum) new_status = "진행";
+
+        avgManner 
+
+        let data = {
+            title: room.title,
+            maxNum: Number(room.num),
+            status: new_status,
+            avgManner: avgManner.toFixed(3),
+            avgAge: avgAge,
+            numOfWoman: nowOfWoman,
+            numOfMan: nowOfMan
+
+        }
+
+        data.users = groupMembersInfo;
+
+        try {
+             const { JoinInfo } = await fetchMeeting(data);
+            await meetingManager.join({
+                meetingInfo: JoinInfo.Meeting,
+                attendeeInfo: JoinInfo.Attendee
+            });
+
+            setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
+            if(roomTitle!==undefined){
+                const socket = socketio.connect('http://localhost:3001');
+                console.log("groupMembersSocketId",groupMembersSocketId)
+                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+            }
+
+            history.push('/deviceSetup');
+        } catch (error) {
+            console.log(error);
+        }
+
     };
+
+
+
 
     let saveMeetingUsers = async (e) => {
         let data = {
@@ -115,6 +195,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             .get('http://localhost:3001/meetings')
             .then(({ data }) => setView(data))
             .catch((err) => { });
+        getGroupInfo()
     }, []);
 
 

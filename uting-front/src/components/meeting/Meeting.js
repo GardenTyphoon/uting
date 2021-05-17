@@ -84,6 +84,8 @@ const Meeting = ({ checkFunc }) => {
             //내가 속한 그룹의 그룹원들 닉네임 받아오기
             //평균 나이, 평균 학점, 현재 남녀 수 구하기
             let avgManner = 0;
+            let sumManner = 0;
+            let sumAge = 0;
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
@@ -107,7 +109,8 @@ const Meeting = ({ checkFunc }) => {
 
 
             }
-
+            sumManner = avgManner;
+            sumAge = avgAge;
             avgManner /= groupMembers.data.length;
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
@@ -123,7 +126,9 @@ const Meeting = ({ checkFunc }) => {
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
                 numOfWoman: nowOfWoman,
-                numOfMan: nowOfMan
+                numOfMan: nowOfMan,
+                sumManner: sumManner,
+                sumAge: sumAge,
             };
             data.users = groupMembersInfo;
 
