@@ -64,7 +64,7 @@ const Profile = () => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        width: "15%",
+        width: "180px"
       }}
     >
       <button
@@ -91,20 +91,19 @@ const Profile = () => {
           />
         )}
       </button>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <div style={{ width: "100%", marginLeft: "15%", color: "#896E6E" }}>
+      <div style={{ display: "flex", flexDirection: "column", width:"90px" }}>
+        <div style={{  marginLeft: "15%", color: "#896E6E", fontWeight:"550" }}>
           {ProfileInfo.nickname}
         </div>
         <div
           style={{
-            width: "100%",
             marginLeft: "8%",
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
           }}
         >
-          <img style={{ width: "30%", marginRight: "3%" }} src={ucoin}></img>
+          <img style={{ width: "30px", marginRight: "3%" }} src={ucoin}></img>
           <div style={{ color: "#896E6E" }}>{ProfileInfo.ucoin}</div>
           <button
             onClick={coinWindow}
@@ -113,20 +112,20 @@ const Profile = () => {
               borderRadius: "10px",
               padding: "5px",
               fontSize: "small",
-              marginLeft: "1%",
+              marginLeft:"5px"
             }}
           >
             충전
           </button>
         </div>
       </div>
-      <Modal isOpen={toggleprofile}>
-        <ModalBody isOpen={toggleprofile} className="profileModal">
+      <Modal isOpen={toggleprofile} >
+        <ModalBody isOpen={toggleprofile} style={{background:"#FFB4AC"}} >
           <Row>
             <button
               onClick={(e) => {
                 toggleProfileBtn(e);
-              }}
+              }}  
               style={{
                 background: "transparent",
                 border: "none",

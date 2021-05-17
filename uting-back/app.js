@@ -74,6 +74,28 @@ app.io = require("socket.io")();
 //   }
 // });
 
+/*
+Room.js
+connect
+clientid
+startVote
+endMeetingAgree
+endMeetingDisagree
+musicplay
+musicpause
+replay
+*/
+
+/*
+Main.js
+connect
+clientid
+premessage
+entermessage
+sendMember
+makeMeetingRoomMsg
+*/
+
 app.io.on("connection", function (socket) {
   //console.log("Connected !");
   socket.on("login", function (data) {
@@ -90,6 +112,23 @@ app.io.on("connection", function (socket) {
   });
 
   socket.on("message", function (msg) {
+    let data = {
+      type: "sendMember",
+      message: "그룹에 초대 되었습니다 ^0^",
+    };
+    app.io.to(msg.socketid).emit("main", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+  });
+  socket.on("premessage", function (msg) {
+    let data = {
+      type: "premessage",
+      message: "그룹에 다른 사용자가 추가되었습니다 ^0^",
+    };
+    for (let i = 0; i < msg.socketidList.length; i++) {
+      app.io.to(msg.socketidList[i]).emit("main", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+    }
+  });
+
+  socket.on("message", function (msg) {
     let data = "그룹에 초대 되었습니다 ^0^";
     app.io.to(msg.socketid).emit("sendMember", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
   });
@@ -103,6 +142,7 @@ app.io.on("connection", function (socket) {
   socket.on("entermessage", function (msg) {
     console.log(msg._id);
     let data = {
+      type: "entermessage",
       message: "호스트에의해 선택한 미팅방에 입장합니다 ^_^",
       roomid: msg.roomid,
       _id: msg._id,
@@ -110,14 +150,17 @@ app.io.on("connection", function (socket) {
 
     if (Object.keys(msg.socketidList.length) !== 1) {
       for (let i = 0; i < Object.keys(msg.socketidList).length; i++) {
-        app.io.to(msg.socketidList[i]).emit("entermessage", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
+        app.io.to(msg.socketidList[i]).emit("main", data); // 진짜 msg.socketid 를 가진 사용자에게 message를 보내는것.
       }
     }
   });
-  socket.on("makeMeetingRoomMsg", function (data) {
-    let msg = "그룹 호스트가 미팅방을 생성하였습니다.";
-    for (let i = 0; i < data.groupMembersSocketId.length; i++) {
-      app.io.to(data.groupMembersSocketId[i]).emit("makeMeetingRoomMsg", msg);
+  socket.on("makeMeetingRoomMsg", function (msg) {
+    let data = {
+      type: "makeMeetingRoomMsg",
+      roomtitle: msg.roomtitle,
+    };
+    for (let i = 0; i < msg.groupMembersSocketId.length; i++) {
+      app.io.to(msg.groupMembersSocketId[i]).emit("main", data);
     }
   });
 
@@ -126,10 +169,10 @@ app.io.on("connection", function (socket) {
     let data = socket.id;
     app.io.to(socket.id).emit("currentSocketId", data);
   });
+
   socket.on("joinRoom", function (roomId) {
     socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
   });
-
   socket.on("startVote", function (msg) {
     let data = {
       type: "startVote",
@@ -138,7 +181,6 @@ app.io.on("connection", function (socket) {
       console.log(msg.socketidList[i]);
       app.io.to(msg.socketidList[i]).emit("room", data);
     }
-    //app.io.in('room').emit("startVote"); //'room'부분 미팅방 방제로 수정 예정
   });
 
   socket.on("musicplay", function (msg) {
@@ -177,6 +219,7 @@ app.io.on("connection", function (socket) {
       }
     }
   });
+
   socket.on("endMeetingAgree", function (msg) {
     let data = {
       type: "endMeetingAgree",
@@ -194,48 +237,46 @@ app.io.on("connection", function (socket) {
     for (let i = 0; i < Object.keys(msg.participantsSocketIdList).length; i++) {
       app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
-  });
-  socket.on("disconnect", function (reason) {
-    console.log("user disconnected : " + reason);
-  });
-  socket.on("notifyTurn", (msg) => {
-    let data = { type: "notifyTurn", turn: msg.turn };
-    for (let i = 0; i < msg.socketIdList.length; i++) {
-      app.io.to(msg.socketIdList[i]).emit("room", data);
-    }
-  });
-  socket.on("notifyMember", (msg) => {
-    console.log("notifyMember");
-    console.log(msg);
-    let data = { type: "notifyMember" };
-    if (msg.turnSocketId != "undefined") {
+    socket.on("notifyTurn", (msg) => {
+      let data = { type: "notifyTurn", turn: msg.turn };
+      for (let i = 0; i < msg.socketIdList.length; i++) {
+        app.io.to(msg.socketIdList[i]).emit("room", data);
+      }
+    });
+    socket.on("notifyMember", (msg) => {
+      console.log("notifyMember");
+      console.log(msg);
+      let data = { type: "notifyMember" };
+      if (msg.turnSocketId != "undefined") {
+        app.io.to(msg.turnSocketId).emit("room", data);
+      }
+    });
+    socket.on("sendMsg", (msg) => {
+      console.log("sendMsg : ");
+      console.log(msg);
+
+      let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
       app.io.to(msg.turnSocketId).emit("room", data);
-    }
-  });
-  socket.on("sendMsg", (msg) => {
-    console.log("sendMsg : ");
-    console.log(msg);
+    });
+    socket.on("respondMsg", (msg) => {
+      console.log("respondMsg : ");
+      console.log(msg);
+      let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
+      for (let i = 0; i < msg.socketIdList.length; i++) {
+        app.io.to(msg.socketIdList[i]).emit("room", data);
+      }
+    });
 
-    let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
-    app.io.to(msg.turnSocketId).emit("room", data);
-  });
-  socket.on("respondMsg", (msg) => {
-    console.log("respondMsg : ");
-    console.log(msg);
-    let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
-    for (let i = 0; i < msg.socketIdList.length; i++) {
-      app.io.to(msg.socketIdList[i]).emit("room", data);
-    }
-  });
-
-  socket.on("gameStart", function (msg) {
-    let data = {
-      type: "gameStart",
-      message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
-    };
-    for (let i = 0; i < msg.socketIdList.length; i++) {
-      app.io.to(msg.socketIdList[i]).emit("room", data);
-    }
+    socket.on("gameStart", function (msg) {
+      console.log("gameStart@!@!");
+      let data = {
+        type: "gameStart",
+        message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
+      };
+      for (let i = 0; i < msg.socketIdList.length; i++) {
+        app.io.to(msg.socketIdList[i]).emit("room", data);
+      }
+    });
   });
 });
 module.exports = app;

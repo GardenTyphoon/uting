@@ -59,10 +59,6 @@ const McBot = ({
   gameStartFlag,
   gameTurn,
 }) => {
-  const socket = socketio.connect("http://localhost:3001", {
-    transports: ["websocket"],
-  });
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
   const [number, setNumber] = useState("");
@@ -104,7 +100,10 @@ const McBot = ({
   };
 
   let getMusicName = (e) => {
+    const socket = socketio.connect("http://localhost:3001");
     if (e === 1) {
+      console.log(e);
+      console.log(participantsSocketIdList);
       socket.emit("musicplay", {
         socketIdList: participantsSocketIdList,
         src: "/music/신남/SellBuyMusic신남1.mp3",
@@ -125,12 +124,12 @@ const McBot = ({
   };
 
   let pause = () => {
-    console.log("정지");
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("musicpause", { socketIdList: participantsSocketIdList });
   };
 
   let play = () => {
-    console.log("재생");
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("replay", { socketIdList: participantsSocketIdList });
   };
 
@@ -230,9 +229,6 @@ const McBot = ({
             ></img>
           ) : number === 3 ? (
             <div>
-              <Button color="danger" onClick={toogleERR}>
-                asdasd
-              </Button>
               <div>
                 <HashTag onClick={(e) => getMusicName(1)}>#신남</HashTag>
                 <HashTag onClick={(e) => getMusicName(2)}>#설렘</HashTag>

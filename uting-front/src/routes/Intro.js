@@ -60,7 +60,7 @@ const Intro = () => {
   return (
     <div className="IntroContainer">
       {isLoggedIn === false ? (
-        <div>
+        <div >
           <button
             className="LogInOutBtn"
             onClick={(e) => {
@@ -69,7 +69,6 @@ const Intro = () => {
           >
             로그인
           </button>
-
           <button className="MiddleBtn" onClick={onClick}>
             계정 만들기
           </button>

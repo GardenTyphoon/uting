@@ -1,0 +1,29 @@
+.makeRoomContainer{
+    display:flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: space-between;
+    font-family: NanumSquare_acR;
+    color:black;
+    font-weight: 600;
+}
+.room-input{
+    width:250px;
+    border:none;
+    padding:3px;
+    padding-left: 10px;
+    background-color: #F6CDCD;
+}
+.num-input{
+    width:70px;
+    border:none;
+    padding:3px;
+    padding-left: 10px;
+    background-color: #F6CDCD;
+}
+.warningMess{
+    font-size:small;
+    font-family: NanumSquare_acR;
+    color: #FF6994;
+    margin:20px;
+}

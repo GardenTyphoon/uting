@@ -12,6 +12,9 @@ import {
   Label,
   FormText,
   Badge,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
@@ -46,18 +49,22 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
+    //console.log("socketId.id",socketId)
     const res = await axios.post(
       "http://localhost:3001/users/savesocketid",
       data
     );
-    setSocketFlag(!socketFlag);
+    //console.log(res)
+    setSocketFlag(true);
   };
 
   useEffect(() => {
     putSocketid();
+    console.log(socketId);
   }, [socketId]);
 
   let saveParticipantsSocketId = async () => {
+    console.log("saveParticipantsSocketId");
     let data = {
       preMember: participants,
     };
@@ -67,23 +74,38 @@ const Room = () => {
     );
 
     if (res.data !== "undefined") {
-      console.log(res.data);
       setParticipantsSocketId(res.data);
     }
   };
+  useEffect(() => {
+    if (participantsSocketId.length !== 0) {
+      cutUcoin(sessionStorage.getItem("nickname"));
+    }
+  }, [participantsSocketId]);
 
   const getparticipants = async () => {
-    const _id = location.state._id;
+    //const _id = location.state._id;
     // location.state를 쓰려면 순차적으로 넘어갈때만 가능
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
-    //const _id = meetingId;
-    const res = await axios.post(
-      "http://localhost:3001/meetings/getparticipants",
-      { _id: _id }
-    );
 
-    setParticipants(res.data);
+    const _id = meetingId;
+    if (meetingId !== "") {
+      console.log("meetingId", meetingId);
+      const res = await axios.post(
+        "http://localhost:3001/meetings/getparticipants",
+        { _id: meetingId }
+      );
+      console.log(" 참여자들 닉네임 : " + res.data);
+      console.log("길이", res.data.length);
+      let par = [];
+      for (let i = 0; i < res.data.length; i++) {
+        par.push(res.data[i].nickname);
+      }
+      console.log(par);
+
+      setParticipants(par);
+    }
   };
 
   useEffect(() => {
@@ -95,9 +117,8 @@ const Room = () => {
     socket.on("clientid", function async(id) {
       setSocketId(id);
     });
+
     socket.on("room", function (data) {
-      console.log("dadadad");
-      console.log(data);
       if (data.type === "startVote") {
         console.log("Room - startVote");
         voteRef.current.onStartVote();
@@ -113,18 +134,12 @@ const Room = () => {
         }
       } else if (data.type === "musicplay") {
         toast("호스트가 음악을 설정 하였습니다.");
-        //alert("호스트가 음악을 설정 하였습니다.")
-        //setPopup("호스트가 음악을 설정 하였습니다.")
         setMusicsrc(data.src);
       } else if (data.type === "musicpause") {
         toast(data.message);
-        //alert(data.message)
-        //setPopup(data.message)
         document.getElementById("audio").pause();
       } else if (data.type === "replay") {
         toast(data.message);
-        //alert(data.message)
-        //setPopup(data.message)
         document.getElementById("audio").play();
       } else if (data.type === "notifyTurn") {
         setNextTurnFlag(false); //에러 발생할수도 얘땜시
@@ -137,7 +152,7 @@ const Room = () => {
         toast(`${data.mesg}`);
         setNextTurnFlag(true);
       } else if (data.type === "gameStart") {
-        toast(data.message);
+        alert(data.message);
         setGameStartFlag(true);
       }
     });
@@ -145,13 +160,22 @@ const Room = () => {
     return () => {
       socket.removeListener("room");
     };
-  }, []); //test
-
+  }, []);
   useEffect(() => {
-    setTimeout(() => {
-      getparticipants();
-    }, 5000);
+    if (socketFlag === true) {
+      setTimeout(() => {
+        getparticipants();
+      }, 5000);
+    }
   }, [socketFlag]);
+
+  let cutUcoin = async (e) => {
+    let data = {
+      currentUser: e,
+    };
+    const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
+    console.log(res);
+  };
 
   useEffect(() => {
     saveParticipantsSocketId();

@@ -3,7 +3,7 @@ var router = express.Router();
 const { Meeting }=require('../model');
 
 const fs = require('fs');
-const uuid = require('uuid/v4');
+const {v4:uuid} = require('uuid');
 const AWS = require('aws-sdk');
 // const { response } = require('express');
 /* eslint-enable */
@@ -53,18 +53,20 @@ router.get('/:id', async function(req, res, next) {
 });
 
 // getAttendee
-router.get('/attendee?', async function (req, res, next) {
+router.post('/attendee', async function (req, res, next) {
   // const meeting = await Meeting.findOne({ _id: req.params.id });
-
-  const title = req.query.title;
-  const attendee = req.query.attendee;
+  console.log("Attendee!!!!!!!!!")
+  console.log(req.body)
+  const title = req.body.meetingId;
+  const attendee = req.body.attendee;
 
   const attendeeInfo = {
-    AttendeeInfo: {
+    
       AttendeeId: attendee,
       Name: attendeeCache[title][attendee]
-    }
+  
   };
+  res.send(JSON.stringify(attendeeInfo))
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(attendeeInfo), 'utf8');
@@ -85,7 +87,9 @@ router.post('/', function(req, res,next){
     avgAge:req.body.avgAge,
     users:req.body.users,
     numOfWoman:req.body.numOfWoman,
-    numOfMan : req.body.numOfMan
+    numOfMan : req.body.numOfMan,
+    sumManner: req.body.sumManner,
+    sumAge: req.body.sumAge,
   });
   meeting.save((err)=>{
     res.send("방을 생성하였습니다.")
@@ -94,13 +98,17 @@ router.post('/', function(req, res,next){
 
 // POST CHIME one meeting
 router.post('/join', async function(req, res, next){
-  
+  // const temp_title = await Meeting.findOne({title:req.body.title});
+  // console.log(temp_title);
   // console.log(req.body);
   // const meeting = new Meeting({
   //   title:req.body.title,
   //   num:req.body.num,
   //   status:req.body.status
   // });
+  const temp_room = await Meeting.findOne({title:req.body.title});
+  console.log('what meetingroom data')
+  console.log(temp_room)
   const meeting = new Meeting({
     title:req.body.title,
     maxNum:req.body.maxNum,
@@ -111,8 +119,9 @@ router.post('/join', async function(req, res, next){
     numOfWoman:req.body.numOfWoman,
     numOfMan : req.body.numOfMan
   });
+  meeting.save();
 
-  const title = meeting.title;
+  const title = req.body.title;
   const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기 임시로 이렇게 넣어 놓은 것임.
   const region = "us-east-1"
   
@@ -146,7 +155,6 @@ router.post('/join', async function(req, res, next){
   // meeting.save((err) => {
   //   res.send("방을 생성하였습니다.")
   // });
-  meeting.save();
   res.end(); // res.json 또는 res.send 없으면 안써도돼
 })
 
@@ -169,16 +177,25 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
+  console.log("+++++++++++++++++++++++++++++++++++++")
+  console.log("getparticipants!!",req.body)
+  console.log("+++++++++++++++++++++++++++++++++++++")
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
-      if(obj._id.toString()===req.body._id){
+      console.log("obj",obj.title)
+      if(obj.title===req.body._id){
+        console.log(obj.title)
+        console.log("obj",obj)
         res.send(obj.users);
       }
     })
   })
 });
 
-
+router.post('/logs', function(req, res, next){
+  console.log('Writing logs to cloudwatch');
+  res.redirect('back');
+})
 
 // PUT edit one meeting
 router.put('/:id', async function(req,res,next){
@@ -187,18 +204,17 @@ router.put('/:id', async function(req,res,next){
 })
 
 // DELETE one meeting
-router.delete('/end?', async function(req,res,next){
-  const meeting = await Meeting.deleteOne({_id : req.params.id});
+router.post('/end', async function(req,res,next){
+  const title = req.body.meetingId;
+  const meeting = await Meeting.deleteOne({title : title});
   //res.json(meeting);
 
-  const title = req.query.title;
-  
-    await chime.deleteMeeting({
-      MeetingId: meetingCache[title].Meeting.MeetingId
-    }).promise();
-    res.statusCode = 200;
-    res.end();
-    // res.send("The meeting is terminated successful");
+  await chime.deleteMeeting({
+    MeetingId: meetingCache[title].Meeting.MeetingId
+  }).promise();
+  res.statusCode = 200;
+  res.end();
+  // res.send("The meeting is terminated successful");
 });
 
 

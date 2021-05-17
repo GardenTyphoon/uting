@@ -7,6 +7,10 @@ import MeetingRoom from "../../img/MeetingRoom.png";
 import "./MeetingList.css";
 import { Container, Row, Col } from "reactstrap";
 import socketio from "socket.io-client";
+
+import { useAppState } from "../../providers/AppStateProvider";
+import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
+import { createGetAttendeeCallback, fetchMeeting } from "../../utils/api";
 let mannerColor;
 function mannerCredit(avgManner) {
   if (avgManner === 4.5) {
@@ -38,33 +42,131 @@ function mannerCredit(avgManner) {
     return "F";
   }
 }
+
+function birthToAge(birth) {
+  let year = birth.slice(0, 4);
+  return 2021 - Number(year) + 1;
+}
+
 export default function MeetingList({
   checkState,
   groupSocketList,
   currentsocketId,
 }) {
   const history = useHistory();
+  const meetingManager = useMeetingManager();
+  const {
+    setAppMeetingInfo,
+    region: appRegion,
+    meetingId: appMeetingId,
+  } = useAppState();
+
   const [viewRoomList, setView] = useState([]);
+  const [originList, setOriginList] = useState([]);
   const [state, setState] = useState(false);
   const [title, setTitle] = useState("");
 
   const [groupMember, setGroupMember] = useState([]);
   const [flag, setFlag] = useState(false);
   const [roomObj, setRoomObj] = useState({});
-  const socket = socketio.connect("http://localhost:3001");
+  const [prevFilter, setPrevFilter] = useState("");
+
+  let sessionUser = sessionStorage.getItem("nickname");
+
   //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
   const attendRoomByID = async (room) => {
-    getGroupInfo();
     setRoomObj(room);
-    setFlag(true);
-    //현재 그룹원 모두에게 방 타이틀로 이동하는 메시지 띄우고 리다이렉트시키기
+    // setFlag(true)
+
+    let avgManner = room.sumManner;
+    let avgAge = room.sumAge;
+
+    let sumManner = room.sumManner;
+    let sumAge = room.sumAge;
+
+    let nowOfWoman = 0;
+    let nowOfMan = 0;
+
+    let groupMembersInfo = [];
+    let groupMembersSocketId = [];
+
+    for (let i = 0; i < groupMember.length; i++) {
+      let userInfo = await axios.post("http://localhost:3001/users/userInfo", {
+        userId: groupMember[i],
+      });
+      groupMembersInfo.push({
+        nickname: userInfo.data.nickname,
+        introduce: userInfo.data.introduce,
+        mannerCredit: userInfo.data.mannerCredit,
+        age: birthToAge(userInfo.data.birth),
+      });
+      if (userInfo.data.nickname != sessionUser) {
+        groupMembersSocketId.push(userInfo.data.socketid);
+      }
+      avgManner += userInfo.data.mannerCredit;
+      avgAge += birthToAge(userInfo.data.birth);
+      if (userInfo.data.gender === "woman") nowOfWoman += 1;
+      else nowOfMan += 1;
+    }
+
+    sumManner += avgManner;
+    sumAge += avgAge;
+
+    let new_numOfMan = nowOfMan + room.numOfMan;
+    let new_numOfWoman = nowOfWoman + room.numOfWoman;
+
+    avgManner /= new_numOfMan + new_numOfWoman;
+    avgAge /= new_numOfMan + new_numOfWoman;
+    avgAge = parseInt(avgAge);
+
+    let new_status;
+    if (new_numOfMan + new_numOfWoman === room.maxNum) {
+      new_status = "진행";
+    }
+    let data = {
+      title: room.title,
+      maxNum: Number(room.num),
+      status: new_status,
+      avgManner: avgManner.toFixed(3),
+      avgAge: avgAge,
+      numOfWoman: nowOfWoman,
+      numOfMan: nowOfMan,
+      sumOfManner: sumManner,
+      sumOfAge: sumAge,
+    };
+
+    data.users = groupMembersInfo;
+
+    try {
+      const { JoinInfo } = await fetchMeeting(data);
+      await meetingManager.join({
+        meetingInfo: JoinInfo.Meeting,
+        attendeeInfo: JoinInfo.Attendee,
+      });
+
+      setAppMeetingInfo(room.title, "Tester", "ap-northeast-2");
+      if (room.title !== undefined) {
+        const socket = socketio.connect("http://localhost:3001");
+        console.log("groupMembersSocketId", groupMembersSocketId);
+        socket.emit("makeMeetingRoomMsg", {
+          groupMembersSocketId: groupMembersSocketId,
+          roomtitle: room.title,
+        });
+      }
+
+      history.push("/deviceSetup");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   let saveMeetingUsers = async (e) => {
+    console.log("saveMeetingUsers", roomObj.length);
     let data = {
       member: groupMember,
       room: roomObj,
     };
+    console.log("saveMeetingUsers", data);
     const res = await axios.post(
       "http://localhost:3001/meetings/savemember",
       data
@@ -73,23 +175,23 @@ export default function MeetingList({
   };
 
   useEffect(() => {
+    //if (
+    //  Object.keys(groupMember.data).length !== 0 &&
+    //  roomObj.lenght !== undefined
+    //) {
     saveMeetingUsers();
+    //}
   }, [groupMember]);
-  useEffect(() => {
-    groupSocketList.push(currentsocketId.id);
+  // useEffect(() => {
 
-    socket.on("connect", function () {
-      socket.emit("entermessage", {
-        socketidList: groupSocketList,
-        roomid: "roomid~!",
-        _id: roomObj._id,
-      });
-      //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
-    });
-  }, [flag]);
+  //     groupSocketList.push(currentsocketId.id)
+  //    const socket = socketio.connect('http://localhost:3001');
+  //     socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
+  //         //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
+
+  // }, [flag])
 
   const getGroupInfo = async (e) => {
-    let sessionUser = sessionStorage.getItem("nickname");
     let sessionObject = { sessionUser: sessionUser };
     const res = await axios.post(
       "http://localhost:3001/groups/info",
@@ -108,24 +210,63 @@ export default function MeetingList({
     }
   };
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/meetings")
-      .then(({ data }) => setView(data))
-      .catch((err) => {});
+    getMeetings();
+    getGroupInfo();
   }, []);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/meetings")
-      .then(({ data }) => setView(data))
-      .catch((err) => {});
+    if (checkState === true) {
+      getMeetings();
+    }
   }, [checkState]);
+  /*
+    let filt = ()=>{
+        const filtered = viewRoomList.filter((list) => {
+            return list.title.toLowerCase().includes(filterRoomName)});
+     
+        console.log(filtered)
+        
+        setView(filtered)
+    }*/
 
+  let getMeetings = async () => {
+    await axios
+      .get("http://localhost:3001/meetings")
+      .then(({ data }) => {
+        setView(data);
+        setOriginList(data);
+      })
+      .catch((err) => {});
+  };
+  /*
+    useEffect(()=>{
+        if(filterRoomName!=="")
+        {
+            filt()
+        }
+        else if(filterRoomName===""){
+            const filtered = originList.filter((list) => {
+                return list.title.toLowerCase().includes(filterRoomName)});
+         
+            console.log(filtered)
+            
+            setView(filtered)
+        }
+            
+            
+    
+    },[filterRoomName])*/
+
+  /*
+    useEffect(()=>{
+
+    },[viewRoomList])
+*/
   return (
     //tr map 한다음에 key넣어주기
-    <div style={{ width: "60%" }}>
+    <div className="RoomListContainer">
       {viewRoomList.map((room, index) => (
-        <div>
+        <div style={{ marginRight: "25px" }}>
           <Container className="MeetingRoom">
             <Row style={{ width: "100%" }}>
               <img
@@ -152,7 +293,9 @@ export default function MeetingList({
                     marginTop: "15%",
                   }}
                 >
-                  <div style={{ marginRight: "7%" }}>{room.avgManner}</div>
+                  <div style={{ marginRight: "7%" }}>
+                    {room.avgManner !== null ? room.avgManner : ""}
+                  </div>
                   <div>{mannerCredit(room.avgManner)}</div>
                 </div>
                 <div

@@ -33,8 +33,7 @@ const EarInMal = ({
   const [isAsked, setIsAsked] = useState(false);
   const [questionedUser, setQuestionedUser] = useState();
   const [participantsForTurn, setParticipantsForTurn] = useState(participants);
-
-  let currentUser = sessionStorage.getItem("nickname");
+  const socket = socketio.connect("http://localhost:3001");
   var data;
   let toSendSckId;
 
@@ -57,10 +56,14 @@ const EarInMal = ({
   };
 
   useEffect(() => {
+    console.log("flag : " + flag);
     if (flag) {
       data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
       const socket = socketio.connect("http://localhost:3001");
+      console.log("socket data : ");
+      console.log(data);
       socket.emit("gameStart", data);
+      console.log("gameStart socket emit!!");
     }
   }, [flag]);
 
@@ -95,11 +98,12 @@ const EarInMal = ({
       await matchMemSckId(turn);
       console.log(participants);
       console.log(participantsSocketIdList);
-      data = { turn: turn, socketIdList: participantsSocketIdList };
-      const socket = socketio.connect("http://localhost:3001");
-      socket.emit("notifyTurn", data);
-      data = { turnSocketId: toSendSckId };
-      socket.emit("notifyMember", data);
+      //const socket = socketio.connect("http://localhost:3001");
+      socket.emit("notifyTurn", {
+        turn: turn,
+        socketIdList: participantsSocketIdList,
+      });
+      socket.emit("notifyMember", { turnSocketId: toSendSckId });
     }
   }, [turn]);
 
@@ -113,7 +117,7 @@ const EarInMal = ({
   }, [gameTurn]);
 
   useEffect(() => {
-    console.log("participatns : " + participants);
+    console.log("participatns : " + participantsSocketIdList);
   }, [participants]);
 
   useEffect(() => {
@@ -139,7 +143,7 @@ const EarInMal = ({
     };
     console.log("data : ");
     console.log(data);
-    const socket = socketio.connect("http://localhost:3001");
+    //const socket = socketio.connect("http://localhost:3001");
     socket.emit("sendMsg", data);
     console.log("sendMsg");
     alert("전송완료!");
@@ -158,7 +162,7 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       msg: e.target.value,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    //const socket = socketio.connect("http://localhost:3001");
     socket.emit("respondMsg", data);
     alert("전송완료!");
     setIsNextTurn(false);
@@ -170,7 +174,7 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    //const socket = socketio.connect("http://localhost:3001");
     socket.emit("sendMsg", data);
     alert("전송완료~!");
   };

@@ -24,12 +24,10 @@ const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
   margin-bottom: 10px;
-  margin-right: 20px;
-  width: 200px;
+  width: 150px;
   height: 50px;
-  padding-left: 20%;
+  text-align: center;
   padding-top: 5%;
-  padding-bottom: 1%;
   background-color: white;
 `;
 
@@ -37,8 +35,7 @@ const PlusIcon = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
   margin-bottom: 10px;
-  margin-right: 20px;
-  width: 200px;
+  width: 150px;
   height: 50px;
   padding-left: 40%;
   padding-top: 5%;
@@ -57,13 +54,15 @@ const On = styled.span`
 const GroupBox = styled.div`
   float: right;
   background-color: #ffe4e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const GroupTitle = styled.div`
   font-family: NanumSquare_acR;
   font-size: medium;
   color: #896e6e;
-  margin-left: 20%;
   margin-bottom: 5%;
 `;
 
@@ -126,11 +125,17 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   }, [groupMember]);
 
   useEffect(() => {
-    getGroupInfo();
+    if (checkGroup !== false) {
+      getGroupInfo();
+    }
   }, [checkGroup]);
+
   useEffect(() => {
-    getGroupInfo();
+    if (checkAnother !== false) {
+      getGroupInfo();
+    }
   }, [checkAnother]);
+
   useEffect(() => {
     getGroupInfo();
   }, [checkMem]);

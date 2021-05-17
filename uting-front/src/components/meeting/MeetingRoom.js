@@ -11,9 +11,10 @@ import {
     ActionType,
     useMeetingStatus,
     LocalVideo,
-    RemoteVideos,
+//    RemoteVideos,
 } from 'amazon-chime-sdk-component-library-react';
 
+import RemoteVideos from './RemoteVideos';
 import MeetingControls from './MeetingControls';
 import MeetingDetails from './MeetingDetails';
 
