@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import socketio from "socket.io-client";
+import "./Vote.css"
 
 const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
@@ -126,7 +127,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     return (
         
         <div>
-            <button onClick={(e) => onClickEndMeetingBtn(e)}>미팅 종료</button>
+            <button className="gradientBtn" onClick={(e) => onClickEndMeetingBtn(e)}>미팅 종료</button>
             <Modal isOpen={toggleEndMeetingBtn}>
                 <ModalBody>
                     미팅 종료 버튼을 누르셨습니다.
@@ -138,18 +139,18 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                 </ModalFooter>
             </Modal>
             {startVote === true ?
-                <div style={{ backgroundColor: "#fffff0", borderRadius: "20px" }}>
+                <div className="voteContainer">
                     <div>미팅을 종료하시겠습니까?</div>
                     {isVote === false ?
                         <div>
-                            <button onClick={(e) => onClickAgree(e)}>찬성</button>
-                            <button onClick={(e) => onClickDisagree(e)}>반대</button>
+                            <button className="agreeBtn" onClick={(e) => onClickAgree(e)}>찬성</button>
+                            <button className="disAgreeBtn"onClick={(e) => onClickDisagree(e)}>반대</button>
                         </div>
                         : <div>{myDeicision}하셨습니다.</div>}
 
                     <Progress multi>
-                        <Progress bar color="success" value={numOfAgree} max={participants.length} />
-                        <Progress bar color="danger" value={numOfDisagree} max={participants.length} />
+                        <Progress bar style={{backgroundColor:"#2CDB52"}} value={numOfAgree} max={participants.length} />
+                        <Progress bar style={{backgroundColor:"#FB6060"}} value={numOfDisagree} max={participants.length} />
                     </Progress>
                 </div>
                 : ""}
