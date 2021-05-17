@@ -229,6 +229,7 @@ app.io.on("connection", function (socket) {
       app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
   });
+
   socket.on("endMeetingDisagree", function (msg) {
     let data = {
       type: "endMeetingDisagree",
@@ -237,46 +238,46 @@ app.io.on("connection", function (socket) {
     for (let i = 0; i < Object.keys(msg.participantsSocketIdList).length; i++) {
       app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
-    socket.on("notifyTurn", (msg) => {
-      let data = { type: "notifyTurn", turn: msg.turn };
-      for (let i = 0; i < msg.socketIdList.length; i++) {
-        app.io.to(msg.socketIdList[i]).emit("room", data);
-      }
-    });
-    socket.on("notifyMember", (msg) => {
-      console.log("notifyMember");
-      console.log(msg);
-      let data = { type: "notifyMember" };
-      if (msg.turnSocketId != "undefined") {
-        app.io.to(msg.turnSocketId).emit("room", data);
-      }
-    });
-    socket.on("sendMsg", (msg) => {
-      console.log("sendMsg : ");
-      console.log(msg);
-
-      let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
+  });
+  socket.on("notifyTurn", function (msg) {
+    let data = { type: "notifyTurn", turn: msg.turn };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
+    }
+  });
+  socket.on("notifyMember", function (msg) {
+    console.log("notifyMember");
+    console.log(msg);
+    let data = { type: "notifyMember" };
+    if (msg.turnSocketId != "undefined") {
       app.io.to(msg.turnSocketId).emit("room", data);
-    });
-    socket.on("respondMsg", (msg) => {
-      console.log("respondMsg : ");
-      console.log(msg);
-      let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
-      for (let i = 0; i < msg.socketIdList.length; i++) {
-        app.io.to(msg.socketIdList[i]).emit("room", data);
-      }
-    });
+    }
+  });
+  socket.on("sendMsg", function (msg) {
+    console.log("sendMsg : ");
+    console.log(msg);
 
-    socket.on("gameStart", function (msg) {
-      console.log("gameStart@!@!");
-      let data = {
-        type: "gameStart",
-        message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
-      };
-      for (let i = 0; i < msg.socketIdList.length; i++) {
-        app.io.to(msg.socketIdList[i]).emit("room", data);
-      }
-    });
+    let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
+    app.io.to(msg.turnSocketId).emit("room", data);
+  });
+  socket.on("respondMsg", function (msg) {
+    console.log("respondMsg : ");
+    console.log(msg);
+    let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
+    }
+  });
+
+  socket.on("gameStart", function (msg) {
+    console.log("gameStart@!@!");
+    let data = {
+      type: "gameStart",
+      message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
+    };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
+    }
   });
 });
 module.exports = app;

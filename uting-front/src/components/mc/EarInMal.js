@@ -50,6 +50,7 @@ const EarInMal = ({
   };
 
   const start = () => {
+    const socket = socketio.connect("http://localhost:3001");
     setStartButtonFade(false);
     setFlag(true);
     determineTurn(participantsForTurn);
