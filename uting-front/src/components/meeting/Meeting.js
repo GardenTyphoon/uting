@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import socketio from 'socket.io-client';
 import { useAppState } from '../../providers/AppStateProvider';
@@ -10,9 +10,8 @@ import "./Meeting.css";
 import { alignItems } from 'styled-system';
 
 function birthToAge(birth) {
-
-    let year = birth.slice(0, 4);
-    return 2021 - Number(year) + 1;
+  let year = birth.slice(0, 4);
+  return 2021 - Number(year) + 1;
 }
 function limitNumOfParticipants(inputTag, inputValue, numOfGroupMember) {
 
@@ -188,8 +187,7 @@ const Meeting = ({ checkFunc }) => {
            
 
         </div>
-
-    )
+      
+  );
 };
 export default Meeting;
-

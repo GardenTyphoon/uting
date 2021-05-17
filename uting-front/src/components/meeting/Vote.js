@@ -1,8 +1,20 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import {useHistory } from "react-router";
-import styled from 'styled-components';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress } from 'reactstrap';
-import axios from 'axios';
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import { useHistory } from "react-router";
+import styled from "styled-components";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Progress,
+} from "reactstrap";
+import axios from "axios";
 import socketio from "socket.io-client";
 
 const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
@@ -141,7 +153,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                     </Progress>
                 </div>
                 : ""}
-        </div>
-    );
+    </div>
+  );
 });
 export default Vote;
