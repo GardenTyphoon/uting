@@ -48,7 +48,7 @@ const Meeting = ({ checkFunc }) => {
     })
 
     const onChangehandler = e => {
-
+        console.log(groupMembers);
         const { name, value } = e.target;
         if (name === 'title') {
             setRoom({
@@ -57,7 +57,7 @@ const Meeting = ({ checkFunc }) => {
             })
         }
         else {
-            if (limitNumOfParticipants(name, value, Object.keys(groupMembers.data).length)) {
+            if (limitNumOfParticipants(name, value, Object.keys(groupMembers).length)) {
 
                 setRoom({
                     ...room,
@@ -70,13 +70,18 @@ const Meeting = ({ checkFunc }) => {
             }
         }
     };
-    const getMyGroupMember = async (e) => {
+    const getMyGroupMember = async () => {
+        console.log("불렀음")
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-        console.log(res.data);
-        setGroupMembers(res);
+        console.log(res);
+        let onlyMe = [sessionUser];
+        if(res.data==="no") setGroupMembers(onlyMe);
+        else setGroupMembers(res.data);
+        //setGroupMembers(res);
     }
     useEffect(() => {
         getMyGroupMember();
+        
     }, [])
     const makeRoom = async (e) => {
         e.preventDefault();
@@ -89,8 +94,8 @@ const Meeting = ({ checkFunc }) => {
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
-            for (let i = 0; i < (groupMembers.data).length; i++) {
-                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
+            for (let i = 0; i < groupMembers.length; i++) {
+                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
                 groupMembersInfo.push({
                     "nickname": userInfo.data.nickname,
                     "introduce": userInfo.data.introduce,
@@ -111,8 +116,8 @@ const Meeting = ({ checkFunc }) => {
             }
             sumManner = avgManner;
             sumAge = avgAge;
-            avgManner /= groupMembers.data.length;
-            avgAge /= groupMembers.data.length;
+            avgManner /= groupMembers.length;
+            avgAge /= groupMembers.length;
             avgAge = parseInt(avgAge);
 
             const roomTitle= room.title.trim().toLocaleLowerCase()
@@ -176,7 +181,7 @@ const Meeting = ({ checkFunc }) => {
                 
             </div>
             {toggleShowWarningMess === true ?
-                <span className="warningMess">* 성별당 인원수는 {(groupMembers.data).length}명 이상, 4명 이하여야 합니다.</span>
+                <span className="warningMess">* 성별당 인원수는 {groupMembers.length}명 이상, 4명 이하여야 합니다.</span>
                 : ""}
             </div>
             <button className="makeRoomBtn" onClick={makeRoom} style={{marginTop:"2 0px"}}>방만들기</button>

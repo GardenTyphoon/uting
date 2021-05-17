@@ -198,7 +198,11 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             "http://localhost:3001/groups/info",
             sessionObject
         );
-        setGroupMember(res.data.member);
+       console.log(typeof(res.data.member));
+        let onlyMe = [sessionUser];
+        if(res.data==="no") setGroupMember(onlyMe);
+        else setGroupMember(res.data.member);
+       //setGroupMember(res.data.member);
     };
 
     const toggleParticipantsInfo = (title) => {

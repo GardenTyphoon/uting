@@ -10,6 +10,12 @@ import pauseImg from '../../img/음악정지.png';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Modal,ModalBody,ModalHeader,Fade,Button } from 'reactstrap';
 import ReactAudioPlayer from 'react-audio-player';
 import socketio from "socket.io-client";
+
+
+const McBotContainer = styled.div`
+  width: 100vw;
+`;
+
 const Box = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
@@ -126,12 +132,12 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   },[])
 
   return (
-    <div>
+    <McBotContainer >
 
     
-      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+      <Dropdown isOpen={dropdownOpen} toggle={toggle} style={{width:"160px", margin:"0px"}}>
         <DropdownToggle caret style={{ width:"15%", backgroundColor: "transparent", border: "0px" }}>
-          <img src={McBotImg} style={{ width: "80%" }} />
+          <img src={McBotImg} style={{ width:"160px" }} />
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={(e)=>FadeToggle(1)}>게임 추천</DropdownItem>
@@ -169,7 +175,7 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
         
       </Fade>
       
-    </div>
+    </McBotContainer>
   );
 };
 export default McBot;
