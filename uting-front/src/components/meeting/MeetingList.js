@@ -5,7 +5,7 @@ import woman from '../../img/woman.png'
 import man from '../../img/man.png'
 import MeetingRoom from '../../img/MeetingRoom.png'
 import './MeetingList.css'
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Tooltip } from 'reactstrap';
 import socketio from "socket.io-client";
 
 import { useAppState } from '../../providers/AppStateProvider';
@@ -62,18 +62,18 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const history = useHistory();
     const meetingManager = useMeetingManager();
     const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
- 
-   
+
+
     const [viewRoomList, setView] = useState([]);
-    const [originList,setOriginList]=useState([])
+    const [originList, setOriginList] = useState([])
     const [state, setState] = useState(false);
     const [title, setTitle] = useState("");
-   
+
     const [groupMember, setGroupMember] = useState([]);
     const [flag, setFlag] = useState(false)
     const [roomObj, setRoomObj] = useState({})
-    const [prevFilter,setPrevFilter]=useState("")
-    
+    const [prevFilter, setPrevFilter] = useState("")
+    const [tooltipOpen, setTooltipOpen] = useState(false);
     let sessionUser = sessionStorage.getItem("nickname");
 
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
@@ -81,7 +81,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
         setRoomObj(room)
         // setFlag(true)
-        
+
         let avgManner = room.sumManner;
         let avgAge = room.sumAge;
 
@@ -94,7 +94,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         let groupMembersInfo = []
         let groupMembersSocketId = []
 
-        for(let i = 0; i < groupMember.length; i++){
+        for (let i = 0; i < groupMember.length; i++) {
             let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
@@ -108,7 +108,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             avgManner += userInfo.data.mannerCredit;
             avgAge += birthToAge(userInfo.data.birth);
             if (userInfo.data.gender === "woman") nowOfWoman += 1;
-            
+
             else nowOfMan += 1;
         }
 
@@ -125,7 +125,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
         let new_status;
-        if((new_numOfMan + new_numOfWoman) === room.maxNum) {
+        if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
             new_status = "진행";
         }
         let data = {
@@ -143,16 +143,16 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         data.users = groupMembersInfo;
 
         try {
-             const { JoinInfo } = await fetchMeeting(data);
+            const { JoinInfo } = await fetchMeeting(data);
             await meetingManager.join({
                 meetingInfo: JoinInfo.Meeting,
                 attendeeInfo: JoinInfo.Attendee
             });
 
             setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
-            if(room.title!==undefined){
+            if (room.title !== undefined) {
                 const socket = socketio.connect('http://localhost:3001');
-                console.log("groupMembersSocketId",groupMembersSocketId)
+                console.log("groupMembersSocketId", groupMembersSocketId)
                 socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
             }
 
@@ -167,28 +167,28 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     let saveMeetingUsers = async (e) => {
-        console.log("saveMeetingUsers",roomObj.length)
+        console.log("saveMeetingUsers", roomObj.length)
         let data = {
             member: groupMember,
             room: roomObj
         }
-        console.log("saveMeetingUsers",data)
+        console.log("saveMeetingUsers", data)
         const res = await axios.post("http://localhost:3001/meetings/savemember", data)
         console.log(res)
     }
 
     useEffect(() => {
-        if(groupMember.length!==0 && roomObj.lenght!==undefined ){
+        if (groupMember.length !== 0 && roomObj.lenght !== undefined) {
             saveMeetingUsers()
         }
     }, [groupMember])
     // useEffect(() => {
-        
+
     //     groupSocketList.push(currentsocketId.id)
     //    const socket = socketio.connect('http://localhost:3001');
     //     socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
     //         //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
-        
+
     // }, [flag])
 
     const getGroupInfo = async (e) => {
@@ -198,11 +198,11 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             "http://localhost:3001/groups/info",
             sessionObject
         );
-       console.log(typeof(res.data.member));
+        console.log(typeof (res.data.member));
         let onlyMe = [sessionUser];
-        if(res.data==="no") setGroupMember(onlyMe);
+        if (res.data === "no") setGroupMember(onlyMe);
         else setGroupMember(res.data.member);
-       //setGroupMember(res.data.member);
+        //setGroupMember(res.data.member);
     };
 
     const toggleParticipantsInfo = (title) => {
@@ -223,21 +223,21 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     useEffect(() => {
-        if(checkState===true){
+        if (checkState === true) {
             getMeetings()
         }
     }, [checkState])
-/*
-    let filt = ()=>{
-        const filtered = viewRoomList.filter((list) => {
-            return list.title.toLowerCase().includes(filterRoomName)});
-     
-        console.log(filtered)
-        
-        setView(filtered)
-    }*/
+    /*
+        let filt = ()=>{
+            const filtered = viewRoomList.filter((list) => {
+                return list.title.toLowerCase().includes(filterRoomName)});
+         
+            console.log(filtered)
+            
+            setView(filtered)
+        }*/
 
-    let getMeetings =async()=>{
+    let getMeetings = async () => {
         await axios
             .get('http://localhost:3001/meetings')
             .then(({ data }) => {
@@ -245,7 +245,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 setOriginList(data)
             })
             .catch((err) => { });
-        
+
     }
     /*
     useEffect(()=>{
@@ -266,30 +266,32 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     
     },[filterRoomName])*/
 
-/*
-    useEffect(()=>{
-
-    },[viewRoomList])
-*/
+    /*
+        useEffect(()=>{
+    
+        },[viewRoomList])
+    */
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
 
-                <div style={{marginRight:"25px"}}>
+                <div style={{ marginRight: "25px" }}>
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
 
                             <img src={MeetingRoom}
                                 style={{ padding: "1%", width: "10%", borderRadius: "50%", marginRight: "5%" }}
+                                id={"Tooltip-" + room.title} 
                                 onMouseOver={(e) => toggleParticipantsInfo(room.title)}
-                                onMouseOut={(e) => toggleParticipantsInfo(room.title)} />
+                                onMouseOut={(e) => toggleParticipantsInfo(room.title)}
+                                />
 
 
 
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
                                 <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
-                                    <div style={{ marginRight: "7%" }}>{room.avgManner!==null?room.avgManner:""}</div>
+                                    <div style={{ marginRight: "7%" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
                                     <div >{mannerCredit(room.avgManner)}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small" }}>{room.avgAge}살</div>
@@ -307,18 +309,23 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                         </Row>
 
                     </Container>
-                    {title === room.title && state === true ?
-                        <div>
-                            {room.users.map(user =>
-                                <div>
-                                    {user.nickname}
-                                    {user.introduce}
-                                    {user.mannerCredit}
-                                    {user.age}
-                                </div>
-                            )}
-                        </div>
-                        : ""}
+              
+                    <Tooltip
+                        placement="bottom"
+                        isOpen={title===room.title && state===true}
+                        target={"Tooltip-" + room.title}
+                        toggle={()=>setTooltipOpen(!tooltipOpen)}
+                        style={{backgroundColor:"#DEEFFF", fontFamily:"NanumSquare_acR", color:"black", padding:"10px"}}
+                    >
+                    
+                    {room.users.map(user=>
+                    
+                        <div>{user.nickname}  {mannerCredit(user.mannerCredit)}  {user.age}살 <br></br></div>)}
+                    </Tooltip>
+                   
+                 
+
+
                 </div>
             )}
         </div>
