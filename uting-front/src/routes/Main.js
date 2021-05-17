@@ -67,6 +67,7 @@ const Main = () => {
     });
 
     socket.on("clientid", function async(id) {
+      console.log(id)
       setSocketId(id);
     });
 
@@ -144,6 +145,7 @@ const Main = () => {
   }
 
   let putSocketid = async (e) => {
+    console.log(socketId)
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
@@ -152,6 +154,7 @@ const Main = () => {
       "http://localhost:3001/users/savesocketid",
       data
     );
+    console.log(res)
   };
   useEffect(() => {
     putSocketid();
