@@ -1,14 +1,26 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import {useHistory } from "react-router";
-import styled from 'styled-components';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress } from 'reactstrap';
-import axios from 'axios';
+import React, {
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import { useHistory } from "react-router";
+import styled from "styled-components";
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Progress,
+} from "reactstrap";
+import axios from "axios";
 import socketio from "socket.io-client";
 
 const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     const history = useHistory();
-    const socket = socketio.connect("http://localhost:3001");
+    
 
     const [toggleEndMeetingBtn, setToggleEndMeetingBtn] = useState(false);
     const [startVote, setStartVote] = useState(false);
@@ -31,6 +43,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickAgree = (e) => {
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -38,6 +51,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     const onClickDisagree = (e) => {
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("endMeetingDisagree", { participantsSocketIdList, numOfDisagree: numOfDisagree + 1 });
         setNumOfDisagree(numOfDisagree + 1);
         setIsVote(!isVote);
@@ -46,6 +60,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
 
     const emitStartVote = () => {
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("startVote", { socketidList:participantsSocketIdList });
         console.log(participantsSocketIdList);
         console.log("emitvote")
@@ -53,7 +68,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     useImperativeHandle(ref, () => ({
         onStartVote(){
-            alert("미팅 종료를 위한 투표를 시작합니다.");
+            alert("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
             setStartVote(true);
         },
         onEndMeetingAgree(data){
@@ -96,9 +111,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                 setTimeout(()=>{
                     alert("투표가 종료되었습니다. 미팅을 종료합니다.");
                 
-                history.push({
-                    pathname: `/main`
-                });
+                window.location.href="http://localhost:3000/main"
                 },1000)
               
             }
@@ -140,7 +153,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                     </Progress>
                 </div>
                 : ""}
-        </div>
-    );
+    </div>
+  );
 });
 export default Vote;

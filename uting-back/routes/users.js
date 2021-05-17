@@ -153,7 +153,6 @@ router.post("/viewMyProfile", function (req, res, next) {
   });
 });
 router.post("/userInfo", function (req, res, next) {
-
   User.find(function (err, user) {
     user.forEach((per) => {
       if (
@@ -168,17 +167,18 @@ router.post("/userInfo", function (req, res, next) {
 
 router.post("/usersSocketId", function (req, res, next) {
   let data = [];
-  
-    User.find(function (err, user) {
-      user.forEach((per) => {
-        req.body.users.forEach((one)=>{
+  console.log("usersSocketId -ing 12");
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      req.body.users.forEach((one) => {
         if (one === per._id.toString() || one === per.nickname) {
           data.push(per.socketid);
         }
       });
     });
+    console.log("usersSocketId -finished");
     res.send(data);
-  })
+  });
 });
 router.post("/modifyMyProfile", function (req, res, next) {
   User.findByIdAndUpdate(
@@ -200,9 +200,8 @@ router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
 });
 
 router.post("/addUcoin", function (req, res, next) {
-  
   let newUcoin = req.body.ucoin + req.body.chargingCoin;
-  
+
   User.findByIdAndUpdate(
     req.body.userId,
     {
@@ -216,7 +215,6 @@ router.post("/addUcoin", function (req, res, next) {
 
 // 그룹 생성시 온라인 유저인지 확인
 router.post("/logined", function (req, res, next) {
-
   let ismember = false;
   User.find(function (err, user) {
     //console.log(user)
@@ -330,16 +328,15 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
+            console.log(mem + " : " + per.socketid);
             socketidList.push(per.socketid);
           }
         });
       });
+      console.log("socketidList : " + socketidList);
       res.send(socketidList);
     });
   }
 });
-
-
-
 
 module.exports = router;

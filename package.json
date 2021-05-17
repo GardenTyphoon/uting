@@ -16,5 +16,14 @@
   "bugs": {
     "url": "https://github.com/GardenTyphoon/uting/issues"
   },
-  "homepage": "https://github.com/GardenTyphoon/uting#readme"
+  "homepage": "https://github.com/GardenTyphoon/uting#readme",
+  "dependencies": {
+    "amazon-chime-sdk-component-library-react": "^2.4.0",
+    "amazon-chime-sdk-js": "^2.9.0",
+    "chime": "^1.0.4",
+    "react-toastify": "^7.0.4",
+    "styled-components": "^5.3.0",
+    "styled-system": "^5.1.5",
+    "uuid": "^8.3.2"
+  }
 }
