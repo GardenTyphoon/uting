@@ -145,7 +145,7 @@ const Room = () => {
     return () => {
       socket.removeListener("room");
     };
-  }, []);
+  }, []); //test
 
   useEffect(() => {
     setTimeout(() => {
