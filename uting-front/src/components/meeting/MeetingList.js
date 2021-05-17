@@ -78,12 +78,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const attendRoomByID = async (room) => {
 
         setRoomObj(room)
-        setFlag(true)
+        // setFlag(true)
         
         let avgManner = room.sumManner;
         let avgAge = room.sumAge;
 
-        let sumManner = sumManner;
+        let sumManner = room.sumManner;
         let sumAge = room.sumAge;
 
         let nowOfWoman = 0;
@@ -179,14 +179,14 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             saveMeetingUsers()
         }
     }, [groupMember])
-    useEffect(() => {
+    // useEffect(() => {
         
-        groupSocketList.push(currentsocketId.id)
-       const socket = socketio.connect('http://localhost:3001');
-        socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
-            //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
+    //     groupSocketList.push(currentsocketId.id)
+    //    const socket = socketio.connect('http://localhost:3001');
+    //     socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
+    //         //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
         
-    }, [flag])
+    // }, [flag])
 
     const getGroupInfo = async (e) => {
 
@@ -245,7 +245,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
                                 <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
-                                    <div style={{ marginRight: "7%" }}>{room.avgManner!==null?room.avgManner.toFixed(2):""}</div>
+                                    <div style={{ marginRight: "7%" }}>{""}</div>
                                     <div >{mannerCredit(room.avgManner)}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small" }}>{room.avgAge}살</div>
