@@ -5,15 +5,18 @@
 
 
 .ProfileContainer{
-    
+
+    width:15%;
     background-color: #FFB4AC;  
     border-radius: 10px;
     display: flex;
     flex-direction:column;
     align-items: center;
     font-family: NanumSquare_acR;
-    padding: 2%;
+    padding: 3%;
     font-size:13px;
+    margin-bottom: 3%;
+
 }
 .ProfileTop{
     display:flex;

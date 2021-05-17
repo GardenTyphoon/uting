@@ -125,7 +125,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             .then(({ data }) => setView(data))
             .catch((err) => { });
         }
-        
     }, [checkState])
 
     return (//tr map 한다음에 key넣어주기
