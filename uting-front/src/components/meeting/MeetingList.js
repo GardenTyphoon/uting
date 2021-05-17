@@ -167,6 +167,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     let saveMeetingUsers = async (e) => {
+        console.log("saveMeetingUsers",roomObj.length)
         let data = {
             member: groupMember,
             room: roomObj
@@ -177,7 +178,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }
 
     useEffect(() => {
-        if(groupMember.length!==0){
+        if(groupMember.length!==0 && roomObj.lenght!==undefined ){
             saveMeetingUsers()
         }
     }, [groupMember])
