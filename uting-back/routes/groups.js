@@ -12,6 +12,9 @@ router.post('/getMyGroupMember', function (req, res, next) {
           if (req.body.sessionUser === nickname) {
             res.send(gr.member);
             }
+          else{
+            res.send("no")
+          }
         })
       })
     })

@@ -178,9 +178,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }
 
     useEffect(() => {
-        if(groupMember.length!==0 && roomObj.lenght!==undefined ){
+        //if(groupMember.length!==0 && roomObj!==undefined ){
             saveMeetingUsers()
-        }
+        //}
     }, [groupMember])
     // useEffect(() => {
         

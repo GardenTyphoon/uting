@@ -57,23 +57,32 @@ const Meeting = ({ checkFunc }) => {
             })
         }
         else {
-            if (limitNumOfParticipants(name, value, Object.keys(groupMembers.data).length)) {
+            if(groupMembers.length!==0){
+                if (limitNumOfParticipants(name, value, Object.keys(groupMembers.data).length)) {
 
-                setRoom({
-                    ...room,
-                    [name]: value
-                })
-                setToggleShowWarningMess(false);
+                    setRoom({
+                        ...room,
+                        [name]: value
+                    })
+                    setToggleShowWarningMess(false);
+                }
+                else {
+                    setToggleShowWarningMess(true);
+                }
             }
-            else {
-                setToggleShowWarningMess(true);
-            }
+            
+            
         }
     };
     const getMyGroupMember = async (e) => {
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
         console.log(res.data);
-        setGroupMembers(res);
+        if(res.data==="no"){
+            console.log(res)
+        }
+        else{
+            setGroupMembers(res);
+        }
     }
     useEffect(() => {
         getMyGroupMember();
