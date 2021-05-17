@@ -87,7 +87,9 @@ router.post('/', function(req, res,next){
     avgAge:req.body.avgAge,
     users:req.body.users,
     numOfWoman:req.body.numOfWoman,
-    numOfMan : req.body.numOfMan
+    numOfMan : req.body.numOfMan,
+    sumManner: req.body.sumManner,
+    sumAge: req.body.sumAge,
   });
   meeting.save((err)=>{
     res.send("방을 생성하였습니다.")
