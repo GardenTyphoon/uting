@@ -150,6 +150,7 @@ const Meeting = ({ checkFunc }) => {
                 setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
                 if(roomTitle!==undefined){
                     const socket = socketio.connect('http://localhost:3001');
+                    console.log("groupMembersSocketId",groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
                 }
 

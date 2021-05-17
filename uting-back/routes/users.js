@@ -235,6 +235,8 @@ router.post("/logined", function (req, res, next) {
 router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
+  console.log(req.body.currentSocketId)
+  console.log(typeof req.body.currentSocketId)
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
@@ -264,6 +266,8 @@ router.post("/savesocketid", function (req, res, next) {
           },
         },
         (err, u) => {
+          perObj.socketid=req.body.currentSocketId.id
+          console.log(perObj)
           res.send(perObj);
         }
       );
@@ -328,6 +332,7 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
+            console.log(per)
             socketidList.push(per.socketid);
           }
         });

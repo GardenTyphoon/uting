@@ -32,12 +32,16 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
+    console.log("socketId.id",socketId)
     const res = await axios.post(
       "http://localhost:3001/users/savesocketid",
       data
     );
+    console.log(res)
     setSocketFlag(true)
   };
+
+  
 
   useEffect(() => {
     
@@ -46,6 +50,7 @@ const Room = () => {
   }, [socketId]);
 
   let saveParticipantsSocketId = async()=>{
+    console.log("saveParticipantsSocketId")
     let data={
       preMember:participants
     }
@@ -62,11 +67,23 @@ const Room = () => {
     // location.state를 쓰려면 순차적으로 넘어갈때만 가능
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
+    
     const _id = meetingId;
-    const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: meetingId })
-    console.log(" 참여자들 닉네임 : " + res.data);
-   
-    setParticipants(res.data);
+    if(meetingId!==""){
+      console.log("meetingId",meetingId)
+      const res = await axios.post("http://localhost:3001/meetings/getparticipants", { _id: meetingId })
+      console.log(" 참여자들 닉네임 : " + res.data);
+      console.log("길이",res.data.length)
+      let par=[]
+      for(let i=0;i<res.data.length;i++){
+        par.push(res.data[i].nickname)
+        
+      }
+      console.log(par)
+     
+      setParticipants(par);
+    }
+    
   }
 
   useEffect(() => {

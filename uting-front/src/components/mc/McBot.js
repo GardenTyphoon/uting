@@ -7,7 +7,7 @@ import backImg from '../../img/뒤로가기.svg'
 import renewImg from '../../img/새로고침.svg'
 import playImg from '../../img/음악재생.svg'
 import pauseImg from '../../img/음악정지.png';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Modal,ModalBody,ModalHeader,Fade } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Modal,ModalBody,ModalHeader,Fade,Button } from 'reactstrap';
 import ReactAudioPlayer from 'react-audio-player';
 import socketio from "socket.io-client";
 const Box = styled.div`
@@ -42,7 +42,6 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
   const [content,setContent] = useState("")
   const [musicpath,setMusicpath]=useState("")
 
-  
 
   const toggle = (e) => {
     setDropdownOpen(prevState => !prevState)
@@ -167,7 +166,9 @@ const McBot = ({participantsSocketIdList,currentSocketId,participants}) => {
         :""
         }<div style={{marginTop:"50px",marginLeft:"50px"}}>{content}</div>
         </Box>
+        
       </Fade>
+      
     </div>
   );
 };
