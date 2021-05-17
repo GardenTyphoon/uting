@@ -7,6 +7,10 @@ import MeetingRoom from '../../img/MeetingRoom.png'
 import './MeetingList.css'
 import { Container, Row, Col } from 'reactstrap';
 import socketio from "socket.io-client";
+
+import { useAppState } from '../../providers/AppStateProvider';
+import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
+import { createGetAttendeeCallback, fetchMeeting } from '../../utils/api';
 let mannerColor;
 function mannerCredit(avgManner) {
     if (avgManner === 4.5) {
@@ -56,6 +60,10 @@ function birthToAge(birth) {
 export default function MeetingList({ checkState, groupSocketList, currentsocketId }) {
 
     const history = useHistory();
+    const meetingManager = useMeetingManager();
+    const { setAppMeetingInfo, region: appRegion, meetingId: appMeetingId } = useAppState();
+ 
+   
     const [viewRoomList, setView] = useState([]);
     const [state, setState] = useState(false);
     const [title, setTitle] = useState("");
@@ -64,6 +72,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [flag, setFlag] = useState(false)
     const [roomObj, setRoomObj] = useState({})
     
+    let sessionUser = sessionStorage.getItem("nickname");
+
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
     const attendRoomByID = async (room) => {
 
@@ -71,12 +81,16 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         setFlag(true)
         
         let avgManner = room.sumManner;
-        let avgAge = 0;
+        let avgAge = room.sumAge;
+
+        let sumManner = sumManner;
+        let sumAge = room.sumAge;
+
         let nowOfWoman = 0;
         let nowOfMan = 0;
 
-        groupMembersInfo = []
-        groupMembersSocketId = []
+        let groupMembersInfo = []
+        let groupMembersSocketId = []
 
         for(let i = 0; i < groupMember.length; i++){
             let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
@@ -96,18 +110,22 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             else nowOfMan += 1;
         }
 
-        avgManner /= groupMember.length;
-        avgAge /= groupMember.length;
+        sumManner += avgManner;
+        sumAge += avgAge;
+
+        let new_numOfMan = nowOfMan + room.numOfMan;
+        let new_numOfWoman = nowOfWoman + room.numOfWoman;
+
+        avgManner /= (new_numOfMan + new_numOfWoman);
+        avgAge /= (new_numOfMan + new_numOfWoman);
         avgAge = parseInt(avgAge);
 
 
-        new_numOfMan = numOfMan + room.numOfMan;
-        new_numOfWoman = numOfWoman + room.numOfWoman;
 
-        if((new_numOfMan + new_numOfWoman) === room.maxNum) new_status = "진행";
-
-        avgManner 
-
+        let new_status;
+        if((new_numOfMan + new_numOfWoman) === room.maxNum) {
+            new_status = "진행";
+        }
         let data = {
             title: room.title,
             maxNum: Number(room.num),
@@ -115,8 +133,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             avgManner: avgManner.toFixed(3),
             avgAge: avgAge,
             numOfWoman: nowOfWoman,
-            numOfMan: nowOfMan
-
+            numOfMan: nowOfMan,
+            sumOfManner: sumManner,
+            sumOfAge: sumAge,
         }
 
         data.users = groupMembersInfo;
@@ -128,11 +147,11 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 attendeeInfo: JoinInfo.Attendee
             });
 
-            setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
-            if(roomTitle!==undefined){
+            setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
+            if(room.title!==undefined){
                 const socket = socketio.connect('http://localhost:3001');
                 console.log("groupMembersSocketId",groupMembersSocketId)
-                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
             }
 
             history.push('/deviceSetup');
@@ -170,7 +189,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [flag])
 
     const getGroupInfo = async (e) => {
-        let sessionUser = sessionStorage.getItem("nickname");
+
         let sessionObject = { sessionUser: sessionUser };
         const res = await axios.post(
             "http://localhost:3001/groups/info",
