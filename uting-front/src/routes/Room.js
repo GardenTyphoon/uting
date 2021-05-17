@@ -39,6 +39,7 @@ const Room = () => {
   const [musicsrc, setMusicsrc] = useState("");
   const [respondFlag, setRespondFlag] = useState(false);
   const [gameStartFlag, setGameStartFlag] = useState(false);
+  const [gameEndFlag, setGameEndFlag] = useState(false);
   const [gameTurn, setGameTurn] = useState();
   const [question, setQuestion] = useState();
   const [participantsForTurn, setParticipantsForTurn] = useState();
@@ -155,8 +156,13 @@ const Room = () => {
         setRespondFlag(true);
         setQuestion(data.mesg);
       } else if (data.type === "gameStart") {
-        alert(data.message);
+        toast(data.message);
         setGameStartFlag(true);
+        setGameEndFlag(false);
+      } else if (data.type === "endGame") {
+        toast(data.message);
+        setGameStartFlag(false);
+        //setGameEndFlag(true);
       }
     });
 
@@ -201,6 +207,7 @@ const Room = () => {
         participants={participants}
         respondFlag={respondFlag}
         gameStartFlag={gameStartFlag}
+        gameEndFlag={gameEndFlag}
         gameTurn={gameTurn}
         question={question}
         participantsForTurn={participantsForTurn}

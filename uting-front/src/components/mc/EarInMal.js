@@ -183,7 +183,14 @@ const EarInMal = ({
     setIsAsked(false);
   };
 
-  const ending = () => {};
+  const ending = () => {
+    setTurnFlag(false);
+    data = {
+      socketIdList: participantsSocketIdList,
+    };
+    const socket = socketio.connect("http://localhost:3001");
+    socket.emit("endGame", data);
+  };
 
   return (
     <div className="EarInMal">

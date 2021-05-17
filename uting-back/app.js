@@ -281,5 +281,16 @@ app.io.on("connection", function (socket) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
     }
   });
+
+  socket.on("endGame", function (msg) {
+    let data = {
+      type: "endGame",
+      message: `게임이 종료 되었습니다!~!`,
+    };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
+    }
+  });
 });
+
 module.exports = app;
