@@ -93,7 +93,7 @@ router.post("/signin", function (req, res, next) {
       }
     });
     if (ismember === true) {
-      console.log(perObj._id);
+      //console.log(perObj._id);
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -235,8 +235,8 @@ router.post("/logined", function (req, res, next) {
 router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
-  console.log(req.body.currentSocketId)
-  console.log(typeof req.body.currentSocketId)
+  //console.log(req.body.currentSocketId)
+  //console.log(typeof req.body.currentSocketId)
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
@@ -267,7 +267,7 @@ router.post("/savesocketid", function (req, res, next) {
         },
         (err, u) => {
           perObj.socketid=req.body.currentSocketId.id
-          console.log(perObj)
+          //console.log(perObj)
           res.send(perObj);
         }
       );
@@ -287,7 +287,7 @@ router.post("/logout", function (req, res, next) {
       if (req.body.email === per.email) {
         ismember = true;
         perObj = per;
-        console.log("로그아웃", per);
+        //console.log("로그아웃", per);
       }
     });
     if (ismember === true) {
@@ -311,13 +311,13 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          console.log(perObj);
+          //console.log(perObj);
           res.send("success");
         }
       );
     }
     if (ismember === false) {
-      console.log("no!");
+      //console.log("no!");
       res.send("no");
     }
   });
@@ -332,7 +332,7 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            console.log(per)
+            //console.log(per)
             socketidList.push(per.socketid);
           }
         });
@@ -341,6 +341,52 @@ router.post("/preMemSocketid", function (req, res, next) {
     });
   }
 });
+
+router.post("/cutUcoin",function(req,res,next){
+  let perObj={};
+  let perArr=[];
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+        if (req.body.currentUser === per.nickname) {
+          ismember = true;
+          console.log("-----------------")
+          perObj=per;
+          //perArr.push(per)
+          console.log("-----------------")
+        }
+    
+    });
+    if(ismember===true){
+
+      User.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: perObj.status,
+            _id: perObj._id,
+            name: perObj.name,
+            nickname: perObj.nickname,
+            gender: perObj.gender,
+            birth: perObj.birth,
+            email: perObj.email,
+            password: perObj.password,
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: perObj.mannerCredit,
+            ucoin: perObj.ucoin-1,
+            socketid: perObj.socketid,
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+
+    }
+    
+  });
+})
 
 
 

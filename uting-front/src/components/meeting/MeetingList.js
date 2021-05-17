@@ -65,12 +65,14 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
  
    
     const [viewRoomList, setView] = useState([]);
+    const [originList,setOriginList]=useState([])
     const [state, setState] = useState(false);
     const [title, setTitle] = useState("");
    
     const [groupMember, setGroupMember] = useState([]);
     const [flag, setFlag] = useState(false)
     const [roomObj, setRoomObj] = useState({})
+    const [prevFilter,setPrevFilter]=useState("")
     
     let sessionUser = sessionStorage.getItem("nickname");
 
@@ -210,23 +212,60 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         }
     }
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/meetings')
-            .then(({ data }) => setView(data))
-            .catch((err) => { });
+        getMeetings()
         getGroupInfo()
     }, []);
 
 
     useEffect(() => {
         if(checkState===true){
-            axios
-            .get('http://localhost:3001/meetings')
-            .then(({ data }) => setView(data))
-            .catch((err) => { });
+            getMeetings()
         }
     }, [checkState])
+/*
+    let filt = ()=>{
+        const filtered = viewRoomList.filter((list) => {
+            return list.title.toLowerCase().includes(filterRoomName)});
+     
+        console.log(filtered)
+        
+        setView(filtered)
+    }*/
 
+    let getMeetings =async()=>{
+        await axios
+            .get('http://localhost:3001/meetings')
+            .then(({ data }) => {
+                setView(data)
+                setOriginList(data)
+            })
+            .catch((err) => { });
+        
+    }
+    /*
+    useEffect(()=>{
+        if(filterRoomName!=="")
+        {
+            filt()
+        }
+        else if(filterRoomName===""){
+            const filtered = originList.filter((list) => {
+                return list.title.toLowerCase().includes(filterRoomName)});
+         
+            console.log(filtered)
+            
+            setView(filtered)
+        }
+            
+            
+    
+    },[filterRoomName])*/
+
+/*
+    useEffect(()=>{
+
+    },[viewRoomList])
+*/
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
@@ -245,7 +284,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
                                 <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
-                                    <div style={{ marginRight: "7%" }}>{""}</div>
+                                    <div style={{ marginRight: "7%" }}>{room.avgManner!==null?room.avgManner:""}</div>
                                     <div >{mannerCredit(room.avgManner)}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small" }}>{room.avgAge}살</div>

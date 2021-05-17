@@ -99,9 +99,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                 setTimeout(()=>{
                     alert("투표가 종료되었습니다. 미팅을 종료합니다.");
                 
-                history.push({
-                    pathname: `/main`
-                });
+                window.location.href="http://localhost:3000/main"
                 },1000)
               
             }

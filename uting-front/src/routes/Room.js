@@ -60,6 +60,11 @@ const Room = () => {
       setParticipantsSocketId(res.data)
     }
   }
+  useEffect(()=>{
+    if(participantsSocketId.length!==0){
+      cutUcoin(sessionStorage.getItem("nickname"))
+    }
+  },[participantsSocketId])
 
 
   const getparticipants = async () => {
@@ -130,6 +135,8 @@ const Room = () => {
       }
     })
 
+
+
   return () => {
     socket.removeListener('room')
   }
@@ -144,9 +151,17 @@ const Room = () => {
     
   },[socketFlag])
   
+  let cutUcoin = async(e)=>{
+    let data={
+      "currentUser":e
+    }
+    const res = await axios.post("http://localhost:3001/users/cutUcoin",data)
+    console.log(res)
+  }
 
   useEffect(()=>{
     saveParticipantsSocketId()
+    
   },[participants])
 
 
