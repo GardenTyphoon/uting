@@ -14,30 +14,25 @@ const EarInMal = ({
   currentSocketId,
   participants,
   isTurn,
-  nextTurnFlag,
+  respondFlag,
   respondFormFlag,
   gameStartFlag,
   gameTurn,
   question,
+  participantsForTurnSet,
 }) => {
-  //let sessionUser = sessionStorage.getItem("nickname");
   const [startButtonFade, setStartButtonFade] = useState(true); //시작버튼
-  //const [content, setContent] = useState(false);
-  const [myturnFlag, setMyTurnFlag] = useState(isTurn);
   const [turn, setTurn] = useState(gameTurn);
   const [msgModalFlag, setMsgModalFlag] = useState(false);
   const [msg, setMsg] = useState();
-  const [nextTurnUser, setnextTurnUser] = useState();
-  const [isNextTurn, setIsNextTurn] = useState(nextTurnFlag);
-  const [flag, setFlag] = useState(false);
-  const [gameStart, setGameStart] = useState(gameStartFlag);
+  const [needToRespond, setNeedToRespond] = useState(respondFlag);
+  const [turnFlag, setTurnFlag] = useState(isTurn);
   const [isAsked, setIsAsked] = useState(false);
   const [questionedUser, setQuestionedUser] = useState();
   const [participantsForTurn, setParticipantsForTurn] = useState(participants);
-  const socket = socketio.connect("http://localhost:3001");
   var data;
   let toSendSckId;
-
+  let currentUser = sessionStorage.getItem("nickname");
   function getRandomInt(min, max) {
     //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
@@ -45,32 +40,39 @@ const EarInMal = ({
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-    let tmp = participantsForTurn.slice();
-    tmp.splice(rand, rand);
+
+    console.log("participantsForTurn :" + participantsForTurn); //for debug
+    var tmp = participantsForTurn.slice();
+    tmp.splice(rand, 1);
+    console.log("tmp : " + tmp);
     setParticipantsForTurn(tmp);
   };
 
   const start = () => {
-    const socket = socketio.connect("http://localhost:3001");
     setStartButtonFade(false);
-    setFlag(true);
     determineTurn(participantsForTurn);
   };
 
   useEffect(() => {
-    console.log("flag : " + flag);
-    if (flag) {
+    if (!startButtonFade) {
       data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
       const socket = socketio.connect("http://localhost:3001");
-      console.log("socket data : ");
-      console.log(data);
       socket.emit("gameStart", data);
-      console.log("gameStart socket emit!!");
     }
-  }, [flag]);
+  }, [startButtonFade]);
 
   useEffect(() => {
-    setGameStart(gameStartFlag);
+    //console.log("participantsForTurnSet :" + participantsForTurn);
+    if (participantsForTurnSet) {
+      setParticipantsForTurn(participantsForTurnSet);
+    }
+  }, [participantsForTurnSet]);
+
+  /*useEffect(() => {
+    console.log("participantsForTurn :" + participantsForTurn); //for debug
+  }, [participantsForTurn]);*/
+
+  useEffect(() => {
     if (gameStartFlag) {
       setStartButtonFade(false);
     }
@@ -79,53 +81,49 @@ const EarInMal = ({
   const matchMemSckId = async (nickname) => {
     let tmp = [];
     tmp.push(nickname);
-    console.log("matchMem -ing ");
-    console.log("tmp : " + tmp);
     const res = await axios.post("http://localhost:3001/users/usersSocketId", {
       users: tmp,
     });
     if (res.status == 200) {
-      console.log("data[0] : " + data);
       toSendSckId = res.data;
     }
   };
 
-  useEffect(async () => {
-    console.log("turn & gameTurn : " + turn + " " + gameTurn);
+  useEffect(() => {
     if (turn) {
-      //(turn && !gameTurn)
-      //게임 스타트를 직접 누른 경우에만 실행
-      console.log("뷁 ");
-
-      await matchMemSckId(turn);
-      console.log(participants);
-      console.log(participantsSocketIdList);
-      //const socket = socketio.connect("http://localhost:3001");
-      socket.emit("notifyTurn", {
-        turn: turn,
-        socketIdList: participantsSocketIdList,
-      });
-      socket.emit("notifyMember", { turnSocketId: toSendSckId });
+      globalizeTurn(); //+
     }
   }, [turn]);
 
+  const globalizeTurn = async () => {
+    await matchMemSckId(turn);
+    console.log(participants);
+    console.log(participantsSocketIdList);
+    const socket = socketio.connect("http://localhost:3001");
+    socket.emit("notifyTurn", {
+      turn: turn,
+      socketIdList: participantsSocketIdList,
+      remainParticipants: participantsForTurn,
+    });
+    socket.emit("notifyMember", { turnSocketId: toSendSckId });
+  };
+
   useEffect(() => {
-    setMyTurnFlag(isTurn);
+    setTurnFlag(isTurn);
   }, [isTurn]);
+
   useEffect(() => {
-    if (gameTurn) {
-      setTurn(gameTurn);
+    setTurn(gameTurn);
+    console.log("gameTurn : " + gameTurn);
+    console.log("currentUser : " + currentUser);
+    if (gameTurn === currentUser) {
+      setTurnFlag(true);
     }
   }, [gameTurn]);
 
   useEffect(() => {
-    console.log("participatns : " + participantsSocketIdList);
-  }, [participants]);
-
-  useEffect(() => {
-    setIsNextTurn(nextTurnFlag);
-    console.log("isNextTurn : " + isNextTurn);
-  }, [nextTurnFlag]); //message받고나서
+    setNeedToRespond(respondFlag);
+  }, [respondFlag]); //message받고나서
 
   const updateField = (e) => {
     let { name, value } = e.target;
@@ -133,26 +131,20 @@ const EarInMal = ({
   };
   const sendQues = async (e) => {
     e.preventDefault();
-    console.log("nextTurnUser : " + questionedUser);
-
     await matchMemSckId(questionedUser);
-
     data = {
       user: turn,
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    console.log("data : ");
-    console.log(data);
-    //const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("sendQues", data);
     alert("전송완료!");
-    //setMyTurnFlag(false);  <<이거 답변받고 false로 해야된다!
-    //toggleMsgModalFlag();
+    setMsgModalFlag(false);
     setIsAsked(true);
   };
 
-  const choosenextTurnUser = (e) => {
+  const questionToWhom = (e) => {
     setMsgModalFlag(true);
     setQuestionedUser(e.target.value);
   };
@@ -162,10 +154,10 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       msg: e.target.value,
     };
-    //const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("respondMsg", data);
     alert("전송완료!");
-    setIsNextTurn(false);
+    setNeedToRespond(false);
   };
   const notifyQuestion = async (e) => {
     await matchMemSckId(e.target.value);
@@ -174,18 +166,21 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    //const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("sendMsg", data);
     alert("전송완료~!");
   };
 
   const giveTurn = () => {
-    gameTurn = null;
-    determineTurn(participantsForTurn);
-
-    setIsAsked(false); //turn이었던 사람 state 초기화
-    setMyTurnFlag(false);
-    setIsNextTurn(false);
+    if (participantsForTurn.length === 0) {
+      //멤버 한바퀴 다돌아서 새롭게 랜덤 턴 시
+      console.log("determine with participants : " + participants);
+      determineTurn(participants);
+    } else {
+      determineTurn(participantsForTurn);
+    }
+    setTurnFlag(false);
+    setIsAsked(false);
   };
 
   const ending = () => {};
@@ -206,7 +201,7 @@ const EarInMal = ({
             gridTemplateRows: "0.5fr 2fr 15%",
           }}
         >
-          {myturnFlag ? (
+          {turnFlag ? (
             <>
               {isAsked ? (
                 <>
@@ -272,7 +267,7 @@ const EarInMal = ({
                         style={{ border: 0 }}
                         key={index}
                         value={member}
-                        onClick={choosenextTurnUser}
+                        onClick={questionToWhom}
                       >
                         {member}
                       </Button>
@@ -300,7 +295,7 @@ const EarInMal = ({
             </>
           ) : (
             <>
-              {isNextTurn ? (
+              {needToRespond ? (
                 <>
                   <div
                     style={{

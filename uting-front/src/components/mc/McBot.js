@@ -58,11 +58,11 @@ const McBot = ({
   participantsSocketIdList,
   currentSocketId,
   participants,
-  isTurn,
-  nextTurnFlag,
+  respondFlag,
   gameStartFlag,
   gameTurn,
   question,
+  participantsForTurn,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
@@ -161,6 +161,8 @@ const McBot = ({
     if (gameStartFlag) {
       setContentFade(true);
       setNumber(4);
+    } else {
+      setContentFade(false);
     }
   }, [gameStartFlag]);
 
@@ -238,11 +240,11 @@ const McBot = ({
                   participantsSocketIdList={participantsSocketIdList}
                   currentSocketId={currentSocketId}
                   participants={participants}
-                  isTurn={isTurn}
-                  nextTurnFlag={nextTurnFlag}
+                  respondFlag={respondFlag}
                   gameStartFlag={gameStart}
                   gameTurn={gameTurn}
                   question={question}
+                  participantsForTurnSet={participantsForTurn}
                 />
                 {!gameStart ? (
                   <>

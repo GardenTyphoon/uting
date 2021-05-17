@@ -240,17 +240,13 @@ app.io.on("connection", function (socket) {
     }
   });
   socket.on("notifyTurn", function (msg) {
-    let data = { type: "notifyTurn", turn: msg.turn };
+    let data = {
+      type: "notifyTurn",
+      turn: msg.turn,
+      remainParticipants: msg.remainParticipants,
+    };
     for (let i = 0; i < msg.socketIdList.length; i++) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
-    }
-  });
-  socket.on("notifyMember", function (msg) {
-    console.log("notifyMember");
-    console.log(msg);
-    let data = { type: "notifyMember" };
-    if (msg.turnSocketId != "undefined") {
-      app.io.to(msg.turnSocketId).emit("room", data);
     }
   });
   socket.on("sendMsg", function (msg) {
@@ -277,7 +273,6 @@ app.io.on("connection", function (socket) {
   });
 
   socket.on("gameStart", function (msg) {
-    console.log("gameStart@!@!");
     let data = {
       type: "gameStart",
       message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
