@@ -84,6 +84,8 @@ const Meeting = ({ checkFunc }) => {
             //내가 속한 그룹의 그룹원들 닉네임 받아오기
             //평균 나이, 평균 학점, 현재 남녀 수 구하기
             let avgManner = 0;
+            let sumManner = 0;
+            let sumAge = 0;
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
@@ -107,14 +109,14 @@ const Meeting = ({ checkFunc }) => {
 
 
             }
-
+            sumManner = avgManner;
+            sumAge = avgAge;
             avgManner /= groupMembers.data.length;
             avgAge /= groupMembers.data.length;
             avgAge = parseInt(avgAge);
-            //방 생성
+
             const roomTitle= room.title.trim().toLocaleLowerCase()
-            //setRoomtitle(roomTitle);
-            console.log(roomtitle)
+
             
             let data = {
                 title: roomTitle,
@@ -123,20 +125,19 @@ const Meeting = ({ checkFunc }) => {
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
                 numOfWoman: nowOfWoman,
-                numOfMan: nowOfMan
+                numOfMan: nowOfMan,
+                sumManner: sumManner,
+                sumAge: sumAge,
             };
             data.users = groupMembersInfo;
 
 
-            // await axios.post('http://localhost:3001/meetings', data);
             meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
             
             
             checkFunc(true)
 
             try {
-                // 원래 형태는 id(title), 참여자이름, 지역임.
-                // const { JoinInfo } = await fetchMeeting(roomTitle, room);
                 
                 const { JoinInfo } = await fetchMeeting(data);
                 await meetingManager.join({
@@ -144,9 +145,6 @@ const Meeting = ({ checkFunc }) => {
                     attendeeInfo: JoinInfo.Attendee
                 });
 
-                console.log(JoinInfo)
-                // 디바이스 세팅하고 미팅 시작하는데 영향 끼치는 부분이라서
-                // 실제로는 중간 파라미터로 사용자 이름 넣어야함. sessionUser가 보니까 nickname string인거 같은데 그거 넣으면 될 듯 하다
                 setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
                 if(roomTitle!==undefined){
                     const socket = socketio.connect('http://localhost:3001');
