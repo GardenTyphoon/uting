@@ -26,7 +26,11 @@ import {
 } from "reactstrap";
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
-import { alignItems, paddingLeft } from "styled-system";
+
+const McBotContainer = styled.div`
+  width: 100vw;
+`;
+
 const Box = styled.div`
   border: 2px solid rgb(255, 255, 255);
   border-radius: 7px;
@@ -163,28 +167,12 @@ const McBot = ({
   const toogleERR = () => setModal(!modal);
 
   return (
-    <div>
-      <Modal isOpen={modal} toggle={toogleERR}>
-        <ModalHeader toggle={toogleERR}>Modal title</ModalHeader>
-        <ModalBody>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toogleERR}>
-            Do Something
-          </Button>{" "}
-          <Button color="secondary" onClick={toogleERR}>
-            Cancel
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+    <McBotContainer>
+      <Dropdown
+        isOpen={dropdownOpen}
+        toggle={toggle}
+        style={{ width: "160px", margin: "0px" }}
+      >
         <DropdownToggle
           caret
           style={{
@@ -193,7 +181,7 @@ const McBot = ({
             border: "0px",
           }}
         >
-          <img src={McBotImg} style={{ width: "80%" }} />
+          <img src={McBotImg} style={{ width: "160px" }} />
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={(e) => FadeToggle(1)}>게임 추천</DropdownItem>
@@ -292,7 +280,7 @@ const McBot = ({
           <div style={{ marginTop: "50px", marginLeft: "50px" }}>{content}</div>
         </Box>
       </Fade>
-    </div>
+    </McBotContainer>
   );
 };
 export default McBot;

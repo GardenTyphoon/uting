@@ -175,12 +175,9 @@ export default function MeetingList({
   };
 
   useEffect(() => {
-    //if (
-    //  Object.keys(groupMember.data).length !== 0 &&
-    //  roomObj.lenght !== undefined
-    //) {
-    saveMeetingUsers();
-    //}
+    if (groupMember.length !== 0 && roomObj.lenght !== undefined) {
+      saveMeetingUsers();
+    }
   }, [groupMember]);
   // useEffect(() => {
 
@@ -197,7 +194,11 @@ export default function MeetingList({
       "http://localhost:3001/groups/info",
       sessionObject
     );
-    setGroupMember(res.data.member);
+    console.log(typeof res.data.member);
+    let onlyMe = [sessionUser];
+    if (res.data === "no") setGroupMember(onlyMe);
+    else setGroupMember(res.data.member);
+    //setGroupMember(res.data.member);
   };
 
   const toggleParticipantsInfo = (title) => {

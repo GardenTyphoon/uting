@@ -91,7 +91,7 @@ const Profile = () => {
           />
         )}
       </button>
-      <div style={{ display: "flex", flexDirection: "column", width:"90px" }}>
+      <div style={{ display: "flex", flexDirection: "column", width:"100px" }}>
         <div style={{  marginLeft: "15%", color: "#896E6E", fontWeight:"550" }}>
           {ProfileInfo.nickname}
         </div>
