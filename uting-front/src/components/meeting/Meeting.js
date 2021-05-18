@@ -67,6 +67,8 @@ const Meeting = ({ checkFunc }) => {
             else {
                 setToggleShowWarningMess(true);
             }
+            
+            
         }
     };
     const getMyGroupMember = async () => {

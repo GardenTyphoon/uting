@@ -351,4 +351,93 @@ router.post("/preMemSocketid", function (req, res, next) {
   }
 });
 
+router.post("/cutUcoin",function(req,res,next){
+  let perObj={};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+        if (req.body.currentUser === per.nickname) {
+          ismember = true;
+          console.log("-----------------")
+          perObj=per;
+          //perArr.push(per)
+          console.log("-----------------")
+        }
+    
+    });
+    if(ismember===true){
+
+      User.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: perObj.status,
+            _id: perObj._id,
+            name: perObj.name,
+            nickname: perObj.nickname,
+            gender: perObj.gender,
+            birth: perObj.birth,
+            email: perObj.email,
+            password: perObj.password,
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: perObj.mannerCredit,
+            ucoin: perObj.ucoin-1,
+            socketid: perObj.socketid,
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+
+    }
+    
+  });
+})
+
+router.post("/manner",function(req,res,next){
+  let perObj={};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+        if (req.body.name === per.nickname) {
+          ismember = true;
+          perObj=per;
+        }
+    
+    });
+    if(ismember===true){
+      User.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: perObj.status,
+            _id: perObj._id,
+            name: perObj.name,
+            nickname: perObj.nickname,
+            gender: perObj.gender,
+            birth: perObj.birth,
+            email: perObj.email,
+            password: perObj.password,
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: ((perObj.mannerCredit + req.body.manner)/2),
+            ucoin: perObj.ucoin,
+            socketid: perObj.socketid,
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+
+    }
+    
+  });
+})
+
+
+
+
 module.exports = router;
