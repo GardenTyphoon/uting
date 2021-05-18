@@ -85,15 +85,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
         setRoomObj(room)
         // setFlag(true)
+        const userNum = room.users.length;
+        let sumManner = room.avgManner * userNum;
+        let sumAge = room.avgAge * userNum;
 
-        let avgManner = room.sumManner;
-        let avgAge = room.sumAge;
-
-        let sumManner = room.sumManner;
-        let sumAge = room.sumAge;
-
-        let nowOfWoman = 0;
-        let nowOfMan = 0;
+        let numOfWoman = 0;
+        let numOfMan = 0;
 
         let groupMembersInfo = []
         let groupMembersSocketId = []
@@ -110,11 +107,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (userInfo.data.nickname != sessionUser) {
                 groupMembersSocketId.push(userInfo.data.socketid);
             }
-            avgManner += userInfo.data.mannerCredit;
-            avgAge += birthToAge(userInfo.data.birth);
-            if (userInfo.data.gender === "woman") nowOfWoman += 1;
-
-            else nowOfMan += 1;
+            sumManner += userInfo.data.mannerCredit;
+            sumAge += birthToAge(userInfo.data.birth);
+            if (userInfo.data.gender === "woman") numOfWoman += 1;
+            else numOfMan += 1;
         }
         let coinCheck =true;
         for(let i=0;i<groupMembersInfo.length;i++){
@@ -123,17 +119,15 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             }
         }
         if(coinCheck===true){
-            sumManner += avgManner;
-            sumAge += avgAge;
+            // sumManner += avgManner;
+            // sumAge += avgAge;
+            //
     
-            let new_numOfMan = nowOfMan + room.numOfMan;
-            let new_numOfWoman = nowOfWoman + room.numOfWoman;
+            let new_numOfMan = numOfMan + room.numOfMan;
+            let new_numOfWoman = numOfWoman + room.numOfWoman;
     
-            avgManner /= (new_numOfMan + new_numOfWoman);
-            avgAge /= (new_numOfMan + new_numOfWoman);
-            avgAge = parseInt(avgAge);
-    
-    
+            const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
+            const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
     
             let new_status;
             if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
@@ -145,11 +139,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 status: new_status,
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
-                numOfWoman: nowOfWoman,
-                numOfMan: nowOfMan,
-                sumOfManner: sumManner,
-                sumOfAge: sumAge,
-                session: sessionUser,
+                numOfWoman: numOfWoman,
+                numOfMan: numOfMan,
             }
     
             data.users = groupMembersInfo;
@@ -161,7 +152,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                     attendeeInfo: JoinInfo.Attendee
                 });
     
-                setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
+                setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
                 if (room.title !== undefined) {
                     const socket = socketio.connect('http://localhost:3001');
                     console.log("groupMembersSocketId", groupMembersSocketId)
