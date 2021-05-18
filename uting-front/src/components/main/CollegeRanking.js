@@ -5,7 +5,8 @@ import styled from "styled-components";
 const CollegeRankingContainer = styled.div`
     margin-top:10px;
   background : white;
-  
+  width:15vw;
+    max-width:200px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -16,8 +17,8 @@ const CollegeContainer = styled.div`
     color:black;
     font-family: NanumSquare_acR;
     border-radius:10px;
-    width:170px;
-    min-width:13vw;
+    width:13vw;
+    max-width:180px;
     padding:5px;
     margin:5px;
     text-align:center;

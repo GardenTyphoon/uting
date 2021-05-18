@@ -28,7 +28,7 @@ const SignUpBox = styled.div`
   margin-bottom:15px;
   padding:20px;
   background-color: white;
-  width:50vw;
+  width:45vw;
   min-width:500px;
   font-weight:bold;
   font-size:large;
