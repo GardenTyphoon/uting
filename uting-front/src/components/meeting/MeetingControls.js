@@ -6,7 +6,7 @@ import {
   ContentShareControl,
   AudioOutputControl,
   ControlBarButton,
-  Dots
+  Dots,
 } from 'amazon-chime-sdk-component-library-react';
 
 import EndMeetingControl from './EndMeetingControl';
@@ -30,15 +30,8 @@ const MeetingControls = () => {
         layout="undocked-horizontal"
         showLabels
       >
-        <ControlBarButton
-          className="mobile-toggle"
-          icon={<Dots />}
-          onClick={handleToggle}
-          label="Menu"
-        />
         <AudioInputControl />
         <VideoInputControl />
-        <ContentShareControl />
         <AudioOutputControl />
         <EndMeetingControl />
       </ControlBar>
