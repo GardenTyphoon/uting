@@ -83,7 +83,7 @@ const Intro = () => {
       )}
 
       <Container>
-        <Modal isOpen={toggleSignIn} style={{ width: "30%" }}>
+        <Modal isOpen={toggleSignIn} style={{ width: "50%" , maxWidth:"350px"}}>
           <ModalBody isOpen={toggleSignIn}>
             <button
               onClick={(e) => {
