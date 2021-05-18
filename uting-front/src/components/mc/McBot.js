@@ -186,11 +186,13 @@ const McBot = ({
         setDropdownOpen(false)
         setContentFade(true)
         setNumber(3)
+        setContent("")
       }
       else if(intervalFade===4){
         setDropdownOpen(false)
         setContentFade(true)
         setNumber(4)
+        setContent("")
       }
     }
   },[intervalFade])
