@@ -24,6 +24,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     const [goManner,setGoManner] = useState({"name":"","manner":""})
 
     const onClickEndMeetingBtn = (e) => {
+        console.log(participantsSocketIdList)
         setToggleEndMeetingBtn(!toggleEndMeetingBtn)
         
     }
