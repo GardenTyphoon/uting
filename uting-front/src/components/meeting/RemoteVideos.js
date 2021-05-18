@@ -1,6 +1,8 @@
 import React, { memo, useState } from 'react';
-import camera_on from '../../img/camera_on.png';
-import camera_off from '../../img/camera_off.png';
+import camera_on from '../../img/cam_on.png';
+import camera_off from '../../img/cam_off.png';
+import { useAppState } from '../../providers/AppStateProvider';
+
 import {  
   useRemoteVideoTileState, 
   RemoteVideo, 
@@ -30,6 +32,7 @@ export const RemoteVideos = (props) => {
       {tiles.map((tileId) => {
         const attendee = roster[tileIdToAttendeeId[tileId]] || {};
         const { name } = attendee;
+        console.log(tileId)
         return (
           <div style={temp}>
           <Grid                
@@ -44,6 +47,7 @@ export const RemoteVideos = (props) => {
             {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} name={name} /> : ""}
             
           </Grid>
+          
           </div>
         );
       })}

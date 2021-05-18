@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import camera_on from '../../img/camera_on.png';
-import camera_off from '../../img/camera_off.png';
+import camera_on from '../../img/cam_on.png';
+import camera_off from '../../img/cam_off.png';
 
 import {
     Grid,
@@ -64,7 +64,7 @@ export default function Rooms() {
                 
                 >
        
-                         <LocalVideo />
+                    <LocalVideo />
                         
                   
                     

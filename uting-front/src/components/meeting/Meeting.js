@@ -144,11 +144,13 @@ const Meeting = ({ checkFunc }) => {
                     numOfMan: nowOfMan,
                     sumManner: sumManner,
                     sumAge: sumAge,
+                    session: sessionUser,
                 };
                 data.users = groupMembersInfo;
     
     
                 meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
+                
                 
                 
                 checkFunc(true)
@@ -161,7 +163,7 @@ const Meeting = ({ checkFunc }) => {
                         attendeeInfo: JoinInfo.Attendee
                     });
     
-                    setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
+                    setAppMeetingInfo(roomTitle, sessionUser, 'ap-northeast-2');
                     if(roomTitle!==undefined){
                         const socket = socketio.connect('http://localhost:3001');
                         console.log("groupMembersSocketId",groupMembersSocketId)

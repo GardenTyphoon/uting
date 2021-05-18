@@ -41,16 +41,11 @@ const app = process.env.npm_config_app || 'meeting';
 router.get('/', async function(req, res, next) {
   Meeting.find({}).then((meetings)=>{ 
     res.json(meetings);
+  }).catch((err) => {
+    res.send(err);
   });
-  //res.json(meetings);
 });
 
-// GET one meeting
-router.get('/:id', async function(req, res, next) {
-  
-  const meeting = await Meeting.findOne({_id:req.params.id});
-   //res.json(meeting);
-});
 
 // getAttendee
 router.post('/attendee', async function (req, res, next) {
@@ -98,14 +93,8 @@ router.post('/', function(req, res,next){
 
 // POST CHIME one meeting
 router.post('/join', async function(req, res, next){
-  // const temp_title = await Meeting.findOne({title:req.body.title});
-  // console.log(temp_title);
-  // console.log(req.body);
-  // const meeting = new Meeting({
-  //   title:req.body.title,
-  //   num:req.body.num,
-  //   status:req.body.status
-  // });
+
+
   const temp_room = await Meeting.findOne({title:req.body.title});
   console.log('what meetingroom data')
   console.log(temp_room)
@@ -121,8 +110,9 @@ router.post('/join', async function(req, res, next){
   });
   meeting.save();
 
+
   const title = req.body.title;
-  const name = "Tester"; // @TODO 세션을활용해서 Nickname 넣어주기 임시로 이렇게 넣어 놓은 것임.
+  const name = req.body.session;
   const region = "us-east-1"
   
   if (!meetingCache[title]){
