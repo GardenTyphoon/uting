@@ -37,10 +37,12 @@ const Room = () => {
   const [vote, setVote] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [musicsrc, setMusicsrc] = useState("");
-  const [isTurn, setIsTurn] = useState(false);
-  const [nextTurnFlag, setNextTurnFlag] = useState(false);
+  const [respondFlag, setRespondFlag] = useState(false);
   const [gameStartFlag, setGameStartFlag] = useState(false);
+  const [gameEndFlag, setGameEndFlag] = useState(false);
   const [gameTurn, setGameTurn] = useState();
+  const [question, setQuestion] = useState();
+  const [participantsForTurn, setParticipantsForTurn] = useState();
 
   const { meetingId } = useAppState();
 
@@ -142,18 +144,25 @@ const Room = () => {
         toast(data.message);
         document.getElementById("audio").play();
       } else if (data.type === "notifyTurn") {
-        setNextTurnFlag(false); //에러 발생할수도 얘땜시
         toast(`${data.turn}님의 차례입니다!`);
         setGameTurn(data.turn);
-      } else if (data.type === "notifyMember") {
-        setIsTurn(true);
+        setParticipantsForTurn(data.remainParticipants);
       } else if (data.type === "receiveMsg") {
         console.log("receiveMsg!!!");
         toast(`${data.mesg}`);
-        setNextTurnFlag(true);
+      } else if (data.type === "receiveQues") {
+        console.log("receiveQues!!!");
+        toast(`${data.mesg}`);
+        setRespondFlag(true);
+        setQuestion(data.mesg);
       } else if (data.type === "gameStart") {
-        alert(data.message);
+        toast(data.message);
         setGameStartFlag(true);
+        setGameEndFlag(false);
+      } else if (data.type === "endGame") {
+        toast(data.message);
+        setGameStartFlag(false);
+        //setGameEndFlag(true);
       }
     });
 
@@ -181,10 +190,6 @@ const Room = () => {
     saveParticipantsSocketId();
   }, [participants]);
 
-  useEffect(() => {
-    console.log("nextTurnFlag : " + nextTurnFlag);
-  }, [nextTurnFlag]);
-
   return (
     <div
       style={{
@@ -200,10 +205,12 @@ const Room = () => {
         participantsSocketIdList={participantsSocketId}
         currentSocketId={socketId}
         participants={participants}
-        isTurn={isTurn}
-        nextTurnFlag={nextTurnFlag}
+        respondFlag={respondFlag}
         gameStartFlag={gameStartFlag}
+        gameEndFlag={gameEndFlag}
         gameTurn={gameTurn}
+        question={question}
+        participantsForTurn={participantsForTurn}
       ></McBot>
       <Vote
         ref={voteRef}
