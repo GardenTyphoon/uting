@@ -14,6 +14,9 @@ router.post('/getMyGroupMember', function (req, res, next) {
             isMember=true;
             res.send(gr.member);
             }
+          else{
+            res.send("no")
+          }
         })
       })
       if(isMember===false) res.send("no");
