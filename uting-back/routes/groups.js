@@ -35,7 +35,7 @@ router.post('/info', function(req, res,next){
         
       })
       if(ismember===false){
-        res.send("no")
+        res.send("no");
       }
   
     })
@@ -44,6 +44,7 @@ router.post('/info', function(req, res,next){
   
   // POST write one group
   router.post('/', function(req, res,next){
+
     let exist=false;
     let foundPer;
     let memList=[];

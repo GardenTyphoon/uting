@@ -163,6 +163,7 @@ const McBot = ({
       setNumber(4);
     } else {
       setContentFade(false);
+      setNumber(0);
     }
   }, [gameStartFlag]);
 
