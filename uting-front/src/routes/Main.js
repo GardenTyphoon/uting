@@ -190,8 +190,8 @@ const Main = () => {
 
 
         <div className="Room">
-          <div className="RoomTop">
-            <div className="RoomTop">
+          <div className="RoomTop" style={{width:"50vw", minWidth:"520px"}}>
+            <div className="RoomTop" style={{width:"43vw"}}>
             <div style={{fontFamily:"NanumSquare_acR", fontSize:"large", color:"#9A7D7D", marginRight:"25px"}}>Room List</div>
             <Filter filterRoomTitle={(e)=>filterRoomTitle(e)}  />
             </div>

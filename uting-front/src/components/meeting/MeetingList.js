@@ -77,6 +77,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     let sessionUser = sessionStorage.getItem("nickname");
 
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
+    const haveUcoin = () => {
+        
+    }
     const attendRoomByID = async (room) => {
 
         setRoomObj(room)
