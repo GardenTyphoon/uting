@@ -22,8 +22,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     const [myDeicision, setMyDecision] = useState("");
     const [copyParticipants,setCopyParticipants]=useState(participants);
     const [goManner,setGoManner] = useState({"name":"","manner":""})
-    const [timer, setTimer] = useState(0);
-    const [startTimer, setStartTimer] = useState(false);
+
 
     const onClickEndMeetingBtn = (e) => {
         console.log(participantsSocketIdList)
@@ -62,18 +61,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         console.log("emitvote")
     }
 
-    const initVote = () =>{
-        setStartVote(false)
-        setMyDecision("")
-        setNumOfDisagree(0)
-        setNumOfAgree(0)
-        setIsVote(false)
-        setFlag(false)
-        setStartTimer(false);
-    }
     useImperativeHandle(ref, () => ({
         onStartVote(){
-            setStartTimer(true)
             setStartVote(true);
         },
         onEndMeetingAgree(data){
@@ -127,38 +116,12 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         }
     },[toggleManner])
 
-
-    useEffect(() => {
-        const countdown = setInterval(() => {
-          if (parseInt(timer) > 0) {
-            setTimer(parseInt(timer) - 1);
-          }
-          if (parseInt(timer) === 0) {
-              clearInterval(countdown);
-              setStartTimer(false);
-              if(startVote===true){
-                toast("투표가 종료되었습니다. 미팅을 계속합니다.")
-                initVote();
-              }
-            } 
-          
-        }, 1000);
-        return () => clearInterval(countdown);
-      }, [timer]);
-
-      useEffect(()=>{
-        if(startTimer===true)
-            setTimer(60);
-        else setTimer(0);
-      },[startTimer])
-
-
     useEffect(() => {
         if (doneVote()) {
             if (conditionEndMeeting()) {
                 setTimeout(()=>{
                     toast("투표가 종료되었습니다. 미팅을 종료합니다.")
-                    setStartTimer(false);
+                  
                     setToggleManner(true)
                 },1000)
               
@@ -167,7 +130,12 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                 setTimeout(()=>{
                     toast("투표가 종료되었습니다. 미팅을 계속합니다.")
                     //여기수정
-                   initVote();
+                    setStartVote(false)
+        setMyDecision("")
+        setNumOfDisagree(0)
+        setNumOfAgree(0)
+        setIsVote(false)
+        setFlag(false)
                 },1000)
             }
         }
@@ -282,8 +250,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                             <button className="disAgreeBtn"onClick={(e) => onClickDisagree(e)}>반대</button>
                         </div>
                         : <div>{myDeicision}하셨습니다.</div>}
-        
-                        <div>{timer < 10 ? `0${timer}` : timer}초</div>
                     <Progress multi>
                         <Progress bar style={{backgroundColor:"#2CDB52"}} value={numOfAgree} max={participants.length} />
                         <Progress bar style={{backgroundColor:"#FB6060"}} value={numOfDisagree} max={participants.length} />
