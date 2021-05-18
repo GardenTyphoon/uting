@@ -44,7 +44,8 @@ const Room = () => {
   const [question, setQuestion] = useState();
   const [participantsForTurn, setParticipantsForTurn] = useState();
   const [intervalMessage,setIntervalMessage]=useState("")
-  const [intervalMessageCheck,setIntervalMessageChekc]=useState(false)
+  const [intervalMessageCheck,setIntervalMessageChekc]=useState(0)
+  const [intervalFade,setIntervalFade]=useState(0)
   const { meetingId } = useAppState();
 
   let putSocketid = async (e) => {
@@ -114,15 +115,42 @@ const Room = () => {
 
 
   useEffect(()=>{
-    let messageArr=["대화 소재가 떨어졌을때 MC봇을 활용하는건 어떤가요?","갑분싸가 됐나요? MC봇을 통해 게임을 추천받아보세요",
-    "이 기세를 몰아 MC봇을 통해 귓속말 게임을 해보세요 ~","MC봇을 통해 미팅방에 음악을 재생시켜보세요 !","몰랑몰랑몰랑"]
-    let index = Math.floor(Math.random() * messageArr.length);
-    console.log(index)
-    setTimeout(()=>{
-      setIntervalMessage(messageArr[index])
-      setIntervalMessageChekc(!intervalMessageCheck)
-
-    },100000)
+    let messageArr=["대화 소재가 떨어졌을때 MC봇을 활용하는건 어떤가요?","갑분싸가 됐나요? MC봇을 통해 게임을 추천받아보세요"
+    ,"MC봇을 통해 미팅방에 음악을 재생시켜보세요 !","이 기세를 몰아 MC봇을 통해 귓속말 게임을 해보세요 ~",""]
+    //let index = Math.floor(Math.random() * messageArr.length);
+    console.log(intervalMessageCheck)
+    if(intervalMessageCheck<5){
+      if(intervalMessageCheck===0){
+        setTimeout(()=>{
+          setIntervalMessage(messageArr[0])
+          setIntervalMessageChekc(intervalMessageCheck+1)
+          setIntervalFade(2)
+        },3000)
+      }
+      else if(intervalMessageCheck===1){
+        setTimeout(()=>{
+          setIntervalMessage(messageArr[1])
+          setIntervalMessageChekc(intervalMessageCheck+1)
+          setIntervalFade(1)
+        },5000)
+      }
+      else if(intervalMessageCheck===2){
+        setTimeout(()=>{
+          setIntervalMessage(messageArr[2])
+          setIntervalMessageChekc(intervalMessageCheck+1)
+          setIntervalFade(3)
+        },6000)
+      }
+      else if(intervalMessageCheck===3){
+        setTimeout(()=>{
+          setIntervalMessage(messageArr[3])
+          setIntervalMessageChekc(intervalMessageCheck+1)
+          setIntervalFade(4)
+        },5000)
+      }
+    }
+    
+    
   },[intervalMessageCheck])
 
 
@@ -229,12 +257,14 @@ const Room = () => {
         gameTurn={gameTurn}
         question={question}
         participantsForTurn={participantsForTurn}
+        intervalFade={intervalFade}
       ></McBot>
       
       <Vote
         ref={voteRef}
         participantsSocketIdList={participantsSocketId}
         participants={participants}
+        
       ></Vote>
       <ToastContainer />
     </div>

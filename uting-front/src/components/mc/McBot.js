@@ -63,6 +63,7 @@ const McBot = ({
   gameTurn,
   question,
   participantsForTurn,
+  intervalFade
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
@@ -166,6 +167,33 @@ const McBot = ({
       setNumber(0);
     }
   }, [gameStartFlag]);
+
+  useEffect(()=>{
+    if(intervalFade!==0){
+      if(intervalFade===1){
+        setDropdownOpen(false)
+        setContentFade(true)
+        setNumber(1)
+        getGame();
+      }
+      else if(intervalFade===2){
+        setDropdownOpen(false)
+        setContentFade(true)
+        setNumber(2)
+        getTopic()
+      }
+      else if(intervalFade===3){
+        setDropdownOpen(false)
+        setContentFade(true)
+        setNumber(3)
+      }
+      else if(intervalFade===4){
+        setDropdownOpen(false)
+        setContentFade(true)
+        setNumber(4)
+      }
+    }
+  },[intervalFade])
 
   const [modal, setModal] = useState(false);
   const toogleERR = () => setModal(!modal);
