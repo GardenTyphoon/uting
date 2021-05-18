@@ -141,6 +141,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         }
     }, [numOfAgree, numOfDisagree])
 
+    
+
     let onChangehandler=(e)=>{
         let { name, value } = e.target;
         if(name==="par_name")
