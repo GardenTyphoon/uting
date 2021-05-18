@@ -5,6 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress,Input } fr
 import axios from 'axios';
 import socketio from "socket.io-client";
 import "./Vote.css"
+import { ToastContainer, toast } from "react-toastify";
 
 const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
@@ -60,7 +61,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     useImperativeHandle(ref, () => ({
         onStartVote(){
-            alert("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
+            //alert("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
+            toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
             setStartVote(true);
         },
         onEndMeetingAgree(data){
@@ -119,15 +121,23 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         if (doneVote()) {
             if (conditionEndMeeting()) {
                 setTimeout(()=>{
-                    alert("투표가 종료되었습니다. 미팅을 종료합니다.");
+                    //alert("투표가 종료되었습니다. 미팅을 종료합니다.");
+                    toast("투표가 종료되었습니다. 미팅을 종료합니다.")
                     setToggleManner(true)
                 },1000)
               
             }
             else {
                 setTimeout(()=>{
-                    alert("투표가 종료되었습니다. 미팅을 계속합니다.")
-                    window.location.reload();},1000)
+                    //alert("투표가 종료되었습니다. 미팅을 계속합니다.")
+                    toast("투표가 종료되었습니다. 미팅을 계속합니다.")
+                    //여기수정
+                    setStartVote(false)
+                    setMyDecision("")
+                    setNumOfDisagree(0)
+                    setNumOfAgree(0)
+                    setIsVote(false)
+                },1000)
             }
         }
     }, [numOfAgree, numOfDisagree])
@@ -165,6 +175,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                 }
             }
             alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
+            
             document.getElementsByName("per_name").values="default"
             document.getElementsByName("realmanner").values="default"
             setCopyParticipants(arr)
@@ -245,6 +256,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                     </Progress>
                 </div>
                 : ""}
+                
+      <ToastContainer />
     </div>
   );
 });
