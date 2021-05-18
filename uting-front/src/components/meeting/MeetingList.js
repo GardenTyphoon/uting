@@ -277,15 +277,16 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             {viewRoomList.map((room, index) =>
                 
                 <div style={{ marginRight: "25px" }}>
-                   { console.log(typeof(room._id))}
+                   { console.log(room._id.substr(0,10))}
+                   { console.log(typeof(room._id.sub(0,10)))}
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
                             
                             <img src={MeetingRoom}
                                 style={{ padding: "1%", width: "10%", borderRadius: "50%", marginRight: "5%" }}
-                                id={"Tooltip-" + room.title} 
-                                onMouseOver={(e) => toggleParticipantsInfo(room._id.substring(0,10))}
-                                onMouseOut={(e) => toggleParticipantsInfo(room._id.substring(0,10))}
+                                id={"Tooltip-" +room._id.substr(0,10)} 
+                                onMouseOver={(e) => toggleParticipantsInfo(room._id.substr(0,10))}
+                                onMouseOut={(e) => toggleParticipantsInfo(room._id.substr(0,10))}
                                 />
 
 
@@ -314,8 +315,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
               
                     <Tooltip
                         placement="bottom"
-                        isOpen={title===room._id.substring(0,10) && state===true}
-                        target={"Tooltip-" + room._id.substring(0,10)}
+                        isOpen={title===room._id.substr(0,10) && state===true}
+                        target={"Tooltip-" + room._id.substr(0,10)}
                         toggle={()=>setTooltipOpen(!tooltipOpen)}
                         style={{backgroundColor:"#DEEFFF", fontFamily:"NanumSquare_acR", color:"black", padding:"10px"}}
                     >
