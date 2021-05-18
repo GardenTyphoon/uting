@@ -277,8 +277,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             {viewRoomList.map((room, index) =>
                 
                 <div style={{ marginRight: "25px" }}>
-                   { console.log(room._id.substr(0,10))}
-                   { console.log(typeof(room._id.sub(0,10)))}
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
                             
