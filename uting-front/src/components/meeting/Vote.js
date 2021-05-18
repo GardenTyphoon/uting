@@ -163,7 +163,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                   i--;
                 }
             }
-            
+            alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
             document.getElementsByName("per_name").values="default"
             document.getElementsByName("realmanner").values="default"
             setCopyParticipants(arr)
@@ -173,6 +173,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     }
 
     let finishMeeting = (e)=>{
+        alert("미팅 방을 나갑니다.")
         window.location.href="http://localhost:3000/main"
     }
 
@@ -203,18 +204,11 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                 <Input type="select" name="par_name" id="par_name" onChange={(e)=>onChangehandler(e)} >
                     <option value="default" selected>닉네임을 선택해주세요.</option>
                    {copyParticipants.map((data,i)=>{
-                       
-                             return(
-                                 <option value={data} >{data}</option>
-                              )
-                          
-                       
-                       
+                    return(<option value={data} >{data}</option>)
                    })}
                     </Input>
                 {goManner!==""?
-                <div>
-                    <span><Input style={{width:"70%"}} id="realmanner" type="select" name="realmanner" onChange={(e)=>onChangehandler(e)}>
+                    <span><Input id="realmanner" type="select" name="realmanner" onChange={(e)=>onChangehandler(e)}>
                     <option value="default" selected>학점을 선택해주세요</option>
                     <option value="4.5">A+</option>
                     <option value="4.0">A0</option>
@@ -226,12 +220,11 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                     <option value="1.0">D0</option>
                     <option value="0">F</option>
                     </Input></span>
-                    </div>
                 :""}
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={(e)=>{saveManner(e)}}>학점부여</Button>{' '}
-                    <Button color="secondary" onClick={(e)=>finishMeeting(e)}>넘어가기</Button>
+                    <Button color="secondary" onClick={(e)=>finishMeeting(e)}>끝내기</Button>
                 </ModalFooter>
             </Modal>
             
