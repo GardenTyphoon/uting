@@ -67,7 +67,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [viewRoomList, setView] = useState([]);
     const [originList, setOriginList] = useState([])
     const [state, setState] = useState(false);
-    const [title, setTitle] = useState("");
+    const [toolTipId, settoolTipId] = useState("");
 
     const [groupMember, setGroupMember] = useState([]);
     const [flag, setFlag] = useState(false)
@@ -205,16 +205,16 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         //setGroupMember(res.data.member);
     };
 
-    const toggleParticipantsInfo = (title) => {
+    const toggleToolTipId = (title) => {
 
         if (state === true) {
             setState(false);
-            setTitle("");
+            settoolTipId("");
         }
         else {
             
             setState(true);
-            setTitle(title);
+            settoolTipId(title);
         }
     }
     useEffect(() => {
@@ -285,8 +285,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                             <img src={MeetingRoom}
                                 style={{ padding: "1%", width: "10%", borderRadius: "50%", marginRight: "5%" }}
                                 id={"Tooltip-" +room._id.substr(0,10)} 
-                                onMouseOver={(e) => toggleParticipantsInfo(room._id.substr(0,10))}
-                                onMouseOut={(e) => toggleParticipantsInfo(room._id.substr(0,10))}
+                                onMouseOver={(e) => toggleToolTipId(room._id.substr(0,10))}
+                                onMouseOut={(e) => toggleToolTipId(room._id.substr(0,10))}
                                 />
 
 
@@ -315,7 +315,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
               
                     <Tooltip
                         placement="bottom"
-                        isOpen={title===room._id.substr(0,10) && state===true}
+                        isOpen={toolTipId===room._id.substr(0,10) && state===true}
                         target={"Tooltip-" + room._id.substr(0,10)}
                         toggle={()=>setTooltipOpen(!tooltipOpen)}
                         style={{backgroundColor:"#DEEFFF", fontFamily:"NanumSquare_acR", color:"black", padding:"10px"}}
