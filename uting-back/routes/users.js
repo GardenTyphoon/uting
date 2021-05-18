@@ -164,9 +164,9 @@ router.post("/userInfo", function (req, res, next) {
     });
   });
 });
+
 router.post("/usersSocketId", function (req, res, next) {
   let data = [];
-
   User.find(function (err, user) {
     user.forEach((per) => {
       req.body.users.forEach((one) => {
@@ -176,7 +176,21 @@ router.post("/usersSocketId", function (req, res, next) {
       });
     });
     res.send(data);
-  })
+  });
+});
+router.post("/usersSocketIdx", function (req, res, next) {
+  let data = [];
+  User.find(function (err, user) {
+    user.forEach((per, idx) => {
+      req.body.users.forEach((one) => {
+        if (one === per._id.toString() || one === per.nickname) {
+          data.push(per.socketid);
+          data.push(idx);
+        }
+      });
+    });
+    res.send(data);
+  });
 });
 router.post("/modifyMyProfile", function (req, res, next) {
   User.findByIdAndUpdate(
@@ -189,7 +203,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
         imgURL: req.body.imgURL,
       },
     },
-    (err, us) => { }
+    (err, us) => {}
   );
 });
 
@@ -198,7 +212,6 @@ router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
 });
 
 router.post("/addUcoin", function (req, res, next) {
-
   let newUcoin = req.body.ucoin + req.body.chargingCoin;
 
   User.findByIdAndUpdate(
@@ -208,13 +221,12 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => { }
+    (err, us) => {}
   );
 });
 
 // 그룹 생성시 온라인 유저인지 확인
 router.post("/logined", function (req, res, next) {
-
   let ismember = false;
   User.find(function (err, user) {
     //console.log(user)
@@ -235,8 +247,6 @@ router.post("/logined", function (req, res, next) {
 router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
-  console.log(req.body.currentSocketId)
-  console.log(typeof req.body.currentSocketId)
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
@@ -266,8 +276,6 @@ router.post("/savesocketid", function (req, res, next) {
           },
         },
         (err, u) => {
-          perObj.socketid=req.body.currentSocketId.id
-          console.log(perObj)
           res.send(perObj);
         }
       );
@@ -332,15 +340,102 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            console.log(per)
+            console.log(mem + " : " + per.socketid);
             socketidList.push(per.socketid);
           }
         });
       });
+      console.log("socketidList : " + socketidList);
       res.send(socketidList);
     });
   }
 });
+
+router.post("/cutUcoin",function(req,res,next){
+  let perObj={};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+        if (req.body.currentUser === per.nickname) {
+          ismember = true;
+          console.log("-----------------")
+          perObj=per;
+          //perArr.push(per)
+          console.log("-----------------")
+        }
+    
+    });
+    if(ismember===true){
+
+      User.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: perObj.status,
+            _id: perObj._id,
+            name: perObj.name,
+            nickname: perObj.nickname,
+            gender: perObj.gender,
+            birth: perObj.birth,
+            email: perObj.email,
+            password: perObj.password,
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: perObj.mannerCredit,
+            ucoin: perObj.ucoin-1,
+            socketid: perObj.socketid,
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+
+    }
+    
+  });
+})
+
+router.post("/manner",function(req,res,next){
+  let perObj={};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+        if (req.body.name === per.nickname) {
+          ismember = true;
+          perObj=per;
+        }
+    
+    });
+    if(ismember===true){
+      User.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: perObj.status,
+            _id: perObj._id,
+            name: perObj.name,
+            nickname: perObj.nickname,
+            gender: perObj.gender,
+            birth: perObj.birth,
+            email: perObj.email,
+            password: perObj.password,
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: ((perObj.mannerCredit + req.body.manner)/2),
+            ucoin: perObj.ucoin,
+            socketid: perObj.socketid,
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+
+    }
+    
+  });
+})
 
 
 

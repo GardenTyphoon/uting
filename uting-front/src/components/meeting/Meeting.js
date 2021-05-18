@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import socketio from 'socket.io-client';
 import { useAppState } from '../../providers/AppStateProvider';
@@ -10,9 +10,8 @@ import "./Meeting.css";
 import { alignItems } from 'styled-system';
 
 function birthToAge(birth) {
-
-    let year = birth.slice(0, 4);
-    return 2021 - Number(year) + 1;
+  let year = birth.slice(0, 4);
+  return 2021 - Number(year) + 1;
 }
 function limitNumOfParticipants(inputTag, inputValue, numOfGroupMember) {
 
@@ -48,7 +47,7 @@ const Meeting = ({ checkFunc }) => {
     })
 
     const onChangehandler = e => {
-
+        console.log(groupMembers);
         const { name, value } = e.target;
         if (name === 'title') {
             setRoom({
@@ -57,7 +56,7 @@ const Meeting = ({ checkFunc }) => {
             })
         }
         else {
-            if (limitNumOfParticipants(name, value, Object.keys(groupMembers.data).length)) {
+            if (limitNumOfParticipants(name, value, Object.keys(groupMembers).length)) {
 
                 setRoom({
                     ...room,
@@ -68,15 +67,22 @@ const Meeting = ({ checkFunc }) => {
             else {
                 setToggleShowWarningMess(true);
             }
+            
+            
         }
     };
-    const getMyGroupMember = async (e) => {
+    const getMyGroupMember = async () => {
+        console.log("불렀음")
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-        console.log(res.data);
-        setGroupMembers(res);
+        console.log(res);
+        let onlyMe = [sessionUser];
+        if(res.data==="no") setGroupMembers(onlyMe);
+        else setGroupMembers(res.data);
+        //setGroupMembers(res);
     }
     useEffect(() => {
         getMyGroupMember();
+        
     }, [])
     const makeRoom = async (e) => {
         e.preventDefault();
@@ -89,13 +95,14 @@ const Meeting = ({ checkFunc }) => {
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
-            for (let i = 0; i < (groupMembers.data).length; i++) {
-                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
+            for (let i = 0; i < groupMembers.length; i++) {
+                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
                 groupMembersInfo.push({
                     "nickname": userInfo.data.nickname,
                     "introduce": userInfo.data.introduce,
                     "mannerCredit": userInfo.data.mannerCredit,
-                    "age": birthToAge(userInfo.data.birth)
+                    "age": birthToAge(userInfo.data.birth),
+                    "ucoin":userInfo.data.ucoin
                 });
                 if (userInfo.data.nickname != sessionUser) {
                     groupMembersSocketId.push(userInfo.data.socketid);
@@ -109,53 +116,67 @@ const Meeting = ({ checkFunc }) => {
 
 
             }
-            sumManner = avgManner;
-            sumAge = avgAge;
-            avgManner /= groupMembers.data.length;
-            avgAge /= groupMembers.data.length;
-            avgAge = parseInt(avgAge);
 
-            const roomTitle= room.title.trim().toLocaleLowerCase()
-
-            
-            let data = {
-                title: roomTitle,
-                maxNum: Number(room.num),
-                status: room.status,
-                avgManner: avgManner.toFixed(3),
-                avgAge: avgAge,
-                numOfWoman: nowOfWoman,
-                numOfMan: nowOfMan,
-                sumManner: sumManner,
-                sumAge: sumAge,
-            };
-            data.users = groupMembersInfo;
-
-
-            meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
-            
-            
-            checkFunc(true)
-
-            try {
-                
-                const { JoinInfo } = await fetchMeeting(data);
-                await meetingManager.join({
-                    meetingInfo: JoinInfo.Meeting,
-                    attendeeInfo: JoinInfo.Attendee
-                });
-
-                setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
-                if(roomTitle!==undefined){
-                    const socket = socketio.connect('http://localhost:3001');
-                    console.log("groupMembersSocketId",groupMembersSocketId)
-                    socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+            console.log(groupMembersInfo)
+            let coinCheck =true;
+            for(let i=0;i<groupMembersInfo.length;i++){
+                if(groupMembersInfo[i].ucoin<0){
+                    coinCheck=false
                 }
-
-                history.push('/deviceSetup');
-            } catch (error) {
-                console.log(error);
             }
+            if(coinCheck===true){
+                sumManner = avgManner;
+                sumAge = avgAge;
+                avgManner /= groupMembers.length;
+                avgAge /= groupMembers.length;
+                avgAge = parseInt(avgAge);
+    
+                const roomTitle= room.title.trim().toLocaleLowerCase()
+    
+                
+                let data = {
+                    title: roomTitle,
+                    maxNum: Number(room.num),
+                    status: room.status,
+                    avgManner: avgManner.toFixed(3),
+                    avgAge: avgAge,
+                    numOfWoman: nowOfWoman,
+                    numOfMan: nowOfMan,
+                    sumManner: sumManner,
+                    sumAge: sumAge,
+                };
+                data.users = groupMembersInfo;
+    
+    
+                meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
+                
+                
+                checkFunc(true)
+    
+                try {
+                    
+                    const { JoinInfo } = await fetchMeeting(data);
+                    await meetingManager.join({
+                        meetingInfo: JoinInfo.Meeting,
+                        attendeeInfo: JoinInfo.Attendee
+                    });
+    
+                    setAppMeetingInfo(roomTitle, "Tester", 'ap-northeast-2');
+                    if(roomTitle!==undefined){
+                        const socket = socketio.connect('http://localhost:3001');
+                        console.log("groupMembersSocketId",groupMembersSocketId)
+                        socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+                    }
+    
+                    history.push('/deviceSetup');
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+            else if(coinCheck===false){
+                alert("그룹원 중에 유코인이 부족한 사람이 있어 방생성이 불가합니다. 유코인을 충전하세요.")
+            }
+            
         }
     }
 
@@ -176,15 +197,14 @@ const Meeting = ({ checkFunc }) => {
                 
             </div>
             {toggleShowWarningMess === true ?
-                <span className="warningMess">* 성별당 인원수는 {(groupMembers.data).length}명 이상, 4명 이하여야 합니다.</span>
+                <span className="warningMess">* 성별당 인원수는 {groupMembers.length}명 이상, 4명 이하여야 합니다.</span>
                 : ""}
             </div>
             <button className="makeRoomBtn" onClick={makeRoom} style={{marginTop:"2 0px"}}>방만들기</button>
            
 
         </div>
-
-    )
+      
+  );
 };
 export default Meeting;
-
