@@ -103,7 +103,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 "nickname": userInfo.data.nickname,
                 "introduce": userInfo.data.introduce,
                 "mannerCredit": userInfo.data.mannerCredit,
-                "age": birthToAge(userInfo.data.birth)
+                "age": birthToAge(userInfo.data.birth),
+                "ucoin":userInfo.data.ucoin,
             });
             if (userInfo.data.nickname != sessionUser) {
                 groupMembersSocketId.push(userInfo.data.socketid);
@@ -114,55 +115,67 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
             else nowOfMan += 1;
         }
-
-        sumManner += avgManner;
-        sumAge += avgAge;
-
-        let new_numOfMan = nowOfMan + room.numOfMan;
-        let new_numOfWoman = nowOfWoman + room.numOfWoman;
-
-        avgManner /= (new_numOfMan + new_numOfWoman);
-        avgAge /= (new_numOfMan + new_numOfWoman);
-        avgAge = parseInt(avgAge);
-
-
-
-        let new_status;
-        if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
-            new_status = "진행";
-        }
-        let data = {
-            title: room.title,
-            maxNum: Number(room.num),
-            status: new_status,
-            avgManner: avgManner.toFixed(3),
-            avgAge: avgAge,
-            numOfWoman: nowOfWoman,
-            numOfMan: nowOfMan,
-            sumOfManner: sumManner,
-            sumOfAge: sumAge,
-        }
-
-        data.users = groupMembersInfo;
-
-        try {
-            const { JoinInfo } = await fetchMeeting(data);
-            await meetingManager.join({
-                meetingInfo: JoinInfo.Meeting,
-                attendeeInfo: JoinInfo.Attendee
-            });
-
-            setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
-            if (room.title !== undefined) {
-                const socket = socketio.connect('http://localhost:3001');
-                console.log("groupMembersSocketId", groupMembersSocketId)
-                socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
+        let coinCheck =true;
+        for(let i=0;i<groupMembersInfo.length;i++){
+            if(groupMembersInfo[i].ucoin<0){
+                coinCheck=false
             }
-
-            history.push('/deviceSetup');
-        } catch (error) {
-            console.log(error);
         }
+        if(coinCheck===true){
+            sumManner += avgManner;
+            sumAge += avgAge;
+    
+            let new_numOfMan = nowOfMan + room.numOfMan;
+            let new_numOfWoman = nowOfWoman + room.numOfWoman;
+    
+            avgManner /= (new_numOfMan + new_numOfWoman);
+            avgAge /= (new_numOfMan + new_numOfWoman);
+            avgAge = parseInt(avgAge);
+    
+    
+    
+            let new_status;
+            if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
+                new_status = "진행";
+            }
+            let data = {
+                title: room.title,
+                maxNum: Number(room.num),
+                status: new_status,
+                avgManner: avgManner.toFixed(3),
+                avgAge: avgAge,
+                numOfWoman: nowOfWoman,
+                numOfMan: nowOfMan,
+                sumOfManner: sumManner,
+                sumOfAge: sumAge,
+            }
+    
+            data.users = groupMembersInfo;
+    
+            try {
+                const { JoinInfo } = await fetchMeeting(data);
+                await meetingManager.join({
+                    meetingInfo: JoinInfo.Meeting,
+                    attendeeInfo: JoinInfo.Attendee
+                });
+    
+                setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
+                if (room.title !== undefined) {
+                    const socket = socketio.connect('http://localhost:3001');
+                    console.log("groupMembersSocketId", groupMembersSocketId)
+                    socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
+                }
+    
+                history.push('/deviceSetup');
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        else if(coinCheck===false){
+            alert("그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요.")
+
+        }
+        
 
     };
 
@@ -280,8 +293,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             {viewRoomList.map((room, index) =>
                 
                 <div style={{ marginRight: "25px" }}>
-                   { console.log(room._id.substr(0,10))}
-                   { console.log(typeof(room._id.sub(0,10)))}
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
                             
