@@ -61,7 +61,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     useImperativeHandle(ref, () => ({
         onStartVote(){
-            //alert("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
             toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
             setStartVote(true);
         },
@@ -121,7 +120,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         if (doneVote()) {
             if (conditionEndMeeting()) {
                 setTimeout(()=>{
-                    //alert("투표가 종료되었습니다. 미팅을 종료합니다.");
                     toast("투표가 종료되었습니다. 미팅을 종료합니다.")
                     setToggleManner(true)
                 },1000)
@@ -129,7 +127,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
             }
             else {
                 setTimeout(()=>{
-                    //alert("투표가 종료되었습니다. 미팅을 계속합니다.")
                     toast("투표가 종료되었습니다. 미팅을 계속합니다.")
                     //여기수정
                     setStartVote(false)
