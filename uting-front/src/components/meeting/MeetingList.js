@@ -132,8 +132,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             status: new_status,
             avgManner: avgManner.toFixed(3),
             avgAge: avgAge,
-            numOfWoman: nowOfWoman,
-            numOfMan: nowOfMan,
+            numOfWoman: new_numOfMan,
+            numOfMan: nowOfWoman,
             sumOfManner: sumManner,
             sumOfAge: sumAge,
         }
