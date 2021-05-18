@@ -69,6 +69,7 @@ const Room = () => {
 
   let saveParticipantsSocketId = async () => {
     console.log("saveParticipantsSocketId");
+    console.log(participantsSocketId)
     let data = {
       preMember: participants,
     };
@@ -79,6 +80,7 @@ const Room = () => {
 
     if (res.data !== "undefined") {
       setParticipantsSocketId(res.data);
+      console.log(res.data)
     }
   };
   useEffect(() => {
@@ -219,7 +221,7 @@ const Room = () => {
     if (socketFlag === true) {
       setTimeout(() => {
         getparticipants();
-      }, 5000);
+      }, 15000);
     }
   }, [socketFlag]);
 
