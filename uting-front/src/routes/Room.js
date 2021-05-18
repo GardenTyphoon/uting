@@ -119,7 +119,7 @@ const Room = () => {
     ,"MC봇을 통해 미팅방에 음악을 재생시켜보세요 !","이 기세를 몰아 MC봇을 통해 귓속말 게임을 해보세요 ~",""]
     //let index = Math.floor(Math.random() * messageArr.length);
     console.log(intervalMessageCheck)
-    if(intervalMessageCheck<5){
+    if(intervalMessageCheck<4){
       if(intervalMessageCheck===0){
         setTimeout(()=>{
           setIntervalMessage(messageArr[0])
