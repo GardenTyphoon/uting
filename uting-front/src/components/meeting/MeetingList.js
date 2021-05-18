@@ -212,6 +212,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             setTitle("");
         }
         else {
+            
             setState(true);
             setTitle(title);
         }
@@ -274,16 +275,17 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
-
+                
                 <div style={{ marginRight: "25px" }}>
+                   { console.log(typeof(room._id))}
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
-
+                            
                             <img src={MeetingRoom}
                                 style={{ padding: "1%", width: "10%", borderRadius: "50%", marginRight: "5%" }}
                                 id={"Tooltip-" + room.title} 
-                                onMouseOver={(e) => toggleParticipantsInfo(room.title)}
-                                onMouseOut={(e) => toggleParticipantsInfo(room.title)}
+                                onMouseOver={(e) => toggleParticipantsInfo(room._id.substring(0,10))}
+                                onMouseOut={(e) => toggleParticipantsInfo(room._id.substring(0,10))}
                                 />
 
 
@@ -312,8 +314,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
               
                     <Tooltip
                         placement="bottom"
-                        isOpen={title===room.title && state===true}
-                        target={"Tooltip-" + room.title}
+                        isOpen={title===room._id.substring(0,10) && state===true}
+                        target={"Tooltip-" + room._id.substring(0,10)}
                         toggle={()=>setTooltipOpen(!tooltipOpen)}
                         style={{backgroundColor:"#DEEFFF", fontFamily:"NanumSquare_acR", color:"black", padding:"10px"}}
                     >
