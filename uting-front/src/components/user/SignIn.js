@@ -71,7 +71,7 @@ const SignIn = () => {
       <Row >
         <Col className="InputContainer">
           <input
-            style={{ backgroundColor: "#F6CDCD", border: "none", margin: "10px", padding: "3px" }}
+            className="signInInput"
             name="email"
             type="email"
             placeholder="ID"
@@ -80,7 +80,7 @@ const SignIn = () => {
             onChange={(e) => onChangehandler(e)}
           />
           <input
-            style={{ backgroundColor: "#F6CDCD", border: "none", margin: "10px", padding: "3px" }}
+            className="signInInput"
             name="password"
             type="password"
             placeholder="Password"
