@@ -24,7 +24,8 @@ const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
   margin-bottom: 10px;
-  width: 150px;
+  width: 10vw;
+  min-width:150px;
   height: 50px;
   text-align: center;
   padding-top: 5%;
@@ -35,7 +36,8 @@ const PlusIcon = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
   margin-bottom: 10px;
-  width: 150px;
+  width: 10vw;
+  min-width:150px;
   height: 50px;
   padding-left: 40%;
   padding-top: 5%;
