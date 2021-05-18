@@ -30,8 +30,11 @@ const EarInMal = ({
   const [isAsked, setIsAsked] = useState(false);
   const [questionedUser, setQuestionedUser] = useState();
   const [participantsForTurn, setParticipantsForTurn] = useState(participants);
+  const [flag, setFlag] = useState(false);
+  const [giveTurnFlag, setGiveTurnFlag] = useState(false);
   var data;
   let toSendSckId;
+  let toSckIndex;
   let currentUser = sessionStorage.getItem("nickname");
   function getRandomInt(min, max) {
     //min ~ max 사이의 임의의 정수 반환
@@ -40,26 +43,32 @@ const EarInMal = ({
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-
     console.log("participantsForTurn :" + participantsForTurn); //for debug
     var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
-    console.log("tmp : " + tmp);
+    //console.log("tmp : " + tmp);
     setParticipantsForTurn(tmp);
   };
 
   const start = () => {
     setStartButtonFade(false);
     determineTurn(participantsForTurn);
+    setFlag(true);
   };
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!startButtonFade) {
       data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
       const socket = socketio.connect("http://localhost:3001");
       socket.emit("gameStart", data);
     }
-  }, [startButtonFade]);
+  }, [startButtonFade]);*/
+
+  const globalizeGameStart = () => {
+    data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
+    const socket = socketio.connect("http://localhost:3001");
+    socket.emit("gameStart", data);
+  };
 
   useEffect(() => {
     //console.log("participantsForTurnSet :" + participantsForTurn);
@@ -81,24 +90,35 @@ const EarInMal = ({
   const matchMemSckId = async (nickname) => {
     let tmp = [];
     tmp.push(nickname);
-    const res = await axios.post("http://localhost:3001/users/usersSocketId", {
+    const res = await axios.post("http://localhost:3001/users/usersSocketIdx", {
       users: tmp,
     });
     if (res.status == 200) {
-      toSendSckId = res.data;
+      toSendSckId = res.data[0];
+      toSckIndex = res.data[1];
     }
   };
 
-  useEffect(() => {
-    if (turn) {
+  useEffect(async () => {
+    if (flag) {
+      globalizeGameStart();
       globalizeTurn(); //+
+      setFlag(false);
     }
-  }, [turn]);
+  }, [flag]);
+
+  useEffect(async () => {
+    if (giveTurnFlag) {
+      globalizeTurn(); //+
+      setGiveTurnFlag(false);
+    }
+  }, [giveTurnFlag]);
 
   const globalizeTurn = async () => {
     await matchMemSckId(turn);
     console.log(participants);
     console.log(participantsSocketIdList);
+
     const socket = socketio.connect("http://localhost:3001");
     socket.emit("notifyTurn", {
       turn: turn,
@@ -171,14 +191,18 @@ const EarInMal = ({
     alert("전송완료~!");
   };
 
-  const giveTurn = () => {
+  const giveTurn = async () => {
+    await matchMemSckId(turn);
     if (participantsForTurn.length === 0) {
       //멤버 한바퀴 다돌아서 새롭게 랜덤 턴 시
-      console.log("determine with participants : " + participants);
-      determineTurn(participants);
+      let tmp = participants.slice();
+      tmp.splice(toSckIndex, 1);
+      console.log("determine with participants : " + tmp);
+      await determineTurn(tmp);
     } else {
-      determineTurn(participantsForTurn);
+      await determineTurn(participantsForTurn);
     }
+    setGiveTurnFlag(true);
     setTurnFlag(false);
     setIsAsked(false);
   };
