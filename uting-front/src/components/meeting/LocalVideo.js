@@ -8,13 +8,19 @@ import {
     useLocalVideo,
     VideoTile,
     useApplyVideoObjectFit,
-
+    Grid,
 
 } from 'amazon-chime-sdk-component-library-react';
 
 const StyledLocalVideo = styled(VideoTile)`
   ${(props) => (!props.active ? 'display: none' : '')};
 `;
+
+const temp = {
+  background: "white",
+  border: "15px solid white",
+  borderRadius: "30px"
+}
 
 export const LocalVideo = ({ nameplate, ...rest }) => {
   const { tileId, isVideoEnabled } = useLocalVideo(true);
@@ -38,12 +44,24 @@ export const LocalVideo = ({ nameplate, ...rest }) => {
   }, [audioVideo, tileId, isVideoEnabled]);
 
   return (
+    <div style={temp}>
+      <Grid                
+            responsive
+            gridTemplateRows="repeat(1, 2vw) repeat(1, 14vw)"
+            gridAutoFlow="dense"
+            color="white"
+
+            
+            >
+    <span></span>
     <StyledLocalVideo
       active={isVideoEnabled}
       nameplate={nameplate}
       ref={videoEl}
       {...rest}
     />
+    </Grid>
+    </div>
   );
 };
 

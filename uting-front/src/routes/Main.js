@@ -40,7 +40,8 @@ const Main = () => {
   
   const [socketId, setSocketId] = useState("");
   
-  let sessionUser = sessionStorage.getItem("email");
+  let sessionEmail = sessionStorage.getItem("email");
+  let sessionUser = sessionStorage.getItem("nickname");
 
   const gotoAdminPage = () => {
     history.push({
@@ -68,7 +69,6 @@ const Main = () => {
     });
 
     socket.on("clientid", function async(id) {
-      console.log(id)
       setSocketId(id);
     });
 
@@ -94,11 +94,9 @@ const Main = () => {
         setCheckGroup(true);
       }
       else if(data.type==="makeMeetingRoomMsg"){
-        console.log("여기깅")
         let temp = {
           title: data,
         }
-        //data가 방제....
         toast("'"+data.roomtitle+"'방에 초대되었습니다. >_<");
         setRoomtitle(data.roomtitle)
           
@@ -126,7 +124,6 @@ const Main = () => {
       title: roomtitle,
     }
 
-    console.log("roomtitle",roomtitle)
     meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
       
     try {
@@ -136,8 +133,7 @@ const Main = () => {
           meetingInfo: JoinInfo.Meeting,
           attendeeInfo: JoinInfo.Attendee
         });
-        setAppMeetingInfo(roomtitle, "Tester", "ap-northeast-2");
-        console.log(JoinInfo)
+        setAppMeetingInfo(roomtitle, sessionUser, "ap-northeast-2");
         history.push("/deviceSetup");
       
     } catch (error) {
@@ -172,7 +168,7 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
-        {sessionUser === "admin@ajou.ac.kr" ? (
+        {sessionEmail === "admin@ajou.ac.kr" ? (
           <button onClick={gotoAdminPage}>관리자페이지</button>
         ) : (
           ""

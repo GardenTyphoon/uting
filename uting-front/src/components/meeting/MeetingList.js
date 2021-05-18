@@ -74,6 +74,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [roomObj, setRoomObj] = useState({})
     const [prevFilter, setPrevFilter] = useState("")
     const [tooltipOpen, setTooltipOpen] = useState(false);
+
     let sessionUser = sessionStorage.getItem("nickname");
 
     //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
@@ -148,6 +149,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 numOfMan: nowOfMan,
                 sumOfManner: sumManner,
                 sumOfAge: sumAge,
+                session: sessionUser,
             }
     
             data.users = groupMembersInfo;
@@ -159,7 +161,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                     attendeeInfo: JoinInfo.Attendee
                 });
     
-                setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
+                setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
                     const socket = socketio.connect('http://localhost:3001');
                     console.log("groupMembersSocketId", groupMembersSocketId)
