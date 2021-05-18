@@ -37,7 +37,7 @@ router.post("/sendEmail", async function (req, res, next) {
       host: "smtp.gmail.com",
       auth: {
         user: "uting4u@gmail.com",
-        pass: "uting0515!",
+        pass: "uuttiinngg0515!",
       },
     })
   );
@@ -93,7 +93,7 @@ router.post("/signin", function (req, res, next) {
       }
     });
     if (ismember === true) {
-      //console.log(perObj._id);
+      console.log(perObj._id);
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -164,9 +164,10 @@ router.post("/userInfo", function (req, res, next) {
     });
   });
 });
+
 router.post("/usersSocketId", function (req, res, next) {
   let data = [];
-
+  console.log("usersSocketId -ing 12");
   User.find(function (err, user) {
     user.forEach((per) => {
       req.body.users.forEach((one) => {
@@ -175,8 +176,9 @@ router.post("/usersSocketId", function (req, res, next) {
         }
       });
     });
+    console.log("usersSocketId -finished");
     res.send(data);
-  })
+  });
 });
 router.post("/modifyMyProfile", function (req, res, next) {
   User.findByIdAndUpdate(
@@ -189,7 +191,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
         imgURL: req.body.imgURL,
       },
     },
-    (err, us) => { }
+    (err, us) => {}
   );
 });
 
@@ -198,7 +200,6 @@ router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
 });
 
 router.post("/addUcoin", function (req, res, next) {
-
   let newUcoin = req.body.ucoin + req.body.chargingCoin;
 
   User.findByIdAndUpdate(
@@ -208,13 +209,12 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => { }
+    (err, us) => {}
   );
 });
 
 // 그룹 생성시 온라인 유저인지 확인
 router.post("/logined", function (req, res, next) {
-
   let ismember = false;
   User.find(function (err, user) {
     //console.log(user)
@@ -235,8 +235,6 @@ router.post("/logined", function (req, res, next) {
 router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
-  //console.log(req.body.currentSocketId)
-  //console.log(typeof req.body.currentSocketId)
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
@@ -266,8 +264,6 @@ router.post("/savesocketid", function (req, res, next) {
           },
         },
         (err, u) => {
-          perObj.socketid=req.body.currentSocketId.id
-          //console.log(perObj)
           res.send(perObj);
         }
       );
@@ -287,7 +283,7 @@ router.post("/logout", function (req, res, next) {
       if (req.body.email === per.email) {
         ismember = true;
         perObj = per;
-        //console.log("로그아웃", per);
+        console.log("로그아웃", per);
       }
     });
     if (ismember === true) {
@@ -311,13 +307,13 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          //console.log(perObj);
+          console.log(perObj);
           res.send("success");
         }
       );
     }
     if (ismember === false) {
-      //console.log("no!");
+      console.log("no!");
       res.send("no");
     }
   });
@@ -332,11 +328,12 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            //console.log(per)
+            console.log(mem + " : " + per.socketid);
             socketidList.push(per.socketid);
           }
         });
       });
+      console.log("socketidList : " + socketidList);
       res.send(socketidList);
     });
   }
@@ -394,19 +391,11 @@ router.post("/manner",function(req,res,next){
     user.forEach((per) => {
         if (req.body.name === per.nickname) {
           ismember = true;
-          console.log("-----------------")
           perObj=per;
-          //perArr.push(per)
-          console.log("-----------------")
         }
     
     });
     if(ismember===true){
-      console.log("!!!!!!!!!!!!!!!!")
-      console.log(((perObj.mannerCredit + req.body.manner)))
-      console.log(perObj.mannerCredit)
-      console.log(req.body.manner)
-      console.log("!!!!!!!!!!!!!!!!")
       User.findByIdAndUpdate(
         perObj._id,
         {

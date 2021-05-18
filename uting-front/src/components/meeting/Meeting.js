@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React from 'react';
-import { useState, useEffect } from 'react';
+import axios from "axios";
+import React from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import socketio from 'socket.io-client';
 import { useAppState } from '../../providers/AppStateProvider';
@@ -10,9 +10,8 @@ import "./Meeting.css";
 import { alignItems } from 'styled-system';
 
 function birthToAge(birth) {
-
-    let year = birth.slice(0, 4);
-    return 2021 - Number(year) + 1;
+  let year = birth.slice(0, 4);
+  return 2021 - Number(year) + 1;
 }
 function limitNumOfParticipants(inputTag, inputValue, numOfGroupMember) {
 
@@ -48,7 +47,7 @@ const Meeting = ({ checkFunc }) => {
     })
 
     const onChangehandler = e => {
-
+        console.log(groupMembers);
         const { name, value } = e.target;
         if (name === 'title') {
             setRoom({
@@ -57,35 +56,33 @@ const Meeting = ({ checkFunc }) => {
             })
         }
         else {
-            if(groupMembers.length!==0){
-                if (limitNumOfParticipants(name, value, Object.keys(groupMembers.data).length)) {
+            if (limitNumOfParticipants(name, value, Object.keys(groupMembers).length)) {
 
-                    setRoom({
-                        ...room,
-                        [name]: value
-                    })
-                    setToggleShowWarningMess(false);
-                }
-                else {
-                    setToggleShowWarningMess(true);
-                }
+                setRoom({
+                    ...room,
+                    [name]: value
+                })
+                setToggleShowWarningMess(false);
+            }
+            else {
+                setToggleShowWarningMess(true);
             }
             
             
         }
     };
-    const getMyGroupMember = async (e) => {
+    const getMyGroupMember = async () => {
+        console.log("불렀음")
         let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
-        console.log(res.data);
-        if(res.data==="no"){
-            console.log(res)
-        }
-        else{
-            setGroupMembers(res);
-        }
+        console.log(res);
+        let onlyMe = [sessionUser];
+        if(res.data==="no") setGroupMembers(onlyMe);
+        else setGroupMembers(res.data);
+        //setGroupMembers(res);
     }
     useEffect(() => {
         getMyGroupMember();
+        
     }, [])
     const makeRoom = async (e) => {
         e.preventDefault();
@@ -98,8 +95,8 @@ const Meeting = ({ checkFunc }) => {
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
-            for (let i = 0; i < (groupMembers.data).length; i++) {
-                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers.data[i] });
+            for (let i = 0; i < groupMembers.length; i++) {
+                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
                 groupMembersInfo.push({
                     "nickname": userInfo.data.nickname,
                     "introduce": userInfo.data.introduce,
@@ -120,8 +117,8 @@ const Meeting = ({ checkFunc }) => {
             }
             sumManner = avgManner;
             sumAge = avgAge;
-            avgManner /= groupMembers.data.length;
-            avgAge /= groupMembers.data.length;
+            avgManner /= groupMembers.length;
+            avgAge /= groupMembers.length;
             avgAge = parseInt(avgAge);
 
             const roomTitle= room.title.trim().toLocaleLowerCase()
@@ -185,15 +182,14 @@ const Meeting = ({ checkFunc }) => {
                 
             </div>
             {toggleShowWarningMess === true ?
-                <span className="warningMess">* 성별당 인원수는 {(groupMembers.data).length}명 이상, 4명 이하여야 합니다.</span>
+                <span className="warningMess">* 성별당 인원수는 {groupMembers.length}명 이상, 4명 이하여야 합니다.</span>
                 : ""}
             </div>
             <button className="makeRoomBtn" onClick={makeRoom} style={{marginTop:"2 0px"}}>방만들기</button>
            
 
         </div>
-
-    )
+      
+  );
 };
 export default Meeting;
-
