@@ -139,9 +139,13 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 status: new_status,
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
-                numOfWoman: numOfWoman,
-                numOfMan: numOfMan,
+                numOfWoman: new_numOfWoman,
+                numOfMan: new_numOfMan,
+                groupmember:groupMembersInfo,
             }
+            console.log(typeof data.groupmember)
+            const response = await axios.post("http://localhost:3001/meetings/newmemebers",data)
+            //console.log(response)
     
             data.users = groupMembersInfo;
     
