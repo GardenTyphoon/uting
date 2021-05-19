@@ -47,6 +47,8 @@ const Room = () => {
   const [intervalMessageCheck,setIntervalMessageChekc]=useState(0)
   const [intervalFade,setIntervalFade]=useState(0)
   const { meetingId } = useAppState();
+  const [meeting_id,setMeeting_id]=useState("")
+  const [meetingMembers,setMeetingMembers]=useState([])
 
   let putSocketid = async (e) => {
     let data = {
@@ -68,8 +70,6 @@ const Room = () => {
   }, [socketId]);
 
   let saveParticipantsSocketId = async () => {
-    console.log("saveParticipantsSocketId");
-    console.log(participantsSocketId)
     let data = {
       preMember: participants,
     };
@@ -102,14 +102,15 @@ const Room = () => {
         "http://localhost:3001/meetings/getparticipants",
         { _id: meetingId }
       );
-      console.log(" 참여자들 닉네임 : " + res.data);
+      console.log(" 참여자들 닉네임 : " , res.data);
       console.log("길이", res.data.length);
       let par = [];
       for (let i = 0; i < res.data.length; i++) {
         par.push(res.data[i].nickname);
       }
+      setMeetingMembers(res.data)
       console.log(par);
-
+      setMeeting_id(meetingId)
       setParticipants(par);
     }
   };
@@ -219,8 +220,6 @@ const Room = () => {
     return () => {
       socket.removeListener("room");
     };
-
-    
   }, []);
   useEffect(() => {
     if (socketFlag === true) {
@@ -271,7 +270,8 @@ const Room = () => {
         ref={voteRef}
         participantsSocketIdList={participantsSocketId}
         participants={participants}
-        
+        meeting_id={meeting_id}
+        meetingMembers={meetingMembers}
       ></Vote>
       <ToastContainer />
     </div>
