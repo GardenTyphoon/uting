@@ -7,7 +7,7 @@ import socketio from "socket.io-client";
 import "./Vote.css"
 import { ToastContainer, toast } from "react-toastify";
 
-const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
+const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meetingMembers},ref) => {
 
     const history = useHistory();
     
@@ -100,6 +100,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         console.log(participantsSocketIdList)
         console.log(copyParticipants)
         console.log({participants})
+        console.log(meeting_id)
+        console.log(meetingMembers)
     },[])
 
     useEffect(()=>{
@@ -185,9 +187,34 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         }
     }
 
-    let finishMeeting = (e)=>{
-        alert("미팅 방을 나갑니다.")
-        window.location.href="http://localhost:3000/main"
+    let finishMeeting = async(e)=>{
+        
+        //방 나갈때 numOfWoman이랑 numOfMan 중에 적절한거 -1하기 그리고 numOfWoman이랑 numOfMan이 각각 0이 되면 미팅방 del
+        let ismember=false
+        let mem={};
+        for(let i=0;i<meetingMembers.length;i++){
+            if(meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
+                ismember=true
+                mem=meetingMembers[i]
+            }
+        }
+        if(ismember===true){
+            let data ={
+                title:meeting_id,
+                user:mem.nickname,
+                gender:mem.gender
+            }
+
+            const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
+
+            if(res.data==="success"){
+                alert("미팅 방을 나갑니다.")
+                window.location.href="http://localhost:3000/main"
+            }
+        }
+        
+        console.log(meeting_id)
+        //window.location.href="http://localhost:3000/main"
     }
 
     useEffect(()=>{

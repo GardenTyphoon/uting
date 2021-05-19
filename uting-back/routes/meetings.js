@@ -229,6 +229,68 @@ router.post('/newmemebers',function(req,res,next){
   });
 })
 
+router.post('/leavemember',function(req,res,next){
+  console.log("leavememeber!!!!!!!!!!!!!!!!!!!")
+  Meeting.find(function (err, meeting) {
+    //console.log(user)
+    meeting.forEach((meet) => {
+      if (req.body.title === meet.title) {
+        isroom = true;
+        perObj = meet;
+      }
+    });
+    if (isroom === true) {
+      //삭제
+      if(perObj.numOfWoman+perObj.numOfMan === 1){
+        Meeting.deleteOne({_id:perObj._id}).then((result)=>{
+
+          res.send("success");
+        })
+      }
+      else{
+        let arr=[]
+        for(let i=0;i<perObj.users.length;i++){
+          if(perObj.users[i].nickname===req.body.user){
+            perObj.users.splice(i, 1);
+            i--;
+          }
+        }
+        console.log(perObj.users)
+        if(req.body.gender==="woman"){
+          perObj.numOfWoman=perObj.numOfWoman-1
+        }
+        else if(req.body.gender==="man"){
+          perObj.numOfMan=perObj.numOfMan-1
+        }
+        Meeting.findByIdAndUpdate(
+          perObj._id,
+          {
+            $set: {
+              users: perObj.users,
+              title: perObj.title,
+              maxNum: perObj.maxNum,
+              status: perObj.status,
+              avgManner: perObj.avgManner,
+              avgAge: perObj.avgAge,
+              numOfWoman: perObj.numOfWoman,
+              numOfMan: perObj.numOfMan,
+            },
+          },
+          (err, u) => {
+            res.send("success");
+          }
+        );
+      }
+      
+      
+      //res.send(perObj)
+    }
+    if (isroom === false) {
+      res.send("no");
+    }
+  });
+})
+
 router.post('/logs', function(req, res, next){
   console.log('Writing logs to cloudwatch');
   res.redirect('back');

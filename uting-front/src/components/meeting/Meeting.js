@@ -102,7 +102,8 @@ const Meeting = ({ checkFunc }) => {
                     "introduce": userInfo.data.introduce,
                     "mannerCredit": userInfo.data.mannerCredit,
                     "age": birthToAge(userInfo.data.birth),
-                    "ucoin":userInfo.data.ucoin
+                    "ucoin":userInfo.data.ucoin,
+                    "gender":userInfo.data.gender,
                 });
                 if (userInfo.data.nickname != sessionUser) {
                     groupMembersSocketId.push(userInfo.data.socketid);
