@@ -33,7 +33,6 @@ const MeetingControls = () => {
         <AudioInputControl />
         <VideoInputControl />
         <AudioOutputControl />
-        <EndMeetingControl />
       </ControlBar>
   );
 };

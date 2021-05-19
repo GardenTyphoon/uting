@@ -24,6 +24,8 @@ import ReactAudioPlayer from "react-audio-player";
 import MeetingRoom from "../components/meeting/MeetingRoom";
 import { useAppState } from "../providers/AppStateProvider";
 import { ToastContainer, toast } from "react-toastify";
+
+import MeetingControls from '../components/meeting/MeetingControls';
 import "react-toastify/dist/ReactToastify.css";
 
 const Room = () => {
@@ -244,31 +246,47 @@ const Room = () => {
         width: "100vw",
         height: "100vh",
         padding: "2%",
+        overflow: "hidden",
       }}
     >
-      <MeetingRoom />
-      <ReactAudioPlayer id="audio" src={musicsrc} controls />
-      {intervalMessage}
-      <McBot
-        participantsSocketIdList={participantsSocketId}
-        currentSocketId={socketId}
-        participants={participants}
-        respondFlag={respondFlag}
-        gameStartFlag={gameStartFlag}
-        gameEndFlag={gameEndFlag}
-        gameTurn={gameTurn}
-        question={question}
-        participantsForTurn={participantsForTurn}
-        intervalFade={intervalFade}
-      ></McBot>
-      
-      <Vote
-        ref={voteRef}
-        participantsSocketIdList={participantsSocketId}
-        participants={participants}
-        meeting_id={meeting_id}
-        meetingMembers={meetingMembers}
-      ></Vote>
+      <div
+      style={{
+        width: "75%",
+        height: "100vh",
+        float: "left",
+      }}>
+        <MeetingRoom />
+      </div>
+      <div
+      style={{
+        width: "20%",
+        height: "100vh",
+        float: "left",
+      }}>
+        <MeetingControls/>
+        <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
+        <br/>{intervalMessage}
+        <McBot
+          participantsSocketIdList={participantsSocketId}
+          currentSocketId={socketId}
+          participants={participants}
+          respondFlag={respondFlag}
+          gameStartFlag={gameStartFlag}
+          gameEndFlag={gameEndFlag}
+          gameTurn={gameTurn}
+          question={question}
+          participantsForTurn={participantsForTurn}
+          intervalFade={intervalFade}
+        ></McBot>
+        
+        <Vote
+          ref={voteRef}
+          participantsSocketIdList={participantsSocketId}
+          participants={participants}
+          meeting_id={meeting_id}
+          meetingMembers={meetingMembers}
+        ></Vote>
+      </div>
       <ToastContainer />
     </div>
   );
