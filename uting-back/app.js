@@ -291,6 +291,15 @@ app.io.on("connection", function (socket) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
     }
   });
+
+  socket.on("newParticipants", function(msg){
+    let data = {
+      type:"newParticipants"
+    };
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
+    }
+  })
 });
 
 module.exports = app;
