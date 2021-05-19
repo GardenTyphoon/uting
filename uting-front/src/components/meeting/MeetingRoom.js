@@ -20,7 +20,6 @@ import {
 
 import LocalVideo from './LocalVideo'
 import RemoteVideos from './RemoteVideos';
-import MeetingControls from './MeetingControls';
 import MeetingDetails from './MeetingDetails';
 import EndMeetingControl from './EndMeetingControl';
 
@@ -64,14 +63,10 @@ export default function Rooms() {
                 
                 >
        
-                    <LocalVideo />
-                        
-                  
-                    
+                    <LocalVideo />    
                     <RemoteVideos />
                     
                 </Grid>
-                <MeetingControls />
             </UserActivityProvider>
         </div>
     );
