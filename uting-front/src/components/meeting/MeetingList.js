@@ -74,25 +74,39 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [roomObj, setRoomObj] = useState({})
     const [prevFilter, setPrevFilter] = useState("")
     const [tooltipOpen, setTooltipOpen] = useState(false);
+
     let sessionUser = sessionStorage.getItem("nickname");
 
-    //randomroomid에는 참가하는 방 별로 값 가져와서 변수값으로 넣으면 됨
-    const haveUcoin = () => {
+    
+    const updateNewParticipants_to_OriginParticipants = async(meetingRoomParticipantsSocektId) =>{
         
+        const socket = socketio.connect("http://localhost:3001");
+        let data = {
+            preMember: meetingRoomParticipantsSocektId
+          };
+          const res = await axios.post(
+            "http://localhost:3001/users/preMemSocketid",
+            data
+          );
+          console.log(res);
+          socket.emit("newParticipants", { socketIdList: res.data});
     }
     const attendRoomByID = async (room) => {
-
+        let meetingRoomParticipantsSocektId = [];
+        room.users.map((per)=>{
+            meetingRoomParticipantsSocektId.push(per.nickname);
+            
+        })
+        updateNewParticipants_to_OriginParticipants(meetingRoomParticipantsSocektId); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
         setRoomObj(room)
+        
         // setFlag(true)
+        const userNum = room.users.length;
+        let sumManner = room.avgManner * userNum;
+        let sumAge = room.avgAge * userNum;
 
-        let avgManner = room.sumManner;
-        let avgAge = room.sumAge;
-
-        let sumManner = room.sumManner;
-        let sumAge = room.sumAge;
-
-        let nowOfWoman = 0;
-        let nowOfMan = 0;
+        let numOfWoman = 0;
+        let numOfMan = 0;
 
         let groupMembersInfo = []
         let groupMembersSocketId = []
@@ -109,11 +123,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (userInfo.data.nickname != sessionUser) {
                 groupMembersSocketId.push(userInfo.data.socketid);
             }
-            avgManner += userInfo.data.mannerCredit;
-            avgAge += birthToAge(userInfo.data.birth);
-            if (userInfo.data.gender === "woman") nowOfWoman += 1;
-
-            else nowOfMan += 1;
+            sumManner += userInfo.data.mannerCredit;
+            sumAge += birthToAge(userInfo.data.birth);
+            if (userInfo.data.gender === "woman") numOfWoman += 1;
+            else numOfMan += 1;
         }
         let coinCheck =true;
         for(let i=0;i<groupMembersInfo.length;i++){
@@ -122,17 +135,15 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             }
         }
         if(coinCheck===true){
-            sumManner += avgManner;
-            sumAge += avgAge;
+            // sumManner += avgManner;
+            // sumAge += avgAge;
+            //
     
-            let new_numOfMan = nowOfMan + room.numOfMan;
-            let new_numOfWoman = nowOfWoman + room.numOfWoman;
+            let new_numOfMan = numOfMan + room.numOfMan;
+            let new_numOfWoman = numOfWoman + room.numOfWoman;
     
-            avgManner /= (new_numOfMan + new_numOfWoman);
-            avgAge /= (new_numOfMan + new_numOfWoman);
-            avgAge = parseInt(avgAge);
-    
-    
+            const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
+            const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
     
             let new_status;
             if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
@@ -144,11 +155,13 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 status: new_status,
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
-                numOfWoman: nowOfWoman,
-                numOfMan: nowOfMan,
-                sumOfManner: sumManner,
-                sumOfAge: sumAge,
+                numOfWoman: new_numOfWoman,
+                numOfMan: new_numOfMan,
+                groupmember:groupMembersInfo,
             }
+            console.log(typeof data.groupmember)
+            const response = await axios.post("http://localhost:3001/meetings/newmemebers",data)
+            //console.log(response)
     
             data.users = groupMembersInfo;
     
@@ -183,7 +196,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     let saveMeetingUsers = async (e) => {
-        console.log("saveMeetingUsers", roomObj.length)
+        console.log("saveMeetingUsers", roomObj)
         let data = {
             member: groupMember,
             room: roomObj
@@ -191,6 +204,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         console.log("saveMeetingUsers", data)
         const res = await axios.post("http://localhost:3001/meetings/savemember", data)
         console.log(res)
+        
     }
 
     useEffect(() => {
