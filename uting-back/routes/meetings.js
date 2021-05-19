@@ -61,7 +61,7 @@ router.post('/attendee', async function (req, res, next) {
       Name: attendeeCache[title][attendee]
   
   };
-  res.send(JSON.stringify(attendeeInfo))
+  // res.send(JSON.stringify(attendeeInfo))
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(attendeeInfo), 'utf8');
@@ -182,7 +182,7 @@ router.post('/getparticipants', function(req,res,next){
   })
 });
 
-router.post('/newmemebers',function(req,res,next){
+router.post('/newmembers',function(req,res,next){
   let isroom = false;
   let perObj = {};
   

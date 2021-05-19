@@ -146,13 +146,13 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
             const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
     
-            let new_status;
+            let new_status="대기";
             if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
                 new_status = "진행";
             }
             let data = {
                 title: room.title,
-                maxNum: Number(room.num),
+                maxNum: Number(room.maxNum),
                 status: new_status,
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
@@ -161,7 +161,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 groupmember:groupMembersInfo,
             }
             console.log(typeof data.groupmember)
-            const response = await axios.post("http://localhost:3001/meetings/newmemebers",data)
+            const response = await axios.post("http://localhost:3001/meetings/newmembers",data)
             //console.log(response)
     
             //data.users = groupMembersInfo;
