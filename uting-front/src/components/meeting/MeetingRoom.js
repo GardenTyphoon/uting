@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import camera_on from '../../img/cam_on.png';
+import camera_off from '../../img/cam_off.png';
 
 import {
     Grid,
@@ -10,18 +12,28 @@ import {
     Severity,
     ActionType,
     useMeetingStatus,
-    LocalVideo,
+    AudioInputControl,
+    VideoInputControl,
+    AudioOutputControl,
 //    RemoteVideos,
 } from 'amazon-chime-sdk-component-library-react';
 
+import LocalVideo from './LocalVideo'
 import RemoteVideos from './RemoteVideos';
 import MeetingControls from './MeetingControls';
 import MeetingDetails from './MeetingDetails';
+import EndMeetingControl from './EndMeetingControl';
 
+const temp = {
+    background: "white",
+    border: "15px solid white",
+    borderRadius: "30px"
+}
 export default function Rooms() {
     const history = useHistory();
     const dispatch = useNotificationDispatch();
     const meetingStatus = useMeetingStatus();
+    const [localView, setlocalView] = useState(false);
 
     useEffect(() => {
         if (meetingStatus === MeetingStatus.Ended) {
@@ -44,13 +56,20 @@ export default function Rooms() {
             <UserActivityProvider>
                 <Grid
                 responsive
-                gridGap="100px"
-                gridTemplateColumns="repeat(4, 350px)"
-                gridTemplateRows="repeat(2, 350px)"
+                gridGap="50px"
+                gridTemplateColumns="repeat(4, 18vw)"
+                gridTemplateRows="repeat(2, 18vw)"
                 gridAutoFlow="dense"
+                
+                
                 >
+       
                     <LocalVideo />
+                        
+                  
+                    
                     <RemoteVideos />
+                    
                 </Grid>
                 <MeetingControls />
             </UserActivityProvider>

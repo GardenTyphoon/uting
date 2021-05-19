@@ -1,19 +1,54 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
+import camera_on from '../../img/cam_on.png';
+import camera_off from '../../img/cam_off.png';
+import { useAppState } from '../../providers/AppStateProvider';
 
-import {useRemoteVideoTileState, RemoteVideo, useRosterState} from 'amazon-chime-sdk-component-library-react'
-
+import {  
+  useRemoteVideoTileState, 
+  RemoteVideo, 
+  useRosterState,
+  Grid,
+} from 'amazon-chime-sdk-component-library-react'
+const my_style = {
+  width: "auto",
+  height: "auto",
+}
+const temp = {
+  background: "white",
+  border: "15px solid white",
+  borderRadius: "30px"
+}
 
 export const RemoteVideos = (props) => {
   const { roster } = useRosterState();
   const { tiles, tileIdToAttendeeId } = useRemoteVideoTileState();
+  const [remoteView, setremoteView] = useState(true);
+
+
+
 
   return (
     <>
       {tiles.map((tileId) => {
         const attendee = roster[tileIdToAttendeeId[tileId]] || {};
         const { name } = attendee;
+        console.log(tileId)
         return (
-          <RemoteVideo {...props} key={tileId} tileId={tileId} name={name} />
+          <div style={temp}>
+          <Grid                
+            responsive
+            gridTemplateRows="repeat(1, 2vw) repeat(1, 14vw)"
+            gridAutoFlow="dense"
+            color="white"
+
+            
+            >
+            <span  onClick={() => setremoteView(!remoteView)}>{remoteView ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>} </span>
+            {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} name={name} /> : ""}
+            
+          </Grid>
+          
+          </div>
         );
       })}
     </>

@@ -23,6 +23,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
     const [copyParticipants,setCopyParticipants]=useState(participants);
     const [goManner,setGoManner] = useState({"name":"","manner":""})
 
+
     const onClickEndMeetingBtn = (e) => {
         console.log(participantsSocketIdList)
         setToggleEndMeetingBtn(!toggleEndMeetingBtn)
@@ -62,7 +63,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
 
     useImperativeHandle(ref, () => ({
         onStartVote(){
-            toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
             setStartVote(true);
         },
         onEndMeetingAgree(data){
@@ -88,6 +88,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         if (numOfAgree > participants.length / 2) return true;
         else return false;
     }
+
+    
     useEffect(() => {
         if (flag===true && startVote === true) {
             emitStartVote();
@@ -114,14 +116,12 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
         }
     },[toggleManner])
 
-
-
-
     useEffect(() => {
         if (doneVote()) {
             if (conditionEndMeeting()) {
                 setTimeout(()=>{
                     toast("투표가 종료되었습니다. 미팅을 종료합니다.")
+                  
                     setToggleManner(true)
                 },1000)
               
@@ -131,11 +131,11 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                     toast("투표가 종료되었습니다. 미팅을 계속합니다.")
                     //여기수정
                     setStartVote(false)
-                    setMyDecision("")
-                    setNumOfDisagree(0)
-                    setNumOfAgree(0)
-                    setIsVote(false)
-                    setFlag(false);
+        setMyDecision("")
+        setNumOfDisagree(0)
+        setNumOfAgree(0)
+        setIsVote(false)
+        setFlag(false)
                 },1000)
             }
         }
@@ -250,7 +250,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants},ref) => {
                             <button className="disAgreeBtn"onClick={(e) => onClickDisagree(e)}>반대</button>
                         </div>
                         : <div>{myDeicision}하셨습니다.</div>}
-
                     <Progress multi>
                         <Progress bar style={{backgroundColor:"#2CDB52"}} value={numOfAgree} max={participants.length} />
                         <Progress bar style={{backgroundColor:"#FB6060"}} value={numOfDisagree} max={participants.length} />
