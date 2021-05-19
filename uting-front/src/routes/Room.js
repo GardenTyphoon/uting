@@ -168,7 +168,11 @@ const Room = () => {
     });
 
     socket.on("room", function (data) {
-      if (data.type === "startVote") {
+      if (data.type==="newParticipants"){
+        setTimeout(() => {
+          getparticipants();
+        }, 10000);
+      }else if (data.type === "startVote") {
         toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
         console.log("Room - startVote");
         voteRef.current.onStartVote();
