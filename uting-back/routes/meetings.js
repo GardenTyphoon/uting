@@ -230,7 +230,6 @@ router.post('/newmemebers',function(req,res,next){
 })
 
 router.post('/leavemember',function(req,res,next){
-  console.log("leavememeber!!!!!!!!!!!!!!!!!!!")
   Meeting.find(function (err, meeting) {
     //console.log(user)
     meeting.forEach((meet) => {

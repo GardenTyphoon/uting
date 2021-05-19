@@ -213,8 +213,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             }
         }
         
-        console.log(meeting_id)
-        //window.location.href="http://localhost:3000/main"
     }
 
     useEffect(()=>{
