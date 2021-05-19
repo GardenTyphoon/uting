@@ -230,6 +230,8 @@ router.post('/newmemebers',function(req,res,next){
 })
 
 router.post('/leavemember',function(req,res,next){
+  console.log("--------------------------")
+  console.log(req.body)
   Meeting.find(function (err, meeting) {
     //console.log(user)
     meeting.forEach((meet) => {
@@ -258,7 +260,7 @@ router.post('/leavemember',function(req,res,next){
         if(req.body.gender==="woman"){
           perObj.numOfWoman=perObj.numOfWoman-1
         }
-        else if(req.body.gender==="man"){
+        if(req.body.gender==="man"){
           perObj.numOfMan=perObj.numOfMan-1
         }
         Meeting.findByIdAndUpdate(

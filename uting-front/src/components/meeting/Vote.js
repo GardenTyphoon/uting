@@ -178,7 +178,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 }
             }
             alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
-            
+            console.log(meetingMembers)
             document.getElementsByName("per_name").values="default"
             document.getElementsByName("realmanner").values="default"
             setCopyParticipants(arr)
@@ -204,9 +204,10 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 user:mem.nickname,
                 gender:mem.gender
             }
+            console.log(data)
 
             const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
-
+            console.log(res)
             if(res.data==="success"){
                 alert("미팅 방을 나갑니다.")
                 window.location.href="http://localhost:3000/main"

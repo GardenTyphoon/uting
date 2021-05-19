@@ -119,6 +119,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 "mannerCredit": userInfo.data.mannerCredit,
                 "age": birthToAge(userInfo.data.birth),
                 "ucoin":userInfo.data.ucoin,
+                "gender":userInfo.data.gender,
             });
             if (userInfo.data.nickname != sessionUser) {
                 groupMembersSocketId.push(userInfo.data.socketid);
