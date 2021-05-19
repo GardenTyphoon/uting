@@ -182,6 +182,53 @@ router.post('/getparticipants', function(req,res,next){
   })
 });
 
+router.post('/newmemebers',function(req,res,next){
+  let isroom = false;
+  let perObj = {};
+  
+  console.log(req.body.groupmember[0])
+  console.log(typeof req.body.groupmember)
+  Meeting.find(function (err, meeting) {
+    //console.log(user)
+    meeting.forEach((meet) => {
+      if (req.body.title === meet.title) {
+        console.log(meet)
+        isroom = true;
+        perObj = meet;
+      }
+    });
+    if (isroom === true) {
+      let arr=[]
+     for(let i=0;i<req.body.groupmember.length;i++){
+        arr.push(req.body.groupmember[i])
+      }
+
+      Meeting.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            users: perObj.users.concat(arr),
+            title: perObj.title,
+            maxNum: perObj.maxNum,
+            status: perObj.status,
+            avgManner: ((perObj.avgManner + Number(req.body.avgManner))/2).toFixed(2),
+            avgAge: ((perObj.avgAge + req.body.avgAge)/2).toFixed(2),
+            numOfWoman: req.body.numOfWoman,
+            numOfMan: req.body.numOfMan,
+          },
+        },
+        (err, u) => {
+          res.send(perObj);
+        }
+      );
+      //res.send(perObj)
+    }
+    if (isroom === false) {
+      res.send("no");
+    }
+  });
+})
+
 router.post('/logs', function(req, res, next){
   console.log('Writing logs to cloudwatch');
   res.redirect('back');
