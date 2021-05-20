@@ -219,6 +219,8 @@ const Room = () => {
     });
     return () => {
       socket.removeListener("room");
+      socket.removeListener('clientid')
+      socket.removeListener('connect')
     };
   }, []);
   useEffect(() => {

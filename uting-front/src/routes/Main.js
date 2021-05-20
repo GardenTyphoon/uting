@@ -105,6 +105,9 @@ const Main = () => {
 
   return ()=>{
     socket.removeListener('main')
+    socket.removeListener('clientid')
+    socket.removeListener('connect')
+
 
   }
   
