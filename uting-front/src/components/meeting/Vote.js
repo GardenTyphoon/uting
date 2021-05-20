@@ -97,14 +97,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }, [flag])
 
     useEffect(()=>{
-        console.log(participantsSocketIdList)
-        console.log(copyParticipants)
-        console.log({participants})
-        console.log(meeting_id)
-        console.log(meetingMembers)
-    },[])
-
-    useEffect(()=>{
         if(toggleManner===true){
             //
             let arr =participants
@@ -215,12 +207,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
         }
         
     }
-
-    useEffect(()=>{
-        if(goManner.name!=="" && goManner.manner!==""){
-            console.log(goManner)
-        }
-    },[goManner])
     return (
         
         <div>
