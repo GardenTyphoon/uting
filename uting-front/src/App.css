@@ -36,3 +36,17 @@
     transform: rotate(360deg);
   }
 }
+
+.midleave{
+  font-family: NanumSquare_acR;
+    background: linear-gradient(to bottom, #ee0b0b, #e2698b);
+    border: none;
+    border-radius: 7px;
+    color: white;
+    margin-left: 10px;
+    margin-bottom: 20px;
+    font-size: small;
+    width: 8vw;
+    min-width: 78px;
+    padding: 7px;
+}
