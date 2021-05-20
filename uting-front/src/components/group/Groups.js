@@ -89,6 +89,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
       "http://localhost:3001/groups/info",
       data
     );
+    console.log(res.data.member);
     setGroupMember(res.data.member);
   };
 
@@ -177,7 +178,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
           }
         })}
       <PlusIcon onClick={toggelAddMember}>+</PlusIcon>
-      <PlusIcon onClick={() => setClickLeaveGroup(true)}>그룹 나가기</PlusIcon>
+      {groupMember !== undefined ? <PlusIcon onClick={() => setClickLeaveGroup(true)}>그룹 나가기</PlusIcon> : ""}
       <Modal isOpen={clickLeaveGroup}>
         <ModalBody>
           그룹을 떠나시겠습니까?
