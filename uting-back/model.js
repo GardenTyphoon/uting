@@ -99,14 +99,14 @@ const Meeting = new Schema({
         type:Number,
         required:false
     },
-    sumManner:{
-        type:Number,
-        required:false
-    },
-    sumAge:{
-        type:Number,
-        required:false
-    }
+    // sumManner:{
+    //     type:Number,
+    //     required:false
+    // },
+    // sumAge:{
+    //     type:Number,
+    //     required:false
+    // }
 })
 // Meeting.plugin(autoInc.plugin, 'meeting');
 
