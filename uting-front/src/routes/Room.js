@@ -15,6 +15,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  ModalFooter,
 } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
@@ -49,6 +50,9 @@ const Room = () => {
   const { meetingId } = useAppState();
   const [meeting_id,setMeeting_id]=useState("")
   const [meetingMembers,setMeetingMembers]=useState([])
+  const [toggleMidLeave,setToggleMidLeave]=useState(false)
+
+  
 
   let putSocketid = async (e) => {
     let data = {
@@ -128,28 +132,28 @@ const Room = () => {
           setIntervalMessage(messageArr[0])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(2)
-        },3000)
+        },600000)
       }
       else if(intervalMessageCheck===1){
         setTimeout(()=>{
           setIntervalMessage(messageArr[1])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(1)
-        },5000)
+        },1200000)
       }
       else if(intervalMessageCheck===2){
         setTimeout(()=>{
           setIntervalMessage(messageArr[2])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(3)
-        },6000)
+        },1200000)
       }
       else if(intervalMessageCheck===3){
         setTimeout(()=>{
           setIntervalMessage(messageArr[3])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(4)
-        },5000)
+        },1200000)
       }
     }
     
@@ -233,6 +237,43 @@ const Room = () => {
     console.log(res);
   };
 
+  const midLeaveBtn = (e) => {
+    setToggleMidLeave(!toggleMidLeave)
+    
+}
+
+  let midLeave = async(e)=>{
+    console.log('중도퇴장')
+    // meeting 디비에 해당 사람 gender빼기, users object빼기
+    // users 디비에 ucoin차감하기
+    let ismember=false
+        let mem={};
+        for(let i=0;i<meetingMembers.length;i++){
+            if(meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
+                ismember=true
+                mem=meetingMembers[i]
+            }
+        }
+        if(ismember===true){
+            let data ={
+                title:meeting_id,
+                user:mem.nickname,
+                gender:mem.gender
+            }
+            console.log(data)
+
+            const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
+            console.log(res)
+            if(res.data==="success"){
+                cutUcoin(sessionStorage.getItem("nickname"))
+
+                alert("미팅 방을 나갑니다.")
+                window.location.href="http://localhost:3000/main"
+
+            }
+        }
+  }
+
   useEffect(() => {
     saveParticipantsSocketId();
   }, [participants]);
@@ -270,6 +311,20 @@ const Room = () => {
         meetingMembers={meetingMembers}
       ></Vote>
       <ToastContainer />
+      <Button color="danger" onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</Button>
+      <Modal isOpen={toggleMidLeave}>
+                <ModalHeader>
+                    중도 퇴장
+                </ModalHeader>
+                <ModalBody>
+                  중도 퇴장을 하시면 U COIN이 1 차감하게 됩니다.
+                  그래도 퇴장을 원하시면 나가기를 눌러주세요.
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={(e)=>midLeave(e)}>나가기</Button>{' '}
+                    <Button color="secondary" onClick={(e)=>midLeaveBtn(e)}>취소</Button>
+                </ModalFooter>
+            </Modal>
     </div>
   );
 };

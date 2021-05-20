@@ -170,12 +170,12 @@ router.post('/getparticipants', function(req,res,next){
   console.log("+++++++++++++++++++++++++++++++++++++")
   console.log("getparticipants!!",req.body)
   console.log("+++++++++++++++++++++++++++++++++++++")
+  let arr=[]
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
       console.log("obj",obj.title)
       if(obj.title===req.body._id){
-        console.log(obj.title)
-        console.log("obj",obj)
+        console.log(obj.users)
         res.send(obj.users);
       }
     })
