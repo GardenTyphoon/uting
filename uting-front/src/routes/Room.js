@@ -337,9 +337,10 @@ const Room = () => {
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
         ></Vote>
+        <button  onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</button>
       </div>
       <ToastContainer />
-      <Button color="danger" onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</Button>
+      
       <Modal isOpen={toggleMidLeave}>
                 <ModalHeader>
                     중도 퇴장
