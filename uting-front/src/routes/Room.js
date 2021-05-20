@@ -176,8 +176,12 @@ const Room = () => {
     socket.on("room", function (data) {
       if (data.type==="newParticipants"){
         setReady(false);
-        getparticipants();
-       
+        toast("새로운 참여자가 들어옵니다!!")
+        
+        setTimeout(() => {
+          getparticipants();
+        }, 15000);
+        
       }else if (data.type === "startVote") {
      
         toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
