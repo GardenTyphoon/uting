@@ -39,10 +39,10 @@ const PlusIcon = styled.div`
   width: 10vw;
   min-width:150px;
   height: 50px;
-  padding-left: 40%;
   padding-top: 5%;
   padding-bottom: 1%;
   background-color: white;
+  text-align:center;
 `;
 
 const On = styled.span`
@@ -54,6 +54,7 @@ const On = styled.span`
 `;
 
 const GroupBox = styled.div`
+font-family: NanumSquare_acR;
   float: right;
   background-color: #ffe4e1;
   display: flex;
@@ -76,10 +77,11 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   const [groupMember, setGroupMember] = useState([]);
   const [checkMem, setCheckMem] = useState(false);
   const [groupSocketIdList, setGroupSocketIdList] = useState([]);
-  let [modalStatus, setModalStatus] = useState(false);
+  const [clickLeaveGroup, setClickLeaveGroup] = useState(false);
 
+  let [modalStatus, setModalStatus] = useState(false);
+  let sessionUser = sessionStorage.getItem("nickname");
   const getGroupInfo = async (e) => {
-    let sessionUser = sessionStorage.getItem("nickname");
     let sessionObject = { sessionUser: sessionUser };
     const res = await axios.post(
       "http://localhost:3001/groups/info",
@@ -88,6 +90,11 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
     setGroupMember(res.data.member);
   };
 
+  const leaveGroup = async () => {
+    setClickLeaveGroup(false)
+    const res = await axios.post("http://localhost:3001/groups/leaveGroup", { userNickname: sessionUser })
+
+  }
   let saveGroupSocketId = async () => {
     let data = {
       preMember: groupMember,
@@ -149,11 +156,21 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
       {groupMember === undefined
         ? ""
         : groupMember.map((data, member) => {
-            if (data !== currentUser) {
-              return <Member>{data}</Member>;
-            }
-          })}
+          if (data !== currentUser) {
+            return <Member>{data}</Member>;
+          }
+        })}
       <PlusIcon onClick={toggelAddMember}>+</PlusIcon>
+      <PlusIcon onClick={() => setClickLeaveGroup(true)}>그룹 나가기</PlusIcon>
+      <Modal isOpen={clickLeaveGroup}>
+        <ModalBody>
+          그룹을 떠나시겠습니까?
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={()=>setClickLeaveGroup(false)}>아니요</Button>{' '}
+          <Button color="secondary" onClick={()=>leaveGroup()}>예</Button>
+        </ModalFooter>
+      </Modal>
       <Modal isOpen={addMemberModal}>
         <ModalHeader
           toggle={toggelAddMember}

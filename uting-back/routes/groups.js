@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 const { Group } = require('../model');
-const { User } = require('../model');
 
 
 
@@ -76,4 +75,29 @@ router.post('/info', function(req, res,next){
     })
   
   })
+  router.post('/leaveGroup', function(req,res,next){
+
+    let check=false;
+    console.log(req.body.userNickname)
+    Group.find(function(err,group){
+      
+      group.forEach(gr=>{
+        gr.member.forEach(mem=>{
+          console.log(gr._id);
+          if(req.body.userNickname===mem){
+            console.log(gr._id);
+            Group.findByIdAndUpdate(gr._id, {$pull:{member:{$in:[req.body.userNickname]}}}, (err)=>{});
+            check=true;
+          }
+        })
+        console.log(gr.member.length);
+        if(gr.member.length===2 && check===true){
+          Group.findByIdAndDelete(gr._id, (err)=>{});
+        }
+        check=false;
+      })
+      
+    })
+
+  });
 module.exports = router;
