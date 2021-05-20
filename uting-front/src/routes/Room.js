@@ -277,7 +277,7 @@ const Room = () => {
             console.log(res)
             if(res.data==="success"){
                 cutUcoin(sessionStorage.getItem("nickname"))
-
+                setToggleMidLeave(false)
                 alert("미팅 방을 나갑니다.")
                 window.location.href="http://localhost:3000/main"
 
@@ -337,7 +337,7 @@ const Room = () => {
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
         ></Vote>
-        <button  onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</button>
+        <button className="midleave"  onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</button>
       </div>
       <ToastContainer />
       
