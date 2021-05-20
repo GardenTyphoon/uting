@@ -299,7 +299,18 @@ app.io.on("connection", function (socket) {
     for (let i = 0; i < msg.socketIdList.length; i++) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
     }
-  })
+  });
+  socket.on("leaveGroup", function(msg){
+  
+    let data = {
+      type:"someoneLeaveGroup",
+      message:msg.leavingUsers+"님이 그룹을 나갔습니다."
+    };
+    console.log(data);
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("main", data);
+    }
+  });
 });
 
 module.exports = app;
