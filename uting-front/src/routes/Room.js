@@ -1,21 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useHistory } from "react-router";
 import styled from "styled-components";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  FormText,
-  Badge,
-  Modal,
-  ModalHeader,
-  ModalBody,
-} from "reactstrap";
+import {  Spinner } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
@@ -51,7 +37,7 @@ const Room = () => {
   const { meetingId } = useAppState();
   const [meeting_id,setMeeting_id]=useState("")
   const [meetingMembers,setMeetingMembers]=useState([])
-
+  const [ready, setReady] = useState(false);
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -96,7 +82,7 @@ const Room = () => {
     // location.state를 쓰려면 순차적으로 넘어갈때만 가능
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
-
+    
     const _id = meetingId;
     if (meetingId !== "") {
       console.log("meetingId", meetingId);
@@ -114,6 +100,7 @@ const Room = () => {
       console.log(par);
       setMeeting_id(meetingId)
       setParticipants(par);
+      setReady(true);
     }
   };
 
@@ -171,6 +158,7 @@ const Room = () => {
 
     socket.on("room", function (data) {
       if (data.type==="newParticipants"){
+        setReady(false);
         setTimeout(() => {
           getparticipants();
         }, 10000);
@@ -226,6 +214,7 @@ const Room = () => {
   }, []);
   useEffect(() => {
     if (socketFlag === true) {
+
       setTimeout(() => {
         getparticipants();
       }, 15000);
@@ -268,6 +257,7 @@ const Room = () => {
         height: "100vh",
         float: "left",
       }}>
+        {ready===false ? <Spinner color="dark" /> : ""}
         <MeetingControls/>
         <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
         <br/>{intervalMessage}
