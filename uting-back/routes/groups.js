@@ -76,8 +76,8 @@ router.post('/info', function(req, res,next){
   
   })
   router.post('/leaveGroup', function(req,res,next){
-
-    let check=false;
+    let success=false;
+    let onlyOnePerson=false;
     console.log(req.body.userNickname)
     Group.find(function(err,group){
       
@@ -87,16 +87,19 @@ router.post('/info', function(req, res,next){
           if(req.body.userNickname===mem){
             console.log(gr._id);
             Group.findByIdAndUpdate(gr._id, {$pull:{member:{$in:[req.body.userNickname]}}}, (err)=>{});
-            check=true;
+            success=true;
+            onlyOnePerson=true;
           }
         })
         console.log(gr.member.length);
-        if(gr.member.length===2 && check===true){
+        if(gr.member.length===2 && onlyOnePerson===true){
           Group.findByIdAndDelete(gr._id, (err)=>{});
+          
         }
-        check=false;
+        onlyOnePerson=false;
       })
-      
+      if(success===true){res.send("success");}
+      else {res.send("fail");}
     })
 
   });

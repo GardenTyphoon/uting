@@ -20,6 +20,8 @@ import axios from "axios";
 import AddMember from "./AddMember";
 import "../../App.css";
 
+import socketio from "socket.io-client";
+
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
@@ -82,19 +84,33 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   let [modalStatus, setModalStatus] = useState(false);
   let sessionUser = sessionStorage.getItem("nickname");
   const getGroupInfo = async (e) => {
-    let sessionObject = { sessionUser: sessionUser };
+    let data = { sessionUser: sessionUser };
     const res = await axios.post(
       "http://localhost:3001/groups/info",
-      sessionObject
+      data
     );
     setGroupMember(res.data.member);
   };
 
   const leaveGroup = async () => {
+    const socket = socketio.connect("http://localhost:3001");
     setClickLeaveGroup(false)
-    const res = await axios.post("http://localhost:3001/groups/leaveGroup", { userNickname: sessionUser })
-
+     let groupMemberExceptMe = [];
+     groupMember.map((mem)=>{if(mem!==sessionUser){groupMemberExceptMe.push(mem)}})
+     console.log(groupMemberExceptMe);
+     
+     let res = await axios.post(
+      "http://localhost:3001/users/preMemSocketid",
+      {preMember:groupMemberExceptMe}
+    );
+    console.log(res.data);
+    socket.emit("leaveGroup", { socketIdList: res.data, leavingUsers:sessionUser });
+   
+    res = await axios.post("http://localhost:3001/groups/leaveGroup", { userNickname: sessionUser });
+   
+    window.location.reload();
   }
+
   let saveGroupSocketId = async () => {
     let data = {
       preMember: groupMember,
