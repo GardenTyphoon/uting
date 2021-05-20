@@ -61,7 +61,7 @@ router.post('/attendee', async function (req, res, next) {
       Name: attendeeCache[title][attendee]
   
   };
-  res.send(JSON.stringify(attendeeInfo))
+  // res.send(JSON.stringify(attendeeInfo))
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(attendeeInfo), 'utf8');
@@ -98,18 +98,19 @@ router.post('/join', async function(req, res, next){
   const temp_room = await Meeting.findOne({title:req.body.title});
   console.log('what meetingroom data')
   console.log(temp_room)
-  const meeting = new Meeting({
-    title:req.body.title,
-    maxNum:req.body.maxNum,
-    status:req.body.status,
-    avgManner:req.body.avgManner,
-    avgAge:req.body.avgAge,
-    users:req.body.users,
-    numOfWoman:req.body.numOfWoman,
-    numOfMan : req.body.numOfMan
-  });
-  meeting.save();
-
+  if(!temp_room){
+    const meeting = new Meeting({
+      title:req.body.title,
+      maxNum:req.body.maxNum,
+      status:req.body.status,
+      avgManner:req.body.avgManner,
+      avgAge:req.body.avgAge,
+      users:req.body.users,
+      numOfWoman:req.body.numOfWoman,
+      numOfMan : req.body.numOfMan
+    });
+    meeting.save();
+  }
 
   const title = req.body.title;
   const name = req.body.session;
@@ -182,7 +183,7 @@ router.post('/getparticipants', function(req,res,next){
   })
 });
 
-router.post('/newmemebers',function(req,res,next){
+router.post('/newmembers',function(req,res,next){
   let isroom = false;
   let perObj = {};
   

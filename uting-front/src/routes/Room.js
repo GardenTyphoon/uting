@@ -17,6 +17,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
+import {  Spinner } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
@@ -25,6 +26,8 @@ import ReactAudioPlayer from "react-audio-player";
 import MeetingRoom from "../components/meeting/MeetingRoom";
 import { useAppState } from "../providers/AppStateProvider";
 import { ToastContainer, toast } from "react-toastify";
+
+import MeetingControls from '../components/meeting/MeetingControls';
 import "react-toastify/dist/ReactToastify.css";
 
 const Room = () => {
@@ -51,9 +54,7 @@ const Room = () => {
   const [meeting_id,setMeeting_id]=useState("")
   const [meetingMembers,setMeetingMembers]=useState([])
   const [toggleMidLeave,setToggleMidLeave]=useState(false)
-
-  
-
+  const [ready, setReady] = useState(false);
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -98,7 +99,7 @@ const Room = () => {
     // location.state를 쓰려면 순차적으로 넘어갈때만 가능
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
-
+    
     const _id = meetingId;
     if (meetingId !== "") {
       console.log("meetingId", meetingId);
@@ -116,6 +117,7 @@ const Room = () => {
       console.log(par);
       setMeeting_id(meetingId)
       setParticipants(par);
+      setReady(true);
     }
   };
 
@@ -172,7 +174,13 @@ const Room = () => {
     });
 
     socket.on("room", function (data) {
-      if (data.type === "startVote") {
+      if (data.type==="newParticipants"){
+        setReady(false);
+        setTimeout(() => {
+          getparticipants();
+        }, 10000);
+      }else if (data.type === "startVote") {
+     
         toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
         console.log("Room - startVote");
         voteRef.current.onStartVote();
@@ -225,6 +233,7 @@ const Room = () => {
   }, []);
   useEffect(() => {
     if (socketFlag === true) {
+
       setTimeout(() => {
         getparticipants();
       }, 15000);
@@ -287,31 +296,48 @@ const Room = () => {
         width: "100vw",
         height: "100vh",
         padding: "2%",
+        overflow: "hidden",
       }}
     >
-      <MeetingRoom />
-      <ReactAudioPlayer id="audio" src={musicsrc} controls />
-      {intervalMessage}
-      <McBot
-        participantsSocketIdList={participantsSocketId}
-        currentSocketId={socketId}
-        participants={participants}
-        respondFlag={respondFlag}
-        gameStartFlag={gameStartFlag}
-        gameEndFlag={gameEndFlag}
-        gameTurn={gameTurn}
-        question={question}
-        participantsForTurn={participantsForTurn}
-        intervalFade={intervalFade}
-      ></McBot>
-      
-      <Vote
-        ref={voteRef}
-        participantsSocketIdList={participantsSocketId}
-        participants={participants}
-        meeting_id={meeting_id}
-        meetingMembers={meetingMembers}
-      ></Vote>
+      <div
+      style={{
+        width: "75%",
+        height: "100vh",
+        float: "left",
+      }}>
+        <MeetingRoom />
+      </div>
+      <div
+      style={{
+        width: "20%",
+        height: "100vh",
+        float: "left",
+      }}>
+        {ready===false ? <Spinner color="dark" /> : ""}
+        <MeetingControls/>
+        <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
+        <br/>{intervalMessage}
+        <McBot
+          participantsSocketIdList={participantsSocketId}
+          currentSocketId={socketId}
+          participants={participants}
+          respondFlag={respondFlag}
+          gameStartFlag={gameStartFlag}
+          gameEndFlag={gameEndFlag}
+          gameTurn={gameTurn}
+          question={question}
+          participantsForTurn={participantsForTurn}
+          intervalFade={intervalFade}
+        ></McBot>
+        
+        <Vote
+          ref={voteRef}
+          participantsSocketIdList={participantsSocketId}
+          participants={participants}
+          meeting_id={meeting_id}
+          meetingMembers={meetingMembers}
+        ></Vote>
+      </div>
       <ToastContainer />
       <Button color="danger" onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</Button>
       <Modal isOpen={toggleMidLeave}>
