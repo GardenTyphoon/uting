@@ -12,6 +12,25 @@ import axios from 'axios'
 
 export async function fetchMeeting(data){
     const response = await fetch(
+        `http://localhost:3001/meetings/create`,
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        },
+    );
+    const resData = await response.json();
+
+    if(resData.error){
+        throw new Error(`Server error: ${resData.error}`);
+    }
+    return resData;
+}
+
+export async function attendMeeting(data){
+    const response = await fetch(
         `http://localhost:3001/meetings/join`,
         {
             method: 'POST',
@@ -41,7 +60,7 @@ export function createGetAttendeeCallback(meetingId){
                 meetingId : meetingId,
                 attendee : chimeAttendeeId
             }
-            res = await axios.post("http://localhost:3001/meetings/attendee",data)
+            res = await axios.post("http://localhost:3001/meetings/attendee", data)
             
             if(res.data.Name!==""){
                 return{

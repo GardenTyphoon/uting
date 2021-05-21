@@ -49,9 +49,6 @@ router.get('/', async function(req, res, next) {
 
 // getAttendee
 router.post('/attendee', async function (req, res, next) {
-  // const meeting = await Meeting.findOne({ _id: req.params.id });
-  console.log("Attendee!!!!!!!!!")
-  console.log(req.body)
   const title = req.body.meetingId;
   const attendee = req.body.attendee;
 
@@ -61,43 +58,82 @@ router.post('/attendee', async function (req, res, next) {
       Name: attendeeCache[title][attendee]
   
   };
-  // res.send(JSON.stringify(attendeeInfo))
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify(attendeeInfo), 'utf8');
-  res.end();
 
-  console.log(req.query.title)
-  console.log(req.query.attendee)
+  res.send(JSON.stringify(attendeeInfo));
+
+
 });
 
-// POST write one meeting
-router.post('/', function(req, res,next){
+router.post('/join', async function(req, res, next){
 
-  const meeting = new Meeting({
-    title:req.body.title,
-    maxNum:req.body.maxNum,
-    status:req.body.status,
-    avgManner:req.body.avgManner,
-    avgAge:req.body.avgAge,
-    users:req.body.users,
-    numOfWoman:req.body.numOfWoman,
-    numOfMan : req.body.numOfMan,
-    sumManner: req.body.sumManner,
-    sumAge: req.body.sumAge,
+  let isroom = false;
+  let perObj = {};
+
+  Meeting.find(function (err, meeting) {
+
+    meeting.forEach((meet) => {
+      if (req.body.title === meet.title) {
+
+        isroom = true;
+        perObj = meet;
+      }
+    });
+    if (isroom === true) {
+      let arr=[]
+     for(let i=0;i<req.body.groupmember.length;i++){
+        arr.push(req.body.groupmember[i])
+      }
+
+      Meeting.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            users: perObj.users.concat(arr),
+            title: perObj.title,
+            maxNum: perObj.maxNum,
+            status: perObj.status,
+            avgManner: ((perObj.avgManner + Number(req.body.avgManner))/2).toFixed(2),
+            avgAge: ((perObj.avgAge + req.body.avgAge)/2).toFixed(2),
+            numOfWoman: req.body.numOfWoman,
+            numOfMan: req.body.numOfMan,
+          },
+        },
+        (err, u) => {
+          res.send(perObj);
+        }
+      );
+    }
+    if (isroom === false) {
+      res.send("no");
+    }
   });
-  meeting.save((err)=>{
-    res.send("방을 생성하였습니다.")
-  });
+
+  const title = req.body.title;
+  const name = req.body.session;
+  const region = "us-east-1"
+  
+  const joinInfo = {
+    JoinInfo: {
+      Title: title,
+      Meeting: meetingCache[title].Meeting,
+      Attendee: (
+        await chime
+          .createAttendee({
+            MeetingId: meetingCache[title].Meeting.MeetingId,
+            ExternalUserId: uuid()
+          }).promise()).Attendee
+    }
+  };
+  attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
+
+  
+  res.send(JSON.stringify(joinInfo));
 })
 
 // POST CHIME one meeting
-router.post('/join', async function(req, res, next){
-
-
+router.post('/create', async function(req, res, next){
   const temp_room = await Meeting.findOne({title:req.body.title});
-  console.log('what meetingroom data')
-  console.log(temp_room)
+
   const meeting = new Meeting({
     title:req.body.title,
     maxNum:req.body.maxNum,
@@ -139,13 +175,7 @@ router.post('/join', async function(req, res, next){
 
   
   
-  res.statusCode = 201;
-  res.setHeader('Content-Type', 'application/json');
-  res.write(JSON.stringify(joinInfo), 'utf8');
-  // meeting.save((err) => {
-  //   res.send("방을 생성하였습니다.")
-  // });
-  res.end(); // res.json 또는 res.send 없으면 안써도돼
+  res.send(JSON.stringify(joinInfo));
 })
 
 router.post('/savemember', function(req, res,next){
@@ -167,67 +197,14 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
-  console.log("+++++++++++++++++++++++++++++++++++++")
-  console.log("getparticipants!!",req.body)
-  console.log("+++++++++++++++++++++++++++++++++++++")
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
-      console.log("obj",obj.title)
       if(obj.title===req.body._id){
-        console.log(obj.title)
-        console.log("obj",obj)
         res.send(obj.users);
       }
     })
   })
 });
-
-router.post('/newmembers',function(req,res,next){
-  let isroom = false;
-  let perObj = {};
-  
-  console.log(req.body.groupmember[0])
-  console.log(typeof req.body.groupmember)
-  Meeting.find(function (err, meeting) {
-    //console.log(user)
-    meeting.forEach((meet) => {
-      if (req.body.title === meet.title) {
-        console.log(meet)
-        isroom = true;
-        perObj = meet;
-      }
-    });
-    if (isroom === true) {
-      let arr=[]
-     for(let i=0;i<req.body.groupmember.length;i++){
-        arr.push(req.body.groupmember[i])
-      }
-
-      Meeting.findByIdAndUpdate(
-        perObj._id,
-        {
-          $set: {
-            users: perObj.users.concat(arr),
-            title: perObj.title,
-            maxNum: perObj.maxNum,
-            status: perObj.status,
-            avgManner: ((perObj.avgManner + Number(req.body.avgManner))/2).toFixed(2),
-            avgAge: ((perObj.avgAge + req.body.avgAge)/2).toFixed(2),
-            numOfWoman: req.body.numOfWoman,
-            numOfMan: req.body.numOfMan,
-          },
-        },
-        (err, u) => {
-          res.send(perObj);
-        }
-      );
-      //res.send(perObj)
-    }
-    if (isroom === false) {
-      res.send("no");
-    }
-  });
-})
 
 router.post('/leavemember',function(req,res,next){
   console.log("--------------------------")
@@ -297,24 +274,16 @@ router.post('/logs', function(req, res, next){
   res.redirect('back');
 })
 
-// PUT edit one meeting
-router.put('/:id', async function(req,res,next){
-  const meeting = await Meeting.findByIdAndUpdate(req.params.id, req.body);
-  //res.json(meeting);
-})
-
 // DELETE one meeting
 router.post('/end', async function(req,res,next){
   const title = req.body.meetingId;
   const meeting = await Meeting.deleteOne({title : title});
-  //res.json(meeting);
 
   await chime.deleteMeeting({
     MeetingId: meetingCache[title].Meeting.MeetingId
   }).promise();
-  res.statusCode = 200;
-  res.end();
-  // res.send("The meeting is terminated successful");
+
+  res.send("The meeting is terminated successful");
 });
 
 

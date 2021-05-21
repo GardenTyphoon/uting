@@ -63,7 +63,7 @@ const Main = () => {
 
   
   useEffect(() => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("http://localhost:8080");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
