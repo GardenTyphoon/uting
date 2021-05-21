@@ -173,8 +173,6 @@ router.post('/create', async function(req, res, next){
   };
   attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
 
-  
-  
   res.send(JSON.stringify(joinInfo));
 })
 
