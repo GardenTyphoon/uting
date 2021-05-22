@@ -101,6 +101,11 @@ const Main = () => {
         setRoomtitle(data.roomtitle)
           
       }
+      else if(data.type==="someoneLeaveGroup"){
+        toast(data.message);
+        window.location.reload();
+        
+      }
     })
 
   return ()=>{
