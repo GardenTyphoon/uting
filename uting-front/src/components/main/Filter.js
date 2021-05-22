@@ -12,31 +12,16 @@ const Filter = ({filterRoomTitle}) => {
 
     let onChangehandler = (e) => {
         let { name, value } = e.target;
-        //setRoomname(value)
-        setRoomname("")
-        console.log(value)
-        if(prev.length>value.length){
-            console.log("delete")
             setRoomname({
                 ...roomname,
                 [name]:value,
             });
-        }
-        else{
-            setRoomname({
-                ...roomname,
-                [name]:value,
-            });
-        }
-        //filterRoomTitle(value)
-        setPrev(value)
     };
 
     useEffect(()=>{
-        //console.log(roomname.name)
+        console.log(roomname.name)
         if(roomname!==""){
             filterRoomTitle(roomname.name)
-
         }
     },[roomname])
 

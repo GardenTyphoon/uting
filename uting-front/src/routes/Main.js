@@ -166,10 +166,7 @@ const Main = () => {
   }, [socketId]);
 
   let filterRoomTitle =(e)=>{
-    console.log(e)
-    //setFilterRoomName(e)
-
-   setFilterRoomName(e);
+    setFilterRoomName(e);
   }
 
   return (
