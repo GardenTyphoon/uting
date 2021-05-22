@@ -57,7 +57,7 @@ function birthToAge(birth) {
     return 2021 - Number(year) + 1;
 }
 
-export default function MeetingList({ checkState, groupSocketList, currentsocketId }) {
+export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName }) {
 
     const history = useHistory();
     const meetingManager = useMeetingManager();
@@ -259,15 +259,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             getMeetings()
         }
     }, [checkState])
-    /*
-        let filt = ()=>{
-            const filtered = viewRoomList.filter((list) => {
-                return list.title.toLowerCase().includes(filterRoomName)});
-         
-            console.log(filtered)
-            
-            setView(filtered)
-        }*/
+ 
 
     let getMeetings = async () => {
         await axios
@@ -279,30 +271,18 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             .catch((err) => { });
 
     }
-    /*
+    
     useEffect(()=>{
-        if(filterRoomName!=="")
-        {
-            filt()
-        }
-        else if(filterRoomName===""){
-            const filtered = originList.filter((list) => {
-                return list.title.toLowerCase().includes(filterRoomName)});
-         
-            console.log(filtered)
-            
-            setView(filtered)
-        }
-            
-            
-    
-    },[filterRoomName])*/
+         const filteredName = originList.filter((data)=>{
+                return data.title.toLowerCase().includes(filterRoomName)
+            });
+        setView(filteredName)
+    },[filterRoomName])
 
-    /*
-        useEffect(()=>{
-    
-        },[viewRoomList])
-    */
+    useEffect(()=>{
+        console.log(viewRoomList)
+    },[viewRoomList])
+
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
