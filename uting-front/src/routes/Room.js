@@ -302,6 +302,12 @@ const Room = () => {
         overflow: "hidden",
       }}
     >
+      <Modal isOpen={!ready}>
+        <ModalBody style={{textAlign:"center", fontFamily:" NanumSquare_acR", padding:"30px"}}> 
+        <Spinner color="dark" /> 
+        <div style={{ margin:"20px", fontSize:"large"}}>잠시만 기다려주세요 o(*^▽^*)┛</div> 
+        </ModalBody>
+      </Modal>
       <div
       style={{
         width: "75%",
@@ -316,7 +322,6 @@ const Room = () => {
         height: "100vh",
         float: "left",
       }}>
-        {ready===false ? <Spinner color="dark" /> : ""}
         <MeetingControls/>
         <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
         <br/>{intervalMessage}
