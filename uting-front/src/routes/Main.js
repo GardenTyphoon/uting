@@ -36,6 +36,7 @@ const Main = () => {
   const [roomtitle,setRoomtitle]=useState("")
   const [filterRoomName,setFilterRoomName]=useState("")
   const [filtermanner,setFiltermanner] = useState({})
+  const [filterage,setFilterage] = useState({})
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
   
   const [socketId, setSocketId] = useState("");
@@ -178,6 +179,14 @@ const Main = () => {
     setFiltermanner(data)
   }
 
+  let filterAge = (e)=>{
+    let data={
+      "first":e.first,
+      "last":e.last
+    }
+    setFilterage(data)
+  }
+
   return (
     <div className="mainContainer">
       <div className="mainTop">
@@ -203,7 +212,7 @@ const Main = () => {
           <div className="RoomTop" style={{width:"50vw", minWidth:"520px"}}>
             <div className="RoomTop" style={{width:"43vw"}}>
             <div style={{fontFamily:"NanumSquare_acR", fontSize:"large", color:"#9A7D7D", marginRight:"25px"}}>Room List</div>
-            <Filter filterRoomTitle={(e)=>filterRoomTitle(e)} filterManner={(e)=>filterManner(e)} />
+            <Filter filterRoomTitle={(e)=>filterRoomTitle(e)} filterManner={(e)=>filterManner(e)} filterAge={(e)=>filterAge(e)}/>
             </div>
             <button
               className="makeRoomBtn"
@@ -229,7 +238,7 @@ const Main = () => {
               height:"70vh"
             }}
           >
-            <MeetingList filterRoomName={filterRoomName} filtermanner={filtermanner} currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
+            <MeetingList filterRoomName={filterRoomName} filtermanner={filtermanner} filterage={filterage} currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
           </div>
         </div>
         <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />

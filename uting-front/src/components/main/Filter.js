@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import "./Filter.css"
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem,Input } from 'reactstrap';
 
-const Filter = ({filterRoomTitle,filterManner}) => {
+const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [fiternum,setFilternum]=useState(0)
     const [roomname,setRoomname]=useState("")
     const [prev,setPrev]=useState("")
     const [filtermanner,setFiltermanner] = useState({"first":"","last":""})
+    const [filterage,setFilterage] = useState({"first":"","last":""})
     const toggle = () => setDropdownOpen(prevState => !prevState);
 
     let onChangehandler = (e) => {
@@ -26,6 +27,12 @@ const Filter = ({filterRoomTitle,filterManner}) => {
         if(name==="lastManner"){
             setFiltermanner({...filtermanner,["last"]:Number(value)})
         }
+        if(name==="firstAge"){
+            setFilterage({...filterage,["first"]:Number(value)})
+        }
+        if(name==="lastAge"){
+            setFilterage({...filterage,["last"]:Number(value)})
+        }
             
     };
 
@@ -38,6 +45,13 @@ const Filter = ({filterRoomTitle,filterManner}) => {
             filterManner(filtermanner)
         }
     },[filtermanner])
+
+    useEffect(()=>{
+        if(filterage.first!=="" && filterage.last!==""){
+            console.log(filterage)
+            filterAge(filterage)
+        }
+    },[filterage])
 
     useEffect(()=>{
         if(roomname!==""){
@@ -73,7 +87,7 @@ const Filter = ({filterRoomTitle,filterManner}) => {
     {fiternum===1?
     <span>
         <Input type="select" name="firstManner" onChange={(e)=>onChangehandler(e)}>
-            <option value="default" selected>학점을 선택해주세요</option>
+            <option value="default" selected>최고 학점을 선택해주세요</option>
             <option value="4.5">A+</option>
             <option value="4.0">A0</option>
             <option value="3.5">B+</option>
@@ -85,7 +99,7 @@ const Filter = ({filterRoomTitle,filterManner}) => {
             <option value="0">F</option> 
         </Input>
         <Input type="select" name="lastManner" onChange={(e)=>onChangehandler(e)}>
-            <option value="default" selected>학점을 선택해주세요</option>
+            <option value="default" selected>최저 학점을 선택해주세요</option>
             <option value="4.5">A+</option>
             <option value="4.0">A0</option>
             <option value="3.5">B+</option>
@@ -98,7 +112,11 @@ const Filter = ({filterRoomTitle,filterManner}) => {
         </Input>
     </span>
     :
-    fiternum===2?""
+    fiternum===2?
+    <span>
+        <Input type="text" name="firstAge" onChange={(e)=>onChangehandler(e)}></Input>
+        <Input type="text" name="lastAge" onChange={(e)=>onChangehandler(e)}></Input>
+    </span>
     :
     fiternum===3?<div><Input name="name" onChange={(e)=>onChangehandler(e)} type="text"></Input></div>:""}
     
