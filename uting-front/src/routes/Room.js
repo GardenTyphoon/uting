@@ -15,7 +15,9 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  ModalFooter,
 } from "reactstrap";
+import {  Spinner } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
@@ -51,7 +53,8 @@ const Room = () => {
   const { meetingId } = useAppState();
   const [meeting_id,setMeeting_id]=useState("")
   const [meetingMembers,setMeetingMembers]=useState([])
-
+  const [toggleMidLeave,setToggleMidLeave]=useState(false)
+  const [ready, setReady] = useState(false);
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -96,7 +99,7 @@ const Room = () => {
     // location.state를 쓰려면 순차적으로 넘어갈때만 가능
     // 다른 방법으로 props 없이 돌아가면 undefined가 됨.
     // 그래서 임시로 일단 AppStateProvider 값으로 지정함.
-
+    
     const _id = meetingId;
     if (meetingId !== "") {
       console.log("meetingId", meetingId);
@@ -114,6 +117,7 @@ const Room = () => {
       console.log(par);
       setMeeting_id(meetingId)
       setParticipants(par);
+      setReady(true);
     }
   };
 
@@ -130,28 +134,28 @@ const Room = () => {
           setIntervalMessage(messageArr[0])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(2)
-        },3000)
+        },600000)
       }
       else if(intervalMessageCheck===1){
         setTimeout(()=>{
           setIntervalMessage(messageArr[1])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(1)
-        },5000)
+        },1200000)
       }
       else if(intervalMessageCheck===2){
         setTimeout(()=>{
           setIntervalMessage(messageArr[2])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(3)
-        },6000)
+        },1200000)
       }
       else if(intervalMessageCheck===3){
         setTimeout(()=>{
           setIntervalMessage(messageArr[3])
           setIntervalMessageChekc(intervalMessageCheck+1)
           setIntervalFade(4)
-        },5000)
+        },1200000)
       }
     }
     
@@ -170,7 +174,16 @@ const Room = () => {
     });
 
     socket.on("room", function (data) {
-      if (data.type === "startVote") {
+      if (data.type==="newParticipants"){
+        setReady(false);
+        toast("새로운 참여자가 들어옵니다!!")
+        
+        setTimeout(() => {
+          getparticipants();
+        }, 15000);
+        
+      }else if (data.type === "startVote") {
+     
         toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ")
         console.log("Room - startVote");
         voteRef.current.onStartVote();
@@ -217,10 +230,13 @@ const Room = () => {
     });
     return () => {
       socket.removeListener("room");
+      socket.removeListener('clientid')
+      socket.removeListener('connect')
     };
   }, []);
   useEffect(() => {
     if (socketFlag === true) {
+
       setTimeout(() => {
         getparticipants();
       }, 15000);
@@ -234,6 +250,43 @@ const Room = () => {
     const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
     console.log(res);
   };
+
+  const midLeaveBtn = (e) => {
+    setToggleMidLeave(!toggleMidLeave)
+    
+}
+
+  let midLeave = async(e)=>{
+    console.log('중도퇴장')
+    // meeting 디비에 해당 사람 gender빼기, users object빼기
+    // users 디비에 ucoin차감하기
+    let ismember=false
+        let mem={};
+        for(let i=0;i<meetingMembers.length;i++){
+            if(meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
+                ismember=true
+                mem=meetingMembers[i]
+            }
+        }
+        if(ismember===true){
+            let data ={
+                title:meeting_id,
+                user:mem.nickname,
+                gender:mem.gender
+            }
+            console.log(data)
+
+            const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
+            console.log(res)
+            if(res.data==="success"){
+                cutUcoin(sessionStorage.getItem("nickname"))
+                setToggleMidLeave(false)
+                alert("미팅 방을 나갑니다.")
+                window.location.href="http://localhost:3000/main"
+
+            }
+        }
+  }
 
   useEffect(() => {
     saveParticipantsSocketId();
@@ -249,6 +302,12 @@ const Room = () => {
         overflow: "hidden",
       }}
     >
+      <Modal isOpen={!ready}>
+        <ModalBody style={{textAlign:"center", fontFamily:" NanumSquare_acR", padding:"30px"}}> 
+        <Spinner color="dark" /> 
+        <div style={{ margin:"20px", fontSize:"large"}}>잠시만 기다려주세요 o(*^▽^*)┛</div> 
+        </ModalBody>
+      </Modal>
       <div
       style={{
         width: "75%",
@@ -286,8 +345,23 @@ const Room = () => {
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
         ></Vote>
+        <button className="midleave"  onClick={(e)=>midLeaveBtn(e)}>중도 퇴장</button>
       </div>
       <ToastContainer />
+      
+      <Modal isOpen={toggleMidLeave}>
+                <ModalHeader>
+                    중도 퇴장
+                </ModalHeader>
+                <ModalBody>
+                  중도 퇴장을 하시면 U COIN이 1 차감하게 됩니다.
+                  그래도 퇴장을 원하시면 나가기를 눌러주세요.
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={(e)=>midLeave(e)}>나가기</Button>{' '}
+                    <Button color="secondary" onClick={(e)=>midLeaveBtn(e)}>취소</Button>
+                </ModalFooter>
+            </Modal>
     </div>
   );
 };

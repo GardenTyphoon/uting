@@ -95,6 +95,8 @@ const Meeting = ({ checkFunc }) => {
             let avgAge = 0;
             let nowOfWoman = 0;
             let nowOfMan = 0;
+            console.log("room.title", room.title);
+            console.log("room.maxNum", room.num);
             for (let i = 0; i < groupMembers.length; i++) {
                 let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
                 groupMembersInfo.push({
@@ -126,8 +128,6 @@ const Meeting = ({ checkFunc }) => {
                 }
             }
             if(coinCheck===true){
-                sumManner = avgManner;
-                sumAge = avgAge;
                 avgManner /= groupMembers.length;
                 avgAge /= groupMembers.length;
                 avgAge = parseInt(avgAge);
@@ -143,8 +143,6 @@ const Meeting = ({ checkFunc }) => {
                     avgAge: avgAge,
                     numOfWoman: nowOfWoman,
                     numOfMan: nowOfMan,
-                    sumManner: sumManner,
-                    sumAge: sumAge,
                     session: sessionUser,
                 };
                 data.users = groupMembersInfo;

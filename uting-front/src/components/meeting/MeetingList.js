@@ -57,7 +57,7 @@ function birthToAge(birth) {
     return 2021 - Number(year) + 1;
 }
 
-export default function MeetingList({ checkState, groupSocketList, currentsocketId }) {
+export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName,filtermanner,filterage,getorigin }) {
 
     const history = useHistory();
     const meetingManager = useMeetingManager();
@@ -77,24 +77,28 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     let sessionUser = sessionStorage.getItem("nickname");
 
-    
-    const updateNewParticipants_to_OriginParticipants = async(meetingRoomParticipantsSocektId) =>{
-        
+
+    const updateNewParticipants_to_OriginParticipants = async (meetingRoomParticipants) => {
+
         const socket = socketio.connect("http://localhost:3001");
         let data = {
-            preMember: meetingRoomParticipantsSocektId
-          };
-          const res = await axios.post(
+            preMember: meetingRoomParticipants
+        };
+        const res = await axios.post(
             "http://localhost:3001/users/preMemSocketid",
             data
-          );
-          console.log(res);
-          socket.emit("newParticipants", { socketIdList: res.data});
+        );
+        console.log(res);
+        socket.emit("newParticipants", { socketIdList: res.data });
     }
     const attendRoomByID = async (room) => {
+<<<<<<< HEAD
         
         setRoomObj(room)
         
+=======
+        setRoomObj(room)
+>>>>>>> main
 
         // setFlag(true)
         const userNum = room.users.length;
@@ -114,8 +118,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 "introduce": userInfo.data.introduce,
                 "mannerCredit": userInfo.data.mannerCredit,
                 "age": birthToAge(userInfo.data.birth),
-                "ucoin":userInfo.data.ucoin,
-                "gender":userInfo.data.gender,
+                "ucoin": userInfo.data.ucoin,
+                "gender": userInfo.data.gender,
             });
             if (userInfo.data.nickname != sessionUser) {
                 groupMembersSocketId.push(userInfo.data.socketid);
@@ -125,6 +129,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (userInfo.data.gender === "woman") numOfWoman += 1;
             else numOfMan += 1;
         }
+<<<<<<< HEAD
 
 
 
@@ -165,17 +170,71 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         try {
             const { JoinInfo } = await attendMeeting(data);
 
+=======
+        let coinCheck = true;
+        for (let i = 0; i < groupMembersInfo.length; i++) {
+            if (groupMembersInfo[i].ucoin < 0) {
+                coinCheck = false
+            }
+        }
+        if (coinCheck === true) {
+            // sumManner += avgManner;
+            // sumAge += avgAge;
+            //
+
+            let new_numOfMan = numOfMan + room.numOfMan;
+            let new_numOfWoman = numOfWoman + room.numOfWoman;
+
+            const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
+            const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
+
+            let new_status = "대기";
+            if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
+                new_status = "진행";
+            }
+            let data = {
+                title: room.title,
+                maxNum: Number(room.maxNum),
+                status: new_status,
+                avgManner: avgManner.toFixed(3),
+                avgAge: avgAge,
+                numOfWoman: new_numOfWoman,
+                numOfMan: new_numOfMan,
+                groupmember: groupMembersInfo,
+            }
+            console.log(typeof data.groupmember)
+            const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
+            let meetingRoomParticipants = [];
+            room.users.map((per) => {
+                meetingRoomParticipants.push(per.nickname);
+
+            })
+            updateNewParticipants_to_OriginParticipants(meetingRoomParticipants); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
+
+            //console.log(response)
+
+            //data.users = groupMembersInfo;
+
+            try {
+                const { JoinInfo } = await fetchMeeting(data);
+>>>>>>> main
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
                     attendeeInfo: JoinInfo.Attendee
                 });
+<<<<<<< HEAD
     
                 setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
+=======
+
+                setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
+>>>>>>> main
                 if (room.title !== undefined) {
                     const socket = socketio.connect('http://localhost:3001');
                     console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
+<<<<<<< HEAD
     
                 let meetingRoomParticipantsSocektId = [];
                 room.users.map((per)=>{
@@ -184,15 +243,22 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 })
                 updateNewParticipants_to_OriginParticipants(meetingRoomParticipantsSocektId); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
         
+=======
+>>>>>>> main
 
                 history.push('/deviceSetup');
             } catch (error) {
                 console.log(error);
             }
         }
-        else if(coinCheck===false){
+        else if (coinCheck === false) {
             alert("그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요.")
         }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> main
     };
 
 
@@ -207,7 +273,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         console.log("saveMeetingUsers", data)
         const res = await axios.post("http://localhost:3001/meetings/savemember", data)
         console.log(res)
-        
+
     }
 
     useEffect(() => {
@@ -245,7 +311,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             settoolTipId("");
         }
         else {
-            
+
             setState(true);
             settoolTipId(title);
         }
@@ -261,15 +327,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             getMeetings()
         }
     }, [checkState])
-    /*
-        let filt = ()=>{
-            const filtered = viewRoomList.filter((list) => {
-                return list.title.toLowerCase().includes(filterRoomName)});
-         
-            console.log(filtered)
-            
-            setView(filtered)
-        }*/
+ 
 
     let getMeetings = async () => {
         await axios
@@ -281,44 +339,57 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             .catch((err) => { });
 
     }
-    /*
+    
     useEffect(()=>{
-        if(filterRoomName!=="")
-        {
-            filt()
-        }
-        else if(filterRoomName===""){
-            const filtered = originList.filter((list) => {
-                return list.title.toLowerCase().includes(filterRoomName)});
-         
-            console.log(filtered)
-            
-            setView(filtered)
-        }
-            
-            
-    
-    },[filterRoomName])*/
+         const filteredName = originList.filter((data)=>{
+                return data.title.toLowerCase().includes(filterRoomName)
+            });
+        setView(filteredName)
+    },[filterRoomName])
 
-    /*
-        useEffect(()=>{
-    
-        },[viewRoomList])
-    */
+    useEffect(()=>{
+        let filtered=[];
+
+        originList.map((data)=>{
+            if(data.avgManner<=filtermanner.first && data.avgManner>=filtermanner.last){
+                filtered.push(data)
+            }
+        })
+        setView(filtered)
+    },[filtermanner])
+
+    useEffect(()=>{
+        let filtered=[];
+
+        originList.map((data)=>{
+            if(data.avgAge<=filterage.first && data.avgAge>=filterage.last){
+                filtered.push(data)
+            }
+        })
+        setView(filtered)
+
+    },[filterage])
+
+    useEffect(()=>{
+       
+            setView(originList)
+        
+    },[getorigin])
+
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
-                
+
                 <div style={{ marginRight: "25px" }}>
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
-                            
+
                             <img src={MeetingRoom}
                                 style={{ padding: "1%", width: "10%", borderRadius: "50%", marginRight: "5%" }}
-                                id={"Tooltip-" +room._id.substr(0,10)} 
-                                onMouseOver={(e) => toggleToolTipId(room._id.substr(0,10))}
-                                onMouseOut={(e) => toggleToolTipId(room._id.substr(0,10))}
-                                />
+                                id={"Tooltip-" + room._id.substr(0, 10)}
+                                onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
+                                onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
+                            />
 
 
 
@@ -343,21 +414,21 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                         </Row>
 
                     </Container>
-              
+
                     <Tooltip
                         placement="bottom"
-                        isOpen={toolTipId===room._id.substr(0,10) && state===true}
-                        target={"Tooltip-" + room._id.substr(0,10)}
-                        toggle={()=>setTooltipOpen(!tooltipOpen)}
-                        style={{backgroundColor:"#DEEFFF", fontFamily:"NanumSquare_acR", color:"black", padding:"10px"}}
+                        isOpen={toolTipId === room._id.substr(0, 10) && state === true}
+                        target={"Tooltip-" + room._id.substr(0, 10)}
+                        toggle={() => setTooltipOpen(!tooltipOpen)}
+                        style={{ backgroundColor: "#DEEFFF", fontFamily: "NanumSquare_acR", color: "black", padding: "10px" }}
                     >
-                    
-                    {room.users.map(user=>
-                    
-                        <div>{user.nickname}  {mannerCredit(user.mannerCredit)}  {user.age}살 <br></br></div>)}
+
+                        {room.users.map(user =>
+
+                            <div>{user.nickname}  {mannerCredit(user.mannerCredit)}  {user.age}살 <br></br></div>)}
                     </Tooltip>
-                   
-                 
+
+
 
 
                 </div>
