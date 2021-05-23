@@ -57,7 +57,7 @@ function birthToAge(birth) {
     return 2021 - Number(year) + 1;
 }
 
-export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName,filtermanner,filterage }) {
+export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName,filtermanner,filterage,getorigin }) {
 
     const history = useHistory();
     const meetingManager = useMeetingManager();
@@ -302,6 +302,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         setView(filtered)
 
     },[filterage])
+
+    useEffect(()=>{
+       
+            setView(originList)
+        
+    },[getorigin])
 
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >

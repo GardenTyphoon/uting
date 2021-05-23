@@ -16,7 +16,7 @@ import CollegeRanking from "../components/main/CollegeRanking.js";
 //import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import renewImg from '../img/새로고침.svg'
 
 import { useAppState } from '../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
@@ -37,8 +37,9 @@ const Main = () => {
   const [filterRoomName,setFilterRoomName]=useState("")
   const [filtermanner,setFiltermanner] = useState({})
   const [filterage,setFilterage] = useState({})
+  const [getorigin,setGetorigin]=useState(false)
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
-  
+  const toggleGetorigin = (e)=>setGetorigin(!getorigin)
   const [socketId, setSocketId] = useState("");
   
   let sessionEmail = sessionStorage.getItem("email");
@@ -214,12 +215,15 @@ const Main = () => {
             <div style={{fontFamily:"NanumSquare_acR", fontSize:"large", color:"#9A7D7D", marginRight:"25px"}}>Room List</div>
             <Filter filterRoomTitle={(e)=>filterRoomTitle(e)} filterManner={(e)=>filterManner(e)} filterAge={(e)=>filterAge(e)}/>
             </div>
+            <img src={renewImg} style={{width:"5%",marginRight:"3%"}} onClick={(e)=>toggleGetorigin(e)}/>
+
             <button
               className="makeRoomBtn"
               onClick={(e) => {toggleMakeMeetingBtn(e);}}
              >
               방 생성
             </button>
+
             
             <Modal isOpen={toggleMakeMeeting}>
               <ModalHeader className="font" toggle={() => setToggleMakeMeeting(!toggleMakeMeeting)}>미팅방 정보 입력</ModalHeader>
@@ -238,7 +242,7 @@ const Main = () => {
               height:"70vh"
             }}
           >
-            <MeetingList filterRoomName={filterRoomName} filtermanner={filtermanner} filterage={filterage} currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
+            <MeetingList getorigin={getorigin} filterRoomName={filterRoomName} filtermanner={filtermanner} filterage={filterage} currentsocketId={socketId} groupSocketList={groupSocketList} checkState={checkRoomList} />
           </div>
         </div>
         <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />

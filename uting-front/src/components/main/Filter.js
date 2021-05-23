@@ -86,8 +86,8 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
     </Dropdown>
     {fiternum===1?
     <span>
-        <Input type="select" name="firstManner" onChange={(e)=>onChangehandler(e)}>
-            <option value="default" selected>최고 학점을 선택해주세요</option>
+        <Input style={{width:"45%",display:"inline-block",marginLeft:"1%"}} type="select" name="firstManner" onChange={(e)=>onChangehandler(e)}>
+            <option value="default" selected>高</option>
             <option value="4.5">A+</option>
             <option value="4.0">A0</option>
             <option value="3.5">B+</option>
@@ -98,8 +98,9 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
             <option value="1.0">D0</option>
             <option value="0">F</option> 
         </Input>
-        <Input type="select" name="lastManner" onChange={(e)=>onChangehandler(e)}>
-            <option value="default" selected>최저 학점을 선택해주세요</option>
+        ~
+        <Input style={{width:"45%",display:"inline-block"}} type="select" name="lastManner" onChange={(e)=>onChangehandler(e)}>
+            <option value="default" selected>低</option>
             <option value="4.5">A+</option>
             <option value="4.0">A0</option>
             <option value="3.5">B+</option>
@@ -114,11 +115,12 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
     :
     fiternum===2?
     <span>
-        <Input type="text" name="firstAge" onChange={(e)=>onChangehandler(e)}></Input>
-        <Input type="text" name="lastAge" onChange={(e)=>onChangehandler(e)}></Input>
+        <Input style={{width:"20%",display:"inline-block",marginLeft:"5%",marginRight:"2%"}} placeholder="高" type="text" name="firstAge" onChange={(e)=>onChangehandler(e)}/>
+        ~
+        <Input style={{width:"20%",display:"inline-block",marginLeft:"2%"}} placeholder="低" type="text" name="lastAge" onChange={(e)=>onChangehandler(e)}/>
     </span>
     :
-    fiternum===3?<div><Input name="name" onChange={(e)=>onChangehandler(e)} type="text"></Input></div>:""}
+    fiternum===3?<div><Input style={{width:"90%",marginLeft:"5%",marginRight:"2%"}} name="name" onChange={(e)=>onChangehandler(e)} type="text"></Input></div>:""}
     
         </>
     )
