@@ -99,12 +99,12 @@ router.post('/join', async function(req, res, next){
           },
         },
         (err, u) => {
-          res.send(perObj);
+          console.log(err);
         }
       );
     }
     if (isroom === false) {
-      res.send("no");
+      res.send("참가하는 과정에서 오류가 발생했습니다.");
     }
   });
 
@@ -133,23 +133,7 @@ router.post('/join', async function(req, res, next){
 // POST CHIME one meeting
 router.post('/create', async function(req, res, next){
   const temp_room = await Meeting.findOne({title:req.body.title});
-<<<<<<< HEAD
 
-  const meeting = new Meeting({
-    title:req.body.title,
-    maxNum:req.body.maxNum,
-    status:req.body.status,
-    avgManner:req.body.avgManner,
-    avgAge:req.body.avgAge,
-    users:req.body.users,
-    numOfWoman:req.body.numOfWoman,
-    numOfMan : req.body.numOfMan
-  });
-  meeting.save();
-
-=======
-  console.log('what meetingroom data')
-  console.log(temp_room)
   if(!temp_room){
     const meeting = new Meeting({
       title:req.body.title,
@@ -163,7 +147,6 @@ router.post('/create', async function(req, res, next){
     });
     meeting.save();
   }
->>>>>>> main
 
   const title = req.body.title;
   const name = req.body.session;
@@ -213,20 +196,14 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
-<<<<<<< HEAD
-=======
   console.log("+++++++++++++++++++++++++++++++++++++")
   console.log("getparticipants!!",req.body)
   console.log("+++++++++++++++++++++++++++++++++++++")
   let arr=[]
->>>>>>> main
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
       if(obj.title===req.body._id){
-<<<<<<< HEAD
-=======
         console.log(obj.users)
->>>>>>> main
         res.send(obj.users);
       }
     })

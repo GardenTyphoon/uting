@@ -92,13 +92,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         socket.emit("newParticipants", { socketIdList: res.data });
     }
     const attendRoomByID = async (room) => {
-<<<<<<< HEAD
-        
         setRoomObj(room)
-        
-=======
-        setRoomObj(room)
->>>>>>> main
 
         // setFlag(true)
         const userNum = room.users.length;
@@ -129,48 +123,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (userInfo.data.gender === "woman") numOfWoman += 1;
             else numOfMan += 1;
         }
-<<<<<<< HEAD
-
-
-
-        let coinCheck =true;
-
-        for(let i=0;i<groupMembersInfo.length;i++){
-            if(groupMembersInfo[i].ucoin<0){
-                coinCheck=false
-            }
-        }
-
-        if(coinCheck===true){
-    
-        let new_numOfMan = numOfMan + room.numOfMan;
-        let new_numOfWoman = numOfWoman + room.numOfWoman;
-    
-        const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
-        const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
-    
-        let new_status="대기";
-        if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
-            new_status = "진행";
-        }
-        let data = {
-            title: room.title,
-            maxNum: Number(room.maxNum),
-            status: new_status,
-            avgManner: avgManner.toFixed(3),
-            avgAge: avgAge,
-            numOfWoman: new_numOfWoman,
-            numOfMan: new_numOfMan,
-            groupMember:groupMembersInfo,
-            session: sessionUser,
-        }
-
-        meetingManager.getAttendee = createGetAttendeeCallback(room.title);
-
-        try {
-            const { JoinInfo } = await attendMeeting(data);
-
-=======
         let coinCheck = true;
         for (let i = 0; i < groupMembersInfo.length; i++) {
             if (groupMembersInfo[i].ucoin < 0) {
@@ -202,8 +154,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 numOfMan: new_numOfMan,
                 groupmember: groupMembersInfo,
             }
-            console.log(typeof data.groupmember)
-            const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
+            //console.log(typeof data.groupmember)
+            //const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
             let meetingRoomParticipants = [];
             room.users.map((per) => {
                 meetingRoomParticipants.push(per.nickname);
@@ -211,40 +163,19 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             })
             updateNewParticipants_to_OriginParticipants(meetingRoomParticipants); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
 
-            //console.log(response)
-
-            //data.users = groupMembersInfo;
-
             try {
-                const { JoinInfo } = await fetchMeeting(data);
->>>>>>> main
+                const { JoinInfo } = await attendMeeting(data);
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
                     attendeeInfo: JoinInfo.Attendee
                 });
-<<<<<<< HEAD
-    
-                setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
-=======
 
-                setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
->>>>>>> main
+                setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
                     const socket = socketio.connect('http://localhost:3001');
                     console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
-<<<<<<< HEAD
-    
-                let meetingRoomParticipantsSocektId = [];
-                room.users.map((per)=>{
-                    meetingRoomParticipantsSocektId.push(per.nickname);
-                    
-                })
-                updateNewParticipants_to_OriginParticipants(meetingRoomParticipantsSocektId); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
-        
-=======
->>>>>>> main
 
                 history.push('/deviceSetup');
             } catch (error) {
@@ -254,11 +185,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         else if (coinCheck === false) {
             alert("그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요.")
         }
-<<<<<<< HEAD
-=======
 
 
->>>>>>> main
     };
 
 
