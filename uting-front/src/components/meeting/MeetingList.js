@@ -57,7 +57,7 @@ function birthToAge(birth) {
     return 2021 - Number(year) + 1;
 }
 
-export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName }) {
+export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName,filtermanner }) {
 
     const history = useHistory();
     const meetingManager = useMeetingManager();
@@ -281,8 +281,15 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     },[filterRoomName])
 
     useEffect(()=>{
-        console.log(viewRoomList)
-    },[viewRoomList])
+        let filtered=[];
+
+        originList.map((data)=>{
+            if(data.avgManner<=filtermanner.first && data.avgManner>=filtermanner.last){
+                filtered.push(data)
+            }
+        })
+        setView(filtered)
+    },[filtermanner])
 
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
