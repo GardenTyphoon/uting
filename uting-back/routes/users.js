@@ -95,6 +95,10 @@ router.post("/signin", function (req, res, next) {
     });
     if (ismember === true) {
       console.log(perObj._id);
+      if(perObj.beReported>=3){
+        res.send("hell")
+      }
+      else{
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -119,6 +123,7 @@ router.post("/signin", function (req, res, next) {
           res.send(perObj);
         }
       );
+      }
       //res.send(per)
     }
     if (ismember === false) {
