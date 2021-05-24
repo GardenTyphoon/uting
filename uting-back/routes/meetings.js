@@ -64,118 +64,146 @@ router.post('/attendee', async function (req, res, next) {
 
 });
 
-router.post('/join', async function(req, res, next){
-
-  let isroom = false;
-  let perObj = {};
-
-  Meeting.find(function (err, meeting) {
-
-    meeting.forEach((meet) => {
-      if (req.body.title === meet.title) {
-
-        isroom = true;
-        perObj = meet;
-      }
-    });
-    if (isroom === true) {
-      let arr=[]
-     for(let i=0;i<req.body.groupmember.length;i++){
-        arr.push(req.body.groupmember[i])
-      }
-
-      Meeting.findByIdAndUpdate(
-        perObj._id,
-        {
-          $set: {
-            users: perObj.users.concat(arr),
-            title: perObj.title,
-            maxNum: perObj.maxNum,
-            status: perObj.status,
-            avgManner: ((perObj.avgManner + Number(req.body.avgManner))/2).toFixed(2),
-            avgAge: ((perObj.avgAge + req.body.avgAge)/2).toFixed(2),
-            numOfWoman: req.body.numOfWoman,
-            numOfMan: req.body.numOfMan,
-          },
-        },
-        (err, u) => {
-          console.log(err);
-        }
-      );
-    }
-    if (isroom === false) {
-      res.send("참가하는 과정에서 오류가 발생했습니다.");
-    }
-  });
-
-  const title = req.body.title;
-  const name = req.body.session;
-  const region = "us-east-1"
-  
-  const joinInfo = {
-    JoinInfo: {
-      Title: title,
-      Meeting: meetingCache[title].Meeting,
-      Attendee: (
-        await chime
-          .createAttendee({
-            MeetingId: meetingCache[title].Meeting.MeetingId,
-            ExternalUserId: uuid()
-          }).promise()).Attendee
-    }
-  };
-  attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
-
-  
-  res.send(JSON.stringify(joinInfo));
-})
-
 // POST CHIME one meeting
 router.post('/create', async function(req, res, next){
-  const temp_room = await Meeting.findOne({title:req.body.title});
 
-  if(!temp_room){
-    const meeting = new Meeting({
-      title:req.body.title,
-      maxNum:req.body.maxNum,
-      status:req.body.status,
-      avgManner:req.body.avgManner,
-      avgAge:req.body.avgAge,
-      users:req.body.users,
-      numOfWoman:req.body.numOfWoman,
-      numOfMan : req.body.numOfMan
-    });
-    meeting.save();
-  }
+  let flag = req.body.flag;
 
-  const title = req.body.title;
-  const name = req.body.session;
-  const region = "us-east-1"
-  
-  if (!meetingCache[title]){
-    meetingCache[title] = await chime
-      .createMeeting({
-        ClientRequestToken: uuid(),
-        MediaRegion: region
-      }).promise();
-      attendeeCache[title] = {};
-  }
-  const joinInfo = {
-    JoinInfo: {
-      Title: title,
-      Meeting: meetingCache[title].Meeting,
-      Attendee: (
-        await chime
-          .createAttendee({
-            MeetingId: meetingCache[title].Meeting.MeetingId,
-            ExternalUserId: uuid()
-          }).promise()).Attendee
+
+
+
+
+  if(flag === 0){//Create meeting
+      const temp_room = await Meeting.findOne({title:req.body.title});
+
+      if(!temp_room){
+        const meeting = new Meeting({
+          title:req.body.title,
+          maxNum:req.body.maxNum,
+          status:req.body.status,
+          avgManner:req.body.avgManner,
+          avgAge:req.body.avgAge,
+          users:req.body.users,
+          numOfWoman:req.body.numOfWoman,
+          numOfMan : req.body.numOfMan
+        });
+        meeting.save();
+
+        const title = req.body.title;
+        const name = req.body.session;
+        const region = "us-east-1"
+
+        if (!meetingCache[title]){
+          meetingCache[title] = await chime
+            .createMeeting({
+              ClientRequestToken: uuid(),
+              MediaRegion: region
+            }).promise();
+            attendeeCache[title] = {};
+        }
+        const joinInfo = {
+          JoinInfo: {
+            Title: title,
+            Meeting: meetingCache[title].Meeting,
+            Attendee: (
+              await chime
+                .createAttendee({
+                  MeetingId: meetingCache[title].Meeting.MeetingId,
+                  ExternalUserId: uuid()
+                }).promise()).Attendee
+          }
+        };
+        attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
+        res.send(JSON.stringify(joinInfo));       
+      }
+      else{
+        res.send("이미 존재하는 방 이름 입니다.");
+      }
     }
-  };
-  attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
+    else if(flag === 1){ // join meeting*
+      let isroom = false;
+      console.log("flag 1");
+      let perObj = {};
+    
+      let temp = Meeting.find(function (err, meeting) {
+        meeting.forEach((meet) => {
+          if (req.body.title === meet.title) {
+    
+            isroom = true;
+            perObj = meet;
+          }
+        });
+        if (isroom === true) {
+          let arr=[]
+         for(let i=0;i<req.body.groupmember.length;i++){
+            arr.push(req.body.groupmember[i])
+          }
+    
+          Meeting.findByIdAndUpdate(
+            perObj._id,
+            {
+              $set: {
+                users: perObj.users.concat(arr),
+                title: perObj.title,
+                maxNum: perObj.maxNum,
+                status: req.body.status,
+                avgManner: ((perObj.avgManner + Number(req.body.avgManner))/2).toFixed(2),
+                avgAge: ((perObj.avgAge + req.body.avgAge)/2).toFixed(2),
+                numOfWoman: req.body.numOfWoman,
+                numOfMan: req.body.numOfMan,
+              },
+            },
+            (err, u) => {
+              console.log(err);
+            }
+          );
+        }
+        if (isroom === false) {
+          res.send("참가하는 과정에서 오류가 발생했습니다.");
+        }
+      });
+      const title = req.body.title;
+      const name = req.body.session;
+      const region = "us-east-1"
+      const joinInfo = {
+        JoinInfo: {
+          Title: title,
+          Meeting: meetingCache[title].Meeting,
+          Attendee: (
+            await chime
+              .createAttendee({
+                MeetingId: meetingCache[title].Meeting.MeetingId,
+                ExternalUserId: uuid()
+              }).promise()).Attendee
+        }
+      };
+      attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;
+    
+      res.send(JSON.stringify(joinInfo));
+    }
 
-  res.send(JSON.stringify(joinInfo));
-})
+    else if(flag === 2){ // invite meeting
+      console.log("flag 2");
+      const title = req.body.title;
+      const name = req.body.session;
+      const region = "us-east-1"
+      const joinInfo = {
+        JoinInfo: {
+          Title: title,
+          Meeting: meetingCache[title].Meeting,
+          Attendee: (
+            await chime
+              .createAttendee({
+                MeetingId: meetingCache[title].Meeting.MeetingId,
+                ExternalUserId: uuid()
+              }).promise()).Attendee
+        }
+      };
+      attendeeCache[title][joinInfo.JoinInfo.Attendee.AttendeeId] = name;      
+      res.send(JSON.stringify(joinInfo));
+    }
+
+  })
 
 router.post('/savemember', function(req, res,next){
   Meeting.findByIdAndUpdate(
@@ -207,6 +235,26 @@ router.post('/getparticipants', function(req,res,next){
         res.send(obj.users);
       }
     })
+  })
+});
+
+router.post('/check', function(req,res,next){
+let flag=false;
+  Meeting.find(function(err,meeting){
+    meeting.forEach((obj)=>{
+      if(obj.title===req.body.title.title){
+        flag=true;
+      }
+      
+    })
+    if(flag===true){
+      res.send("true");
+    }
+    else if(flag===false){
+      res.send("false");
+    }
+
+
   })
 });
 

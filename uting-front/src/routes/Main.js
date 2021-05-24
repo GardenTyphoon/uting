@@ -132,6 +132,7 @@ const Main = () => {
   let goRoom = async()=>{
     let temp = {
       title: roomtitle,
+      flag: 2,
     }
 
     meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
@@ -192,15 +193,9 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
-        {sessionEmail === "admin@ajou.ac.kr" ? (
-          <button onClick={gotoAdminPage}>관리자페이지</button>
-        ) : (
-          ""
-        )}
+        
         <Profile />
       </div>
-
-
 
       <div className="mainBottom">
         <div className="CollegeRanking">
