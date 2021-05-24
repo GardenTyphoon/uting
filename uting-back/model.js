@@ -56,6 +56,10 @@ const User = new Schema({
     socketid:{
         type:String,
         requried:false,
+    },
+    reports:{
+        type:Number,
+        required:true
     }
 
     

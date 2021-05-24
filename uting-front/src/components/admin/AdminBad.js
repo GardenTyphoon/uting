@@ -39,6 +39,18 @@ const AdminBad = () => {
     let isOpen = () => {
         setOpen(!open);
       };
+
+      let getReported =async(e)=>{
+        //const res = await axios.post()
+        //신고자 리스트 받아오는 함수
+      }
+
+      useEffect(()=>{
+        if(open===true){
+          getReported()
+        }
+      },[open])
+    
   return (
     <Card>
     <CardHeader>
@@ -51,7 +63,11 @@ const AdminBad = () => {
     </CardHeader>
     <Collapse isOpen={open}>
       <CardBody>
-        
+        <div style={{width:"100%",height:"100%"}}>
+          <span>신고자 목록</span>
+          <div>List</div>
+        </div>
+
       </CardBody>
     </Collapse>
   </Card>

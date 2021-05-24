@@ -324,7 +324,7 @@ const Room = () => {
       }}>
         <MeetingControls/>
         <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
-        <br/>{intervalMessage}
+        <br/><div style={{fontFamily:"Jua"}}>{intervalMessage}</div>
         <McBot
           participantsSocketIdList={participantsSocketId}
           currentSocketId={socketId}
