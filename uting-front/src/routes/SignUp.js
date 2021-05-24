@@ -108,7 +108,7 @@ const SignUp = () => {
         phone: userinfo.phone,
       };
 
-      const res = await axios.post("http://49.50.172.205/users/signup", data);
+      const res = await axios.post("http://localhost:3001/users/signup", data);
       console.log(res.data);
 
       setUserinfo({
@@ -136,7 +136,7 @@ const SignUp = () => {
 
     if (data.email.slice(-6) === ".ac.kr") {
       const res = await axios.post(
-        "http://49.50.172.205/users/sendEmail",
+        "http://localhost:3001/users/sendEmail",
         data
       );
       alert("해당 이메일로 인증코드를 전송했습니다.")
@@ -166,7 +166,7 @@ const SignUp = () => {
       nickname: userinfo.nickname
     }
 
-    const res = await axios.post("http://49.50.172.205/users/checknickname", data)
+    const res = await axios.post("http://localhost:3001/users/checknickname", data)
     if (res.data === "exist") {
       alert("이미 존재하는 닉네임입니다.")
     }

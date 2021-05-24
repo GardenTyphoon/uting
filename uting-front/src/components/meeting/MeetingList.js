@@ -80,12 +80,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     const updateNewParticipants_to_OriginParticipants = async (meetingRoomParticipants) => {
 
-        const socket = socketio.connect("http://49.50.172.205");
+        const socket = socketio.connect("http://localhost:3001");
         let data = {
             preMember: meetingRoomParticipants
         };
         const res = await axios.post(
-            "http://49.50.172.205/users/preMemSocketid",
+            "http://localhost:3001/users/preMemSocketid",
             data
         );
         console.log(res);
@@ -106,7 +106,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         let groupMembersSocketId = []
 
         for (let i = 0; i < groupMember.length; i++) {
-            let userInfo = await axios.post('http://49.50.172.205/users/userInfo', { "userId": groupMember[i] });
+            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
                 "introduce": userInfo.data.introduce,
@@ -155,7 +155,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 groupmember: groupMembersInfo,
             }
             //console.log(typeof data.groupmember)
-            //const response = await axios.post("http://49.50.172.205/meetings/newmembers", data)
+            //const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
             let meetingRoomParticipants = [];
             room.users.map((per) => {
                 meetingRoomParticipants.push(per.nickname);
@@ -172,7 +172,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                 setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
-                    const socket = socketio.connect('http://49.50.172.205');
+                    const socket = socketio.connect('http://localhost:3001');
                     console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
@@ -199,7 +199,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             room: roomObj
         }
         console.log("saveMeetingUsers", data)
-        const res = await axios.post("http://49.50.172.205/meetings/savemember", data)
+        const res = await axios.post("http://localhost:3001/meetings/savemember", data)
         console.log(res)
 
     }
@@ -212,7 +212,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     // useEffect(() => {
 
     //     groupSocketList.push(currentsocketId.id)
-    //    const socket = socketio.connect('http://49.50.172.205');
+    //    const socket = socketio.connect('http://localhost:3001');
     //     socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
     //         //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
 
@@ -222,7 +222,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
         let sessionObject = { sessionUser: sessionUser };
         const res = await axios.post(
-            "http://49.50.172.205/groups/info",
+            "http://localhost:3001/groups/info",
             sessionObject
         );
         console.log(typeof (res.data.member));
@@ -259,7 +259,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     let getMeetings = async () => {
         await axios
-            .get('http://49.50.172.205/meetings')
+            .get('http://localhost:3001/meetings')
             .then(({ data }) => {
                 setView(data)
                 setOriginList(data)

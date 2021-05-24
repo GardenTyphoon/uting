@@ -38,7 +38,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
 
     const onClickAgree = (e) => {
-        const socket = socketio.connect("http://49.50.172.205");
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -46,7 +46,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
 
     const onClickDisagree = (e) => {
-        const socket = socketio.connect("http://49.50.172.205");
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("endMeetingDisagree", { participantsSocketIdList, numOfDisagree: numOfDisagree + 1 });
         setNumOfDisagree(numOfDisagree + 1);
         setIsVote(!isVote);
@@ -55,7 +55,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
 
 
     const emitStartVote = () => {
-        const socket = socketio.connect("http://49.50.172.205");
+        const socket = socketio.connect("http://localhost:3001");
         socket.emit("startVote", { socketidList:participantsSocketIdList });
         console.log(participantsSocketIdList);
         console.log("emitvote")
@@ -159,7 +159,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             name:goManner.name,
             manner:goManner.manner
         }
-        const res = await axios.post("http://49.50.172.205/users/manner",data)
+        const res = await axios.post("http://localhost:3001/users/manner",data)
         console.log(res)
         if(res.data==="success"){
             let arr = copyParticipants
@@ -198,7 +198,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             }
             console.log(data)
 
-            const res = await axios.post("http://49.50.172.205/meetings/leavemember",data)
+            const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
             console.log(res)
             if(res.data==="success"){
                 alert("미팅 방을 나갑니다.")

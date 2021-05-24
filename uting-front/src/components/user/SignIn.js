@@ -41,7 +41,7 @@ const SignIn = () => {
       email: email,
       password: password
     }
-    const res = await axios.post('http://49.50.172.205/users/signin', data);
+    const res = await axios.post('http://localhost:3001/users/signin', data);
     
     sessionStorage.setItem('nickname', res.data.nickname);
     if (res.data === "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.") {
@@ -60,10 +60,10 @@ const SignIn = () => {
         //소켓
         
         if(email==="admin@ajou.ac.kr"&&password==="admin"){
-          window.location.href = 'http://49.50.172.205:3000/admin';
+          window.location.href = 'http://localhost:3000/admin';
         }
         else{
-          window.location.href = 'http://49.50.172.205:3000/main';
+          window.location.href = 'http://localhost3000/main';
  
         }
 

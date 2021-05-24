@@ -65,7 +65,7 @@ const Main = () => {
 
   
   useEffect(() => {
-    const socket = socketio.connect("http://49.50.172.205");
+    const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -158,7 +158,7 @@ const Main = () => {
       currentSocketId: socketId,
     };
     const res = await axios.post(
-      "http://49.50.172.205/users/savesocketid",
+      "http://localhost:3001/users/savesocketid",
       data
     );
     console.log(res)

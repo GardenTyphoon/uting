@@ -62,10 +62,9 @@ const Ucoin = () => {
     }
   };
 
-  const addUcoin = () => { 
-    
+  const addUcoin = () => {
     console.log(ProfileInfo._id);
-    const res = axios.post("http://49.50.172.205/users/addUcoin", {
+    const res = axios.post("http://localhost:3001/users/addUcoin", {
       userId: ProfileInfo._id,
       ucoin: ProfileInfo.ucoin,
       chargingCoin: chargingCoin,
@@ -73,7 +72,7 @@ const Ucoin = () => {
   };
 
   const getProfile = async (e) => {
-    const res = await axios.post("http://49.50.172.205/users/viewMyProfile", {
+    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
       sessionUser: `${sessionStorage.getItem("email")}`,
     });
     let data = {

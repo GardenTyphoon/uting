@@ -210,6 +210,26 @@ router.post('/getparticipants', function(req,res,next){
   })
 });
 
+router.post('/check', function(req,res,next){
+let flag=false;
+  Meeting.find(function(err,meeting){
+    meeting.forEach((obj)=>{
+      if(obj.title===req.body.title.title){
+        flag=true;
+      }
+      
+    })
+    if(flag===true){
+      res.send("true");
+    }
+    else if(flag===false){
+      res.send("false");
+    }
+
+
+  })
+});
+
 router.post('/leavemember',function(req,res,next){
   console.log("--------------------------")
   console.log(req.body)

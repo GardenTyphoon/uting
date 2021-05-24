@@ -32,7 +32,7 @@ const Profile = () => {
   const coinWindow = () => {
     const coinWin = window.open(
       //ret = 창 객체
-      "http://49.50.172.205:3000/ucoin",
+      "http://localhost3000/ucoin",
       "_blank",
       "resizable=no, left=0, top=0, width=820, height=1020"
     );
@@ -42,11 +42,11 @@ const Profile = () => {
   }, []);
 
   const getProfile = async (e) => {
-    const res = await axios.post("http://49.50.172.205/users/viewMyProfile", {
+    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
       sessionUser: sessionUser,
     });
     if (res.data.imgURL !== "") {
-      let staticpath = "http://49.50.172.205";
+      let staticpath = "http://localhost:3001";
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {

@@ -73,7 +73,7 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async () => {
         console.log("불렀음")
-        let res = await axios.post('http://49.50.172.205/groups/getMyGroupMember', { sessionUser: sessionUser });
+        let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
         console.log(res);
         let onlyMe = [sessionUser];
         if(res.data==="no") setGroupMembers(onlyMe);
@@ -86,97 +86,107 @@ const Meeting = ({ checkFunc }) => {
     }, [])
     const makeRoom = async (e) => {
         e.preventDefault();
-        if (contidionMakingRoom(toggleShowWarningMess, room.title, room.num)) {
-            //내가 속한 그룹의 그룹원들 닉네임 받아오기
-            //평균 나이, 평균 학점, 현재 남녀 수 구하기
-            let avgManner = 0;
-            let sumManner = 0;
-            let sumAge = 0;
-            let avgAge = 0;
-            let nowOfWoman = 0;
-            let nowOfMan = 0;
-            console.log("room.title", room.title);
-            console.log("room.maxNum", room.num);
-            for (let i = 0; i < groupMembers.length; i++) {
-                let userInfo = await axios.post('http://49.50.172.205/users/userInfo', { "userId": groupMembers[i] });
-                groupMembersInfo.push({
-                    "nickname": userInfo.data.nickname,
-                    "introduce": userInfo.data.introduce,
-                    "mannerCredit": userInfo.data.mannerCredit,
-                    "age": birthToAge(userInfo.data.birth),
-                    "ucoin":userInfo.data.ucoin,
-                    "gender":userInfo.data.gender,
-                });
-                if (userInfo.data.nickname != sessionUser) {
-                    groupMembersSocketId.push(userInfo.data.socketid);
-                }
-                avgManner += userInfo.data.mannerCredit;
-                avgAge += birthToAge(userInfo.data.birth);
-                if (userInfo.data.gender === "woman") {
-                    nowOfWoman += 1;
-                }
-                else nowOfMan += 1;
+        const res = await axios.post('http://localhost:3001/meetings/check',{"title":room})
+        console.log(res.data)
+        if(res.data===true){
+            alert("이미 존재하는 방 이름입니다.")
+        }
+        else if(res.data===false){
 
-
-            }
-
-            console.log(groupMembersInfo)
-            let coinCheck =true;
-            for(let i=0;i<groupMembersInfo.length;i++){
-                if(groupMembersInfo[i].ucoin<0){
-                    coinCheck=false
-                }
-            }
-            if(coinCheck===true){
-                avgManner /= groupMembers.length;
-                avgAge /= groupMembers.length;
-                avgAge = parseInt(avgAge);
-    
-                const roomTitle= room.title.trim().toLocaleLowerCase()
-    
-                
-                let data = {
-                    title: roomTitle,
-                    maxNum: Number(room.num),
-                    status: room.status,
-                    avgManner: avgManner.toFixed(3),
-                    avgAge: avgAge,
-                    numOfWoman: nowOfWoman,
-                    numOfMan: nowOfMan,
-                    session: sessionUser,
-                };
-                data.users = groupMembersInfo;
-    
-    
-                meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
-                
-                
-                
-                checkFunc(true)
-    
-                try {
-                    
-                    const { JoinInfo } = await fetchMeeting(data);
-                    await meetingManager.join({
-                        meetingInfo: JoinInfo.Meeting,
-                        attendeeInfo: JoinInfo.Attendee
+            if (contidionMakingRoom(toggleShowWarningMess, room.title, room.num)) {
+                //내가 속한 그룹의 그룹원들 닉네임 받아오기
+                //평균 나이, 평균 학점, 현재 남녀 수 구하기
+                let avgManner = 0;
+                let sumManner = 0;
+                let sumAge = 0;
+                let avgAge = 0;
+                let nowOfWoman = 0;
+                let nowOfMan = 0;
+                console.log("room.title", room.title);
+                console.log("room.maxNum", room.num);
+                for (let i = 0; i < groupMembers.length; i++) {
+                    let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
+                    groupMembersInfo.push({
+                        "nickname": userInfo.data.nickname,
+                        "introduce": userInfo.data.introduce,
+                        "mannerCredit": userInfo.data.mannerCredit,
+                        "age": birthToAge(userInfo.data.birth),
+                        "ucoin":userInfo.data.ucoin,
+                        "gender":userInfo.data.gender,
                     });
-    
-                    setAppMeetingInfo(roomTitle, sessionUser, 'ap-northeast-2');
-                    if(roomTitle!==undefined){
-                        const socket = socketio.connect('http://49.50.172.205');
-                        console.log("groupMembersSocketId",groupMembersSocketId)
-                        socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+                    if (userInfo.data.nickname != sessionUser) {
+                        groupMembersSocketId.push(userInfo.data.socketid);
                     }
+                    avgManner += userInfo.data.mannerCredit;
+                    avgAge += birthToAge(userInfo.data.birth);
+                    if (userInfo.data.gender === "woman") {
+                        nowOfWoman += 1;
+                    }
+                    else nowOfMan += 1;
     
-                    history.push('/deviceSetup');
-                } catch (error) {
-                    console.log(error);
+    
                 }
-            }
-            else if(coinCheck===false){
-                alert("그룹원 중에 유코인이 부족한 사람이 있어 방생성이 불가합니다. 유코인을 충전하세요.")
-            }
+    
+                console.log(groupMembersInfo)
+                let coinCheck =true;
+                for(let i=0;i<groupMembersInfo.length;i++){
+                    if(groupMembersInfo[i].ucoin<0){
+                        coinCheck=false
+                    }
+                }
+                if(coinCheck===true){
+                    avgManner /= groupMembers.length;
+                    avgAge /= groupMembers.length;
+                    avgAge = parseInt(avgAge);
+        
+                    const roomTitle= room.title.trim().toLocaleLowerCase()
+        
+                    
+                    let data = {
+                        title: roomTitle,
+                        maxNum: Number(room.num),
+                        status: room.status,
+                        avgManner: avgManner.toFixed(3),
+                        avgAge: avgAge,
+                        numOfWoman: nowOfWoman,
+                        numOfMan: nowOfMan,
+                        session: sessionUser,
+                    };
+                    data.users = groupMembersInfo;
+        
+        
+                    meetingManager.getAttendee = createGetAttendeeCallback(roomTitle);
+                    
+                    
+                    
+                    checkFunc(true)
+        
+                    try {
+                        
+                        const { JoinInfo } = await fetchMeeting(data);
+                        await meetingManager.join({
+                            meetingInfo: JoinInfo.Meeting,
+                            attendeeInfo: JoinInfo.Attendee
+                        });
+        
+                        setAppMeetingInfo(roomTitle, sessionUser, 'ap-northeast-2');
+                        if(roomTitle!==undefined){
+                            const socket = socketio.connect('http://localhost:3001');
+                            console.log("groupMembersSocketId",groupMembersSocketId)
+                            socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
+                        }
+        
+                        history.push('/deviceSetup');
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+                else if(coinCheck===false){
+                    alert("그룹원 중에 유코인이 부족한 사람이 있어 방생성이 불가합니다. 유코인을 충전하세요.")
+                }
+
+        }
+        
             
         }
     }

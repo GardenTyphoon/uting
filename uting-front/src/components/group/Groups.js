@@ -86,7 +86,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionUser };
     const res = await axios.post(
-      "http://49.50.172.205/groups/info",
+      "http://localhost:3001/groups/info",
       data
     );
     console.log(res.data.member);
@@ -94,20 +94,20 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   };
 
   const leaveGroup = async () => {
-    const socket = socketio.connect("http://49.50.172.205");
+    const socket = socketio.connect("http://localhost:3001");
     setClickLeaveGroup(false)
      let groupMemberExceptMe = [];
      groupMember.map((mem)=>{if(mem!==sessionUser){groupMemberExceptMe.push(mem)}})
      console.log(groupMemberExceptMe);
      
      let res = await axios.post(
-      "http://49.50.172.205/users/preMemSocketid",
+      "http://localhost:3001/users/preMemSocketid",
       {preMember:groupMemberExceptMe}
     );
     console.log(res.data);
     socket.emit("leaveGroup", { socketIdList: res.data, leavingUsers:sessionUser });
    
-    res = await axios.post("http://49.50.172.205/groups/leaveGroup", { userNickname: sessionUser });
+    res = await axios.post("http://localhost:3001/groups/leaveGroup", { userNickname: sessionUser });
    
     window.location.reload();
   }
@@ -117,7 +117,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
       preMember: groupMember,
     };
     const res = await axios.post(
-      "http://49.50.172.205/users/preMemSocketid",
+      "http://localhost:3001/users/preMemSocketid",
       data
     );
 
