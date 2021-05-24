@@ -132,6 +132,7 @@ const Main = () => {
   let goRoom = async()=>{
     let temp = {
       title: roomtitle,
+      flag: 2,
     }
 
     meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);

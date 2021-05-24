@@ -36,13 +36,18 @@ const FlexBox = styled.div`
 
 const AdminBad = () => {
     const [open, setOpen] = useState(false);
+    const [reportedList,setReportedList]=useState([])
     let isOpen = () => {
         setOpen(!open);
       };
 
       let getReported =async(e)=>{
-        //const res = await axios.post()
-        //신고자 리스트 받아오는 함수
+        await axios
+            .get('http://localhost:3001/reports')
+            .then(({ data }) => {
+              setReportedList(data)
+            })
+            .catch((err) => { });
       }
 
       useEffect(()=>{
@@ -65,7 +70,9 @@ const AdminBad = () => {
       <CardBody>
         <div style={{width:"100%",height:"100%"}}>
           <span>신고자 목록</span>
-          <div>List</div>
+          <div>{reportedList.map((per,i)=>{
+            return(<div>{per.requester}-{per.target}-{per.content}</div>)
+          })}</div>
         </div>
 
       </CardBody>
