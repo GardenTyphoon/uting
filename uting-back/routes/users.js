@@ -74,6 +74,7 @@ router.post("/signup", function (req, res, next) {
     status: false,
     socketid: "",
     ucoin: Number(0),
+    beReported:Number(0),
   });
 
   user.save((err) => {
