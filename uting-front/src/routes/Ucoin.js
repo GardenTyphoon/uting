@@ -62,7 +62,7 @@ const Ucoin = () => {
     }
   };
 
-  const addUcoin = () => {
+  const addUcoin = () => { 
     console.log(ProfileInfo._id);
     const res = axios.post("http://49.50.172.205/users/addUcoin", {
       userId: ProfileInfo._id,
