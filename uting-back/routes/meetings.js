@@ -70,9 +70,6 @@ router.post('/create', async function(req, res, next){
   let flag = req.body.flag;
 
 
-
-
-
   if(flag === 0){//Create meeting
       const temp_room = await Meeting.findOne({title:req.body.title});
 
