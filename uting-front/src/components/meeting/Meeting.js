@@ -151,6 +151,7 @@ const Meeting = ({ checkFunc }) => {
                         numOfWoman: nowOfWoman,
                         numOfMan: nowOfMan,
                         session: sessionUser,
+                        flag: 0,
                     };
                     data.users = groupMembersInfo;
         
