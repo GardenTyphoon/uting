@@ -63,7 +63,7 @@ const SignIn = () => {
           window.location.href = 'http://localhost:3000/admin';
         }
         else{
-          window.location.href = 'http://localhost3000/main';
+          window.location.href = 'http://localhost:3000/main';
  
         }
 

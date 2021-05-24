@@ -319,14 +319,14 @@ const Room = () => {
         <MeetingRoom />
       </div>
       <div
-        style={{
-          width: "20%",
-          height: "100vh",
-          float: "left",
-        }}>
-        <MeetingControls />
-        <br></br><br /><ReactAudioPlayer style={{ widht: "auto" }} id="audio" src={musicsrc} controls />
-        <br />{intervalMessage}
+      style={{
+        width: "20%",
+        height: "100vh",
+        float: "left",
+      }}>
+        <MeetingControls/>
+        <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
+        <br/><div style={{fontFamily:"Jua"}}>{intervalMessage}</div>
         <McBot
           participantsSocketIdList={participantsSocketId}
           currentSocketId={socketId}

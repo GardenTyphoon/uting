@@ -112,6 +112,7 @@ router.post("/signin", function (req, res, next) {
             mannerCredit: perObj.mannerCredit,
             socketid: perObj.socketid,
             ucoin: perObj.ucoin,
+            beReported:perObj.beReported
           },
         },
         (err, u) => {
@@ -274,6 +275,7 @@ router.post("/savesocketid", function (req, res, next) {
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: req.body.currentSocketId.id,
+            beReported:perObj.beReported
           },
         },
         (err, u) => {
@@ -317,6 +319,7 @@ router.post("/logout", function (req, res, next) {
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
+            beReported:perObj.beReported
           },
         },
         (err, u) => {
@@ -385,6 +388,7 @@ router.post("/cutUcoin",function(req,res,next){
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin-1,
             socketid: perObj.socketid,
+            beReported:perObj.beReported
           },
         },
         (err, u) => {
@@ -426,6 +430,50 @@ router.post("/manner",function(req,res,next){
             mannerCredit: ((perObj.mannerCredit + req.body.manner)/2),
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
+            beReported:perObj.beReported
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+
+    }
+    
+  });
+})
+
+router.post('/report',function(req,res,next){
+  console.log(req.body.nickname)
+  let perObj={};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+        if (req.body.nickname === per.nickname) {
+          ismember = true;
+          perObj=per;
+        }
+    
+    });
+    if(ismember===true){
+      User.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: perObj.status,
+            _id: perObj._id,
+            name: perObj.name,
+            nickname: perObj.nickname,
+            gender: perObj.gender,
+            birth: perObj.birth,
+            email: perObj.email,
+            password: perObj.password,
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: perObj.mannerCredit,
+            ucoin: perObj.ucoin,
+            socketid: perObj.socketid,
+            beReported:perObj.beReported+1
           },
         },
         (err, u) => {
