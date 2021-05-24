@@ -10,7 +10,7 @@ import socketio from "socket.io-client";
 
 import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
-import { createGetAttendeeCallback, fetchMeeting } from '../../utils/api';
+import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
 let mannerColor;
 function mannerCredit(avgManner) {
     if (avgManner === 4.5) {
@@ -57,7 +57,7 @@ function birthToAge(birth) {
     return 2021 - Number(year) + 1;
 }
 
-export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName }) {
+export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName,filtermanner,filterage,getorigin }) {
 
     const history = useHistory();
     const meetingManager = useMeetingManager();
@@ -154,8 +154,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 numOfMan: new_numOfMan,
                 groupmember: groupMembersInfo,
             }
-            console.log(typeof data.groupmember)
-            const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
+            //console.log(typeof data.groupmember)
+            //const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
             let meetingRoomParticipants = [];
             room.users.map((per) => {
                 meetingRoomParticipants.push(per.nickname);
@@ -163,18 +163,14 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             })
             updateNewParticipants_to_OriginParticipants(meetingRoomParticipants); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
 
-            //console.log(response)
-
-            //data.users = groupMembersInfo;
-
             try {
-                const { JoinInfo } = await fetchMeeting(data);
+                const { JoinInfo } = await attendMeeting(data);
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
                     attendeeInfo: JoinInfo.Attendee
                 });
 
-                setAppMeetingInfo(room.title, "Tester", 'ap-northeast-2');
+                setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
                     const socket = socketio.connect('http://localhost:3001');
                     console.log("groupMembersSocketId", groupMembersSocketId)
@@ -188,7 +184,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         }
         else if (coinCheck === false) {
             alert("그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요.")
-
         }
 
 
@@ -281,8 +276,33 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     },[filterRoomName])
 
     useEffect(()=>{
-        console.log(viewRoomList)
-    },[viewRoomList])
+        let filtered=[];
+
+        originList.map((data)=>{
+            if(data.avgManner<=filtermanner.first && data.avgManner>=filtermanner.last){
+                filtered.push(data)
+            }
+        })
+        setView(filtered)
+    },[filtermanner])
+
+    useEffect(()=>{
+        let filtered=[];
+
+        originList.map((data)=>{
+            if(data.avgAge<=filterage.first && data.avgAge>=filterage.last){
+                filtered.push(data)
+            }
+        })
+        setView(filtered)
+
+    },[filterage])
+
+    useEffect(()=>{
+       
+            setView(originList)
+        
+    },[getorigin])
 
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
