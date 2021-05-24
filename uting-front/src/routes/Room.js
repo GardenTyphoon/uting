@@ -2,22 +2,13 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useHistory } from "react-router";
 import styled from "styled-components";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
   Button,
-  Form,
-  FormGroup,
-  Label,
-  FormText,
-  Badge,
   Modal,
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Spinner,
 } from "reactstrap";
-import { Spinner } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
@@ -122,6 +113,22 @@ const Room = () => {
     }
   };
 
+  const submitReport = async () => {
+    let reportNickname = document.getElementsByName("reportNickname");
+    let reportContent = document.getElementsByName("reportContent");
+    console.log(reportNickname[0].options[reportNickname[0].selectedIndex].value);
+    console.log(reportContent[0].value)
+    const res = await axios.post(
+      "http://localhost:3001/reports/saveReport",
+      {
+        reportTarget: reportNickname[0].options[reportNickname[0].selectedIndex].value,
+        reportContent: reportContent[0].value,
+        reportRequester: sessionStorage.getItem("nickname"),
+      }
+    );
+    console.log(res.data);
+    alert(res.data)
+  }
 
 
   useEffect(() => {
@@ -368,21 +375,23 @@ const Room = () => {
       <Modal isOpen={toggleReport}>
         <ModalHeader>사용자 신고</ModalHeader>
         <ModalBody>
-          
-          
-            <select name="report">
+
+
+          <select name="reportNickname">
             <option value="default" selected>신고 할 닉네임을 선택해주세요.</option>
             {participants.map((mem) => {
-              console.log(mem);
+              if(mem!=sessionStorage.getItem("nickname")){
+
               return <option value={mem}>{mem}</option>
+              }
             })}
           </select>
-            <textarea placeholder="신고 사유를 적어주세요."></textarea>
-            
+          <textarea name="reportContent" placeholder="신고 사유를 적어주세요."></textarea>
+
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" >신고하기</Button>{' '}
-          <Button color="secondary" onClick={()=>setToggleReport(!toggleReport)}>취소</Button>
+          <Button color="primary" onClick={() => submitReport()}>신고하기</Button>{' '}
+          <Button color="secondary" onClick={() => setToggleReport(!toggleReport)}>취소</Button>
         </ModalFooter>
       </Modal>
     </div>
