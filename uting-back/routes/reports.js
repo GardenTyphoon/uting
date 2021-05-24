@@ -26,5 +26,12 @@ router.get('/', async function(req, res, next) {
   });
 });
 
+router.post('/delete', async function(req,res,next){
+  Report.deleteOne({_id : req.body._id}).then(
+    res.send("success")
+  )
+  
+  //res.json(ad);
+});
 
 module.exports = router;
