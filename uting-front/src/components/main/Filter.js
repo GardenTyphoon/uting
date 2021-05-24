@@ -37,10 +37,6 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
     };
 
     useEffect(()=>{
-        console.log(filtermanner)
-    },[filtermanner])
-    
-    useEffect(()=>{
         if(filtermanner.first!=="" && filtermanner.last!==""){
             filterManner(filtermanner)
         }
@@ -48,7 +44,6 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
 
     useEffect(()=>{
         if(filterage.first!=="" && filterage.last!==""){
-            console.log(filterage)
             filterAge(filterage)
         }
     },[filterage])
@@ -126,18 +121,3 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
     )
 }
 export default Filter;
-
-/*
-<Input id="realmanner" type="select" name="realmanner" onChange={(e)=>onChangehandler(e)}>
-                    <option value="default" selected>학점을 선택해주세요</option>
-                    <option value="4.5">A+</option>
-                    <option value="4.0">A0</option>
-                    <option value="3.5">B+</option>
-                    <option value="3.0">B0</option>
-                    <option value="2.5">C+</option>
-                    <option value="2.0">C0</option>
-                    <option value="1.5">D+</option>
-                    <option value="1.0">D0</option>
-                    <option value="0">F</option>
-                    </Input>
-*/
