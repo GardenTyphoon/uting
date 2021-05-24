@@ -32,7 +32,7 @@ const Profile = () => {
   const coinWindow = () => {
     const coinWin = window.open(
       //ret = 창 객체
-      "http://localhost:3000/ucoin",
+      "http://localhost3000/ucoin",
       "_blank",
       "resizable=no, left=0, top=0, width=820, height=1020"
     );
