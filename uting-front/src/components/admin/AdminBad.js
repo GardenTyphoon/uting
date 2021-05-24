@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import { Route, Link,Switch,Router } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import './Admin.css'
 import {Button,
     ButtonGroup,
     Card,
@@ -42,22 +43,13 @@ const AdminBad = () => {
     const [content,setContent]=useState({})
 
     const toggle = (e) => {
-      if(e==="hell"){
-        let data={
-          "type":"hell",
-          "modalcontent":"정말로 신고처리 하시겠습니까?",
-          "buttoncontent":"신고처리"
-        }
-        setContent(data)
+      if(e==="none"){
+        setChoice({})
       }
-      else if(e==="pass"){
-        let data={
-          "type":"pass",
-          "modalcontent":"정말로 봐주시겠습니까?",
-          "buttoncontent":"봐주기"
-        }
-        setContent(data)
+      else{
+        setChoice(e)
       }
+      
       setModal(!modal)
     };
     let isOpen = () => {
@@ -119,25 +111,34 @@ const AdminBad = () => {
     </CardHeader>
     <Collapse isOpen={open}>
       <CardBody>
-        <div style={{width:"100%",height:"100%"}}>
-          <span>신고자 목록</span>
-          <Button color="danger" onClick={(e)=>toggle("hell")}>악한사람</Button><Button color="warning" onClick={(e)=>toggle("pass")}>봐주기</Button>
-          <div><span> 신고된 사람 </span><span> 신고 사유 </span><span> 신고한 사람 </span></div>
+        <div style={{width:"100%",height:"50%"}}>
+          <span className="reportedlist">신고자 목록</span>
+          <Row className="header">
+            <Col style={{marginLeft:"10%"}}> 신고된 사람 </Col>
+            <Col style={{marginLeft:"2%"}}> 신고 사유 </Col>
+            <Col style={{marginLeft:"1%"}}> 신고한 사람 </Col>
+          </Row>
           <div>{reportedList.map((per,i)=>{
-            return(<div onClick={(e)=>setChoice(per)}>{per.target}-{per.content}-{per.requester}</div>)
+            return(<Row className="rowbutton" onClick={(e)=>toggle(per)}>
+                      <Col style={{marginLeft:"10%"}}>{per.target}</Col>
+                      <Col >{per.content}</Col>
+                      <Col style={{marginLeft:"2%"}}>{per.requester}</Col>              
+                    </Row>)
           })}</div>
         </div>
 
       </CardBody>
 
-      <Modal isOpen={modal}>
+      <Modal isOpen={modal} >
+        <ModalHeader toggle={(e)=>toggle("none")}>
+          신고처리 및 봐주기
+        </ModalHeader>
         <ModalBody>
-          <div>{choice.requester}님이 {choice.target}님을"{choice.content}" 이유로 신고하였습니다.</div>
-          <div>{choice.target}님을 {content.modalcontent}</div>
+          <div>"{choice.target}"님이 "{choice.content}" 이유로 신고되었습니다.</div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e)=>content.type==="hell"?goHell(e):content.type==="pass"?pass(e):""}>{content.buttoncontent}</Button>{' '}
-          <Button color="secondary" onClick={(e)=>toggle(e)}>취소</Button>
+          <Button color="danger" onClick={(e)=>goHell(e)}>신고처리</Button>{' '}
+          <Button color="warning" onClick={(e)=>pass(e)}>봐주기</Button>
         </ModalFooter>
       </Modal>
     </Collapse>
