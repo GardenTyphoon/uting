@@ -62,7 +62,7 @@ const Room = () => {
     };
     //console.log("socketId.id",socketId)
     const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
+      "http://49.50.172.205/users/savesocketid",
       data
     );
     //console.log(res)
@@ -79,7 +79,7 @@ const Room = () => {
       preMember: participants,
     };
     const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
+      "http://49.50.172.205/users/preMemSocketid",
       data
     );
 
@@ -104,7 +104,7 @@ const Room = () => {
     if (meetingId !== "") {
       console.log("meetingId", meetingId);
       const res = await axios.post(
-        "http://localhost:3001/meetings/getparticipants",
+        "http://49.50.172.205/meetings/getparticipants",
         { _id: meetingId }
       );
       console.log(" 참여자들 닉네임 : " , res.data);
@@ -164,7 +164,7 @@ const Room = () => {
 
 
   useEffect(() => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("http://49.50.172.205");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -247,7 +247,7 @@ const Room = () => {
     let data = {
       currentUser: e,
     };
-    const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
+    const res = await axios.post("http://49.50.172.205/users/cutUcoin", data);
     console.log(res);
   };
 
@@ -276,7 +276,7 @@ const Room = () => {
             }
             console.log(data)
 
-            const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
+            const res = await axios.post("http://49.50.172.205/meetings/leavemember",data)
             console.log(res)
             if(res.data==="success"){
                 cutUcoin(sessionStorage.getItem("nickname"))

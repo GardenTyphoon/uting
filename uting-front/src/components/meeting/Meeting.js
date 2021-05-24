@@ -73,7 +73,7 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async () => {
         console.log("불렀음")
-        let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
+        let res = await axios.post('http://49.50.172.205/groups/getMyGroupMember', { sessionUser: sessionUser });
         console.log(res);
         let onlyMe = [sessionUser];
         if(res.data==="no") setGroupMembers(onlyMe);
@@ -98,7 +98,7 @@ const Meeting = ({ checkFunc }) => {
             console.log("room.title", room.title);
             console.log("room.maxNum", room.num);
             for (let i = 0; i < groupMembers.length; i++) {
-                let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
+                let userInfo = await axios.post('http://49.50.172.205/users/userInfo', { "userId": groupMembers[i] });
                 groupMembersInfo.push({
                     "nickname": userInfo.data.nickname,
                     "introduce": userInfo.data.introduce,
@@ -164,7 +164,7 @@ const Meeting = ({ checkFunc }) => {
     
                     setAppMeetingInfo(roomTitle, sessionUser, 'ap-northeast-2');
                     if(roomTitle!==undefined){
-                        const socket = socketio.connect('http://localhost:3001');
+                        const socket = socketio.connect('http://49.50.172.205');
                         console.log("groupMembersSocketId",groupMembersSocketId)
                         socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
                     }
