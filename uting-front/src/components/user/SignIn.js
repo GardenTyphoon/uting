@@ -59,8 +59,14 @@ const SignIn = () => {
         //toast("로그인 되었습니다.")
         //소켓
         
+        if(email==="admin@ajou.ac.kr"){
+          window.location.href = 'http://localhost:3000/admin';
+        }
+        else{
+          window.location.href = 'http://localhost:3000/main';
+ 
+        }
 
-        window.location.href = 'http://localhost:3000/main';
       } catch (error) {
         setError(error.message);
       }
