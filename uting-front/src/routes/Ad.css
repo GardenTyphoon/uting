@@ -1,0 +1,50 @@
+.adContainer{
+    background: #ffe4e1;
+  width:100vw;
+  height:100vh;
+  padding:20px;
+  padding-left:60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.utingLogo{
+    margin-left: 47.3%;
+}
+.contactus{
+    text-align: center;
+    font-family: "Jua";
+    font-size: 40px;
+}
+
+
+
+.checkcontent{
+    height: 210px;
+    width:1000px;
+    margin-left: 15%;
+    padding: 20px 18px;
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+    color: #767676;
+    font-size: 12px;
+    font-family: 'Nanum Gothic';
+    line-height: 20px;
+}
+
+.formcheck{
+    color: #939393;
+    font-size: 13px;
+    font-family: 'Nanum Gothic';
+    line-height: 20px;
+}
+
+.request{
+    font-size: 30px;
+    color: #404040;
+    margin-bottom: 20px;
+    font-weight: 700;
+    margin-left: 15%;
+    margin-bottom: 1%;
+    margin-top: 5%;
+}
