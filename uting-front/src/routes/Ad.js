@@ -13,13 +13,15 @@ import {
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
 
-const Manner = () => {
- 
-  return (
-    <div >
-     Manner
-    </div>
-  );
-};
-
-export default Manner;
+const Ad = () => {
+    
+  
+    return (
+     <div>
+         광고요청 페이지
+     </div>
+    );
+  };
+  
+  export default Ad;
+  

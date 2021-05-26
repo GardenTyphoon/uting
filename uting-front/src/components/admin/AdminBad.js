@@ -40,7 +40,6 @@ const AdminBad = () => {
     const [reportedList,setReportedList]=useState([])
     const [choice,setChoice]=useState({})
     const [modal, setModal] = useState(false);
-    const [content,setContent]=useState({})
 
     const toggle = (e) => {
       if(e==="none"){

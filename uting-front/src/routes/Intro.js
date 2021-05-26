@@ -81,7 +81,7 @@ const Intro = () => {
           </button>
         </div>
       )}
-
+      
       <Container>
         <Modal isOpen={toggleSignIn} style={{ width: "50%" , maxWidth:"350px"}}>
           <ModalBody isOpen={toggleSignIn}>
@@ -105,6 +105,7 @@ const Intro = () => {
           </ModalBody>
         </Modal>
       </Container>
+      <div className="diva" ><Link className="divad" to="/ad">광고 문의</Link></div>
     </div>
   );
 };

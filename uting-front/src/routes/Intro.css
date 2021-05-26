@@ -34,3 +34,16 @@
   padding: 10px;
   background: linear-gradient(to bottom, #ff9a51, #ff6994);
 }
+.diva{
+  float: right;
+  position: fixed;
+  bottom: 1%;
+  margin-left: 95%;
+  font-family: 'Jua';
+  color: white;
+}
+.divad{
+  color: white; text-decoration: none;
+}
+.divad:visited { color: black; text-decoration: none;}
+.divad:hover { color: black; text-decoration: none;}
