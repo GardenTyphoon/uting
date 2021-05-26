@@ -5,6 +5,7 @@ import { InputGroup, InputGroupAddon, InputGroupText, Input,Button, Form, FormGr
 import axios from 'axios';
 import AdminBad from '../components/admin/AdminBad';
 import AdminMc from '../components/admin/AdminMc';
+import AdminAd from '../components/admin/AdminAd';
 const WhiteSpace = styled.div`
   margin: 10px;
 `;
@@ -24,6 +25,14 @@ const Admin = () => {
       <Row name="main" id="main">
         <Col lg="12">
           <AdminBad></AdminBad>
+        </Col>
+      </Row>
+
+      <WhiteSpace></WhiteSpace>
+
+      <Row name="main" id="main">
+        <Col lg="12">
+          <AdminAd></AdminAd>
         </Col>
       </Row>
 
