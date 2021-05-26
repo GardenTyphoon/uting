@@ -49,6 +49,58 @@ const Ad = () => {
 - 방문에 관한 기록(통신사실확인자료) | 보존 이유 : 통신비밀 보호법, 보존 기간 : 3개월</div>
 </div>
     <div className="formcheck" style={{float:"left" ,marginLeft:"15%",marginTop:"1%"}}><input type="radio"/><span style={{marginLeft:"1%"}}>개인 정보 취급 방침에 동의합니다.</span></div>
+
+    <div className="tablediv">
+        <table>
+            <tbody>
+                <tr>
+                    <th >질문유형</th>
+                    <td>
+                        <div>
+                            <input type="radio" name="inquiryCd" value="Ad" checked="checked"/><label for="inquiryCd1">광고</label>
+                            <input type="radio" name="inquiryCd" value="another"/><label for="inquiryCd1">기타</label>
+                        </div>
+                    </td>
+
+                </tr>
+                <tr>
+                    <th>성, 이름</th>
+                    <td>
+                        <div>
+                            <input type="text" name="last" placeholder="성"/>
+                            <input type="text" name="first" placeholder="이름" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>이메일</th>
+                    <td>
+                        <div>
+                            <input type="text" name="email"/>
+                            @
+                            <input type="text" name="address" />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>파일</th>
+                    <td>
+                        <div>
+                            <input type="file" name="file"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>문의내용</th>
+                    <td>
+                        <div>
+                            <textarea type="textarea" name="textarea"/>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
      </div>
     );
   };
