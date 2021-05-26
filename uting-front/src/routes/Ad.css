@@ -1,7 +1,7 @@
 .adContainer{
     background: #ffe4e1;
   width:100vw;
-  height:100vh;
+  height:140vh;
   padding:20px;
   padding-left:60px;
   display: flex;
@@ -53,4 +53,5 @@
 }
 .tablediv{
     margin-left: 33%;
+    margin-top: 2%;
 }

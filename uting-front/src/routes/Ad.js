@@ -9,6 +9,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Input
 } from "reactstrap";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
@@ -75,10 +76,17 @@ const Ad = () => {
                 <tr>
                     <th>이메일</th>
                     <td>
-                        <div>
-                            <input type="text" name="email"/>
-                            @
-                            <input type="text" name="address" />
+                        <div className="emailinfo">
+                            <input style={{width:"150px" ,float:"left"}} type="text" name="email"/>
+                            <span style={{float:"left"}}>@</span>
+                            <input  style={{width:"150px" ,float:"left"}} type="text" name="address" />
+                            <Input style={{width:"150px" ,float:"left"}} id="domainaddress" type="select" name="domainaddress">
+                                <option value="" selected="selected">직접입력</option>
+                                <option value="naver.com">naver.com</option>
+                                <option value="gmail.com">gmail.com</option>
+                                <option value="daum.net">daum.net</option>
+                                <option value="nate.com">nate.com</option>
+                            </Input>
                         </div>
                     </td>
                 </tr>
@@ -100,6 +108,8 @@ const Ad = () => {
                 </tr>
             </tbody>
         </table>
+        <Button>접수</Button>
+        
     </div>
      </div>
     );
