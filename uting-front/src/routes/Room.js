@@ -28,12 +28,17 @@ import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png"
 import { flexDirection, justifyContent } from "styled-system";
 const McBotContainer = styled.div`
-  width:230px;
-  height:320px;
+  width:250px;
+  height:390px;
   background : #FBBCB5;
   border-radius:15px;
   text-align:center;
-  padding-top:20px;
+  padding:20px;
+  font-family: NanumSquare_acR;
+  
+  display:flex;
+  flex-Direction:column;
+  align-items:center;
 `;
 
 const Room = () => {
@@ -331,8 +336,11 @@ const Room = () => {
       <div
         style={{
           width: "75%",
-          height: "100vh",
+          height: "92vh",
           float: "left",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent:"space-between"
         }}>
 
         <MeetingRoom />
@@ -344,7 +352,7 @@ const Room = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between"
+          justifyContent: "space-evenly"
         }}>
 
         <button onClick={() => setToggleReport(!toggleReport)} style={{ borderStyle: "none", background: "transparent", float: "right" }}>
@@ -376,7 +384,7 @@ const Room = () => {
 
         ></Vote>
 
-        <Dropdown direction="right" isOpen={endMeetingBtn} toggle={() => { setEndMeetingBtn(!endMeetingBtn) }}>
+        <Dropdown direction="up" isOpen={endMeetingBtn} toggle={() => { setEndMeetingBtn(!endMeetingBtn) }}>
           <DropdownToggle caret style={{ background: "#68D2FF", fontFamily: "NanumSquare_acR", border: "none", width: "120px", borderRadius: "20px"}}>
             미팅 종료
            </DropdownToggle>
