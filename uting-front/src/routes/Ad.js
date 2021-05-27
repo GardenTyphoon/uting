@@ -72,7 +72,8 @@ const Ad = () => {
             name:content.last + content.first,
             email:content.email+"@"+content.domainaddress,
             file:content.file,
-            contents:content.textarea
+            contents:content.textarea,
+            title:content.title,
         }
         console.log(data)
         const res = await axios.post("http://localhost:3001/ads/save",data)
@@ -168,6 +169,14 @@ const Ad = () => {
                         <img style={{ width: "120px", height: "120px", margin: "10px" }} src={imgBase64} />  )}
                         <input onChange={(e)=>onChangeImg(e)} accept="image/*" type="file" name="file"/>
                             
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>제목</th>
+                    <td>
+                        <div>
+                            <input onChange={(e)=>onChangehandler(e)}  type="text" name="title"/>
                         </div>
                     </td>
                 </tr>
