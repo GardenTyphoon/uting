@@ -8,39 +8,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  UncontrolledCarousel,
-  Carousel,
-  CarouselItem,
-  CarouselControl,
-  CarouselIndicators,
-  CarouselCaption,
 } from "reactstrap";
 import "./EarInMal.css";
-
-const items = [
-  //for 설명서
-  {
-    src: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa1d%20text%20%7B%20fill%3A%23555%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa1d%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22285.921875%22%20y%3D%22218.3%22%3EFirst%20slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E",
-    altText: "1. (차례인 유저)질문상대 선택하고 질문하기",
-    caption: "질문 예시 : 이상형이 누구에요?? 여기서 마음에 드는 사람 있어요??",
-    header: "1. 차례인 유저는 질문할 대상을 선택한다.",
-  },
-  {
-    src: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa20%20text%20%7B%20fill%3A%23444%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa20%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23666%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22247.3203125%22%20y%3D%22218.3%22%3ESecond%20slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E",
-    altText: "2. 질문 응답",
-    caption:
-      "질문을 받은 유저는 질문에 해당하는 유저를 고르면 모든 유저에게 응답이 알려진다.",
-    header: "2. 질문 응답",
-  },
-  {
-    src: "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22800%22%20height%3D%22400%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20800%20400%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa21%20text%20%7B%20fill%3A%23333%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A40pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa21%22%3E%3Crect%20width%3D%22800%22%20height%3D%22400%22%20fill%3D%22%23555%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22277%22%20y%3D%22218.3%22%3EThird%20slide%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E",
-    altText:
-      "3. 질문이 궁금한 사람은 술을 마시고 질문한 사람에게 질문을 물어 볼 수 있다.",
-    caption:
-      "질문이 궁금한 사람은 술을 마시고 질문한 사람에게 질문을 물어 볼 수 있다.",
-    header: "3. 질문 알려주기",
-  },
-];
 
 const EarInMal = ({
   participantsSocketIdList,
@@ -66,46 +35,10 @@ const EarInMal = ({
   const [flag, setFlag] = useState(false);
   const [giveTurnFlag, setGiveTurnFlag] = useState(false);
   const [toExplain, setToExplain] = useState(false);
-  const [explainIndex, setExplainIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
-
   var data;
   let toSendSckId;
   let toSckIndex;
   let currentUser = sessionStorage.getItem("nickname");
-
-  const next = () => {
-    if (animating) return;
-    const nextIndex = explainIndex === items.length - 1 ? 0 : explainIndex + 1;
-    setExplainIndex(nextIndex);
-  };
-  const previous = () => {
-    if (animating) return;
-    const nextIndex = explainIndex === 0 ? items.length - 1 : explainIndex - 1;
-    setExplainIndex(nextIndex);
-  };
-
-  const goToIndex = (newIndex) => {
-    if (animating) return;
-    setExplainIndex(newIndex);
-  };
-
-  const slides = items.map((item) => {
-    return (
-      <CarouselItem
-        onExiting={() => setAnimating(true)}
-        onExited={() => setAnimating(false)}
-        key={item.src}
-      >
-        <img src={item.src} alt={item.altText} />
-        <CarouselCaption
-          captionText={item.caption}
-          captionHeader={item.caption}
-        />
-      </CarouselItem>
-    );
-  });
-
   function getRandomInt(min, max) {
     //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
@@ -287,24 +220,33 @@ const EarInMal = ({
   };
 
   const explain = () => {
-    setToExplain(!toExplain);
+    setIsGameStart(true);
+    setToExplain(true);
   };
 
   return (
     <div className="EarInMal">
-      {console.log("pariticipants : ")}
-      {console.log(participants)}
       <Modal isOpen={toExplain} toggle={explain}>
-        <ModalHeader toggle={explain}>귓속말 게임</ModalHeader>
+        <ModalHeader toggle={explain}>Modal title</ModalHeader>
         <ModalBody>
-          <UncontrolledCarousel items={items} />
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
         </ModalBody>
         <ModalFooter>
+          <Button color="primary" onClick={explain}>
+            Do Something
+          </Button>
           <Button color="secondary" onClick={explain}>
-            확인
+            Cancel
           </Button>
         </ModalFooter>
       </Modal>
+
       {!isGameStart ? (
         <>
           <strong>귓속말게임</strong>

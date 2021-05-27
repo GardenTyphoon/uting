@@ -8,6 +8,8 @@ import renewImg from "../../img/새로고침.svg";
 import playImg from "../../img/음악재생.svg";
 import pauseImg from "../../img/음악정지.png";
 import EarInMal from "./EarInMal";
+import King from "./King";
+
 import {
   Dropdown,
   DropdownToggle,
@@ -63,7 +65,7 @@ const McBot = ({
   gameTurn,
   question,
   participantsForTurn,
-  intervalFade
+  intervalFade,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
@@ -71,6 +73,7 @@ const McBot = ({
   const [content, setContent] = useState("");
   const [musicpath, setMusicpath] = useState("");
   const [gameStart, setGameStart] = useState(gameStartFlag);
+  const [gameNum, setGameNum] = useState(0);
 
   const toggle = (e) => {
     setDropdownOpen((prevState) => !prevState);
@@ -153,6 +156,8 @@ const McBot = ({
       setContent("");
     }
     if (e === 4 && contentFade === false) {
+      setGameNum(0);
+      setContent("");
       //실시간게임
     }
   };
@@ -162,40 +167,39 @@ const McBot = ({
     if (gameStartFlag) {
       setContentFade(true);
       setNumber(4);
+      setGameNum(1);
     } else {
       setContentFade(false);
       setNumber(0);
+      setGameNum(0);
     }
   }, [gameStartFlag]);
 
-  useEffect(()=>{
-    if(intervalFade!==0){
-      if(intervalFade===1){
-        setDropdownOpen(false)
-        setContentFade(true)
-        setNumber(1)
+  useEffect(() => {
+    if (intervalFade !== 0) {
+      if (intervalFade === 1) {
+        setDropdownOpen(false);
+        setContentFade(true);
+        setNumber(1);
         getGame();
-      }
-      else if(intervalFade===2){
-        setDropdownOpen(false)
-        setContentFade(true)
-        setNumber(2)
-        getTopic()
-      }
-      else if(intervalFade===3){
-        setDropdownOpen(false)
-        setContentFade(true)
-        setNumber(3)
-        setContent("")
-      }
-      else if(intervalFade===4){
-        setDropdownOpen(false)
-        setContentFade(true)
-        setNumber(4)
-        setContent("")
+      } else if (intervalFade === 2) {
+        setDropdownOpen(false);
+        setContentFade(true);
+        setNumber(2);
+        getTopic();
+      } else if (intervalFade === 3) {
+        setDropdownOpen(false);
+        setContentFade(true);
+        setNumber(3);
+        setContent("");
+      } else if (intervalFade === 4) {
+        setDropdownOpen(false);
+        setContentFade(true);
+        setNumber(4);
+        setContent("");
       }
     }
-  },[intervalFade])
+  }, [intervalFade]);
 
   const [modal, setModal] = useState(false);
   const toogleERR = () => setModal(!modal);
@@ -243,11 +247,13 @@ const McBot = ({
               ></img>
             </>
           ) : number === 2 ? (
-            <img
-              onClick={(e) => getTopic(e)}
-              src={renewImg}
-              style={{ width: "12%", marginLeft: "130px" }}
-            ></img>
+            <>
+              <img
+                onClick={(e) => getTopic(e)}
+                src={renewImg}
+                style={{ width: "12%", marginLeft: "130px" }}
+              ></img>
+            </>
           ) : number === 3 ? (
             <div>
               <div>
@@ -265,49 +271,66 @@ const McBot = ({
               </div>
             </div>
           ) : number === 4 ? (
-            <div style={{ alignItems: "center" }}>
-              <ButtonGroup vertical>
-                <EarInMal
-                  participantsSocketIdList={participantsSocketIdList}
-                  currentSocketId={currentSocketId}
-                  participants={participants}
-                  respondFlag={respondFlag}
-                  gameStartFlag={gameStart}
-                  gameTurn={gameTurn}
-                  question={question}
-                  participantsForTurnSet={participantsForTurn}
-                />
-                {!gameStart ? (
-                  <>
+            <div
+              style={{
+                alignItems: "center",
+                marginTop: "10%",
+                marginLeft: "10%",
+              }}
+            >
+              {gameNum === 0 ? (
+                <>
+                  <ButtonGroup vertical>
                     <Button
                       outline
                       color="secondary"
-                      disabled
                       style={{ border: 0 }}
+                      onClick={() => setGameNum(1)}
+                    >
+                      귓속말 게임
+                    </Button>
+                    <Button
+                      outline
+                      color="secondary"
+                      style={{ border: 0 }}
+                      onClick={() => setGameNum(2)}
                     >
                       왕게임
                     </Button>
-                    <Button
-                      outline
-                      color="secondary"
-                      disabled
-                      style={{ border: 0 }}
-                    >
+                    <Button outline color="secondary" style={{ border: 0 }}>
                       라이어게임
                     </Button>
-                    <Button
-                      outline
-                      color="secondary"
-                      disabled
-                      style={{ border: 0 }}
-                    >
-                      ...
-                    </Button>
-                  </>
-                ) : (
-                  <></>
-                )}
-              </ButtonGroup>
+                  </ButtonGroup>
+                </>
+              ) : gameNum === 1 ? (
+                <>
+                  <EarInMal
+                    participantsSocketIdList={participantsSocketIdList}
+                    currentSocketId={currentSocketId}
+                    participants={participants}
+                    respondFlag={respondFlag}
+                    gameStartFlag={gameStart}
+                    gameTurn={gameTurn}
+                    question={question}
+                    participantsForTurnSet={participantsForTurn}
+                  />
+                </>
+              ) : gameNum === 2 ? (
+                <>
+                  <King
+                    participantsSocketIdList={participantsSocketIdList}
+                    currentSocketId={currentSocketId}
+                    participants={participants}
+                    respondFlag={respondFlag}
+                    gameStartFlag={gameStart}
+                    gameTurn={gameTurn}
+                    question={question}
+                    participantsForTurnSet={participantsForTurn}
+                  />
+                </>
+              ) : (
+                <>gameNumError</>
+              )}
             </div>
           ) : (
             ""

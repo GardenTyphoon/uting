@@ -25,5 +25,8 @@
     "styled-components": "^5.3.0",
     "styled-system": "^5.1.5",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "artillery": "^1.6.2"
   }
 }
