@@ -37,7 +37,9 @@ const Box = styled.div`
   padding-bottom: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
- 
+  height:200px;
+  font-size:large;
+  font-weight:500;
 `;
 
 const HashTag = styled.span`
@@ -202,7 +204,7 @@ const McBot = ({
       <Dropdown
         isOpen={dropdownOpen}
         toggle={toggle}
-        style={{ width: "160px", margin: "0px" }}
+        style={{ width: "90px", margin: "0px" }}
         
       >
         <DropdownToggle
@@ -225,7 +227,7 @@ const McBot = ({
         </DropdownMenu>
       </Dropdown>
 
-      <Fade in={contentFade} tag="h5" className="mt-3">
+      <Fade in={contentFade}>
         <Box>
           <img
             onClick={(e) => back(e)}
@@ -310,7 +312,7 @@ const McBot = ({
           ) : (
             ""
           )}
-          <div style={{ marginTop: "50px", marginLeft: "50px" }}>{content}</div>
+          <div style={{marginTop:"60px"}}>{content}</div>
         </Box>
       </Fade>
     </div>
