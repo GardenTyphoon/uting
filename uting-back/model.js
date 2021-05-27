@@ -124,6 +124,23 @@ const Ad = new Schema({
         type:String,
         required:true
     },
+    type : {
+        type:String,
+        required:true
+    },
+    email : {
+        type:String,
+        required:true
+    },
+    file : {
+        type:String,
+        required:true
+    },
+    contents : {
+        type:String,
+        required:true
+    },
+
 })
 // Ad.plugin(autoInc.plugin, 'ad');
 
