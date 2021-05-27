@@ -44,15 +44,26 @@ import {Button,
 
 const AdminAd = () => {
     const [open, setOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('1');
+    const [requestList,setRequestList]=useState([]);
 
     let isOpen = () => {
         setOpen(!open);
       };
-      
-    const toggle = tab => {
-      if(activeTab !== tab) setActiveTab(tab);
+
+    let getAd = async(e)=>{
+      await axios
+      .get('http://localhost:3001/ads/')
+      .then(({ data }) => {
+        setRequestList(data)
+      })
+      .catch((err) => { });
     }
+      
+    useEffect(()=>{
+      if(open===true){
+        getAd()
+      }
+    },[open])
       
   return (
     <Card>
@@ -66,6 +77,12 @@ const AdminAd = () => {
     </CardHeader>
     <Collapse isOpen={open}>
       <CardBody>
+        {requestList.map((data,i)=>{
+          return(
+            <div>{data.contents}{data.type}{data.name}{data.email}{data.file}{data.contents}</div>
+          )
+        })}
+
        
       </CardBody>
     </Collapse>

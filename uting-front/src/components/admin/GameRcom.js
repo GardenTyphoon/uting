@@ -30,7 +30,7 @@ import {Button,
   } from 'reactstrap';
 
 
-const GameRecom = () => {
+const GameRecom = ({tab}) => {
   const [addModal, setAddModal] = useState(false);
   const [newGame,setNewGame]=useState("")
   const [gameList,setGameList]=useState([]);
@@ -64,12 +64,10 @@ const GameRecom = () => {
   }
 
   useEffect(()=>{
-    getGameList()
-  },[])
-
-  useEffect(()=>{
-    getGameList()
-  },[check])
+    if(tab==="2"){
+      getGameList()
+    }
+  },[tab])
 
   return (
     <div>

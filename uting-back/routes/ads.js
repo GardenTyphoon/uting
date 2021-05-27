@@ -44,4 +44,12 @@ router.post("/uploadAdImg", upload.single("img"), (req, res) => {
   res.json({ url: `/uploads/${req.file.filename}` });
 });
 
+router.get('/',function(req,res,next){
+  Ad.find({}).then((ad)=>{ 
+    res.json(ad);
+  }).catch((err) => {
+    res.send(err);
+  });
+})
+
 module.exports = router;
