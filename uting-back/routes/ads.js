@@ -32,6 +32,7 @@ router.post('/save', function(req,res,next){
     email:req.body.email,
     file:req.body.file,
     contents:req.body.contents,
+    title:req.body.title,
   });
 
   ad.save((err) => {

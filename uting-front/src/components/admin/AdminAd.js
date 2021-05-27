@@ -79,7 +79,7 @@ const AdminAd = () => {
       <CardBody>
         {requestList.map((data,i)=>{
           return(
-            <div>{data.contents}{data.type}{data.name}{data.email}{data.file}{data.contents}</div>
+            <div>{data.type}{data.name}{data.email}{data.file}{data.title}{data.contents}</div>
           )
         })}
 
