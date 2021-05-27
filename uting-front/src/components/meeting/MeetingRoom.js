@@ -55,7 +55,7 @@ export default function Rooms() {
             <UserActivityProvider>
                 <Grid
                 responsive
-                gridGap="50px"
+                gridGap="10px"
                 gridTemplateColumns="repeat(4, 18vw)"
                 gridTemplateRows="repeat(2, 18vw)"
                 gridAutoFlow="dense"
