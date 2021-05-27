@@ -58,12 +58,9 @@ const Ad = () => {
     let submit = async(e)=>{
 
         if (imgFile != null) {
-            //새로 업로드하려는 이미지가 있으면
             let formData = new FormData();
-    
             formData.append("img", imgFile);
             formData.append("requester", content.last + content.first);
-    
             let res = await axios.post(
               "http://localhost:3001/ads/uploadAdImg",
               formData
@@ -71,9 +68,6 @@ const Ad = () => {
             
             content["file"] = res.data.url;
         }
-
-
-        console.log(content)
         let data ={
             type:content.requesttype,
             name:content.last + content.first,
