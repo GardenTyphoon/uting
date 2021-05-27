@@ -26,6 +26,15 @@ import { ToastContainer, toast } from "react-toastify";
 import MeetingControls from '../components/meeting/MeetingControls';
 import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png"
+import { flexDirection, justifyContent } from "styled-system";
+const McBotContainer = styled.div`
+  width:230px;
+  height:320px;
+  background : #FBBCB5;
+  border-radius:15px;
+  text-align:center;
+  padding-top:20px;
+`;
 
 const Room = () => {
   const voteRef = useRef();
@@ -314,7 +323,9 @@ const Room = () => {
         width: "100vw",
         height: "100vh",
         padding: "2%",
-        overflow: "hidden",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent:"space-between"
       }}
     >
       <div
@@ -323,54 +334,59 @@ const Room = () => {
           height: "100vh",
           float: "left",
         }}>
+
         <MeetingRoom />
+        <MeetingControls />
       </div>
       <div
         style={{
           width: "20%",
-          height: "100vh",
-          float: "left",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "space-between"
         }}>
-        <MeetingControls />
-        <button onClick={() => setToggleReport(!toggleReport)} style={{ borderStyle: "none", background: "transparent" }}>
+
+        <button onClick={() => setToggleReport(!toggleReport)} style={{ borderStyle: "none", background: "transparent", float: "right" }}>
           <img src={reportImg} width="30" />
         </button>
-        <br></br><br /><ReactAudioPlayer style={{ widht: "auto" }} id="audio" src={musicsrc} controls />
-        <br />{intervalMessage}
-        <McBot
-          participantsSocketIdList={participantsSocketId}
-          currentSocketId={socketId}
-          participants={participants}
-          respondFlag={respondFlag}
-          gameStartFlag={gameStartFlag}
-          gameEndFlag={gameEndFlag}
-          gameTurn={gameTurn}
-          question={question}
-          participantsForTurn={participantsForTurn}
-          intervalFade={intervalFade}
-        ></McBot>
-
-
-          <Vote
-            ref={voteRef}
+        <ReactAudioPlayer style={{ width: "250px" }} id="audio" src={musicsrc} controls />
+        <McBotContainer>
+          {intervalMessage}
+          <McBot
             participantsSocketIdList={participantsSocketId}
+            currentSocketId={socketId}
             participants={participants}
-            meeting_id={meeting_id}
-            meetingMembers={meetingMembers}
-           
-          ></Vote>
+            respondFlag={respondFlag}
+            gameStartFlag={gameStartFlag}
+            gameEndFlag={gameEndFlag}
+            gameTurn={gameTurn}
+            question={question}
+            participantsForTurn={participantsForTurn}
+            intervalFade={intervalFade}
+          ></McBot>
+        </McBotContainer>
+
+        <Vote
+          ref={voteRef}
+          participantsSocketIdList={participantsSocketId}
+          participants={participants}
+          meeting_id={meeting_id}
+          meetingMembers={meetingMembers}
+
+        ></Vote>
 
         <Dropdown direction="right" isOpen={endMeetingBtn} toggle={() => { setEndMeetingBtn(!endMeetingBtn) }}>
-          <DropdownToggle caret >
+          <DropdownToggle caret style={{ background: "#68D2FF", fontFamily: "NanumSquare_acR", border: "none", width: "120px", borderRadius: "20px"}}>
             미팅 종료
            </DropdownToggle>
           <DropdownMenu >
-            <DropdownItem onClick={()=>voteRef.current.onClickEndMeetingBtn()}>미팅 종료 투표</DropdownItem>
-            <DropdownItem onClick={()=>midLeaveBtn()}>중도 퇴장</DropdownItem>
+            <DropdownItem onClick={() => voteRef.current.onClickEndMeetingBtn()}>미팅 종료 투표</DropdownItem>
+            <DropdownItem onClick={() => midLeaveBtn()}>중도 퇴장</DropdownItem>
           </DropdownMenu>
         </Dropdown>
 
-      
+
 
       </div>
       <ToastContainer />

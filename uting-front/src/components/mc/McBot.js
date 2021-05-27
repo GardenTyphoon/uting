@@ -27,9 +27,6 @@ import {
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
 
-const McBotContainer = styled.div`
-  
-`;
 
 const Box = styled.div`
   border: 2px solid rgb(255, 255, 255);
@@ -201,7 +198,7 @@ const McBot = ({
   const toogleERR = () => setModal(!modal);
 
   return (
-    <McBotContainer >
+    <div >
       <Dropdown
         isOpen={dropdownOpen}
         toggle={toggle}
@@ -216,7 +213,7 @@ const McBot = ({
             border: "0px",
           }}
         >
-          <img src={McBotImg} style={{ width: "160px" }} />
+          <img src={McBotImg} style={{ width: "120px" }} />
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={(e) => FadeToggle(1)}>게임 추천</DropdownItem>
@@ -316,7 +313,7 @@ const McBot = ({
           <div style={{ marginTop: "50px", marginLeft: "50px" }}>{content}</div>
         </Box>
       </Fade>
-    </McBotContainer>
+    </div>
   );
 };
 export default McBot;
