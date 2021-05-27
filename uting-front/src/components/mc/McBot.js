@@ -28,7 +28,7 @@ import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
 
 const McBotContainer = styled.div`
-  width: 100vw;
+  
 `;
 
 const Box = styled.div`
@@ -40,7 +40,7 @@ const Box = styled.div`
   padding-bottom: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-  height: 200px;
+ 
 `;
 
 const HashTag = styled.span`
@@ -201,11 +201,12 @@ const McBot = ({
   const toogleERR = () => setModal(!modal);
 
   return (
-    <McBotContainer>
+    <McBotContainer >
       <Dropdown
         isOpen={dropdownOpen}
         toggle={toggle}
         style={{ width: "160px", margin: "0px" }}
+        
       >
         <DropdownToggle
           caret

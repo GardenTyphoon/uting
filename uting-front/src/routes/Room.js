@@ -8,6 +8,11 @@ import {
   ModalBody,
   ModalFooter,
   Spinner,
+  Dropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu,
+
 } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
@@ -20,6 +25,7 @@ import { ToastContainer, toast } from "react-toastify";
 
 import MeetingControls from '../components/meeting/MeetingControls';
 import "react-toastify/dist/ReactToastify.css";
+import reportImg from "../img/report.png"
 
 const Room = () => {
   const voteRef = useRef();
@@ -47,6 +53,7 @@ const Room = () => {
   const [toggleMidLeave, setToggleMidLeave] = useState(false)
   const [ready, setReady] = useState(false);
   const [toggleReport, setToggleReport] = useState(false);
+  const [endMeetingBtn, setEndMeetingBtn] = useState(false);
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -319,14 +326,17 @@ const Room = () => {
         <MeetingRoom />
       </div>
       <div
-      style={{
-        width: "20%",
-        height: "100vh",
-        float: "left",
-      }}>
-        <MeetingControls/>
-        <br></br><br/><ReactAudioPlayer style={{widht:"auto"}}id="audio" src={musicsrc} controls />
-        <br/><div style={{fontFamily:"Jua"}}>{intervalMessage}</div>
+        style={{
+          width: "20%",
+          height: "100vh",
+          float: "left",
+        }}>
+        <MeetingControls />
+        <button onClick={() => setToggleReport(!toggleReport)} style={{ borderStyle: "none", background: "transparent" }}>
+          <img src={reportImg} width="30" />
+        </button>
+        <br></br><br /><ReactAudioPlayer style={{ widht: "auto" }} id="audio" src={musicsrc} controls />
+        <br />{intervalMessage}
         <McBot
           participantsSocketIdList={participantsSocketId}
           currentSocketId={socketId}
@@ -340,15 +350,28 @@ const Room = () => {
           intervalFade={intervalFade}
         ></McBot>
 
-        <Vote
-          ref={voteRef}
-          participantsSocketIdList={participantsSocketId}
-          participants={participants}
-          meeting_id={meeting_id}
-          meetingMembers={meetingMembers}
-        ></Vote>
-        <button className="midleave" onClick={(e) => midLeaveBtn(e)}>중도 퇴장</button>
-        <button className="report" onClick={() => setToggleReport(!toggleReport)}>신고하기</button>
+
+          <Vote
+            ref={voteRef}
+            participantsSocketIdList={participantsSocketId}
+            participants={participants}
+            meeting_id={meeting_id}
+            meetingMembers={meetingMembers}
+           
+          ></Vote>
+
+        <Dropdown direction="right" isOpen={endMeetingBtn} toggle={() => { setEndMeetingBtn(!endMeetingBtn) }}>
+          <DropdownToggle caret >
+            미팅 종료
+           </DropdownToggle>
+          <DropdownMenu >
+            <DropdownItem onClick={()=>voteRef.current.onClickEndMeetingBtn()}>미팅 종료 투표</DropdownItem>
+            <DropdownItem onClick={()=>midLeaveBtn()}>중도 퇴장</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+
+      
+
       </div>
       <ToastContainer />
 
@@ -368,7 +391,7 @@ const Room = () => {
           그래도 퇴장을 원하시면 나가기를 눌러주세요.
                 </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}>나가기</Button>{' '}
+          <Button color="primary" onClick={(e) => midLeave(e)}></Button>{' '}
           <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>취소</Button>
         </ModalFooter>
       </Modal>
@@ -380,9 +403,9 @@ const Room = () => {
           <select name="reportNickname">
             <option value="default" selected>신고 할 닉네임을 선택해주세요.</option>
             {participants.map((mem) => {
-              if(mem!=sessionStorage.getItem("nickname")){
+              if (mem != sessionStorage.getItem("nickname")) {
 
-              return <option value={mem}>{mem}</option>
+                return <option value={mem}>{mem}</option>
               }
             })}
           </select>
