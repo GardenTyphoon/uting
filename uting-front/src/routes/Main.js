@@ -17,6 +17,7 @@ import CollegeRanking from "../components/main/CollegeRanking.js";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import renewImg from '../img/새로고침.svg'
+import Tutorial from '../components/main/Tutorial.js'
 
 import { useAppState } from '../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
@@ -41,7 +42,9 @@ const Main = () => {
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
   const toggleGetorigin = (e)=>setGetorigin(!getorigin)
   const [socketId, setSocketId] = useState("");
-  
+  const [tutorialmodal, setTutorialModal] = useState(false);
+
+  const tutorialtoggle = () => setTutorialModal(!tutorialmodal);
   let sessionEmail = sessionStorage.getItem("email");
   let sessionUser = sessionStorage.getItem("nickname");
 
@@ -65,6 +68,8 @@ const Main = () => {
 
   
   useEffect(() => {
+    setTutorialModal(true)
+
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
@@ -188,6 +193,7 @@ const Main = () => {
     }
     setFilterage(data)
   }
+  
 
   return (
     <div className="mainContainer">
@@ -241,6 +247,12 @@ const Main = () => {
           </div>
         </div>
         <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
+        <Modal style={{width:"auto"}} isOpen={tutorialmodal} toggle={tutorialtoggle} >
+        <ModalHeader toggle={tutorialtoggle}>U-TING 메뉴얼</ModalHeader>
+        <ModalBody >
+          <Tutorial></Tutorial>
+        </ModalBody>
+      </Modal>
         <ToastContainer />
       </div>
     </div>
