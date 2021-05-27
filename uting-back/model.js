@@ -120,14 +120,15 @@ const Group = new Schema({
     }
 })
 const Ad = new Schema({
-    name : {
-        type:String,
-        required:true
-    },
     type : {
         type:String,
         required:true
     },
+    name : {
+        type:String,
+        required:true
+    },
+    
     email : {
         type:String,
         required:true

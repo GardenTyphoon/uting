@@ -9,14 +9,13 @@ router.post('/save', function(req,res,next){
     name:req.body.name,
     email:req.body.email,
     file:req.body.file,
-    cotents:req.body.contents
+    contents:req.body.contents,
   });
 
   ad.save((err) => {
     res.send("요청완료");
   });
 
-  //res.json(report);
 })
 
 
