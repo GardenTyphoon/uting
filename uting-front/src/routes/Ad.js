@@ -22,7 +22,6 @@ const Ad = () => {
     const [content,setContent]=useState({})
     const [imgBase64, setImgBase64] = useState("");
     const [imgFile, setImgFile] = useState(null);
-    const [staticpath, setStaticpath] = useState("http://localhost:3001");
 
     let onChangehandler=(e)=>{
         let { name, value } = e.target;
@@ -80,6 +79,7 @@ const Ad = () => {
         console.log(res)
         if(res.data==="요청완료"){
             alert("접수가 완료되었습니다.")
+            window.location.reload()
         }
         
     }

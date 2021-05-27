@@ -30,7 +30,7 @@ import {Button,
   } from 'reactstrap';
 
 
-const Conversation = () => {
+const Conversation = ({tab}) => {
   const [addModal, setAddModal] = useState(false);
   const [newConversation,setNewConversation]=useState("")
   const [conversationList,setConversationList]=useState([]);
@@ -61,13 +61,12 @@ const Conversation = () => {
     setConversationList(res.data);
   }
 
-  useEffect(()=>{
-    getConversationList()
-  },[])
 
   useEffect(()=>{
-    getConversationList()
-  },[check])
+    if(tab==="1"){
+      getConversationList()
+    }
+  },[tab])
 
   return (
     <div>
