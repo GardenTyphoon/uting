@@ -15,10 +15,14 @@ import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
 import "./Ad.css"
 import utingLogo from "../img/utingLogo.png";
-
+import FormData from "form-data";
+import ProfileNoImage from "../img/ProfileNoImage.jpg";
 const Ad = () => {
     
     const [content,setContent]=useState({})
+    const [imgBase64, setImgBase64] = useState("");
+    const [imgFile, setImgFile] = useState(null);
+    const [staticpath, setStaticpath] = useState("http://localhost:3001");
 
     let onChangehandler=(e)=>{
         let { name, value } = e.target;
@@ -27,8 +31,43 @@ const Ad = () => {
         
     }
 
+    const onChangeImg = async (e) => {
+        // 이미지를 선택했으면
+        let reader = new FileReader();
+    
+        reader.onloadend = () => {
+          const base64 = reader.result;
+          if (base64) {
+            setImgBase64(base64.toString());
+          }
+        };
+        if (e.target.files[0]) {
+          reader.readAsDataURL(e.target.files[0]);
+          // 이미지 이름 저장해둠
+          setImgFile(e.target.files[0]);
+          
+        }
+    };
+
+
+
+    useEffect(()=>{
+        console.log(imgFile)
+    },[imgFile])
+
     let submit = async(e)=>{
-        console.log(content)
+
+        if (imgFile != null) {
+            let formData = new FormData();
+            formData.append("img", imgFile);
+            formData.append("requester", content.last + content.first);
+            let res = await axios.post(
+              "http://localhost:3001/ads/uploadAdImg",
+              formData
+            );
+            
+            content["file"] = res.data.url;
+        }
         let data ={
             type:content.requesttype,
             name:content.last + content.first,
@@ -124,7 +163,11 @@ const Ad = () => {
                     <th>파일</th>
                     <td>
                         <div>
-                            <input onChange={(e)=>onChangehandler(e)} type="file" name="file"/>
+                        {imgBase64 === "" ? (
+                        <img style={{ width: "80px", height: "80px", margin: "10px" }} src={ProfileNoImage} /> ) : (
+                        <img style={{ width: "120px", height: "120px", margin: "10px" }} src={imgBase64} />  )}
+                        <input onChange={(e)=>onChangeImg(e)} accept="image/*" type="file" name="file"/>
+                            
                         </div>
                     </td>
                 </tr>
