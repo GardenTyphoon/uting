@@ -6,6 +6,7 @@ import axios from 'axios';
 import socketio from "socket.io-client";
 import "./Vote.css"
 import { ToastContainer, toast } from "react-toastify";
+import { endMeeting } from "../../utils/api";
 
 const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meetingMembers},ref) => {
 
@@ -115,7 +116,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             if (conditionEndMeeting()) {
                 setTimeout(()=>{
                     toast("투표가 종료되었습니다. 미팅을 종료합니다.")
-                  
                     setToggleManner(true)
                 },1000)
               
