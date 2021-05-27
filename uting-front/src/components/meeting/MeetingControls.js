@@ -29,6 +29,7 @@ const MeetingControls = () => {
         className="controls-menu"
         layout="undocked-horizontal"
         showLabels
+        style={{width:"100%"}}
       >
         <AudioInputControl />
         <VideoInputControl />
