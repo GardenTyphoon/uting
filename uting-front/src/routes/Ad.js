@@ -18,6 +18,32 @@ import utingLogo from "../img/utingLogo.png";
 
 const Ad = () => {
     
+    const [content,setContent]=useState({})
+
+    let onChangehandler=(e)=>{
+        let { name, value } = e.target;
+       
+        setContent({...content,[name]:value})
+        
+    }
+
+    let submit = async(e)=>{
+        console.log(content)
+        let data ={
+            type:content.requesttype,
+            name:content.last + content.first,
+            email:content.email+"@"+content.domainaddress,
+            file:content.file,
+            contents:content.textarea
+        }
+        console.log(data)
+        const res = await axios.post("http://localhost:3001/ads/save",data)
+        console.log(res)
+        if(res.data==="요청완료"){
+            alert("접수가 완료되었습니다.")
+        }
+        
+    }
   
     return (
      <div className="adContainer" >
@@ -58,8 +84,8 @@ const Ad = () => {
                     <th >질문유형</th>
                     <td>
                         <div>
-                            <input type="radio" name="inquiryCd" value="Ad" checked="checked"/><label for="inquiryCd1">광고</label>
-                            <input type="radio" name="inquiryCd" value="another"/><label for="inquiryCd1">기타</label>
+                            <input onChange={(e)=>onChangehandler(e)} type="radio" name="requesttype" value="Ad" checked="checked"/><label for="inquiryCd1">광고</label>
+                            <input onChange={(e)=>onChangehandler(e)} type="radio" name="requesttype" value="another"/><label for="inquiryCd1">기타</label>
                         </div>
                     </td>
 
@@ -68,8 +94,8 @@ const Ad = () => {
                     <th>성, 이름</th>
                     <td>
                         <div>
-                            <input type="text" name="last" placeholder="성"/>
-                            <input type="text" name="first" placeholder="이름" />
+                            <input onChange={(e)=>onChangehandler(e)} type="text" name="last" placeholder="성"/>
+                            <input onChange={(e)=>onChangehandler(e)} type="text" name="first" placeholder="이름" />
                         </div>
                     </td>
                 </tr>
@@ -77,16 +103,20 @@ const Ad = () => {
                     <th>이메일</th>
                     <td>
                         <div className="emailinfo">
-                            <input style={{width:"150px" ,float:"left"}} type="text" name="email"/>
+                            <input onChange={(e)=>onChangehandler(e)} style={{width:"150px" ,float:"left"}} type="text" name="email"/>
                             <span style={{float:"left"}}>@</span>
-                            <input  style={{width:"150px" ,float:"left"}} type="text" name="address" />
-                            <Input style={{width:"150px" ,float:"left"}} id="domainaddress" type="select" name="domainaddress">
-                                <option value="" selected="selected">직접입력</option>
+                            {content.domainaddress==="1"?
+                            <input  onChange={(e)=>onChangehandler(e)}  style={{width:"150px" ,float:"left"}} type="text" name="domainaddress" />:""}
+
+                            <Input onChange={(e)=>onChangehandler(e)} style={{width:"150px" ,float:"left"}} id="domainaddress" type="select" name="domainaddress">
+                                <option value="" selected="selected">주소선택</option>
+                                <option value="1" >직접입력</option>
                                 <option value="naver.com">naver.com</option>
                                 <option value="gmail.com">gmail.com</option>
                                 <option value="daum.net">daum.net</option>
                                 <option value="nate.com">nate.com</option>
                             </Input>
+                            
                         </div>
                     </td>
                 </tr>
@@ -94,7 +124,7 @@ const Ad = () => {
                     <th>파일</th>
                     <td>
                         <div>
-                            <input type="file" name="file"/>
+                            <input onChange={(e)=>onChangehandler(e)} type="file" name="file"/>
                         </div>
                     </td>
                 </tr>
@@ -102,13 +132,13 @@ const Ad = () => {
                     <th>문의내용</th>
                     <td>
                         <div>
-                            <textarea type="textarea" name="textarea"/>
+                            <textarea onChange={(e)=>onChangehandler(e)}  type="textarea" name="textarea"/>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <Button>접수</Button>
+        <Button onClick={(e)=>submit(e)}>접수</Button>
         
     </div>
      </div>
