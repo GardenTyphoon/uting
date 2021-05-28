@@ -33,6 +33,7 @@ router.post('/save', function(req,res,next){
     file:req.body.file,
     contents:req.body.contents,
     title:req.body.title,
+    status:"false",
   });
 
   ad.save((err) => {

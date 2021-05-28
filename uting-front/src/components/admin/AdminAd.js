@@ -123,6 +123,7 @@ const AdminAd = () => {
                         <Col style={{marginLeft:"20%",marginRight:"1000px"}}>{clickData.contents}</Col>
                         <Col style={{marginLeft:"40%",marginRight:"1000px"}}>{clickData.email}</Col>
                         </div>
+                        <div><Button color="warning">수락</Button><Button>거절</Button></div>
                       </Fade>:""}
                     </Row>
                     
