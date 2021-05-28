@@ -37,7 +37,7 @@ const Box = styled.div`
   padding-bottom: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-  height:200px;
+  height:180px;
   font-size:large;
   font-weight:500;
 `;
@@ -204,7 +204,7 @@ const McBot = ({
       <Dropdown
         isOpen={dropdownOpen}
         toggle={toggle}
-        style={{ width: "90px", margin: "0px" }}
+        style={{ width: "90px", margin: "0px"}}
         
       >
         <DropdownToggle
@@ -213,9 +213,12 @@ const McBot = ({
             width: "15%",
             backgroundColor: "transparent",
             border: "0px",
+            outline:"none",
+            
           }}
+          src={McBotImg}
         >
-          <img src={McBotImg} style={{ width: "120px" }} />
+          <img src={McBotImg} style={{ width: "120px"}} />
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={(e) => FadeToggle(1)}>게임 추천</DropdownItem>
@@ -312,7 +315,7 @@ const McBot = ({
           ) : (
             ""
           )}
-          <div style={{marginTop:"60px"}}>{content}</div>
+          <div style={{marginTop:"50px"}}>{content}</div>
         </Box>
       </Fade>
     </div>
