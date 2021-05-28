@@ -50,13 +50,24 @@ const AdminAd = () => {
     const [fadeIn, setFadeIn] = useState(false);
     const [clickData,setClickData]=useState({})
     const [imgBase64, setImgBase64] = useState("");
+    const [modal, setModal] = useState(false);
+
+    const modaltoggle = (e) => {
+      
+      
+      setModal(!modal)
+    };
+
     const fadetoggle = (e,i) => {
       setFadeIn(!fadeIn)
       let data={
+        _id:e._id,
+        name:e.name,
         num:i,
         email:e.email,
         file:e.file,
-        contents:e.contents
+        contents:e.contents,
+        status:e.status,
       }
       setClickData(data)
       let staticpath = "http://localhost:3001";
@@ -74,16 +85,35 @@ const AdminAd = () => {
       })
       .catch((err) => { });
     }
+
+    let reject = async (e)=>{
+      console.log("reject")
+      const res = await axios.post("http://localhost:3001/ads/reject",{_id:clickData._id})
+      console.log(res.data)
+      if(res.data==="delete"){
+        setModal(false)
+        getAd()
+      }
+    }
+
+    let accept = async (e)=>{
+      
+      const res = await axios.post("http://localhost:3001/ads/accept",{_id:clickData._id,type:clickData.status})
+      console.log(res.data)
+      console.log(clickData)
+      if(res.data==="success"){
+        console.log(clickData)
+        setClickData({...clickData,["status"]:"true"})
+        getAd()
+      }
+    }
       
     useEffect(()=>{
       if(open===true){
         getAd()
       }
     },[open])
-    /*
-                      <Col >{data.name}</Col>
-                      <Col style={{marginLeft:"2%"}}>{data.email}</Col>   
-                      <Col style={{marginLeft:"2%"}}>{data.file}</Col> */
+    
       
   return (
     <Card>
@@ -121,9 +151,10 @@ const AdminAd = () => {
                          ) : (
                         <Col><img src={imgBase64} alt="profile img" height="100" width="130" style={{ borderRadius: "10px",float:"left" }} /> </Col>)}
                         <Col style={{marginLeft:"20%",marginRight:"1000px"}}>{clickData.contents}</Col>
-                        <Col style={{marginLeft:"40%",marginRight:"1000px"}}>{clickData.email}</Col>
+                        <Col style={{marginLeft:"30%",marginRight:"1000px"}}>{clickData.email}</Col>
+                        <Col style={{marginLeft:"50%",marginRight:"1000px"}}>{clickData.status==="false"?"보류":"승인완료"}</Col>
                         </div>
-                        <div><Button color="warning">수락</Button><Button>거절</Button></div>
+                        <div>{clickData.status==="false"?<Button color="warning" onClick={(e)=>accept(e)}>수락</Button>:""}<Button onClick={(e)=>modaltoggle(e)}>거절</Button></div>
                       </Fade>:""}
                     </Row>
                     
@@ -133,7 +164,18 @@ const AdminAd = () => {
           })}</div>
           
         </div>
-
+        <Modal isOpen={modal} >
+        <ModalHeader toggle={(e)=>modaltoggle(e)}>
+          문의 거절
+        </ModalHeader>
+        <ModalBody>
+          <div>{clickData.name}의 문의를 정말 거절하시겠습니까?</div>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="danger" onClick={(e)=>reject(e)}>거절</Button>{' '}
+          <Button color="warning" onClick={(e)=>modaltoggle(e)}>취소</Button>
+        </ModalFooter>
+      </Modal>
 
        
       </CardBody>
