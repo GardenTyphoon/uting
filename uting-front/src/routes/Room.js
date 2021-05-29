@@ -26,7 +26,7 @@ import MeetingControls from '../components/meeting/MeetingControls';
 import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png"
 import help from "../img/help.png"
-import McBotTutorial from "../components/meeting/McBotTutorial";
+import McBotTutorial from "../components/mc/McBotTutorial";
 const McBotContainer = styled.div`
   width:250px;
   height:390px;
