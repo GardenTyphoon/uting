@@ -124,7 +124,7 @@ const Ad = () => {
                     <th >질문유형</th>
                     <td>
                         <div>
-                            <input onChange={(e)=>onChangehandler(e)} type="radio" name="requesttype" value="Ad" checked="checked"/><label for="inquiryCd1">광고</label>
+                            <input onChange={(e)=>onChangehandler(e)} type="radio" name="requesttype" value="Ad" /><label for="inquiryCd1">광고</label>
                             <input onChange={(e)=>onChangehandler(e)} type="radio" name="requesttype" value="another"/><label for="inquiryCd1">기타</label>
                         </div>
                     </td>
