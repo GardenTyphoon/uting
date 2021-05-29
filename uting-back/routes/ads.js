@@ -33,6 +33,7 @@ router.post('/save', function(req,res,next){
     file:req.body.file,
     contents:req.body.contents,
     title:req.body.title,
+    status:"false",
   });
 
   ad.save((err) => {
@@ -51,6 +52,53 @@ router.get('/',function(req,res,next){
   }).catch((err) => {
     res.send(err);
   });
+})
+
+router.post('/reject', function(req,res,next){
+  Ad.deleteOne({_id:req.body._id}).then((result)=>{
+
+    res.send("delete")
+  })
+
+})
+
+router.post('/accept', function(req,res,next){
+  let ismember = false;
+  let perObj = {};
+  console.log(req.body)
+  Ad.find(function (err, ads) {
+    //console.log(user)
+    ads.forEach((ad) => {
+      if (ad._id.toString() === req.body._id) {
+        ismember = true;
+        perObj = ad;
+      }
+    });
+    if (ismember === true) {
+      Ad.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: "true",
+            _id: perObj._id,
+            name: perObj.name,
+            email: perObj.email,
+            file: perObj.file,
+            contents: perObj.contents,
+            title: perObj.title
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+      
+    }
+    if (ismember === false) {
+      res.send("no");
+    }
+  });
+
 })
 
 

@@ -145,6 +145,10 @@ const Ad = new Schema({
         type:String,
         required:true
     },
+    status : {
+        type:String,
+        required:true
+    },
 
 })
 // Ad.plugin(autoInc.plugin, 'ad');
