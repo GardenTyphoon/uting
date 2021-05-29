@@ -236,21 +236,21 @@ const McBot = ({
           <img 
             onClick={(e) => back(e)}
             src={backImg}
-            style={{ width: "12%", float:"left" }}
+            style={{ width: "12%", float:"left", margin:"2px", marginRight:"120px" }}
           ></img>
           {number === 1 ? (
             <>
               <img
                 onClick={(e) => getGame(e)}
                 src={renewImg}
-                style={{ width: "12%", marginLeft: "130px" }}
+                style={{ width: "12%" }}
               ></img>
             </>
           ) : number === 2 ? (
             <img
               onClick={(e) => getTopic(e)}
               src={renewImg}
-              style={{ width: "12%", marginLeft: "130px" }}
+              style={{ width: "12%" }}
             ></img>
           ) : number === 3 ? (
             <div >
@@ -269,7 +269,7 @@ const McBot = ({
               </div>
             </div>
           ) : number === 4 ? (
-            <div style={{ alignItems: "center" }}>
+            <div style={{}}>
               <ButtonGroup vertical>
                 <EarInMal
                   participantsSocketIdList={participantsSocketIdList}
