@@ -229,7 +229,7 @@ const MyProfile = () => {
               type="text"
               name="manner"
               class="persistent"
-              value={ProfileInfo.mannerCredit}
+              value={Math.round(ProfileInfo.mannerCredit * 100) / 100}
               readOnly
             />
           </div>
