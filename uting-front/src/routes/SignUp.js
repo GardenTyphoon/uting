@@ -105,7 +105,7 @@ const SignUp = () => {
         birth: userinfo.birth,
         email: userinfo.email,
         password: userinfo.password,
-        phone: userinfo.phone,
+        phone: userinfo.phone
       };
 
       const res = await axios.post("http://localhost:3001/users/signup", data);

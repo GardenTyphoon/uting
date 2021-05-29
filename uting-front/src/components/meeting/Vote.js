@@ -6,6 +6,7 @@ import axios from 'axios';
 import socketio from "socket.io-client";
 import "./Vote.css"
 import { ToastContainer, toast } from "react-toastify";
+import { endMeeting } from "../../utils/api";
 
 const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meetingMembers},ref) => {
 
@@ -24,11 +25,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     const [goManner,setGoManner] = useState({"name":"","manner":""})
 
 
-    const onClickEndMeetingBtn = (e) => {
-        console.log(participantsSocketIdList)
-        setToggleEndMeetingBtn(!toggleEndMeetingBtn)
-        
-    }
+    
 
     const onClickStartVoteBtn = async (e) => {
         
@@ -74,6 +71,11 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             if(startVote===true){
             setNumOfDisagree(data);
             }
+        },
+        onClickEndMeetingBtn(){
+            console.log(participantsSocketIdList)
+            setToggleEndMeetingBtn(!toggleEndMeetingBtn)
+            
         }
       }));
 
@@ -115,7 +117,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             if (conditionEndMeeting()) {
                 setTimeout(()=>{
                     toast("투표가 종료되었습니다. 미팅을 종료합니다.")
-                  
                     setToggleManner(true)
                 },1000)
               
@@ -210,7 +211,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     return (
         
         <div>
-            <button className="gradientBtn" onClick={(e) => onClickEndMeetingBtn(e)}>미팅 종료</button>
             <Modal isOpen={toggleEndMeetingBtn}>
                 <ModalBody>
                     미팅 종료 버튼을 누르셨습니다.
@@ -218,7 +218,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={(e) => onClickStartVoteBtn(e)}>투표하기</Button>{' '}
-                    <Button color="secondary" onClick={(e) => onClickEndMeetingBtn(e)}>취소</Button>
+                    <Button color="secondary" onClick={(e) => setToggleEndMeetingBtn(!toggleEndMeetingBtn)}>취소</Button>
                 </ModalFooter>
             </Modal>
             <Modal isOpen={toggleManner}>

@@ -44,7 +44,7 @@ import {Button,
 
 const AdminMc = () => {
     const [open, setOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('1');
+    const [activeTab, setActiveTab] = useState('0');
 
     let isOpen = () => {
         setOpen(!open);
@@ -87,10 +87,10 @@ const AdminMc = () => {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="1">
-          <Conversation></Conversation>
+          <Conversation tab={activeTab}></Conversation>
         </TabPane>
         <TabPane tabId="2">
-          <GameRecom></GameRecom>
+          <GameRecom tab={activeTab}></GameRecom>
         </TabPane>
       </TabContent>
       </CardBody>

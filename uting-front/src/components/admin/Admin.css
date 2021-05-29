@@ -1,0 +1,28 @@
+.reportedlist{
+    margin-left: 40%;
+    font-size: large;
+    margin-top: 5%;
+}
+
+.header{
+    margin-top: 5%;
+    margin-bottom: 3%;
+    background-color: antiquewhite;
+    border-radius: 10px;
+    height: 50px;
+    padding-top: 1.3%;
+}
+.rowbutton{
+    border: 0;
+    outline: 0;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    margin-bottom: 1%;
+    border-radius: 20px;
+    
+}
+.rowbutton:active{
+    background-color: rgb(248, 244, 204);
+    border-radius: 20px;
+    
+}

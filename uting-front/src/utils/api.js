@@ -76,13 +76,9 @@ export function createGetAttendeeCallback(meetingId){
 }
 
 export async function endMeeting(meetingId){
-    // const res = await fetch(
-    //     `http://localhost:3001/end?title=${encodeURIComponent(meetingId)}`,
-    //     {
-    //         method: 'POST'
-    //     }
-    // );
-    const data = {meetingId : meetingId};
+
+    console.log(meetingId)
+    const data = {title : meetingId};
     const res = await axios.post('http://localhost:3001/meetings/end', data);
 
     if(!res.ok){

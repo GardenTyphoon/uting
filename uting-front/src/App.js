@@ -8,8 +8,8 @@ import Main from "./routes/Main";
 import Room from "./routes/Room";
 import Admin from "./routes/Admin";
 import Ucoin from "./routes/Ucoin";
+import Ad from "./routes/Ad"
 import DeviceSetup from "./components/device/DeviceSetup";
-import Manner from "./routes/Manner"
 import meetingConfig from './meetingConfig';
 import { MeetingProvider } from 'amazon-chime-sdk-component-library-react';
 import { AppStateProvider } from './providers/AppStateProvider';
@@ -30,7 +30,7 @@ function App() {
                 <Route path="/admin" component={Admin}></Route>
                 <Route path="/ucoin" component={Ucoin}></Route>
                 <Route path="/room" component={Room}></Route>
-                <Route path="/manner" component={Manner}></Route>
+                <Route path="/ad" component={Ad}></Route>
                 <Route path="/deviceSetup" component={DeviceSetup}></Route>
               </Switch>
             </NavigationProvider>

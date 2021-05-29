@@ -2,16 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useHistory } from "react-router";
 import styled from "styled-components";
 import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Input,
   Button,
-  Form,
-  FormGroup,
-  Label,
-  FormText,
-  Badge,
   Modal,
   ModalHeader,
   ModalBody,
@@ -22,7 +13,6 @@ import {
   DropdownItem,
   DropdownMenu,
 } from "reactstrap";
-import { Spinner } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
@@ -35,14 +25,21 @@ import { endMeeting } from "../utils/api";
 import MeetingControls from "../components/meeting/MeetingControls";
 import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png";
-import { flexDirection, justifyContent } from "styled-system";
+import help from "../img/help.png";
+import McBotTutorial from "../components/mc/McBotTutorial";
 const McBotContainer = styled.div`
-  width: 230px;
-  height: 320px;
+  width: 250px;
+  height: 390px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
-  padding-top: 20px;
+  padding: 20px;
+  padding-top: 10px;
+  font-family: NanumSquare_acR;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const Room = () => {
@@ -74,6 +71,7 @@ const Room = () => {
   const [endMeetingBtn, setEndMeetingBtn] = useState(false);
   const [role, setRole] = useState();
   const [gameNum, setGameNum] = useState();
+  const [toggleHelp, setToggleHelp] = useState(false);
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -126,8 +124,6 @@ const Room = () => {
         "http://localhost:3001/meetings/getparticipants",
         { _id: meetingId }
       );
-      console.log(" 참여자들 닉네임 : ", res.data);
-      console.log("길이", res.data.length);
       let par = [];
       for (let i = 0; i < res.data.length; i++) {
         par.push(res.data[i].nickname);
@@ -143,10 +139,6 @@ const Room = () => {
   const submitReport = async () => {
     let reportNickname = document.getElementsByName("reportNickname");
     let reportContent = document.getElementsByName("reportContent");
-    console.log(
-      reportNickname[0].options[reportNickname[0].selectedIndex].value
-    );
-    console.log(reportContent[0].value);
     const res = await axios.post("http://localhost:3001/reports/saveReport", {
       reportTarget:
         reportNickname[0].options[reportNickname[0].selectedIndex].value,
@@ -345,28 +337,18 @@ const Room = () => {
         justifyContent: "space-between",
       }}
     >
-      <Modal isOpen={!ready}>
-        <ModalBody
-          style={{
-            textAlign: "center",
-            fontFamily: " NanumSquare_acR",
-            padding: "30px",
-          }}
-        >
-          <Spinner color="dark" />
-          <div style={{ margin: "20px", fontSize: "large" }}>
-            잠시만 기다려주세요 o(*^▽^*)┛
-          </div>
-        </ModalBody>
-      </Modal>
       <div
         style={{
           width: "75%",
-          height: "100vh",
+          height: "92vh",
           float: "left",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
         }}
       >
         <MeetingRoom />
+        <MeetingControls />
       </div>
       <div
         style={{
@@ -374,19 +356,23 @@ const Room = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "space-evenly",
         }}
       >
-        <button
-          onClick={() => setToggleReport(!toggleReport)}
-          style={{
-            borderStyle: "none",
-            background: "transparent",
-            float: "right",
-          }}
-        >
-          <img src={reportImg} width="30" />
-        </button>
+        <div>
+          <button
+            onClick={() => setToggleReport(!toggleReport)}
+            style={{
+              borderStyle: "none",
+              background: "transparent",
+              position: "relative",
+              left: "90px",
+              bottom: "10px",
+            }}
+          >
+            <img src={reportImg} width="30" />
+          </button>
+        </div>
         <ReactAudioPlayer
           style={{ width: "250px" }}
           id="audio"
@@ -394,6 +380,17 @@ const Room = () => {
           controls
         />
         <McBotContainer>
+          <button
+            onClick={() => setToggleHelp(!toggleHelp)}
+            style={{
+              borderStyle: "none",
+              background: "transparent",
+              position: "relative",
+              left: "90px",
+            }}
+          >
+            <img src={help} width="25" />
+          </button>
           {intervalMessage}
           <McBot
             participantsSocketIdList={participantsSocketId}
@@ -420,7 +417,7 @@ const Room = () => {
         ></Vote>
 
         <Dropdown
-          direction="right"
+          direction="up"
           isOpen={endMeetingBtn}
           toggle={() => {
             setEndMeetingBtn(!endMeetingBtn);
@@ -434,6 +431,8 @@ const Room = () => {
               border: "none",
               width: "120px",
               borderRadius: "20px",
+              border: "0px",
+              outline: "0px",
             }}
           >
             미팅 종료
@@ -505,6 +504,18 @@ const Room = () => {
             onClick={() => setToggleReport(!toggleReport)}
           >
             취소
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal size="lg" isOpen={toggleHelp}>
+        <ModalHeader>mc봇 사용법</ModalHeader>
+        <ModalBody>
+          <McBotTutorial />
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={() => setToggleHelp()}>
+            확인
           </Button>
         </ModalFooter>
       </Modal>

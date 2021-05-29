@@ -56,8 +56,11 @@ const User = new Schema({
     socketid:{
         type:String,
         requried:false,
-    }
-
+    },
+    beReported:{
+        type:Number,
+        required:false
+    },
     
 })
 // User.plugin(autoInc.plugin, 'user');
@@ -117,15 +120,49 @@ const Group = new Schema({
     }
 })
 const Ad = new Schema({
+    type : {
+        type:String,
+        required:true
+    },
     name : {
         type:String,
         required:true
     },
+    
+    email : {
+        type:String,
+        required:true
+    },
+    file : {
+        type:String,
+        required:true
+    },
+    contents : {
+        type:String,
+        required:true
+    },
+    title : {
+        type:String,
+        required:true
+    },
+    status : {
+        type:String,
+        required:true
+    },
+
 })
 // Ad.plugin(autoInc.plugin, 'ad');
 
 const Report = new Schema({
-    name : {
+    target : {
+        type:String,
+        required:true
+    },
+    content:{
+        type:String,
+        required:true
+    },
+    requester:{
         type:String,
         required:true
     },

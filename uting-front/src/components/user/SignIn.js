@@ -41,26 +41,35 @@ const SignIn = () => {
       email: email,
       password: password
     }
-    const res = await axios.post('http://localhost:3001/users/signin', data);
+    let res = await axios.post('http://localhost:3001/users/signin', data);
     
-    sessionStorage.setItem('nickname', res.data.nickname);
+    
     if (res.data === "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.") {
       setIslogined(false);
       alert("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
       //toast("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
       
     }
+    else if(res.data==="hell"){
+      alert("신고가 3번이상 누적된 사용자로서 더 이상 U-TING 서비스 사용이 불가합니다.")
+    }
     else {
       try {
         setIslogined(true);
-        
+        sessionStorage.setItem('nickname', res.data.nickname);
         sessionStorage.setItem('email', email);
         alert("로그인 되었습니다.")
         //toast("로그인 되었습니다.")
         //소켓
         
+        if(email==="admin@ajou.ac.kr"&&password==="admin"){
+          window.location.href = 'http://localhost:3000/admin';
+        }
+        else{
+          window.location.href = 'http://localhost:3000/main';
+ 
+        }
 
-        window.location.href = 'http://localhost:3000/main';
       } catch (error) {
         setError(error.message);
       }

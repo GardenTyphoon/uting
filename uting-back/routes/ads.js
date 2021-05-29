@@ -1,36 +1,106 @@
 var express = require('express');
 var router = express.Router();
 const { Ad }=require('../model');
-
-// GET ads list 
-router.get('/', async function(req, res, next) {
-  const ads = await Ad.find();
-  //res.json(ads);
+const fs = require("fs");
+const multer = require("multer");
+const path = require("path");
+fs.readdir("uploads", (error) => {
+  // uploads 폴더 없으면 생성
+  if (error) {
+    fs.mkdirSync("uploads");
+  }
 });
 
-// GET one ad
-router.get('/:id', async function(req, res, next) {
-  const ad = await Ad.findOne({_id:req.params.id});
-  //res.json(ad);
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-// POST write one ad
-router.post('/', function(req, res,next){
-  const ad = new Ad(req.body);
-  ad.save();
-  //res.json(ad);
+router.post('/save', function(req,res,next){
+  console.log(req.body)
+  const ad = new Ad({
+    type:req.body.type,
+    name:req.body.name,
+    email:req.body.email,
+    file:req.body.file,
+    contents:req.body.contents,
+    title:req.body.title,
+    status:"false",
+  });
+
+  ad.save((err) => {
+    res.send("요청완료");
+  });
+
 })
 
-// PUT edit one ad
-router.put('/:id', async function(req,res,next){
-  const ad = await Ad.findByIdAndUpdate(req.params.id, req.body);
-  //res.json(ad);
+router.post("/uploadAdImg", upload.single("img"), (req, res) => {
+  res.json({ url: `/uploads/${req.file.filename}` });
+});
+
+router.get('/',function(req,res,next){
+  Ad.find({}).then((ad)=>{ 
+    res.json(ad);
+  }).catch((err) => {
+    res.send(err);
+  });
 })
 
-// DELETE one ad
-router.delete('/:id', async function(req,res,next){
-  const ad = await Ad.deleteOne({_id : req.params.id});
-  //res.json(ad);
-});
+router.post('/reject', function(req,res,next){
+  Ad.deleteOne({_id:req.body._id}).then((result)=>{
+
+    res.send("delete")
+  })
+
+})
+
+router.post('/accept', function(req,res,next){
+  let ismember = false;
+  let perObj = {};
+  console.log(req.body)
+  Ad.find(function (err, ads) {
+    //console.log(user)
+    ads.forEach((ad) => {
+      if (ad._id.toString() === req.body._id) {
+        ismember = true;
+        perObj = ad;
+      }
+    });
+    if (ismember === true) {
+      Ad.findByIdAndUpdate(
+        perObj._id,
+        {
+          $set: {
+            status: "true",
+            _id: perObj._id,
+            name: perObj.name,
+            email: perObj.email,
+            file: perObj.file,
+            contents: perObj.contents,
+            title: perObj.title
+          },
+        },
+        (err, u) => {
+          res.send("success");
+        }
+      );
+      
+    }
+    if (ismember === false) {
+      res.send("no");
+    }
+  });
+
+})
+
+
 
 module.exports = router;

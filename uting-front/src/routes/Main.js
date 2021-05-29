@@ -17,6 +17,7 @@ import CollegeRanking from "../components/main/CollegeRanking.js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import renewImg from "../img/새로고침.svg";
+import Tutorial from "../components/main/Tutorial.js";
 
 import { useAppState } from "../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
@@ -45,7 +46,9 @@ const Main = () => {
   const toggleMakeMeetingBtn = (e) => setToggleMakeMeeting(!toggleMakeMeeting);
   const toggleGetorigin = (e) => setGetorigin(!getorigin);
   const [socketId, setSocketId] = useState("");
+  const [tutorialmodal, setTutorialModal] = useState(false);
 
+  const tutorialtoggle = () => setTutorialModal(!tutorialmodal);
   let sessionEmail = sessionStorage.getItem("email");
   let sessionUser = sessionStorage.getItem("nickname");
 
@@ -68,6 +71,8 @@ const Main = () => {
   useEffect(() => {}, [addEvent]);
 
   useEffect(() => {
+    setTutorialModal(true);
+
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
@@ -121,12 +126,8 @@ const Main = () => {
   let goRoom = async () => {
     let temp = {
       title: roomtitle,
-<<<<<<< Updated upstream
-    }
-=======
       flag: 2,
     };
->>>>>>> Stashed changes
 
     meetingManager.getAttendee = createGetAttendeeCallback(roomtitle);
 
@@ -185,19 +186,9 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
-<<<<<<< Updated upstream
-        {sessionEmail === "admin@ajou.ac.kr" ? (
-          <button onClick={gotoAdminPage}>관리자페이지</button>
-        ) : (
-          ""
-        )}
-=======
 
->>>>>>> Stashed changes
         <Profile />
       </div>
-
-
 
       <div className="mainBottom">
         <div className="CollegeRanking">
@@ -279,6 +270,14 @@ const Main = () => {
           checkGroup={checkGroup}
           checkAnother={checkAnother}
         />
+        <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
+          <ModalHeader style={{ marginLeft: "40%" }} toggle={tutorialtoggle}>
+            U-TING 메뉴얼
+          </ModalHeader>
+          <ModalBody>
+            <Tutorial></Tutorial>
+          </ModalBody>
+        </Modal>
         <ToastContainer />
       </div>
     </div>

@@ -11,6 +11,7 @@ import socketio from "socket.io-client";
 import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
+import { ConsoleLogger } from 'amazon-chime-sdk-js';
 let mannerColor;
 function mannerCredit(avgManner) {
     if (avgManner === 4.5) {
@@ -140,19 +141,22 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
             const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
 
-            let new_status = "대기";
-            if ((new_numOfMan + new_numOfWoman) === room.maxNum) {
-                new_status = "진행";
-            }
+            // let new_status = "대기";
+            // console.log(new_numOfMan, new_numOfWoman, room.maxNum * 2)
+            // if ((new_numOfMan + new_numOfWoman - room.maxNum * 2) === 0) {
+            //     console.log("아니 여기 왜 안들어가?")
+            //     new_status = "진행";
+            // }
             let data = {
                 title: room.title,
                 maxNum: Number(room.maxNum),
-                status: new_status,
+                status: "진행",
                 avgManner: avgManner.toFixed(3),
                 avgAge: avgAge,
                 numOfWoman: new_numOfWoman,
                 numOfMan: new_numOfMan,
                 groupmember: groupMembersInfo,
+                flag: 1,
             }
             //console.log(typeof data.groupmember)
             //const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
@@ -164,7 +168,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             updateNewParticipants_to_OriginParticipants(meetingRoomParticipants); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
 
             try {
-                const { JoinInfo } = await attendMeeting(data);
+                const { JoinInfo } = await fetchMeeting(data);
                 await meetingManager.join({
                     meetingInfo: JoinInfo.Meeting,
                     attendeeInfo: JoinInfo.Attendee

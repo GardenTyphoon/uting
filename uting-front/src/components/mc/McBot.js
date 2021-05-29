@@ -9,7 +9,6 @@ import playImg from "../../img/음악재생.svg";
 import pauseImg from "../../img/음악정지.png";
 import EarInMal from "./EarInMal";
 import King from "./King";
-
 import {
   Dropdown,
   DropdownToggle,
@@ -29,38 +28,28 @@ import {
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
 
-<<<<<<< Updated upstream
-const McBotContainer = styled.div`
-  width: 100vw;
-`;
-
-=======
->>>>>>> Stashed changes
 const Box = styled.div`
   border: 2px solid rgb(255, 255, 255);
   border-radius: 7px;
   margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-<<<<<<< Updated upstream
-  height: 200px;
-=======
->>>>>>> Stashed changes
+  height: 180px;
+  font-size: large;
+  font-weight: 500;
 `;
 
-const HashTag = styled.span`
-  background-color: #f6cdcf;
-  border-radius: 5px;
-  font-size: 18px;
+const HashTag = styled.button`
+  font-family: NanumSquare_acR;
+  background: transparent;
+  border: 0px;
+  font-size: medium;
   margin-left: 4%;
   padding-left: 1%;
   padding-right: 3%;
   padding-bottom: 1%;
   padding-top: 2%;
-  font-family: "Jua";
 `;
 const McBot = ({
   participantsSocketIdList,
@@ -231,7 +220,7 @@ const McBot = ({
       <Dropdown
         isOpen={dropdownOpen}
         toggle={toggle}
-        style={{ width: "160px", margin: "0px" }}
+        style={{ width: "90px", margin: "0px" }}
       >
         <DropdownToggle
           caret
@@ -239,9 +228,11 @@ const McBot = ({
             width: "15%",
             backgroundColor: "transparent",
             border: "0px",
+            outline: "none",
           }}
+          src={McBotImg}
         >
-          <img src={McBotImg} style={{ width: "160px" }} />
+          <img src={McBotImg} style={{ width: "120px", float: "left" }} />
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={(e) => FadeToggle(1)}>게임 추천</DropdownItem>
@@ -253,42 +244,51 @@ const McBot = ({
         </DropdownMenu>
       </Dropdown>
 
-      <Fade in={contentFade} tag="h5" className="mt-3">
+      <Fade in={contentFade}>
         <Box>
           <img
             onClick={(e) => back(e)}
             src={backImg}
-            style={{ width: "12%" }}
+            style={{
+              width: "12%",
+              float: "left",
+              margin: "2px",
+              marginRight: "120px",
+            }}
           ></img>
           {number === 1 ? (
             <>
               <img
                 onClick={(e) => getGame(e)}
                 src={renewImg}
-                style={{ width: "12%", marginLeft: "130px" }}
+                style={{ width: "12%" }}
               ></img>
             </>
           ) : number === 2 ? (
-            <>
-              <img
-                onClick={(e) => getTopic(e)}
-                src={renewImg}
-                style={{ width: "12%", marginLeft: "130px" }}
-              ></img>
-            </>
+            <img
+              onClick={(e) => getTopic(e)}
+              src={renewImg}
+              style={{ width: "12%" }}
+            ></img>
           ) : number === 3 ? (
             <div>
-              <div>
+              <div style={{ margin: "10px" }}>
                 <HashTag onClick={(e) => getMusicName(1)}>#신남</HashTag>
                 <HashTag onClick={(e) => getMusicName(2)}>#설렘</HashTag>
                 <HashTag onClick={(e) => getMusicName(3)}>#잔잔</HashTag>
               </div>
-              <div style={{ marginTop: "20%", marginLeft: "20%" }}>
+              <div style={{}}>
                 <span onClick={(e) => play()}>
-                  <img style={{ width: "30%" }} src={playImg}></img>
+                  <img
+                    style={{ width: "25%", margin: "10px" }}
+                    src={playImg}
+                  ></img>
                 </span>
                 <span onClick={(e) => pause()}>
-                  <img style={{ width: "30%" }} src={pauseImg}></img>
+                  <img
+                    style={{ width: "25%", margin: "10px" }}
+                    src={pauseImg}
+                  ></img>
                 </span>
               </div>
             </div>
@@ -296,8 +296,6 @@ const McBot = ({
             <div
               style={{
                 alignItems: "center",
-                marginTop: "10%",
-                marginLeft: "10%",
               }}
             >
               {gameNum === 0 ? (
@@ -358,10 +356,10 @@ const McBot = ({
           ) : (
             ""
           )}
-          <div style={{ marginTop: "50px", marginLeft: "50px" }}>{content}</div>
+          <div style={{ marginTop: "40px" }}>{content}</div>
         </Box>
       </Fade>
-      </div>
+    </div>
   );
 };
 export default McBot;
