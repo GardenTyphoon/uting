@@ -247,7 +247,7 @@ const Main = () => {
           </div>
         </div>
         <Groups groupSocket={(e) => groupSocket(e)} currentsocketId={socketId} checkGroup={checkGroup} checkAnother={checkAnother} />
-        <Modal style={{width:"auto"}} isOpen={tutorialmodal} toggle={tutorialtoggle} >
+        <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle} >
         <ModalHeader toggle={tutorialtoggle}>U-TING 메뉴얼</ModalHeader>
         <ModalBody >
           <Tutorial></Tutorial>
