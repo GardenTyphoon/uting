@@ -29,10 +29,13 @@ import {
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
 
+<<<<<<< Updated upstream
 const McBotContainer = styled.div`
   width: 100vw;
 `;
 
+=======
+>>>>>>> Stashed changes
 const Box = styled.div`
   border: 2px solid rgb(255, 255, 255);
   border-radius: 7px;
@@ -42,7 +45,10 @@ const Box = styled.div`
   padding-bottom: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
+<<<<<<< Updated upstream
   height: 200px;
+=======
+>>>>>>> Stashed changes
 `;
 
 const HashTag = styled.span`
@@ -66,6 +72,8 @@ const McBot = ({
   question,
   participantsForTurn,
   intervalFade,
+  role,
+  gameNum_2,
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [contentFade, setContentFade] = useState(false);
@@ -73,7 +81,7 @@ const McBot = ({
   const [content, setContent] = useState("");
   const [musicpath, setMusicpath] = useState("");
   const [gameStart, setGameStart] = useState(gameStartFlag);
-  const [gameNum, setGameNum] = useState(0);
+  const [gameNum, setGameNum] = useState(gameNum_2);
 
   const toggle = (e) => {
     setDropdownOpen((prevState) => !prevState);
@@ -163,17 +171,31 @@ const McBot = ({
   };
 
   useEffect(() => {
+    if (gameNum_2) {
+      setGameNum(gameNum_2);
+      //console.log("gameNum start~!~! : " + gameNum_2);
+    }
+  }, [gameNum_2]);
+
+  useEffect(() => {
     setGameStart(gameStartFlag);
-    if (gameStartFlag) {
+  }, [gameStartFlag]);
+
+  useEffect(() => {
+    if (gameNum === 1) {
       setContentFade(true);
       setNumber(4);
       setGameNum(1);
+    } else if (gameNum === 2) {
+      setContentFade(true);
+      setNumber(4);
+      setGameNum(2);
     } else {
       setContentFade(false);
       setNumber(0);
       setGameNum(0);
     }
-  }, [gameStartFlag]);
+  }, [gameNum]);
 
   useEffect(() => {
     if (intervalFade !== 0) {
@@ -205,7 +227,7 @@ const McBot = ({
   const toogleERR = () => setModal(!modal);
 
   return (
-    <McBotContainer>
+    <div>
       <Dropdown
         isOpen={dropdownOpen}
         toggle={toggle}
@@ -326,6 +348,7 @@ const McBot = ({
                     gameTurn={gameTurn}
                     question={question}
                     participantsForTurnSet={participantsForTurn}
+                    role={role}
                   />
                 </>
               ) : (
@@ -338,7 +361,7 @@ const McBot = ({
           <div style={{ marginTop: "50px", marginLeft: "50px" }}>{content}</div>
         </Box>
       </Fade>
-    </McBotContainer>
+      </div>
   );
 };
 export default McBot;
