@@ -423,7 +423,7 @@ const Room = () => {
           그래도 퇴장을 원하시면 나가기를 눌러주세요.
                 </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}></Button>{' '}
+          <Button color="primary" onClick={(e) => midLeave(e)}>나가기</Button>{' '}
           <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>취소</Button>
         </ModalFooter>
       </Modal>
