@@ -356,12 +356,12 @@ const EarInMal = ({
       </Modal>
       {!isGameStart ? (
         <>
-          <strong>귓속말게임</strong>
+          <strong style={{paddingLeft:"10%"}}>귓속말게임</strong>
           <div
             style={{
               fontSize: "medium",
               marginTop: "10%",
-              marginBottom: "10%",
+              marginBottom: "10%"
             }}
           >
             걸스데이 유라가 꼽은 '최고의 술자리 게임'
