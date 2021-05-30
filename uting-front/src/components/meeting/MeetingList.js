@@ -304,7 +304,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     useEffect(()=>{
        
-            setView(originList)
+            //setView(originList)
+            getMeetings();
         
     },[getorigin])
 
