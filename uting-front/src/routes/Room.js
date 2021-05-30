@@ -467,14 +467,12 @@ const Room = () => {
       <Modal isOpen={toggleMidLeave}>
         <ModalHeader>중도 퇴장</ModalHeader>
         <ModalBody>
-          중도 퇴장을 하시면 U COIN이 1 차감하게 됩니다. 그래도 퇴장을 원하시면
-          나가기를 눌러주세요.
+          <span style={{color:"red",fontWeight:"bold"}}>중도 퇴장</span>을 하시면 <span style={{fontWeight:"bold"}}>U COIN이 1 차감</span>하게 됩니다.<br/>
+          그래도 퇴장을 원하시면 <span style={{fontWeight:"bold"}}>나가기</span>를 눌러주세요.
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}></Button>{" "}
-          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>
-            취소
-          </Button>
+          <Button color="primary" onClick={(e) => midLeave(e)}>나가기</Button>{' '}
+          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>취소</Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={toggleReport}>
