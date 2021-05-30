@@ -276,6 +276,7 @@ app.io.on("connection", function (socket) {
     let data = {
       type: "gameStart",
       message: `호스트에의해 ${msg.gameName}이 시작합니다 ^_^`,
+      gameNum: msg.gameNum,
     };
     for (let i = 0; i < msg.socketIdList.length; i++) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
@@ -292,19 +293,30 @@ app.io.on("connection", function (socket) {
     }
   });
 
-  socket.on("newParticipants", function(msg){
+  socket.on("notifyRole", function (msg) {
     let data = {
-      type:"newParticipants"
+      type: "notifyRole",
+      message: `역할이 정해졌습니다. 카드를 확인해 보세요!~!`,
+      role: msg.role,
+    };
+
+    for (let i = 0; i < msg.socketIdList.length; i++) {
+      app.io.to(msg.socketIdList[i]).emit("room", data);
+    }
+  });
+
+  socket.on("newParticipants", function (msg) {
+    let data = {
+      type: "newParticipants",
     };
     for (let i = 0; i < msg.socketIdList.length; i++) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
     }
   });
-  socket.on("leaveGroup", function(msg){
-  
+  socket.on("leaveGroup", function (msg) {
     let data = {
-      type:"someoneLeaveGroup",
-      message:msg.leavingUsers+"님이 그룹을 나갔습니다."
+      type: "someoneLeaveGroup",
+      message: msg.leavingUsers + "님이 그룹을 나갔습니다.",
     };
     console.log(data);
     for (let i = 0; i < msg.socketIdList.length; i++) {

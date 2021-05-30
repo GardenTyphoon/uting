@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import socketio from "socket.io-client";
-import explain1 from "../../img/귓말겜1.png";
-import explain2 from "../../img/귓말겜2.png";
-import explain3 from "../../img/귓말겜3.png";
 import {
   Button,
   Input,
@@ -11,34 +8,8 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  UncontrolledCarousel,
-  Carousel,
-  CarouselItem,
-  CarouselControl,
-  CarouselIndicators,
-  CarouselCaption,
 } from "reactstrap";
 import "./EarInMal.css";
-
-const items = [
-  //for 설명서
-  {
-    src: explain1,
-    altText: "",
-    caption: "",
-  },
-  {
-    src: explain2,
-    altText: "2. 질문 응답",
-    caption: "",
-  },
-  {
-    src: explain3,
-    altText:
-      "3. 질문이 궁금한 사람은 술을 마시고 질문한 사람에게 질문을 물어 볼 수 있다.",
-    caption: "",
-  },
-];
 
 const EarInMal = ({
   participantsSocketIdList,
@@ -64,30 +35,10 @@ const EarInMal = ({
   const [flag, setFlag] = useState(false);
   const [giveTurnFlag, setGiveTurnFlag] = useState(false);
   const [toExplain, setToExplain] = useState(false);
-  const [explainIndex, setExplainIndex] = useState(0);
-  const [animating, setAnimating] = useState(false);
-
   var data;
   let toSendSckId;
   let toSckIndex;
   let currentUser = sessionStorage.getItem("nickname");
-
-  const next = () => {
-    if (animating) return;
-    const nextIndex = explainIndex === items.length - 1 ? 0 : explainIndex + 1;
-    setExplainIndex(nextIndex);
-  };
-  const previous = () => {
-    if (animating) return;
-    const nextIndex = explainIndex === 0 ? items.length - 1 : explainIndex - 1;
-    setExplainIndex(nextIndex);
-  };
-
-  const goToIndex = (newIndex) => {
-    if (animating) return;
-    setExplainIndex(newIndex);
-  };
-
   function getRandomInt(min, max) {
     //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
@@ -117,11 +68,7 @@ const EarInMal = ({
   }, [startButtonFade]);*/
 
   const globalizeGameStart = () => {
-    data = {
-      gameName: "귓속말게임",
-      socketIdList: participantsSocketIdList,
-      gameNum: 1,
-    };
+    data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
     const socket = socketio.connect("http://localhost:3001");
     socket.emit("gameStart", data);
   };
@@ -181,7 +128,7 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       remainParticipants: participantsForTurn,
     });
-    //.emit("notifyMember", { turnSocketId: toSendSckId });
+    socket.emit("notifyMember", { turnSocketId: toSendSckId });
   };
 
   useEffect(() => {
@@ -273,87 +220,33 @@ const EarInMal = ({
   };
 
   const explain = () => {
-    setToExplain(!toExplain);
+    setIsGameStart(true);
+    setToExplain(true);
   };
-
-  const slides = items.map((item, idx) => {
-    return (
-      <CarouselItem
-        className="custom-tag"
-        tag="div"
-        key={item.id}
-        onExiting={() => setAnimating(true)}
-        onExited={() => setAnimating(false)}
-      >
-        <img src={item.src} alt={item.altText} />
-        <br />
-        {idx === 0 ? (
-          <div style={{ textAlign: "left" }}>
-            <strong>1. (차례인 유저)질문상대 선택하고 질문하기</strong>
-            <div>
-              질문 예시 : 이상형이 누구에요?? 여기서 마음에 드는 사람 있어요??
-            </div>
-          </div>
-        ) : idx === 1 ? (
-          <div style={{ textAlign: "left" }}>
-            <strong>2. 질문 응답</strong>
-            <div>
-              질문을 받은 유저는 질문에 해당하는 유저를 고르면 모든 유저에게
-              응답이 알려진다.
-            </div>
-          </div>
-        ) : (
-          <div style={{ textAlign: "left" }}>
-            <strong>3. 질문 알려주기</strong>
-            <div>
-              질문이 궁금한 사람은 술을 마시고 질문한 사람에게 질문을 물어 볼 수
-              있다.
-            </div>
-          </div>
-        )}
-      </CarouselItem>
-    );
-  });
 
   return (
     <div className="EarInMal">
-      {console.log("pariticipants : ")}
-      {console.log(participants)}
       <Modal isOpen={toExplain} toggle={explain}>
-        <ModalHeader toggle={explain}>귓속말 게임</ModalHeader>
-        <ModalBody style={{ textAlign: "center" }}>
-          <style>
-            {`.custom-tag {
-              max-width: 100%;
-              height: 250px;
-              background: white;
-            }`}
-          </style>
-          <Carousel activeIndex={explainIndex} next={next} previous={previous}>
-            <CarouselIndicators
-              items={items}
-              activeIndex={explainIndex}
-              onClickHandler={goToIndex}
-            />
-            {slides}
-            <CarouselControl
-              direction="prev"
-              directionText="Previous"
-              onClickHandler={previous}
-            />
-            <CarouselControl
-              direction="next"
-              directionText="Next"
-              onClickHandler={next}
-            />
-          </Carousel>
+        <ModalHeader toggle={explain}>Modal title</ModalHeader>
+        <ModalBody>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
         </ModalBody>
         <ModalFooter>
+          <Button color="primary" onClick={explain}>
+            Do Something
+          </Button>
           <Button color="secondary" onClick={explain}>
-            확인
+            Cancel
           </Button>
         </ModalFooter>
       </Modal>
+
       {!isGameStart ? (
         <>
           <strong>귓속말게임</strong>

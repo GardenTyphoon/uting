@@ -212,9 +212,11 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
         
         <div>
             <Modal isOpen={toggleEndMeetingBtn}>
-                <ModalBody>
-                    미팅 종료 버튼을 누르셨습니다.
-                    미팅 종료를 위한 투표를 진행하시겠습니까?
+                <ModalHeader>
+                    미팅 종료 투표
+                </ModalHeader>
+                <ModalBody className="meetingend">
+                    <span style={{color:"red",fontWeight:"bold"}}>미팅 종료</span>를 위한 투표를 진행하시겠습니까?
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={(e) => onClickStartVoteBtn(e)}>투표하기</Button>{' '}
