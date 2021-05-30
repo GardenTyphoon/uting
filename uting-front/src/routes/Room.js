@@ -492,7 +492,7 @@ const Room = () => {
           </Input>
           </div>
           <div>
-          <textarea style={{width:"465px",marginTop:"2%"}}
+          <textarea style={{width:"465px",marginTop:"2%",height:"150px"}}
             name="reportContent"
             placeholder="신고 사유를 적어주세요."
           ></textarea></div>
