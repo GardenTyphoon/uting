@@ -12,6 +12,7 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
+  Input,
 } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
@@ -478,7 +479,8 @@ const Room = () => {
       <Modal isOpen={toggleReport}>
         <ModalHeader>사용자 신고</ModalHeader>
         <ModalBody>
-          <select name="reportNickname">
+          <div>
+          <Input type="select"  name="reportNickname">
             <option value="default" selected>
               신고 할 닉네임을 선택해주세요.
             </option>
@@ -487,11 +489,13 @@ const Room = () => {
                 return <option value={mem}>{mem}</option>;
               }
             })}
-          </select>
-          <textarea
+          </Input>
+          </div>
+          <div>
+          <textarea style={{width:"465px",marginTop:"2%"}}
             name="reportContent"
             placeholder="신고 사유를 적어주세요."
-          ></textarea>
+          ></textarea></div>
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => submitReport()}>
