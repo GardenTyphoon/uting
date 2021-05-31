@@ -73,6 +73,8 @@ const Room = () => {
   const [role, setRole] = useState();
   const [gameNum, setGameNum] = useState();
   const [toggleHelp, setToggleHelp] = useState(false);
+  const [chimeinfo, setChimeinfo] = useState([]);
+
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -120,19 +122,20 @@ const Room = () => {
 
     const _id = meetingId;
     if (meetingId !== "") {
-      console.log("meetingId", meetingId);
       const res = await axios.post(
         "http://localhost:3001/meetings/getparticipants",
         { _id: meetingId }
       );
       let par = [];
-      for (let i = 0; i < res.data.length; i++) {
-        par.push(res.data[i].nickname);
+      for (let i = 0; i < (res.data.users).length; i++) {
+        par.push(res.data.users[i].nickname);
+        setChimeinfo()
       }
-      setMeetingMembers(res.data);
-      console.log(par);
+      console.log("이거", res.data.chime_info)
+      setMeetingMembers(res.data.users);
       setMeeting_id(meetingId);
       setParticipants(par);
+      setChimeinfo(res.data.chime_info)
       setReady(true);
     }
   };
@@ -348,7 +351,7 @@ const Room = () => {
           justifyContent: "space-between",
         }}
       >
-        <MeetingRoom />
+        <MeetingRoom info={chimeinfo}/>
         <MeetingControls />
       </div>
       <div
