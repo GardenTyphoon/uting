@@ -2,29 +2,63 @@
   font-family: "NanumSquare_acR";
   src: url("../ttf/NanumSquare_acR.ttf");
 }
+/*
+background-image: url("../img/Intro이미지.png");
+*/
+.signinclass{
+  margin-bottom: 20%;
+}
+.intrologo{
+  
+  margin-left: 90%;
+}
+.intromessage{
+  
+  margin-left: 50%;
+  margin-top: 5%;
+  margin-right: 10%;
+}
+.Logoutcontainer{
+    background-color:white;
+    display:flex;
+    align-items: center;
+    font-family : NanumSquare_acR;
+    border-radius: 20px;
+    margin-top: 40%;
+    padding-top: 60px;
+    padding-bottom: 60px;
 
+}
 .IntroContainer {
   background-color: #f6cdcd;
-
-  background-size: cover;
-  height: 100vh;
-  width: 100vw;
+  border: 5px black;
+  margin-right: 250px;
+  margin-left: 250px;
+  margin-top: 150px;
+  border-radius: 10px;
+  margin-bottom: 150px;
+  padding-right: 5%;
 }
 .LogInOutBtn {
-  position: absolute;
-  top: 5%;
-  left: 90%;
-  width: 100px;
-  height: 30px;
-  font-family: NanumSquare_acR;
-  border-radius: 10px;
-  background-color: white;
-  color: #e18a88;
-  border: none;
+    width:100px;
+    border:none;
+    color:rgb(247, 247, 247);
+    background-color: #da6a6a;
+    border-radius: 10px;
+    padding:20px;
+    margin-left: 13%;
+
+}
+.logoutname{
+  margin-left: 13%;
+  font-weight: bold;
+  color: #f18a8a;
+  font-size: 20px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .MiddleBtn {
   position: absolute;
-  left: 45%;
+  left: 30%;
   top: 60%;
   width: 200px;
   font-family: NanumSquare_acR;
@@ -32,7 +66,8 @@
   color: white;
   border: none;
   padding: 10px;
-  background: linear-gradient(to bottom, #ff9a51, #ff6994);
+  background: linear-gradient(to bottom, #e7a97c, #ff6994);
+  margin-top: 35%;
 }
 .diva{
   float: right;
@@ -47,3 +82,16 @@
 }
 .divad:visited { color: black; text-decoration: none;}
 .divad:hover { color: black; text-decoration: none;}
+
+.signinclass{
+  margin-left: 40%;
+  padding-bottom: 20%;
+ 
+}
+.col1{
+  margin-top: 35%;
+  width: 180px;
+}
+.col2{
+  
+}
