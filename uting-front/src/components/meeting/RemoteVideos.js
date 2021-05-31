@@ -2,13 +2,17 @@ import React, { memo, useState } from 'react';
 import camera_on from '../../img/cam_on.png';
 import camera_off from '../../img/cam_off.png';
 import { useAppState } from '../../providers/AppStateProvider';
-
+import styles from './RemoteVideos.css';
 import {  
   useRemoteVideoTileState, 
   RemoteVideo, 
   useRosterState,
   Grid,
 } from 'amazon-chime-sdk-component-library-react'
+import styled from 'styled-components';
+
+
+
 const my_style = {
   width: "auto",
   height: "auto",
@@ -18,6 +22,11 @@ const temp = {
   border: "15px solid white",
   borderRadius: "30px"
 }
+const info = {
+  fontFamily: "NanumSquare_acR",
+  textAlign: "center"
+}
+
 
 export const RemoteVideos = (props) => {
   const { roster } = useRosterState();
@@ -26,14 +35,18 @@ export const RemoteVideos = (props) => {
 
 
 
-
   return (
     <>
       {tiles.map((tileId) => {
         const attendee = roster[tileIdToAttendeeId[tileId]] || {};
-        const { name } = attendee;
-        console.log(props)
+        let name = "";
+        //console.log(props.info.info[])
         console.log(attendee)
+        console.log(props.info.info)
+        for (let property in props.info.info) {
+          if(attendee.chimeAttendeeId == property) {name = props.info.info[property]; break;}
+        }
+
         return (
           <div style={temp}>
           <Grid                
@@ -44,9 +57,22 @@ export const RemoteVideos = (props) => {
 
             
             >
-            <span  onClick={() => setremoteView(!remoteView)}>{remoteView ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>} </span>
-            {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} name={name} /> : ""}
             
+              <Grid
+                responsive
+                gridTemplateRows="repeat(1, 2vw)"
+                gridTemplateColumns="repeat(3, 33%)"
+                gridAutoFlow="dense"
+                color="white">
+                  <div onClick={() => setremoteView(!remoteView)}>
+                    {remoteView ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>}
+                  </div>
+                  <div style={info}>{name}</div>
+              </Grid>
+              
+              
+              
+            {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} /> : ""}
           </Grid>
           
           </div>

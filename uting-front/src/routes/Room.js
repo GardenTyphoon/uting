@@ -122,7 +122,6 @@ const Room = () => {
 
     const _id = meetingId;
     if (meetingId !== "") {
-      console.log("meetingId", meetingId);
       const res = await axios.post(
         "http://localhost:3001/meetings/getparticipants",
         { _id: meetingId }
@@ -132,6 +131,7 @@ const Room = () => {
         par.push(res.data.users[i].nickname);
         setChimeinfo()
       }
+      console.log("이거", res.data.chime_info)
       setMeetingMembers(res.data.users);
       setMeeting_id(meetingId);
       setParticipants(par);
