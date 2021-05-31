@@ -61,7 +61,7 @@ const Intro = () => {
 
   return (
     <div className="IntroContainer">
-      {isLoggedIn === false ? (
+      
         <Row className="signinclass">
           <Col>
           <div className="col1">
@@ -71,23 +71,26 @@ const Intro = () => {
            </Col>
            <Col>
            <div className="col2">
-           <SignIn />
-           <div className="createaccount">
+           {isLoggedIn === false ?<><SignIn /><div className="createaccount">
           <button className="MiddleBtn" onClick={onClick}>
             계정 만들기
           </button>
-          </div>
+          </div></>:<div>
+            <div className="Logoutcontainer">
+              <span className="logoutname">{sessionStorage.getItem("nickname")}님 반갑습니다.</span>
+            <button onClick={(e)=>logout(e)}  className="LogInOutBtn">Logout</button></div>
+            <button className="MiddleBtn" onClick={goMain}>
+            미팅 즐기러 가기
+          </button>
+        </div>}
+           
+           
           </div>
           </Col>
         </Row>
-      ) : (
-        <div>
-          <button onClick={(e)=>logout(e)} className="LogInOutBtn">logout</button>
-          <button className="MiddleBtn" onClick={goMain}>
-            미팅 즐기러 가기
-          </button>
-        </div>
-      )}
+ 
+        
+  
       
       <Container>
        
