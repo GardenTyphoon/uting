@@ -60,18 +60,12 @@ const Intro = () => {
   return (
     <div className="IntroContainer">
       {isLoggedIn === false ? (
-        <div >
-          <button
-            className="LogInOutBtn"
-            onClick={(e) => {
-              toggleSignInBtn(e);
-            }}
-          >
-            로그인
-          </button>
-          <button className="MiddleBtn" onClick={onClick}>
-            계정 만들기
-          </button>
+        <div className="signinclass">
+           <SignIn />
+           <span style={{marginLeft:"10%"}}>UTING 회원이 아니신가요 ? <Link  to="/signUp">
+            <span className="MiddleBtn">가입하기</span>
+          </Link></span>
+          
         </div>
       ) : (
         <div>
@@ -83,27 +77,7 @@ const Intro = () => {
       )}
       
       <Container>
-        <Modal isOpen={toggleSignIn} style={{ width: "50%" , maxWidth:"350px"}}>
-          <ModalBody isOpen={toggleSignIn}>
-            <button
-              onClick={(e) => {
-                toggleSignInBtn(e);
-              }}
-              style={{
-                background: "transparent",
-                border: "none",
-                position: "absolute",
-                left: "90%",
-              }}
-            >
-              X
-            </button>
-
-            <Row>
-              <SignIn />
-            </Row>
-          </ModalBody>
-        </Modal>
+       
       </Container>
       <div className="diva" ><Link className="divad" to="/ad">광고 문의</Link></div>
     </div>
