@@ -68,7 +68,8 @@ const GroupTitle = styled.div`
   font-family: NanumSquare_acR;
   font-size: medium;
   color: #896e6e;
-  margin-bottom: 5%;
+  margin-top:3%;
+  margin-bottom: 8%;
 `;
 
 const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
