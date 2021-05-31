@@ -15,7 +15,7 @@ import SignIn from "../components/user/SignIn";
 import Main from "./Main";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
-
+import introLog from '../img/인트로유팅로고.png'
 const Intro = () => {
   const history = useHistory();
   const [toggleSignIn, setToggleSignIn] = useState(false);
@@ -61,11 +61,13 @@ const Intro = () => {
     <div className="IntroContainer">
       {isLoggedIn === false ? (
         <div className="signinclass">
+          <img src={introLog}/>
+          <span>아직도 만나서 미팅해? 우린 안 만나도 미팅해 !</span>
            <SignIn />
-           <span style={{marginLeft:"10%"}}>UTING 회원이 아니신가요 ? <Link  to="/signUp">
-            <span className="MiddleBtn">가입하기</span>
-          </Link></span>
-          
+           <span></span>
+          <button className="MiddleBtn" onClick={onClick}>
+            계정 만들기
+          </button>
         </div>
       ) : (
         <div>
