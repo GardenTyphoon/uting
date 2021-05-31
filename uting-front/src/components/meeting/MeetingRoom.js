@@ -20,20 +20,21 @@ import {
 
 import LocalVideo from './LocalVideo'
 import RemoteVideos from './RemoteVideos';
-import MeetingDetails from './MeetingDetails';
-import EndMeetingControl from './EndMeetingControl';
+
 
 const temp = {
     background: "white",
     border: "15px solid white",
     borderRadius: "30px"
 }
+
 export default function Rooms(props) {
     const history = useHistory();
     const dispatch = useNotificationDispatch();
     const meetingStatus = useMeetingStatus();
     const [localView, setlocalView] = useState(false);
-    console.log(props)
+    const [maxNum, setmaxNum] = useState();
+
     useEffect(() => {
         if (meetingStatus === MeetingStatus.Ended) {
             console.log('[useMeetingEndRedirect] Meeting ended');
@@ -50,24 +51,24 @@ export default function Rooms(props) {
         }
     }, [meetingStatus]);
 
+
+
     return (
         <div>
             <UserActivityProvider>
-                <Grid
+            <Grid
                 responsive
                 gridGap="10px"
-                gridTemplateColumns="repeat(4, 18vw)"
                 gridTemplateRows="repeat(2, 18vw)"
+                gridTemplateColumns="repeat(4, 18vw)"
                 gridAutoFlow="dense"
-                
-                
                 >
-       
-                    <LocalVideo />    
-                    <RemoteVideos info={props} />
-                    
-                </Grid>
+                <LocalVideo />
+                <RemoteVideos info={props} max={maxNum}/>
+                
+            </Grid>
             </UserActivityProvider>
         </div>
-    );
+    )
+    
 }

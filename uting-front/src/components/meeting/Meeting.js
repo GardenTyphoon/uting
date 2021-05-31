@@ -177,7 +177,9 @@ const Meeting = ({ checkFunc }) => {
                             socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
                         }
         
-                        history.push('/deviceSetup');
+                        await meetingManager.start();
+
+                        history.push(`/room/${roomtitle}`);
                     } catch (error) {
                         console.log(error);
                     }
