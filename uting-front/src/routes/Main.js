@@ -278,7 +278,6 @@ const Main = () => {
             <Tutorial></Tutorial>
           </ModalBody>
         </Modal>
-        <ToastContainer />
       </div>
     </div>
   );
