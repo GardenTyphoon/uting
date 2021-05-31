@@ -7,6 +7,10 @@ const { User } = require("../model");
 let nodemailer = require("nodemailer");
 let smtpTransport = require("nodemailer-smtp-transport");
 const { exec } = require("child_process");
+const crypto = require("crypto");
+const config = require("../config");
+const jwt = require("jsonwebtoken");
+const { rejects } = require("assert");
 
 fs.readdir("uploads", (error) => {
   // uploads 폴더 없으면 생성
@@ -61,20 +65,24 @@ router.post("/sendEmail", async function (req, res, next) {
 });
 
 router.post("/signup", function (req, res, next) {
+  const encrypted = crypto
+    .createHmac("sha1", config.secret)
+    .update(req.body.password)
+    .digest("base64");
   const user = new User({
     name: req.body.name,
     nickname: req.body.nickname,
     gender: req.body.gender,
     birth: req.body.birth,
     email: req.body.email,
-    password: req.body.password,
+    password: encrypted,
     phone: req.body.phone,
     imgURL: "",
     mannerCredit: 3.5,
     status: false,
     socketid: "",
     ucoin: Number(0),
-    beReported:Number(0),
+    beReported: Number(0),
   });
 
   user.save((err) => {
@@ -83,53 +91,74 @@ router.post("/signup", function (req, res, next) {
 });
 
 router.post("/signin", function (req, res, next) {
-  let ismember = false;
+  const { email, password } = req.body;
+  const secret = req.app.get("jwt-secret");
   let perObj = {};
 
-  User.find(function (err, user) {
-    user.forEach((per) => {
-      if (per.email === req.body.email && per.password === req.body.password) {
-        ismember = true;
-        perObj = per;
-      }
-    });
-    if (ismember === true) {
-      console.log(perObj._id);
-      if(perObj.beReported>=3){
-        res.send("hell")
-      }
-      else{
-      User.findByIdAndUpdate(
-        perObj._id,
-        {
-          $set: {
-            status: true,
-            _id: perObj._id,
-            name: perObj.name,
-            nickname: perObj.nickname,
-            gender: perObj.gender,
-            birth: perObj.birth,
-            email: perObj.email,
-            password: perObj.password,
-            phone: perObj.phone,
-            imgURL: perObj.imgURL,
-            mannerCredit: perObj.mannerCredit,
-            socketid: perObj.socketid,
-            ucoin: perObj.ucoin,
-            beReported:perObj.beReported
-          },
-        },
-        (err, u) => {
-          res.send(perObj);
+  const check = (user) => {
+    if (!user) {
+      // user does not exist
+      throw new Error("login failed");
+    } else {
+      // user exists, check the password
+      if (user.verify(password)) {
+        if (user.beReported >= 3) {
+          res.send("hell");
+        } else {
+          // create a promise that generates jwt asynchronously
+          const p = new Promise((resolve, reject) => {
+            jwt.sign(
+              {
+                _id: user._id,
+                name: user.name,
+                nickname: user.nickname,
+                gender: user.gender,
+                birth: user.birth,
+                email: user.email,
+                phone: user.phone,
+                imgURL: user.imgURL,
+                mannerCredit: user.mannerCredit,
+                socketid: user.socketid,
+                ucoin: user.ucoin,
+                beReported: user.beReported,
+              },
+              secret,
+              {
+                expiresIn: "7d",
+                issuer: "uting.com",
+                subject: "userInfo",
+              },
+              (err, token) => {
+                if (err) {
+                  console.log(err);
+                  reject(err);
+                }
+                resolve(token);
+              }
+            );
+          });
+          return p;
         }
-      );
+      } else {
+        throw new Error("login failed");
       }
-      //res.send(per)
     }
-    if (ismember === false) {
-      res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
-    }
-  });
+  };
+
+  const respond = (token) => {
+    console.log(token);
+    res.json({
+      message: "logged in successfully",
+      token,
+    });
+  };
+
+  const onError = (error) => {
+    res.status(200).json({
+      message: error.message,
+    });
+  };
+  User.findOneByEmail(email).then(check).then(respond).catch(onError);
 });
 
 router.post("/checknickname", function (req, res, next) {
@@ -274,13 +303,12 @@ router.post("/savesocketid", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
-            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: req.body.currentSocketId.id,
-            beReported:perObj.beReported
+            beReported: perObj.beReported,
           },
         },
         (err, u) => {
@@ -318,13 +346,12 @@ router.post("/logout", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
-            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
-            beReported:perObj.beReported
+            beReported: perObj.beReported,
           },
         },
         (err, u) => {
@@ -360,22 +387,20 @@ router.post("/preMemSocketid", function (req, res, next) {
   }
 });
 
-router.post("/cutUcoin",function(req,res,next){
-  let perObj={};
+router.post("/cutUcoin", function (req, res, next) {
+  let perObj = {};
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {
-        if (req.body.currentUser === per.nickname) {
-          ismember = true;
-          console.log("-----------------")
-          perObj=per;
-          //perArr.push(per)
-          console.log("-----------------")
-        }
-    
+      if (req.body.currentUser === per.nickname) {
+        ismember = true;
+        console.log("-----------------");
+        perObj = per;
+        //perArr.push(per)
+        console.log("-----------------");
+      }
     });
-    if(ismember===true){
-
+    if (ismember === true) {
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -387,37 +412,33 @@ router.post("/cutUcoin",function(req,res,next){
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
-            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
-            ucoin: perObj.ucoin-1,
+            ucoin: perObj.ucoin - 1,
             socketid: perObj.socketid,
-            beReported:perObj.beReported
+            beReported: perObj.beReported,
           },
         },
         (err, u) => {
           res.send("success");
         }
       );
-
     }
-    
   });
-})
+});
 
-router.post("/manner",function(req,res,next){
-  let perObj={};
+router.post("/manner", function (req, res, next) {
+  let perObj = {};
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {
-        if (req.body.name === per.nickname) {
-          ismember = true;
-          perObj=per;
-        }
-    
+      if (req.body.name === per.nickname) {
+        ismember = true;
+        perObj = per;
+      }
     });
-    if(ismember===true){
+    if (ismember === true) {
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -429,38 +450,34 @@ router.post("/manner",function(req,res,next){
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
-            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
-            mannerCredit: ((perObj.mannerCredit + req.body.manner)/2),
+            mannerCredit: (perObj.mannerCredit + req.body.manner) / 2,
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
-            beReported:perObj.beReported
+            beReported: perObj.beReported,
           },
         },
         (err, u) => {
           res.send("success");
         }
       );
-
     }
-    
   });
-})
+});
 
-router.post('/report',function(req,res,next){
-  console.log(req.body.nickname)
-  let perObj={};
+router.post("/report", function (req, res, next) {
+  console.log(req.body.nickname);
+  let perObj = {};
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {
-        if (req.body.nickname === per.nickname) {
-          ismember = true;
-          perObj=per;
-        }
-    
+      if (req.body.nickname === per.nickname) {
+        ismember = true;
+        perObj = per;
+      }
     });
-    if(ismember===true){
+    if (ismember === true) {
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -472,26 +489,21 @@ router.post('/report',function(req,res,next){
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
-            password: perObj.password,
+
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
-            beReported:perObj.beReported+1
+            beReported: perObj.beReported + 1,
           },
         },
         (err, u) => {
           res.send("success");
         }
       );
-
     }
-    
   });
-})
-
-
-
+});
 
 module.exports = router;

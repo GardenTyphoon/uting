@@ -12,7 +12,7 @@ var groupsRouter = require("./routes/groups");
 var adsRouter = require("./routes/ads");
 var reportsRouter = require("./routes/reports");
 var mcsRouter = require("./routes/mcs");
-
+var config = require("./config");
 var clients = [];
 var members = [];
 // PORT => 3001
@@ -31,6 +31,9 @@ mongoose
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+
+// set jwt secret hash
+app.set("jwt-secret", config.secret);
 
 app.use(cors());
 
