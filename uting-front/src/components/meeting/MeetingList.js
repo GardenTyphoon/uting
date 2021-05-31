@@ -156,6 +156,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 numOfWoman: new_numOfWoman,
                 numOfMan: new_numOfMan,
                 groupmember: groupMembersInfo,
+                session: sessionUser,
                 flag: 1,
             }
             //console.log(typeof data.groupmember)

@@ -1,0 +1,10 @@
+@font-face {
+    font-family: "NanumSquare_acR";
+    src: url("../../ttf/NanumSquare_acR.ttf");
+}
+
+.remoteinfo{
+    font-family: NanumSquare_acR;
+    font-size: 50;
+    background-color: red;
+}

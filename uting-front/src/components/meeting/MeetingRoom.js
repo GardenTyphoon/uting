@@ -28,12 +28,12 @@ const temp = {
     border: "15px solid white",
     borderRadius: "30px"
 }
-export default function Rooms() {
+export default function Rooms(props) {
     const history = useHistory();
     const dispatch = useNotificationDispatch();
     const meetingStatus = useMeetingStatus();
     const [localView, setlocalView] = useState(false);
-
+    console.log(props)
     useEffect(() => {
         if (meetingStatus === MeetingStatus.Ended) {
             console.log('[useMeetingEndRedirect] Meeting ended');
@@ -64,7 +64,7 @@ export default function Rooms() {
                 >
        
                     <LocalVideo />    
-                    <RemoteVideos />
+                    <RemoteVideos info={props} />
                     
                 </Grid>
             </UserActivityProvider>

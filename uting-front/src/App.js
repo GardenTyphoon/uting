@@ -14,13 +14,14 @@ import meetingConfig from './meetingConfig';
 import { MeetingProvider } from 'amazon-chime-sdk-component-library-react';
 import { AppStateProvider } from './providers/AppStateProvider';
 import { NavigationProvider } from './providers/NavigationProvider';
-
+import { ToastContainer, toast } from "react-toastify";
 function App() {
   return (
     <div>
       <BrowserRouter>
         <AppStateProvider>
           <MeetingProvider {...meetingConfig}>
+          <ToastContainer />
             <NavigationProvider>
               <Switch>
                 <Route exact path="/" component={Intro}></Route>

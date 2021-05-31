@@ -126,6 +126,7 @@ const Main = () => {
   let goRoom = async () => {
     let temp = {
       title: roomtitle,
+      session: sessionUser,
       flag: 2,
     };
 
@@ -278,7 +279,6 @@ const Main = () => {
             <Tutorial></Tutorial>
           </ModalBody>
         </Modal>
-        <ToastContainer />
       </div>
     </div>
   );
