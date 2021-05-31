@@ -181,8 +181,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                     console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
+                await meetingManager.start();
 
-                history.push('/deviceSetup');
+                history.push(`/room/${room.title}`);
             } catch (error) {
                 console.log(error);
             }
