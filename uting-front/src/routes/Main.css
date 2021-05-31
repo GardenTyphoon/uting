@@ -69,3 +69,7 @@
   margin-left:5vw;
   margin-right: 5vw;
 }
+.renewbtn{
+  border: 0;
+  background-color: rgb(255,228,225);
+}

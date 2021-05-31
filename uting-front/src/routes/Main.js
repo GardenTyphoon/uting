@@ -217,11 +217,11 @@ const Main = () => {
                 filterAge={(e) => filterAge(e)}
               />
             </div>
-            <img
+            <button className="renewbtn"  style={{ width: "5%", marginRight: "3%" }}  onClick={(e) => toggleGetorigin(e)}>
+              <img
               src={renewImg}
-              style={{ width: "5%", marginRight: "3%" }}
-              onClick={(e) => toggleGetorigin(e)}
-            />
+            /></button>
+            
 
             <button
               className="makeRoomBtn"
