@@ -30,7 +30,7 @@ import help from "../img/help.png";
 import McBotTutorial from "../components/mc/McBotTutorial";
 const McBotContainer = styled.div`
   width: 250px;
-  height: 390px;
+  height: 455px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
@@ -74,6 +74,7 @@ const Room = () => {
   const [gameNum, setGameNum] = useState();
   const [toggleHelp, setToggleHelp] = useState(false);
   const [chimeinfo, setChimeinfo] = useState([]);
+  const [maxNum, setmaxNum] = useState();
 
   let putSocketid = async (e) => {
     let data = {
@@ -135,7 +136,9 @@ const Room = () => {
       setMeetingMembers(res.data.users);
       setMeeting_id(meetingId);
       setParticipants(par);
-      setChimeinfo(res.data.chime_info)
+      setChimeinfo(res.data.chime_info);
+      console.log(res.data.maxNum)
+      setmaxNum(res.data.maxNum);
       setReady(true);
     }
   };
@@ -339,8 +342,10 @@ const Room = () => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        overflow: "hidden",
       }}
     >
+
       <div
         style={{
           width: "75%",
@@ -348,80 +353,23 @@ const Room = () => {
           float: "left",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
         }}
       >
-        <MeetingRoom info={chimeinfo}/>
-        <MeetingControls />
+        <MeetingRoom info={chimeinfo} max={maxNum}/>
+        <div style={{height: "15%"}}></div> {/* 이걸로 조정해뒀음 */}
+        <MeetingControls participantss={participants}/>
       </div>
       <div
         style={{
           width: "20%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-evenly",
+          alignItems: "flex-end",
         }}
       >
-        <div>
-          <button
-            onClick={() => setToggleReport(!toggleReport)}
-            style={{
-              borderStyle: "none",
-              background: "transparent",
-              position: "relative",
-              left: "90px",
-              bottom: "10px",
-            }}
-          >
-            <img src={reportImg} width="30" />
-          </button>
-        </div>
-        <ReactAudioPlayer
-          style={{ width: "250px" }}
-          id="audio"
-          src={musicsrc}
-          controls
-        />
-        <McBotContainer>
-          <button
-            onClick={() => setToggleHelp(!toggleHelp)}
-            style={{
-              borderStyle: "none",
-              background: "transparent",
-              position: "relative",
-              left: "90px",
-            }}
-          >
-            <img src={help} width="25" />
-          </button>
-          {intervalMessage}
-          <McBot
-            participantsSocketIdList={participantsSocketId}
-            currentSocketId={socketId}
-            participants={participants}
-            respondFlag={respondFlag}
-            gameStartFlag={gameStartFlag}
-            gameEndFlag={gameEndFlag}
-            gameTurn={gameTurn}
-            question={question}
-            participantsForTurn={participantsForTurn}
-            intervalFade={intervalFade}
-            role={role}
-            gameNum_2={gameNum}
-          ></McBot>
-        </McBotContainer>
-
-        <Vote
-          ref={voteRef}
-          participantsSocketIdList={participantsSocketId}
-          participants={participants}
-          meeting_id={meeting_id}
-          meetingMembers={meetingMembers}
-        ></Vote>
-
+        
         <Dropdown
-          direction="up"
+          direction="down"
           isOpen={endMeetingBtn}
           toggle={() => {
             setEndMeetingBtn(!endMeetingBtn);
@@ -450,9 +398,58 @@ const Room = () => {
             <DropdownItem onClick={() => midLeaveBtn()}>중도 퇴장</DropdownItem>
           </DropdownMenu>
         </Dropdown>
-      </div>
-      
+        <Vote
+          ref={voteRef}
+          participantsSocketIdList={participantsSocketId}
+          participants={participants}
+          meeting_id={meeting_id}
+          meetingMembers={meetingMembers}
+        ></Vote>
+        
+        
+        <div style={{height: "43%"}}></div> {/* 이걸로 조정해뒀음 */}
 
+
+        <McBotContainer>
+          <button
+            onClick={() => setToggleHelp(!toggleHelp)}
+            style={{
+              borderStyle: "none",
+              background: "transparent",
+              position: "relative",
+              left: "90px",
+            }}
+          > 
+            <img src={help} width="25" />
+          </button>
+          {intervalMessage}
+          
+          <McBot
+            participantsSocketIdList={participantsSocketId}
+            currentSocketId={socketId}
+            participants={participants}
+            respondFlag={respondFlag}
+            gameStartFlag={gameStartFlag}
+            gameEndFlag={gameEndFlag}
+            gameTurn={gameTurn}
+            question={question}
+            participantsForTurn={participantsForTurn}
+            intervalFade={intervalFade}
+            role={role}
+            gameNum_2={gameNum}
+          ></McBot>
+        <div>
+        <ReactAudioPlayer
+          style={{width: "230px"}}
+          id="audio"
+          src={musicsrc}
+          controls
+        />
+         </div>
+        </McBotContainer>
+       
+      </div>
+    
       <Modal isOpen={!ready}>
         <ModalBody
           style={{
@@ -479,39 +476,7 @@ const Room = () => {
           <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>취소</Button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={toggleReport}>
-        <ModalHeader>사용자 신고</ModalHeader>
-        <ModalBody>
-          <div>
-          <Input type="select"  name="reportNickname">
-            <option value="default" selected>
-              신고 할 닉네임을 선택해주세요.
-            </option>
-            {participants.map((mem) => {
-              if (mem != sessionStorage.getItem("nickname")) {
-                return <option value={mem}>{mem}</option>;
-              }
-            })}
-          </Input>
-          </div>
-          <div>
-          <textarea style={{width:"465px",marginTop:"2%",height:"150px"}}
-            name="reportContent"
-            placeholder="신고 사유를 적어주세요."
-          ></textarea></div>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => submitReport()}>
-            신고하기
-          </Button>{" "}
-          <Button
-            color="secondary"
-            onClick={() => setToggleReport(!toggleReport)}
-          >
-            취소
-          </Button>
-        </ModalFooter>
-      </Modal>
+
 
       <Modal size="lg" isOpen={toggleHelp}>
         <ModalHeader>mc봇 사용법</ModalHeader>

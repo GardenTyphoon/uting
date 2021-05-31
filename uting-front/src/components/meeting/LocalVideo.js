@@ -18,11 +18,16 @@ const temp = {
   border: "15px solid white",
   borderRadius: "30px"
 }
+const info = {
+  fontFamily: "NanumSquare_acR",
+  textAlign: "center"
+}
 
 export const LocalVideo = ({ nameplate, ...rest }) => {
   const { tileId, isVideoEnabled } = useLocalVideo(true);
   const audioVideo = useAudioVideo();
   const videoEl = useRef(null);
+  let sessionUser = sessionStorage.getItem("nickname");
   useApplyVideoObjectFit(videoEl);
 
   useEffect(() => {
@@ -50,7 +55,7 @@ export const LocalVideo = ({ nameplate, ...rest }) => {
 
             
             >
-    <span></span>
+    <div style={info}>{sessionUser}</div>
     <StyledLocalVideo
       active={isVideoEnabled}
       nameplate={nameplate}

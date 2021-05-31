@@ -47,6 +47,9 @@ const Main = () => {
   const toggleGetorigin = (e) => setGetorigin(!getorigin);
   const [socketId, setSocketId] = useState("");
   const [tutorialmodal, setTutorialModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
 
   const tutorialtoggle = () => setTutorialModal(!tutorialmodal);
   let sessionEmail = sessionStorage.getItem("email");
@@ -140,7 +143,10 @@ const Main = () => {
         attendeeInfo: JoinInfo.Attendee,
       });
       setAppMeetingInfo(roomtitle, sessionUser, "ap-northeast-2");
-      history.push("/deviceSetup");
+
+      await meetingManager.start();
+
+      history.push(`/room/${roomtitle}`);
     } catch (error) {
       console.log(error);
     }
