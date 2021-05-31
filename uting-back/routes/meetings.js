@@ -219,6 +219,7 @@ router.post('/getparticipants', function(req,res,next){
       if(obj.title===req.body._id){
         temp = {
           users: obj.users,
+          maxNum: obj.maxNum,
           chime_info: attendeeCache[obj.title],
         }
         res.send(temp);
