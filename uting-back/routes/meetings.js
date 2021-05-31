@@ -5,13 +5,6 @@ const { Meeting }=require('../model');
 const fs = require('fs');
 const {v4:uuid} = require('uuid');
 const AWS = require('aws-sdk');
-// const { response } = require('express');
-/* eslint-enable */
-
-// let hostname = '127.0.0.1';
-// let port = 8080;
-// let protocol = 'http';
-// let options = {};
 
 const chime = new AWS.Chime({ region: 'us-east-1' });
 const alternateEndpoint = process.env.ENDPOINT;
@@ -26,7 +19,6 @@ if (alternateEndpoint) {
   );
 }
 
-// @TODO 밑에 캐시 두 개 데이터 베이스에 넣어서 관리하면 될 것 같습니둥
 const meetingCache = {};
 const attendeeCache = {};
 
@@ -44,7 +36,7 @@ router.get('/', async function(req, res, next) {
   }).catch((err) => {
     res.send(err);
   });
-  console.log(meetingCache);
+  console.log(attendeeCache);
 });
 
 
@@ -222,15 +214,14 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
-  console.log("+++++++++++++++++++++++++++++++++++++")
-  console.log("getparticipants!!",req.body)
-  console.log("+++++++++++++++++++++++++++++++++++++")
-  let arr=[]
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
       if(obj.title===req.body._id){
-        console.log(obj.users)
-        res.send(obj.users);
+        temp = {
+          users: obj.users,
+          chime_info: attendeeCache[obj.title],
+        }
+        res.send(temp);
       }
     })
   })

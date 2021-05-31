@@ -126,6 +126,7 @@ const Main = () => {
   let goRoom = async () => {
     let temp = {
       title: roomtitle,
+      session: sessionUser,
       flag: 2,
     };
 

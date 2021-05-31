@@ -32,7 +32,8 @@ export const RemoteVideos = (props) => {
       {tiles.map((tileId) => {
         const attendee = roster[tileIdToAttendeeId[tileId]] || {};
         const { name } = attendee;
-        console.log(tileId)
+        console.log(props)
+        console.log(attendee)
         return (
           <div style={temp}>
           <Grid                
