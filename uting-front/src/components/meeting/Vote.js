@@ -271,7 +271,6 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 </div>
                 : ""}
                 
-      <ToastContainer />
     </div>
   );
 });

@@ -451,7 +451,7 @@ const Room = () => {
           </DropdownMenu>
         </Dropdown>
       </div>
-      <ToastContainer />
+      
 
       <Modal isOpen={!ready}>
         <ModalBody
