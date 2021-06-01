@@ -25,6 +25,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     const [goManner,setGoManner] = useState({"name":"","manner":""})
     const [getalert,setGetalert]=useState({"flag":false,"message":""})
   
+    let sessionUser = sessionStorage.getItem("nickname");
     let toggleAlert =(e)=>{
       setGetalert({...getalert,"flag":!getalert.flag})
     }
@@ -202,7 +203,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             let data ={
                 title:meeting_id,
                 user:mem.nickname,
-                gender:mem.gender
+                gender:mem.gender,
+                session: sessionUser,
             }
             console.log(data)
 
@@ -210,10 +212,16 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
            
             if(res.data==="success"){
                 setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
-                setTimeout(()=>{
-                    window.location.href="http://localhost:3000/main"
-                },1500)
-                
+                setTimeout(() => {
+                    window.location.href = "http://localhost:3000/main";
+                }, 1500)
+            }
+            else if(res.data === "last"){
+                setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
+                setTimeout(async () => {
+                    await endMeeting(meeting_id);
+                    window.location.href = "http://localhost:3000/main";
+                }, 1500)
             }
         }
         
