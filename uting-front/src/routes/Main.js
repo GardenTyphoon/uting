@@ -23,6 +23,7 @@ import Tutorial from "../components/main/Tutorial.js";
 import { useAppState } from "../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
 import { createGetAttendeeCallback, fetchMeeting } from "../utils/api";
+import { minWidth } from "styled-system";
 
 const Main = () => {
   const history = useHistory();
@@ -198,15 +199,15 @@ const Main = () => {
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
-          <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder", marginBottom:"8%", marginTop:"3%" }}>
+          <div style={{ fontFamily: "NanumSquare_acR",  fontSize: "large", color:"rgb(89,57,70)", fontWeight: "bold", marginBottom:"6%", marginTop:"3%" }}>
             학교별 매너학점 TOP10
           </div>
           <CollegeRanking />
         </div>
 
         <div className="Room">
-          <div className="RoomTop" style={{ width: "50vw", minWidth: "520px" }}>
-            <div className="RoomTop" style={{ width: "43vw" }}>
+          <div className="RoomTop" style={{ width: "100%", marginBottom:"20px" }}>
+            <div className="RoomTop" style={{ width: "75%" }}>
               <div
                 style={{
                   fontFamily: "NanumSquare_acR",
@@ -257,7 +258,8 @@ const Main = () => {
               flexDirection: "row",
               justifyContent: "space-evenly",
               marginTop: "10px",
-              height: "70vh",
+              minHeight: "450px",
+              height:"70vh",
             }}
           >
             <MeetingList
@@ -272,7 +274,7 @@ const Main = () => {
           </div>
         </div>
         
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center",backgroundColor:"#ffe4e1"}}>
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
         
         <Profile />
         <Groups

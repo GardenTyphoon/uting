@@ -178,8 +178,8 @@ const Meeting = ({ checkFunc }) => {
                         }
         
                         await meetingManager.start();
-
-                        history.push(`/room/${roomtitle}`);
+                       
+                        history.push(`/room/${roomTitle}`);
                     } catch (error) {
                         console.log(error);
                     }

@@ -25,8 +25,7 @@ const temp = {
   borderRadius: "30px"
 }
 const info = {
-  fontFamily: "NanumSquare_acR",
-  textAlign: "center",
+
 }
 
 
@@ -60,12 +59,7 @@ export const RemoteVideos = (props) => {
               gridAutoFlow="dense"
               color="white"
               >
-                <Grid
-                  responsive
-                  gridTemplateRows="repeat(1, 2vw)"
-                  gridTemplateColumns="repeat(3, 33%)"
-                  gridAutoFlow="dense"
-                  color="white">
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"10px"}}>
                     <div onClick={() => setremoteView(!remoteView)}>
                       {remoteView ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>}
                     </div>
@@ -74,8 +68,8 @@ export const RemoteVideos = (props) => {
                       toggleProfileBtn(name);
                       }}  
                       className="anotherbutton"
-                      ><div style={info}>{name}</div></button>
-                </Grid>
+                      >{name}</button>
+                </div>
               {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} /> : <div style={temp}></div>}
             </Grid>
           
