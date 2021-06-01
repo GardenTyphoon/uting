@@ -320,7 +320,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                         <Row style={{ width: "100%" }}>
 
                             <img src={MeetingRoom}
-                                style={{ padding: "1%", width: "10%", borderRadius: "50%", marginRight: "5%" }}
+                                className="MeetingRoomImg"
+                                style={{borderColor:mannerColor}}
                                 id={"Tooltip-" + room._id.substr(0, 10)}
                                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}

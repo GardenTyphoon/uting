@@ -193,13 +193,11 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
-
-        <Profile />
       </div>
 
       <div className="mainBottom">
         <div className="CollegeRanking">
-          <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder" }}>
+          <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder", marginBottom:"8%", marginTop:"3%" }}>
             학교별 매너학점 TOP10
           </div>
           <CollegeRanking />
@@ -271,12 +269,16 @@ const Main = () => {
             />
           </div>
         </div>
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+        <Profile />
         <Groups
           groupSocket={(e) => groupSocket(e)}
           currentsocketId={socketId}
           checkGroup={checkGroup}
           checkAnother={checkAnother}
         />
+        </div>
+       
         <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
           <ModalHeader style={{ marginLeft: "40%" }} toggle={tutorialtoggle}>
             U-TING 메뉴얼
