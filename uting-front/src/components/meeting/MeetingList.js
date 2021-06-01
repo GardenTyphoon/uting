@@ -5,7 +5,7 @@ import woman from '../../img/woman.png'
 import man from '../../img/man.png'
 import MeetingRoom from '../../img/MeetingRoom.png'
 import './MeetingList.css'
-import { Container, Row, Col, Tooltip } from 'reactstrap';
+import { Container, Row, Col, Tooltip, Modal, ModalFooter, ModalHeader, ModalBody, Button } from 'reactstrap';
 import socketio from "socket.io-client";
 
 import { useAppState } from '../../providers/AppStateProvider';
@@ -53,12 +53,12 @@ function mannerCredit(avgManner) {
 }
 
 function birthToAge(birth) {
-
+    console.log(birth)
     let year = birth.slice(0, 4);
     return 2021 - Number(year) + 1;
 }
 
-export default function MeetingList({ checkState, groupSocketList, currentsocketId,filterRoomName,filtermanner,filterage,getorigin }) {
+export default function MeetingList({ checkState, groupSocketList, currentsocketId, filterRoomName, filtermanner, filterage, getorigin }) {
 
     const history = useHistory();
     const meetingManager = useMeetingManager();
@@ -75,9 +75,13 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [roomObj, setRoomObj] = useState({})
     const [prevFilter, setPrevFilter] = useState("")
     const [tooltipOpen, setTooltipOpen] = useState(false);
+    const [getalert, setGetalert] = useState({ "flag": false, "message": "" })
 
     let sessionUser = sessionStorage.getItem("nickname");
 
+    let toggleAlert =(e)=>{
+        setGetalert({...getalert,"flag":!getalert.flag})
+      }
 
     const updateNewParticipants_to_OriginParticipants = async (meetingRoomParticipants) => {
 
@@ -90,14 +94,46 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             data
         );
         console.log(res);
-        let arr=[]
-        for(let i=0;i<res.data.length;i++){
-          arr.push(res.data[i].socketid)
+        let arr = []
+        for (let i = 0; i < res.data.length; i++) {
+            arr.push(res.data[i].socketid)
         }
 
         socket.emit("newParticipants", { socketIdList: arr });
     }
-    const attendRoomByID = async (room) => {
+    const canAttend = async (room) => {
+        console.log("나 들어갈수있엉?")
+        let myGroupWoman = 0;
+        let myGroupMan = 0;
+        let groupMembersInfo = []
+        console.log(groupMember)
+        for (let i = 0; i < groupMember.length; i++) {
+            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
+            console.log(userInfo.data)
+            groupMembersInfo.push({
+                "nickname": userInfo.data.nickname,
+                "introduce": userInfo.data.introduce,
+                "mannerCredit": userInfo.data.mannerCredit,
+                "age": birthToAge(userInfo.data.birth),
+                "ucoin": userInfo.data.ucoin,
+                "gender": userInfo.data.gender,
+                "birth" : userInfo.data.birth,
+            });
+            if (groupMembersInfo.gender === "woman") { myGroupWoman++; }
+            else { myGroupMan++; }
+        }
+        console.log(groupMembersInfo)
+        if (room.numOfMan + myGroupMan <= room.maxNum && room.numOfWoman + myGroupWoman <= room.maxNum) {
+            console.log("웅")
+            attendRoomByID(room, groupMembersInfo);
+        }
+        else {
+            setGetalert({ "flag": true, "message": "정해진 인원수가 맞지 않아 입장이 불가합니다." })
+        }
+    }
+    const attendRoomByID = async (room, groupMembersInfo) => {
+
+        console.log(groupMember)
         setRoomObj(room)
 
         // setFlag(true)
@@ -108,29 +144,22 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         let numOfWoman = 0;
         let numOfMan = 0;
 
-        let groupMembersInfo = []
+
         let groupMembersSocketId = []
 
-        for (let i = 0; i < groupMember.length; i++) {
-            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
-            groupMembersInfo.push({
-                "nickname": userInfo.data.nickname,
-                "introduce": userInfo.data.introduce,
-                "mannerCredit": userInfo.data.mannerCredit,
-                "age": birthToAge(userInfo.data.birth),
-                "ucoin": userInfo.data.ucoin,
-                "gender": userInfo.data.gender,
-            });
-            if (userInfo.data.nickname != sessionUser) {
-                groupMembersSocketId.push(userInfo.data.socketid);
+        for (let i = 0; i < groupMembersInfo.length; i++) {
+
+            if (groupMembersInfo[i].nickname != sessionUser) {
+                groupMembersSocketId.push(groupMembersInfo[i].socketid);
             }
-            sumManner += userInfo.data.mannerCredit;
-            sumAge += birthToAge(userInfo.data.birth);
-            if (userInfo.data.gender === "woman") numOfWoman += 1;
+            sumManner += groupMembersInfo[i].mannerCredit;
+            
+            sumAge += birthToAge(groupMembersInfo[i].birth);
+            if (groupMembersInfo[i].gender === "woman") numOfWoman += 1;
             else numOfMan += 1;
         }
         let coinCheck = true;
-        for (let i = 0; i < groupMembersInfo.length; i++) {
+        for (let i = 0; i < groupMembersInfo[i].length; i++) {
             if (groupMembersInfo[i].ucoin < 0) {
                 coinCheck = false
             }
@@ -266,7 +295,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             getMeetings()
         }
     }, [checkState])
- 
+
 
     let getMeetings = async () => {
         await axios
@@ -278,43 +307,43 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             .catch((err) => { });
 
     }
-    
-    useEffect(()=>{
-         const filteredName = originList.filter((data)=>{
-                return data.title.toLowerCase().includes(filterRoomName)
-            });
+
+    useEffect(() => {
+        const filteredName = originList.filter((data) => {
+            return data.title.toLowerCase().includes(filterRoomName)
+        });
         setView(filteredName)
-    },[filterRoomName])
+    }, [filterRoomName])
 
-    useEffect(()=>{
-        let filtered=[];
+    useEffect(() => {
+        let filtered = [];
 
-        originList.map((data)=>{
-            if(data.avgManner<=filtermanner.first && data.avgManner>=filtermanner.last){
+        originList.map((data) => {
+            if (data.avgManner <= filtermanner.first && data.avgManner >= filtermanner.last) {
                 filtered.push(data)
             }
         })
         setView(filtered)
-    },[filtermanner])
+    }, [filtermanner])
 
-    useEffect(()=>{
-        let filtered=[];
+    useEffect(() => {
+        let filtered = [];
 
-        originList.map((data)=>{
-            if(data.avgAge<=filterage.first && data.avgAge>=filterage.last){
+        originList.map((data) => {
+            if (data.avgAge <= filterage.first && data.avgAge >= filterage.last) {
                 filtered.push(data)
             }
         })
         setView(filtered)
 
-    },[filterage])
+    }, [filterage])
 
-    useEffect(()=>{
-       
-            //setView(originList)
-            getMeetings();
-        
-    },[getorigin])
+    useEffect(() => {
+
+        //setView(originList)
+        getMeetings();
+
+    }, [getorigin])
 
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
@@ -326,7 +355,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                             <img src={MeetingRoom}
                                 className="MeetingRoomImg"
-                                style={{borderColor:mannerColor}}
+                                style={{ borderColor: mannerColor }}
                                 id={"Tooltip-" + room._id.substr(0, 10)}
                                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
@@ -337,13 +366,13 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
                                 <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
-                                    <div style={{ marginRight: "7%", fontWeight:"bold" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
-                                    <div style={{ fontWeight:"bold" }}>{mannerCredit(room.avgManner)}</div>
+                                    <div style={{ marginRight: "7%", fontWeight: "bold" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
+                                    <div style={{ fontWeight: "bold" }}>{mannerCredit(room.avgManner)}</div>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight:"bold" }}>{room.avgAge}살</div>
+                                <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight: "bold" }}>{room.avgAge}살</div>
                             </Col>
                             <Col xs="3">
-                                <button className="joinBtn" onClick={() => attendRoomByID(room)}>참가</button>
+                                <button className="joinBtn" onClick={() => canAttend(room)}>참가</button>
                                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <img style={{ width: "10%", height: "15%", marginRight: "8%" }} src={woman} />
                                     <img style={{ width: "13%", height: "22%", marginRight: "8%" }} src={man} />
@@ -374,6 +403,18 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                 </div>
             )}
+            <Modal isOpen={getalert.flag} >
+                <ModalHeader>
+                    U-TING 메시지
+                </ModalHeader>
+                <ModalBody>
+                    <div>{getalert.message}</div>
+
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="warning" onClick={(e) => toggleAlert(e)}>확인</Button>
+                </ModalFooter>
+            </Modal>
         </div>
 
     )
