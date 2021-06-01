@@ -176,11 +176,13 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
         ? ""
         : groupMember.map((data, member) => {
           if (data !== currentUser) {
-            return <Member>{data}</Member>;
+            return <button style={{border:"0px", background:"transparent"}}><Member>{data}</Member></button>;
           }
         })}
-      <PlusIcon onClick={toggelAddMember}>+</PlusIcon>
-      {groupMember !== undefined ? <PlusIcon onClick={() => setClickLeaveGroup(true)}>그룹 나가기</PlusIcon> : ""}
+      <button style={{border:"0px", background:"transparent"}}><PlusIcon onClick={toggelAddMember}>+</PlusIcon></button>
+      {groupMember !== undefined ? 
+      <button style={{border:"0px", background:"transparent"}}>
+        <PlusIcon onClick={() => setClickLeaveGroup(true)}>그룹 나가기</PlusIcon> </button>: ""}
       <Modal isOpen={clickLeaveGroup}>
         <ModalBody>
           그룹을 떠나시겠습니까?
