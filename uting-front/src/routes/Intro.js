@@ -33,16 +33,16 @@ const Intro = () => {
     });
   };
 
-  let logout = async(e)=>{
-    
-    let data={email:sessionStorage.getItem("email")}
+  let logout = async (e) => {
+
+    let data = { email: sessionStorage.getItem("email") }
     console.log(data)
-    const res = await axios.post('http://localhost:3001/users/logout',data)
-    if(res.data==="success"){
+    const res = await axios.post('http://localhost:3001/users/logout', data)
+    if (res.data === "success") {
       sessionStorage.clear();
       window.location.href = "http://localhost:3000/";
     }
-    if(res.data==="no"){
+    if (res.data === "no") {
       alert("Error")
     }
   }
@@ -61,33 +61,34 @@ const Intro = () => {
 
   return (
     <div className="IntroContainer">
-      
-        <Row className="signinclass">
-          
-          <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-          <img className="intrologo" src={introLog}/>
+
+      <Row className="signinclass">
+
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", marginRight: "20px" }}>
+          <img className="intrologo" src={introLog} />
           <img className="intromessage" src={intromessage}></img>
+        </div>
+        <Col>
+          <div className="col2">
+            {isLoggedIn === false ? <><SignIn />
+              <div className="createaccount">
+                <button className="MiddleBtn" onClick={onClick}>
+                  계정 만들기
+                </button>
+              </div></> 
+              : 
+              <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                <div className="Logoutcontainer">
+                  <span className="logoutname">{sessionStorage.getItem("nickname")}님 <br></br> 반갑습니다.</span>
+                  <button onClick={(e) => logout(e)} className="LogInOutBtn">Logout</button></div>
+                <button className="MiddleBtn" onClick={goMain}>
+                  미팅 즐기러 가기
+                </button>
+              </div>}
           </div>
-           <Col>
-           <div className="col2">
-           {isLoggedIn === false ?<><SignIn /><div className="createaccount">
-          <button className="MiddleBtn" onClick={onClick}>
-            계정 만들기
-          </button>
-          </div></>:<div>
-            <div className="Logoutcontainer">
-              <span className="logoutname">{sessionStorage.getItem("nickname")}님 반갑습니다.</span>
-            <button onClick={(e)=>logout(e)}  className="LogInOutBtn">Logout</button></div>
-            <button className="MiddleBtn" onClick={goMain}>
-            미팅 즐기러 가기
-          </button>
-        </div>}
-           
-           
-          </div>
-          </Col>
-        </Row>
- 
+        </Col>
+      </Row>
+
       <div className="diva" ><Link className="divad" to="/ad">광고 문의</Link></div>
     </div>
   );
