@@ -7,7 +7,7 @@ import MeetingRoom from '../../img/MeetingRoom.png'
 import './MeetingList.css'
 import { Container, Row, Col, Tooltip, Modal, ModalFooter, ModalHeader, ModalBody, Button } from 'reactstrap';
 import socketio from "socket.io-client";
-
+import introLog from '../../img/배경없는유팅로고.png'
 import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
@@ -129,6 +129,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         }
         else {
             setGetalert({ "flag": true, "message": "정해진 인원수가 맞지 않아 입장이 불가합니다." })
+            setTimeout(()=>{
+                setGetalert({"flag":false,"message":""})
+               },1500)
         }
     }
     const attendRoomByID = async (room, groupMembersInfo) => {
@@ -394,17 +397,14 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 </div>
             )}
             <Modal isOpen={getalert.flag} >
-                <ModalHeader>
-                    U-TING 메시지
-                </ModalHeader>
-                <ModalBody>
-                    <div>{getalert.message}</div>
-
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="warning" onClick={(e) => toggleAlert(e)}>확인</Button>
-                </ModalFooter>
-            </Modal>
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
+          
+        </ModalBody>
+      </Modal>
         </div>
 
     )
