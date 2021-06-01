@@ -23,6 +23,7 @@
     flex-direction: row;
     align-items: center;
     font-weight: bolder;
+    font-size:large;
 }
 .ProfileCenter{
     width:100%;
@@ -32,6 +33,7 @@
     flex-direction:column;
     align-items:center;
     font-weight:bolder;
+    font-size:100%;
 }
 .ProfileOthers{
     color:#454545;
@@ -40,7 +42,7 @@
     flex-direction:column;
 
     justify-content: space-around;
-    font-size:80%;
+    font-size:100%;
 }
 .ProfileBtn{
     background: linear-gradient(to bottom, #FF9A51, #FF6994);

@@ -27,7 +27,10 @@ import MeetingControls from "../components/meeting/MeetingControls";
 import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png";
 import help from "../img/help.png";
+import airplane from "../img/airplane.png"
 import McBotTutorial from "../components/mc/McBotTutorial";
+import { backgroundColor } from "styled-system";
+import "./Room.css"
 const McBotContainer = styled.div`
   width: 250px;
   height: 500px;
@@ -76,7 +79,7 @@ const Room = () => {
   const [chimeinfo, setChimeinfo] = useState([]);
   const [maxNum, setmaxNum] = useState();
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
-  const [flagMessage,setFlagMessage]=useState(false);
+  const [flagMessage,setFlagMessage]=useState(true);
   const [iloveyou,setIloveyou]=useState({"mylove":"","socketid":"","lovemessage":""})
 
   let toggleFlagMessage =()=>{
@@ -420,6 +423,8 @@ useEffect(()=>{
           isOpen={endMeetingBtn}
           toggle={() => {
             setEndMeetingBtn(!endMeetingBtn);
+            endMeetingBtn===false?setFlagMessage(false):setFlagMessage(true)
+            
           }}
         >
           <DropdownToggle
@@ -456,15 +461,26 @@ useEffect(()=>{
         
         <div style={{height: "43%"}}></div> {/* 이걸로 조정해뒀음 */}
         
-        <button onClick={(e)=>toggleFlagMessage(e)} style={{marginBottom:"20%",marginRight:"22%",border:"0",borderRadius:"10px",backgroundColor:"white"}}>쪽지보내기</button> 
-        {flagMessage===true?<div>
-          <Input type="select" name="mylove" onChange={(e)=>onChangehandler(e)}>
-          <option value="" selected>수신자를 선택하시오.</option>
+        {flagMessage===true?
+        <div style={{display:"flex", flexDirection:"column",marginBottom:"10%"}}>
+          <div style={{display:"flex", flexDirection:"row",alignItems:"center", justifyContent:"center"}} >
+          <div >To.</div><Input className="loveinput" type="select" name="mylove" style={{width:"180px",marginLeft:"10px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
+            
+          <option value="" selected>수신자</option>
             {participants.map((data,i)=>{
                     return(data!==sessionStorage.getItem("nickname")?<option value={data} >{data}</option>:"")
                    })}
           </Input>
-          <Input type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/><button onClick={(e)=>goLove(e)}>전송</button></div>:""}
+          </div>
+          <div style={{display:"flex", flexDirection:"row",alignItems:"center", justifyContent:"center", margin:"10px"}}>
+          <Input className="loveinput" style={{width:"180px",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
+          <button style={{border:"0",backgroundColor:"rgb(255,228,225)"}} onClick={(e)=>goLove(e)}>
+            <img src={airplane} style={{width:"40px",height:"40px"}}/>
+          </button>
+          
+          
+          </div>
+          </div>:""}
         <McBotContainer>
           <button
             onClick={() => setToggleHelp(!toggleHelp)}

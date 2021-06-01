@@ -1,3 +1,9 @@
 .reportNickname{
     width: 500px;
 }
+.loveinput{
+    
+}
+.loveinput:focus{
+    outline: none;
+}
