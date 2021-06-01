@@ -28,6 +28,16 @@ import reportImg from "../../img/report.png";
 const MeetingControls = ({participantss}) => {
   const { toggleNavbar, closeRoster, showRoster } = useNavigation();
   const [toggleReport, setToggleReport] = useState(false);
+  const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  
+  let toggleAlert =(e)=>{
+    setGetalert({...getalert,"flag":!getalert.flag})
+  }
+
+  useEffect(()=>{
+    setGetalert({"flag":false,"message":""})
+  },[])
+
   const handleToggle = () => {
     if (showRoster) {
       closeRoster();
@@ -46,8 +56,12 @@ const MeetingControls = ({participantss}) => {
       reportRequester: sessionStorage.getItem("nickname"),
     });
     console.log(res.data);
-    alert(res.data);
-    setToggleReport(!toggleReport)
+    //alert(res.data);
+    setGetalert({"flag":true,"message":res.data})
+    setTimeout(()=>{
+      setToggleReport(!toggleReport)
+    },1000)
+    
   };
 
   return (
@@ -64,7 +78,6 @@ const MeetingControls = ({participantss}) => {
         <div         
         style={{
           width: "50%",
-          height: "92vh",
           float: "left",
           display: "flex",
           justifyContent: "flex-end"
@@ -112,6 +125,18 @@ const MeetingControls = ({participantss}) => {
           >
             취소
           </Button>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={getalert.flag} >
+        <ModalHeader>
+          U-TING 메시지
+        </ModalHeader>
+        <ModalBody>
+          <div>{getalert.message}</div>
+          
+        </ModalBody>
+        <ModalFooter>
+        <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
         </ModalFooter>
       </Modal>
       </ControlBar>

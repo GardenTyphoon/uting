@@ -9,6 +9,7 @@ import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
+import helpLogo from '../img/help.png';
 import Filter from "../components/main/Filter.js";
 
 import CollegeRanking from "../components/main/CollegeRanking.js";
@@ -51,7 +52,7 @@ const Main = () => {
   const [error, setError] = useState('');
 
 
-  const tutorialtoggle = () => setTutorialModal(!tutorialmodal);
+  const tutorialtoggle = (e) => setTutorialModal(!tutorialmodal);
   let sessionEmail = sessionStorage.getItem("email");
   let sessionUser = sessionStorage.getItem("nickname");
 
@@ -74,7 +75,7 @@ const Main = () => {
   useEffect(() => {}, [addEvent]);
 
   useEffect(() => {
-    setTutorialModal(true);
+   // setTutorialModal(true);
 
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
@@ -193,8 +194,8 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
+        <button style={{border:"0",backgroundColor:"rgb(255,228,225)",marginRight:"1%",position:"absolute",marginLeft:"92%",marginBottom:"5%"}} onClick={(e)=>tutorialtoggle(e)} ><span style={{color:"rgb(89,57,70)",fontFamily: "NanumSquare_acR",fontWeight:"bold"}}>유팅메뉴얼</span><img style={{width:"20px",height:"20px",marginLeft:"7px",marginBottom:"10px"}} src={helpLogo}></img></button>
       </div>
-
       <div className="mainBottom">
         <div className="CollegeRanking">
           <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder", marginBottom:"8%", marginTop:"3%" }}>
@@ -210,8 +211,9 @@ const Main = () => {
                 style={{
                   fontFamily: "NanumSquare_acR",
                   fontSize: "large",
-                  color: "#9A7D7D",
+                  color:"rgb(89,57,70)",
                   marginRight: "25px",
+                  fontWeight:"bold"
                 }}
               >
                 Room List
@@ -269,7 +271,9 @@ const Main = () => {
             />
           </div>
         </div>
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+        
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center",backgroundColor:"#ffe4e1"}}>
+        
         <Profile />
         <Groups
           groupSocket={(e) => groupSocket(e)}

@@ -148,21 +148,6 @@ const Room = () => {
     }
   };
 
-  const submitReport = async () => {
-    let reportNickname = document.getElementsByName("reportNickname");
-    let reportContent = document.getElementsByName("reportContent");
-    const res = await axios.post("http://localhost:3001/reports/saveReport", {
-      reportTarget:
-        reportNickname[0].options[reportNickname[0].selectedIndex].value,
-      reportContent: reportContent[0].value,
-      reportRequester: sessionStorage.getItem("nickname"),
-    });
-    console.log(res.data);
-    //alert(res.data);
-    setGetalert({"flag":true,"message":res.data})
-    
-  };
-
   useEffect(() => {
     let messageArr = [
       "대화 소재가 떨어졌을때 MC봇을 활용하는건 어떤가요?",
