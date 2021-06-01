@@ -9,6 +9,7 @@ import Groups from "../components/group/Groups";
 import "./Main.css";
 import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
+import helpLogo from '../img/help.png';
 import Filter from "../components/main/Filter.js";
 
 import CollegeRanking from "../components/main/CollegeRanking.js";
@@ -196,7 +197,6 @@ const Main = () => {
 
         <Profile />
       </div>
-
       <div className="mainBottom">
         <div className="CollegeRanking">
           <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder" }}>
