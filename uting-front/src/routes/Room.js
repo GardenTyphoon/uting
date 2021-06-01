@@ -463,17 +463,17 @@ useEffect(()=>{
         
         {flagMessage===true?
         <div style={{display:"flex", flexDirection:"column",marginBottom:"10%"}}>
-          <div style={{display:"flex", flexDirection:"row",alignItems:"center", justifyContent:"center"}} >
-          <div >To.</div><Input className="loveinput" type="select" name="mylove" style={{width:"180px",marginLeft:"10px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
+          <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center"}} >
+          <div >To.</div><select className="loveinput"  name="mylove" style={{width:"180px",marginLeft:"10px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
             
-          <option value="" selected>수신자</option>
+          <option value="" selected>받는 사람</option>
             {participants.map((data,i)=>{
-                    return(data!==sessionStorage.getItem("nickname")?<option value={data} >{data}</option>:"")
+                    return(data!==sessionStorage.getItem("nickname")?<option  value={data} >{data}</option>:"")
                    })}
-          </Input>
+          </select>
           </div>
-          <div style={{display:"flex", flexDirection:"row",alignItems:"center", justifyContent:"center", margin:"10px"}}>
-          <Input className="loveinput" style={{width:"180px",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
+          <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center", margin:"10px"}}>
+          <input className="loveinput" placeholder="메시지를 입력해주세요." style={{width:"180px",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
           <button style={{border:"0",backgroundColor:"rgb(255,228,225)"}} onClick={(e)=>goLove(e)}>
             <img src={airplane} style={{width:"40px",height:"40px"}}/>
           </button>

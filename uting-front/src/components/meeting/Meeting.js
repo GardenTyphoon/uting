@@ -135,11 +135,10 @@ const Meeting = ({ checkFunc }) => {
     
     
                 }
-    
                 console.log(groupMembersInfo)
                 let coinCheck =true;
                 for(let i=0;i<groupMembersInfo.length;i++){
-                    if(groupMembersInfo[i].ucoin<0){
+                    if(groupMembersInfo[i].ucoin<1){
                         coinCheck=false
                     }
                 }
@@ -150,7 +149,6 @@ const Meeting = ({ checkFunc }) => {
         
                     const roomTitle= room.title.trim().toLocaleLowerCase()
         
-                    
                     let data = {
                         title: roomTitle,
                         maxNum: Number(room.num),
