@@ -9,11 +9,15 @@ background-image: url("../img/Intro이미지.png");
     background-color:white;
     display:flex;
     align-items: center;
+    justify-content: center;
     font-family : NanumSquare_acR;
+
+    width : 350px;
     border-radius: 20px;
-    margin-top: 40%;
     padding-top: 60px;
     padding-bottom: 60px;
+
+    margin-bottom:20px;
 
 }
 .IntroContainer {
@@ -33,6 +37,8 @@ background-image: url("../img/Intro이미지.png");
   border-radius: 10px;
 
   overflow: hidden;
+
+  box-shadow: grey 10px 10px 20px;
 }
 .LogInOutBtn {
     width:100px;
@@ -41,15 +47,14 @@ background-image: url("../img/Intro이미지.png");
     background-color: #da6a6a;
     border-radius: 10px;
     padding:20px;
-    margin-left: 13%;
 
 }
 .logoutname{
-  margin-left: 13%;
+  margin-right: 10%;
   font-weight: bold;
   color: #f18a8a;
   font-size: 20px;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family:  "NanumSquare_acR";
 }
 .MiddleBtn {
   
