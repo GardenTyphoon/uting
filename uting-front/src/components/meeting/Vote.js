@@ -23,8 +23,15 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     const [myDeicision, setMyDecision] = useState("");
     const [copyParticipants,setCopyParticipants]=useState(participants);
     const [goManner,setGoManner] = useState({"name":"","manner":""})
-
-
+    const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  
+    let toggleAlert =(e)=>{
+      setGetalert({...getalert,"flag":!getalert.flag})
+    }
+  
+    useEffect(()=>{
+      setGetalert({"flag":false,"message":""})
+    },[])
     
 
     const onClickStartVoteBtn = async (e) => {
@@ -170,8 +177,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                   i--;
                 }
             }
-            alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
-            console.log(meetingMembers)
+            //alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
+            setGetalert({"flag":true,"message":`${goManner.name}`+"님에게 학점을 부여하였습니다."})
             document.getElementsByName("per_name").values="default"
             document.getElementsByName("realmanner").values="default"
             setCopyParticipants(arr)
@@ -200,10 +207,13 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             console.log(data)
 
             const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
-            console.log(res)
+           
             if(res.data==="success"){
-                alert("미팅 방을 나갑니다.")
-                window.location.href="http://localhost:3000/main"
+                setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
+                setTimeout(()=>{
+                    window.location.href="http://localhost:3000/main"
+                },1500)
+                
             }
         }
         
@@ -252,6 +262,18 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 <ModalFooter>
                     <Button color="primary" onClick={(e)=>{saveManner(e)}}>학점부여</Button>{' '}
                     <Button color="secondary" onClick={(e)=>finishMeeting(e)}>끝내기</Button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={getalert.flag} >
+            <ModalHeader>
+                U-TING 메시지
+                </ModalHeader>
+            <ModalBody>
+            <div>{getalert.message}</div>
+          
+            </ModalBody>
+            <ModalFooter>
+                <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
                 </ModalFooter>
             </Modal>
             

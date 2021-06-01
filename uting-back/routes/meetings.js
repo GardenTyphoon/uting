@@ -268,7 +268,6 @@ router.post('/leavemember', async function(req,res,next){
           await chime.deleteMeeting({
             MeetingId: meetingCache[title].Meeting.MeetingId
           }).promise();
-        
           delete meetingCache[title];
           delete attendeeCache[title];
 
