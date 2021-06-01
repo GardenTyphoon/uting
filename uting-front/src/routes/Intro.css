@@ -23,12 +23,12 @@ background-image: url("../img/Intro이미지.png");
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width : 70vw;
-  min-width:850px;
+  width : 60vw;
+  min-width:800px;
   height: 60vh;
   min-height:450px;
   position: absolute;
-  left:15%;
+  left:17%;
   top:15%;
   border-radius: 10px;
 
@@ -66,12 +66,12 @@ background-image: url("../img/Intro이미지.png");
   float: right;
   position: fixed;
   bottom: 1%;
-  margin-left: 95%;
+  margin-left: 90%;
   font-family: 'Jua';
   color: white;
 }
 .divad{
-  color: white; text-decoration: none;
+  color: black; text-decoration: none;
 }
 .divad:visited { color: black; text-decoration: none;}
 .divad:hover { color: black; text-decoration: none;}

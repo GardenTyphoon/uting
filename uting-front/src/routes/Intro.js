@@ -64,7 +64,7 @@ const Intro = () => {
       
         <Row className="signinclass">
           
-          <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", marginRight:"20px"}}>
           <img className="intrologo" src={introLog}/>
           <img className="intromessage" src={intromessage}></img>
           </div>

@@ -14,10 +14,12 @@
 
     margin-bottom:20px;
 
+
 }
 .InputContainer{
     display:flex;
     flex-direction: column;
+    padding-right:0px;
 }
 .SignInBtnContainer{
     display: flex;
@@ -32,7 +34,6 @@
     border-radius: 10px;
     padding-top:25%;
     padding-bottom:25%;
-    margin-left: 5%;
 }
 .signInInput{
     background-color: #F6CDCD;
