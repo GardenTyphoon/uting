@@ -43,7 +43,7 @@ const Profile = () => {
 
   const getProfile = async (e) => {
     const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
-      sessionUser: sessionUser,
+      sessionUser: sessionUser,type:"profile"
     });
     if (res.data.imgURL !== "") {
       let staticpath = "http://localhost:3001";
@@ -138,7 +138,7 @@ const Profile = () => {
             </button>
           </Row>
           <Row>
-            <MyProfile />
+          <MyProfile choicename={sessionStorage.getItem("nickname")} />
           </Row>
         </ModalBody>
       </Modal>
