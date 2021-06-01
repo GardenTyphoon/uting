@@ -74,13 +74,8 @@ export const RemoteVideos = (props) => {
                       toggleProfileBtn(name);
                       }}  
                       className="anotherbutton"
-                      
                       ><div style={info}>{name}</div></button>
-                    
                 </Grid>
-                
-                
-                
               {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} /> : <div style={temp}></div>}
             </Grid>
           
