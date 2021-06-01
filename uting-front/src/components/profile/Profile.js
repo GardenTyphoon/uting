@@ -64,14 +64,15 @@ const Profile = () => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        width: "180px"
+        width: "180px",
+        marginBottom:"20px"
       }}
     >
       <button
         onClick={(e) => {
           toggleProfileBtn(e);
         }}
-        style={{ borderRadius: "16px", padding: "0%", borderColor: "#FF6895" }}
+        style={{ borderRadius: "16px", padding: "0%",border:"2px solid #e2e2e2e2" }}
       >
         {imgBase64 === "" ? (
           <img

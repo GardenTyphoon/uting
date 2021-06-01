@@ -13,7 +13,14 @@
     margin:15px;
     font-size:medium;
 }
+.MeetingRoomImg{
+    width:10%;
+    border-radius: 50%;
+    margin-left:23px;
+    margin-right: 2%;
+    border:3px solid; 
 
+}
 .joinBtn{
     font-weight: bold;
     margin-bottom:10%;

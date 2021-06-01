@@ -71,7 +71,7 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
         <>
         <Dropdown  className="FilteredBy" isOpen={dropdownOpen} toggle={toggle}>
       <DropdownToggle className="FilteredBy" style={{background:"transparent", color:"#8F6F6F", border:"none"}}caret>
-        Filterd by
+        Filter
       </DropdownToggle>
       <DropdownMenu>
         <DropdownItem onClick={(e)=>filterby(1)}>학점</DropdownItem>
