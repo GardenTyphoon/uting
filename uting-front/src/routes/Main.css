@@ -31,13 +31,8 @@
   color: white;
 }
 .mainContainer{
-  background: #ffe4e1;
-  width:100vw;
-  height:100vh;
-  padding:20px;
-  padding-left:30px;
-  
-  padding-left:30px;
+  background-color: #ffe4e1;
+  height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -46,6 +41,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding-top: 30px;
 }
 .mainBottom{
   display: flex;
