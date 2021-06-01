@@ -358,7 +358,11 @@ router.post("/preMemSocketid", function (req, res, next) {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
             console.log(mem + " : " + per.socketid);
-            socketidList.push(per.socketid);
+            let data={
+              nickname:per.nickname,
+              socketid:per.socketid
+            }
+            socketidList.push(data);
           }
         });
       });

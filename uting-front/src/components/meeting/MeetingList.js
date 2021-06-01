@@ -90,7 +90,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             data
         );
         console.log(res);
-        socket.emit("newParticipants", { socketIdList: res.data });
+        let arr=[]
+        for(let i=0;i<res.data.length;i++){
+          arr.push(res.data[i].socketid)
+        }
+
+        socket.emit("newParticipants", { socketIdList: arr });
     }
     const attendRoomByID = async (room) => {
         setRoomObj(room)
