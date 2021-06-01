@@ -66,6 +66,7 @@ const SignIn = () => {
         sessionStorage.setItem('nickname', res.data.nickname);
         sessionStorage.setItem('email', email);
         //alert("로그인 되었습니다.")
+        console.log(getalert)
         setGetalert({"flag":true,"message":"로그인 되었습니다."})
         //toast("로그인 되었습니다.")
         //소켓
@@ -74,8 +75,10 @@ const SignIn = () => {
           window.location.href = 'http://localhost:3000/admin';
         }
         else{
-          window.location.href = 'http://localhost:3000/main';
- 
+          setTimeout(()=>{
+            window.location.href = 'http://localhost:3000/main';
+          },1000)
+          
         }
 
       } catch (error) {
