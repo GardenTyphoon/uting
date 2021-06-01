@@ -30,12 +30,11 @@ import help from "../img/help.png";
 import McBotTutorial from "../components/mc/McBotTutorial";
 const McBotContainer = styled.div`
   width: 250px;
-  height: 455px;
+  height: 500px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
   padding: 20px;
-  padding-top: 10px;
   font-family: NanumSquare_acR;
 
   display: flex;
@@ -51,6 +50,7 @@ const Room = () => {
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
   const [participantsSocketId, setParticipantsSocketId] = useState([]);
+  const [parObj,setParObj]=useState({})
   const [vote, setVote] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [musicsrc, setMusicsrc] = useState("");
@@ -76,6 +76,12 @@ const Room = () => {
   const [chimeinfo, setChimeinfo] = useState([]);
   const [maxNum, setmaxNum] = useState();
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  const [flagMessage,setFlagMessage]=useState(false);
+  const [iloveyou,setIloveyou]=useState({"mylove":"","socketid":"","lovemessage":""})
+
+  let toggleFlagMessage =()=>{
+    setFlagMessage(!flagMessage)
+  }
   
   let toggleAlert =(e)=>{
     setGetalert({...getalert,"flag":!getalert.flag})
@@ -109,9 +115,15 @@ const Room = () => {
       data
     );
 
-    if (res.data !== "undefined") {
-      setParticipantsSocketId(res.data);
-      console.log(res.data);
+    if (res.data.socketid !== "undefined") {
+      setParObj(res.data)
+      console.log(res.data)
+      let arr=[]
+      for(let i=0;i<res.data.length;i++){
+        arr.push(res.data[i].socketid)
+      }
+      setParticipantsSocketId(arr);
+      console.log(arr);
     }
   };
   useEffect(() => {
@@ -139,6 +151,7 @@ const Room = () => {
       }
       console.log("이거", res.data.chime_info)
       setMeetingMembers(res.data.users);
+      console.log(res.data)
       setMeeting_id(meetingId);
       setParticipants(par);
       setChimeinfo(res.data.chime_info);
@@ -164,13 +177,13 @@ const Room = () => {
           setIntervalMessage(messageArr[0]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(2);
-        }, 600000);
+        }, 6000);
       } else if (intervalMessageCheck === 1) {
         setTimeout(() => {
           setIntervalMessage(messageArr[1]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(1);
-        }, 1200000);
+        }, 6000);
       } else if (intervalMessageCheck === 2) {
         setTimeout(() => {
           setIntervalMessage(messageArr[2]);
@@ -254,6 +267,9 @@ const Room = () => {
         toast(data.message);
         setRole(data.role);
       }
+      else if(data.type==="golove"){
+        toast(data.sender+"님이 - >"+data.message)
+      }
     });
     return () => {
       socket.removeListener("room");
@@ -322,6 +338,43 @@ const Room = () => {
     }
   };
 
+  
+  let onChangehandler=(e)=>{
+    let { name, value } = e.target;
+    console.log(parObj)
+    if(name==="mylove")
+    {
+        for(let i=0;i<parObj.length;i++){
+          if(parObj[i].nickname===value){
+            setIloveyou({...iloveyou,["mylove"]:value,["socketid"]:parObj[i].socketid})
+          }
+        }
+        //value는 학점줄 닉네임
+    }
+    else if(name==="lovemessage")
+    {
+
+      setIloveyou({...iloveyou,["lovemessage"]:value})
+
+    }
+    
+}
+
+let goLove =()=>{
+    let data ={
+      mylove:iloveyou.mylove,
+      message:iloveyou.lovemessage,
+      socketid:iloveyou.socketid,
+      sender:sessionStorage.getItem("nickname")
+    }
+    const socket = socketio.connect("http://localhost:3001");
+    socket.emit("golove", { lovemessage: data});
+  
+}
+
+useEffect(()=>{
+  console.log(iloveyou)
+},[iloveyou])
   useEffect(() => {
     saveParticipantsSocketId();
   }, [participants]);
@@ -402,8 +455,16 @@ const Room = () => {
         
         
         <div style={{height: "43%"}}></div> {/* 이걸로 조정해뒀음 */}
-
-
+        
+        <button onClick={(e)=>toggleFlagMessage(e)} style={{marginBottom:"20%",marginRight:"22%",border:"0",borderRadius:"10px",backgroundColor:"white"}}>쪽지보내기</button> 
+        {flagMessage===true?<div>
+          <Input type="select" name="mylove" onChange={(e)=>onChangehandler(e)}>
+          <option value="" selected>수신자를 선택하시오.</option>
+            {participants.map((data,i)=>{
+                    return(data!==sessionStorage.getItem("nickname")?<option value={data} >{data}</option>:"")
+                   })}
+          </Input>
+          <Input type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/><button onClick={(e)=>goLove(e)}>전송</button></div>:""}
         <McBotContainer>
           <button
             onClick={() => setToggleHelp(!toggleHelp)}

@@ -34,6 +34,7 @@ const Meeting = ({ checkFunc }) => {
     const [groupMembers, setGroupMembers] = useState([]);
     const [toggleShowWarningMess, setToggleShowWarningMess] = useState(false);
     const [roomtitle, setRoomtitle] = useState("");
+    const [groupmemeinfo,setGroupmemeinfo]=useState({});
     //const [roomtitle,setRoomtitle]=useState("")
     let sessionUser = sessionStorage.getItem("nickname");
     let groupMembersSocketId = [];
@@ -113,8 +114,16 @@ const Meeting = ({ checkFunc }) => {
                         "age": birthToAge(userInfo.data.birth),
                         "ucoin":userInfo.data.ucoin,
                         "gender":userInfo.data.gender,
+                        "socketid":userInfo.data.socketid,
+                        
+
                     });
                     if (userInfo.data.nickname != sessionUser) {
+                        let data ={
+                            "nickname":userInfo.data.nickname,
+                            "socketid":userInfo.data.socketid
+                        }
+                        setGroupmemeinfo(data)
                         groupMembersSocketId.push(userInfo.data.socketid);
                     }
                     avgManner += userInfo.data.mannerCredit;
@@ -179,6 +188,7 @@ const Meeting = ({ checkFunc }) => {
         
                         await meetingManager.start();
                        
+
                         history.push(`/room/${roomTitle}`);
                     } catch (error) {
                         console.log(error);
