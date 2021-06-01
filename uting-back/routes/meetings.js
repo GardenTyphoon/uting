@@ -251,7 +251,7 @@ let flag=false;
 router.post('/leavemember', async function(req,res,next){
   console.log("--------------------------")
   console.log(req.body)
-  Meeting.find(function (err, meeting) {
+  Meeting.find(async function (err, meeting) {
     //console.log(user)
     meeting.forEach((meet) => {
       if (req.body.title === meet.title) {
@@ -262,16 +262,8 @@ router.post('/leavemember', async function(req,res,next){
     if (isroom === true) {
       //삭제
       if(perObj.numOfWoman+perObj.numOfMan === 1){
-        Meeting.deleteOne({_id:perObj._id}).then(async (result)=>{
-          const title = req.body.title;
-
-          await chime.deleteMeeting({
-            MeetingId: meetingCache[title].Meeting.MeetingId
-          }).promise();
-          delete meetingCache[title];
-          delete attendeeCache[title];
-
-          res.send("success");
+        Meeting.deleteOne({_id:perObj._id}).then((result)=>{
+          res.send("last");
         })
       }
       else{
@@ -321,6 +313,21 @@ router.post('/leavemember', async function(req,res,next){
 router.post('/logs', function(req, res, next){
   console.log('Writing logs to cloudwatch');
   res.redirect('back');
+})
+
+router.post('/end', async function(req, res, next){
+  console.log(req.body, "여기임")
+  const title = req.body.title;
+
+
+  await chime.deleteMeeting({
+    MeetingId: meetingCache[title].Meeting.MeetingId
+  }).promise();
+
+  delete meetingCache[title];
+  delete attendeeCache[title];
+  res.statusCode = 200;
+  res.end();
 })
 
 module.exports = router;
