@@ -285,13 +285,18 @@ const EarInMal = ({
         onExiting={() => setAnimating(true)}
         onExited={() => setAnimating(false)}
       >
-        <img src={item.src} alt={item.altText} />
+        <img
+          src={item.src}
+          alt={item.altText}
+          style={{ paddingBottom: "5%" }}
+        />
         <br />
         {idx === 0 ? (
           <div style={{ textAlign: "left" }}>
-            <strong>1. (차례인 유저)질문상대 선택하고 질문하기</strong>
+            <strong>1. 질문상대 선택하고 질문하기</strong>
             <div>
-              질문 예시 : 이상형이 누구에요?? 여기서 마음에 드는 사람 있어요??
+              차례인 유저는 원하는 상대에게 질문을 한다. (질문은 선택된
+              유저에게만 보여진다.)
             </div>
           </div>
         ) : idx === 1 ? (
@@ -306,8 +311,8 @@ const EarInMal = ({
           <div style={{ textAlign: "left" }}>
             <strong>3. 질문 알려주기</strong>
             <div>
-              질문이 궁금한 사람은 술을 마시고 질문한 사람에게 질문을 물어 볼 수
-              있다.
+              질문을 한 유저는 원하는 대상에게 질문을 알려줄 수 있다.(질문이
+              궁금한 사람은 술을 마시고 질문을 들을 수 있다.)
             </div>
           </div>
         )}
@@ -325,7 +330,7 @@ const EarInMal = ({
           <style>
             {`.custom-tag {
               max-width: 100%;
-              height: 250px;
+              height: 380px;
               background: white;
             }`}
           </style>
@@ -356,12 +361,12 @@ const EarInMal = ({
       </Modal>
       {!isGameStart ? (
         <>
-          <strong style={{paddingLeft:"10%"}}>귓속말게임</strong>
+          <strong style={{ paddingLeft: "10%" }}>귓속말게임</strong>
           <div
             style={{
               fontSize: "medium",
               marginTop: "10%",
-              marginBottom: "10%"
+              marginBottom: "10%",
             }}
           >
             걸스데이 유라가 꼽은 '최고의 술자리 게임'
@@ -425,13 +430,13 @@ const EarInMal = ({
                     style={{
                       border: 0,
                       float: "left",
-                      padding: "10px",
+                      paddingBottom: "10px",
                       gridColumn: "1/2",
                       gridRow: "3/5",
                     }}
                     onClick={giveTurn}
                   >
-                    <h5 style={{ fontSize: "small" }}>턴 넘기기</h5>
+                    <h5 style={{ fontSize: "small" }}>턴넘기기</h5>
                   </Button>
                   <Button
                     outline
