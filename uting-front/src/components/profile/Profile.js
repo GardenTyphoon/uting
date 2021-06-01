@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import MyProfile from "./MyProfile";
-import ProfileNoImage from "../../img/ProfileNoImage.jpg";
+import ProfileNoImage from "../../img/MeetingRoom.png";
 import ucoin from "../../img/ucoin.png";
 import {
   Button,

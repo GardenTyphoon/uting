@@ -211,8 +211,9 @@ const Main = () => {
                 style={{
                   fontFamily: "NanumSquare_acR",
                   fontSize: "large",
-                  color: "#9A7D7D",
+                  color:"rgb(89,57,70)",
                   marginRight: "25px",
+                  fontWeight:"bold"
                 }}
               >
                 Room List
