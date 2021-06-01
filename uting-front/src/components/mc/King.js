@@ -120,7 +120,6 @@ const King = ({
         </Button>
       ) : (
         <>
-<<<<<<< Updated upstream
           <strong>왕게임</strong>
           <div
             style={{
@@ -131,8 +130,6 @@ const King = ({
           >
             무엇이든 다 할 수 있을 것만 같은 악마의 게임
           </div>
-=======
->>>>>>> Stashed changes
           <Button
             outline
             color="secondary"

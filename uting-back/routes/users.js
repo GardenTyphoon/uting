@@ -33,7 +33,6 @@ const upload = multer({
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
-  console.log(req.body);
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
     smtpTransport({
@@ -105,6 +104,7 @@ router.post("/signin", function (req, res, next) {
         if (user.beReported >= 3) {
           res.send("hell");
         } else {
+          perObj = user;
           // create a promise that generates jwt asynchronously
           const p = new Promise((resolve, reject) => {
             jwt.sign(
@@ -124,7 +124,7 @@ router.post("/signin", function (req, res, next) {
               },
               secret,
               {
-                expiresIn: "7d",
+                expiresIn: "10s", //s , h ,d sec, hour, day
                 issuer: "uting.com",
                 subject: "userInfo",
               },
@@ -150,6 +150,7 @@ router.post("/signin", function (req, res, next) {
     res.json({
       message: "logged in successfully",
       token,
+      perObj,
     });
   };
 
@@ -163,12 +164,9 @@ router.post("/signin", function (req, res, next) {
 
 router.post("/checknickname", function (req, res, next) {
   let ismember = false;
-  console.log(req.body.nickname);
   User.find(function (err, user) {
-    //console.log(user)
     user.forEach((per) => {
       if (req.body.nickname === per.nickname) {
-        console.log(per);
         ismember = true;
         res.send("exist");
       }
@@ -265,10 +263,8 @@ router.post("/addUcoin", function (req, res, next) {
 router.post("/logined", function (req, res, next) {
   let ismember = false;
   User.find(function (err, user) {
-    //console.log(user)
     user.forEach((per) => {
       if (req.body.addMember === per.nickname && per.status === true) {
-        console.log(per);
         ismember = true;
         res.send(per);
       }
@@ -284,7 +280,6 @@ router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
   User.find(function (err, user) {
-    //console.log(user)
     user.forEach((per) => {
       if (req.body.currentUser === per.nickname) {
         ismember = true;
@@ -331,7 +326,6 @@ router.post("/logout", function (req, res, next) {
       if (req.body.email === per.email) {
         ismember = true;
         perObj = per;
-        console.log("로그아웃", per);
       }
     });
     if (ismember === true) {
@@ -355,13 +349,11 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          console.log(perObj);
           res.send("success");
         }
       );
     }
     if (ismember === false) {
-      console.log("no!");
       res.send("no");
     }
   });
@@ -376,12 +368,10 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            console.log(mem + " : " + per.socketid);
             socketidList.push(per.socketid);
           }
         });
       });
-      console.log("socketidList : " + socketidList);
       res.send(socketidList);
     });
   }
@@ -394,10 +384,7 @@ router.post("/cutUcoin", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.currentUser === per.nickname) {
         ismember = true;
-        console.log("-----------------");
         perObj = per;
-        //perArr.push(per)
-        console.log("-----------------");
       }
     });
     if (ismember === true) {
@@ -467,7 +454,6 @@ router.post("/manner", function (req, res, next) {
 });
 
 router.post("/report", function (req, res, next) {
-  console.log(req.body.nickname);
   let perObj = {};
   let ismember = false;
   User.find(function (err, user) {

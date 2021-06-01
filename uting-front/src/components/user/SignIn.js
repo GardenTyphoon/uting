@@ -37,12 +37,9 @@ const SignIn = () => {
       email: email,
       password: password,
     };
-    let res = await axios
+    await axios
       .post("http://localhost:3001/users/signin", data)
       .then((res) => {
-        console.log("res.data");
-        console.log(res.data);
-
         if (res.data.message === "login failed") {
           setIslogined(false);
           alert("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
@@ -55,7 +52,8 @@ const SignIn = () => {
           console.log(res.data);
           try {
             setIslogined(true);
-            sessionStorage.setItem("nickname", res.data.nickname);
+            sessionStorage.setItem("token", res.data.token);
+            sessionStorage.setItem("nickname", res.data.perObj.nickname);
             sessionStorage.setItem("email", email);
             alert("로그인 되었습니다.");
 

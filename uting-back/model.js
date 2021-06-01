@@ -62,6 +62,10 @@ const User = new Schema({
     type: Number,
     required: false,
   },
+  refresh_token: {
+    type: String,
+    required: false,
+  },
 });
 // User.plugin(autoInc.plugin, 'user');
 

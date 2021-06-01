@@ -19,15 +19,27 @@ import {
 import axios from "axios";
 import AddMember from "./AddMember";
 import "../../App.css";
-
 import socketio from "socket.io-client";
+
+var token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGI0ZTEzYTRiMjQyMTBhMTUzMGFkMjQiLCJuYW1lIjoi7KGw66-87KCcIiwibmlja25hbWUiOiLriITrpqztj7AiLCJnZW5kZXIiOiJtYW4iLCJiaXJ0aCI6IjE5OTgwMjA0IiwiZW1haWwiOiJtaW5qZUBham91LmFjLmtyIiwicGhvbmUiOiIwMTA4ODY4OTQ1NyIsImltZ1VSTCI6IiIsIm1hbm5lckNyZWRpdCI6My41LCJzb2NrZXRpZCI6Il9sU1BvUUQwcTEzaEh0dXFBQUFCIiwidWNvaW4iOjAsImJlUmVwb3J0ZWQiOjAsImlhdCI6MTYyMjQ4NTczMCwiZXhwIjoxNjIyNTA3MzMwLCJpc3MiOiJ1dGluZy5jb20iLCJzdWIiOiJ1c2VySW5mbyJ9.rr1h_hYg5rWq73EFjlgY8ydzrALY5SPnbfh02CI96mE";
+
+axios.interceptors.request.use(
+  (config) => {
+    config.headers["x-access-token"] = token;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
   margin-bottom: 10px;
   width: 10vw;
-  min-width:150px;
+  min-width: 150px;
   height: 50px;
   text-align: center;
   padding-top: 5%;
@@ -39,12 +51,12 @@ const PlusIcon = styled.div`
   border-radius: 7px;
   margin-bottom: 10px;
   width: 10vw;
-  min-width:150px;
+  min-width: 150px;
   height: 50px;
   padding-top: 5%;
   padding-bottom: 1%;
   background-color: white;
-  text-align:center;
+  text-align: center;
 `;
 
 const On = styled.span`
@@ -56,7 +68,7 @@ const On = styled.span`
 `;
 
 const GroupBox = styled.div`
-font-family: NanumSquare_acR;
+  font-family: NanumSquare_acR;
   float: right;
   background-color: #ffe4e1;
   display: flex;
@@ -85,32 +97,37 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   let sessionUser = sessionStorage.getItem("nickname");
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionUser };
-    const res = await axios.post(
-      "http://localhost:3001/groups/info",
-      data
-    );
+    const res = await axios.post("http://localhost:3001/groups/info", data);
     console.log(res.data.member);
     setGroupMember(res.data.member);
   };
 
   const leaveGroup = async () => {
     const socket = socketio.connect("http://localhost:3001");
-    setClickLeaveGroup(false)
-     let groupMemberExceptMe = [];
-     groupMember.map((mem)=>{if(mem!==sessionUser){groupMemberExceptMe.push(mem)}})
-     console.log(groupMemberExceptMe);
-     
-     let res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
-      {preMember:groupMemberExceptMe}
-    );
+    setClickLeaveGroup(false);
+    let groupMemberExceptMe = [];
+    groupMember.map((mem) => {
+      if (mem !== sessionUser) {
+        groupMemberExceptMe.push(mem);
+      }
+    });
+    console.log(groupMemberExceptMe);
+
+    let res = await axios.post("http://localhost:3001/users/preMemSocketid", {
+      preMember: groupMemberExceptMe,
+    });
     console.log(res.data);
-    socket.emit("leaveGroup", { socketIdList: res.data, leavingUsers:sessionUser });
-   
-    res = await axios.post("http://localhost:3001/groups/leaveGroup", { userNickname: sessionUser });
-   
+    socket.emit("leaveGroup", {
+      socketIdList: res.data,
+      leavingUsers: sessionUser,
+    });
+
+    res = await axios.post("http://localhost:3001/groups/leaveGroup", {
+      userNickname: sessionUser,
+    });
+
     window.location.reload();
-  }
+  };
 
   let saveGroupSocketId = async () => {
     let data = {
@@ -173,19 +190,27 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
       {groupMember === undefined
         ? ""
         : groupMember.map((data, member) => {
-          if (data !== currentUser) {
-            return <Member>{data}</Member>;
-          }
-        })}
+            if (data !== currentUser) {
+              return <Member>{data}</Member>;
+            }
+          })}
       <PlusIcon onClick={toggelAddMember}>+</PlusIcon>
-      {groupMember !== undefined ? <PlusIcon onClick={() => setClickLeaveGroup(true)}>그룹 나가기</PlusIcon> : ""}
+      {groupMember !== undefined ? (
+        <PlusIcon onClick={() => setClickLeaveGroup(true)}>
+          그룹 나가기
+        </PlusIcon>
+      ) : (
+        ""
+      )}
       <Modal isOpen={clickLeaveGroup}>
-        <ModalBody>
-          그룹을 떠나시겠습니까?
-        </ModalBody>
+        <ModalBody>그룹을 떠나시겠습니까?</ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={()=>setClickLeaveGroup(false)}>아니요</Button>{' '}
-          <Button color="secondary" onClick={()=>leaveGroup()}>예</Button>
+          <Button color="primary" onClick={() => setClickLeaveGroup(false)}>
+            아니요
+          </Button>{" "}
+          <Button color="secondary" onClick={() => leaveGroup()}>
+            예
+          </Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={addMemberModal}>
