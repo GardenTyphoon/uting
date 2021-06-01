@@ -15,35 +15,35 @@ import { ConsoleLogger } from 'amazon-chime-sdk-js';
 let mannerColor;
 function mannerCredit(avgManner) {
     if (avgManner === 4.5) {
-        mannerColor = "#FF0000";
+        mannerColor = "#e96363"; //빨강
         return "A+";
     }
     else if (avgManner < 4.5 && avgManner >= 4.0) {
-        mannerColor = "#FC92A4";
+        mannerColor = "#fdc95d"; //주황
         return "A0";
     }
     else if (avgManner < 4.0 && avgManner >= 3.5) {
-        mannerColor = "#FE5E16";
+        mannerColor = "#f28e72"; //탁한분홍
         return "B+";
     }
     else if (avgManner < 3.5 && avgManner >= 3.0) {
-        mannerColor = "#FE9D72";
+        mannerColor = "#72c4bf"; //청록?
         return "B0";
     }
     else if (avgManner < 3.0 && avgManner >= 2.5) {
-        mannerColor = "#97A1FF";
+        mannerColor = "#6d9eca"; //바다색
         return "C+";
     }
     else if (avgManner < 2.5 && avgManner >= 2.0) {
-        mannerColor = "#020DEC";
+        mannerColor = "#7668ac"; //보라색
         return "C0";
     }
     else if (avgManner < 2.0 && avgManner >= 1.5) {
-        mannerColor = "#767171";
+        mannerColor = "#B29FFC"; //갈색
         return "D+";
     }
     else if (avgManner < 1.5 && avgManner >= 1.0) {
-        mannerColor = "#151515";
+        mannerColor = "#444C57"; //먹색
         return "D0";
     }
     else {
@@ -332,10 +332,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
                                 <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
-                                    <div style={{ marginRight: "7%" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
-                                    <div >{mannerCredit(room.avgManner)}</div>
+                                    <div style={{ marginRight: "7%", fontWeight:"bold" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
+                                    <div style={{ fontWeight:"bold" }}>{mannerCredit(room.avgManner)}</div>
                                 </div>
-                                <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small" }}>{room.avgAge}살</div>
+                                <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight:"bold" }}>{room.avgAge}살</div>
                             </Col>
                             <Col xs="3">
                                 <button className="joinBtn" onClick={() => attendRoomByID(room)}>참가</button>

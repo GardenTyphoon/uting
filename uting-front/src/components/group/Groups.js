@@ -66,6 +66,7 @@ font-family: NanumSquare_acR;
 
 const GroupTitle = styled.div`
   font-family: NanumSquare_acR;
+  font-weight:bold;
   font-size: medium;
   color: #896e6e;
   margin-top:3%;
