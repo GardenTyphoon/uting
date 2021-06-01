@@ -1,0 +1,33 @@
+{
+  "name": "uting",
+  "version": "1.0.0",
+  "description": "2021-1 ajou university SW Capstone Project - Uting",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cd uting-back && npm run dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GardenTyphoon/uting.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GardenTyphoon/uting/issues"
+  },
+  "homepage": "https://github.com/GardenTyphoon/uting#readme",
+  "dependencies": {
+    "amazon-chime-sdk-component-library-react": "^2.4.0",
+    "amazon-chime-sdk-js": "^2.9.0",
+    "chime": "^1.0.4",
+    "react-card-carousel": "^1.1.3",
+    "react-toastify": "^7.0.4",
+    "styled-components": "^5.3.0",
+    "styled-system": "^5.1.5",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "artillery": "^1.6.2"
+  }
+}

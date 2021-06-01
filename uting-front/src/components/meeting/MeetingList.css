@@ -1,0 +1,51 @@
+@font-face{
+    font-family:'NanumSquare_acR';
+    src:url('./../../ttf/NanumSquare_acR.ttf');
+}
+.MeetingRoom{
+    font-family: NanumSquare_acR;
+    background-color: white;
+    display : flex;
+    flex-direction : row;
+    justify-content: space-around;
+    border-radius: 10px;
+    padding:15px;
+    margin:15px;
+    font-size:medium;
+    margin-Top:0px;
+}
+.MeetingRoomImg{
+    width:10%;
+    border-radius: 50%;
+    margin-left:23px;
+    margin-right: 2%;
+    border:3px solid; 
+
+}
+.joinBtn{
+    font-weight: bold;
+    margin-bottom:10%;
+    margin-left:20%;
+    border-radius: 15px;
+    width:60%;
+    color:white;
+    background-color:#68D2FF;
+    border:none;
+}
+.RoomListContainer{
+    overflow: auto;
+}
+.RoomListContainer::-webkit-scrollbar{
+    width:7px;
+}
+.RoomListContainer::-webkit-scrollbar-thumb{
+    border-radius: 7px;
+    background-color: #FFB4AC;
+    border: 10px solid #FFB4AC;
+   
+}
+.RoomListContainer::-webkit-scrollbar-track{
+    background-color: #9A7D7D; 
+    background-clip: content-box;
+    border: 5px solid transparent;
+}

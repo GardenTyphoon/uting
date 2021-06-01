@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "NanumSquare_acR";
+  src: url("../ttf/NanumSquare_acR.ttf");
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+.profileModal {
+  background-color: #ffb4ac;
+}
+.payBtn {
+  font-family: NanumSquare_acR;
+  width: 20%;
+  height: 5%;
+  background: linear-gradient(to bottom, #ff9a51, #ff6994);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  float: right;
+}
