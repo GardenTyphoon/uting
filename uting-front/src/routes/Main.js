@@ -194,7 +194,7 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
-        <button style={{border:"0",backgroundColor:"rgb(255,228,225)",marginRight:"1%",position:"absolute",marginLeft:"90%"}} onClick={(e)=>tutorialtoggle(e)} >유팅메뉴얼<img style={{width:"20px",height:"20px",marginLeft:"7px"}} src={helpLogo}></img></button>
+        <button style={{border:"0",backgroundColor:"rgb(255,228,225)",marginRight:"1%",position:"absolute",marginLeft:"92%",marginBottom:"5%"}} onClick={(e)=>tutorialtoggle(e)} ><span style={{color:"rgb(89,57,70)",fontFamily: "NanumSquare_acR",fontWeight:"bold"}}>유팅메뉴얼</span><img style={{width:"20px",height:"20px",marginLeft:"7px",marginBottom:"10px"}} src={helpLogo}></img></button>
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
