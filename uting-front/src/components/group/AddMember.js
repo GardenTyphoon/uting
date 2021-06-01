@@ -18,7 +18,7 @@ import {
 } from "reactstrap";
 import axios from "axios";
 import socketio from "socket.io-client";
-
+import introLog from '../../img/배경없는유팅로고.png'
 const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId,preMemSocketIdList }) => {
  
   const [newmember,setNewmember] = useState("")
@@ -27,9 +27,6 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
   const [precheck,setPrecheck]=useState(false);
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
   
-  let toggleAlert =(e)=>{
-    setGetalert({...getalert,"flag":!getalert.flag})
-  }
   let onChangehandler = (e) => {
     let { name, value } = e.target;
     setNewmember(value)   
@@ -61,10 +58,10 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
     }
     else{
       //alert("현재 접속 중인 사용자가 아니거나, 닉네임이 올바르지 않습니다.")
-      setGetalert({"flag":true,"message":"현재 접속 중인 사용자가 아니거나, 닉네임이 올바르지 않습니다."});
-      // setTimeout(()=>{
-      //   modalState(true);
-      // },1500)
+      setGetalert({"flag":true,"message":"현재 접속 중인 사용자가 아니거나,닉네임이 올바르지 않습니다."});
+       setTimeout(()=>{
+        setGetalert({"flag":false,"message":""})
+       },2000)
      
     }
       //가입된 사용자가 맞는지, 현재 로그인한 사용자가 맞는지 
@@ -112,16 +109,13 @@ return (
               <Button style={{display:"inline",marginLeft:"5%",marginBottom:"2%"}}  color="danger" onClick={(e)=>addGroupMember(e)} >추가</Button>
     </ModalBody>
     <Modal isOpen={getalert.flag} >
-        <ModalHeader>
-          U-TING 메시지
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
         </ModalHeader>
-        <ModalBody>
-          <div>{getalert.message}</div>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"15px",height:"50px"}}>{getalert.message}</div>
           
         </ModalBody>
-        <ModalFooter>
-        <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
-        </ModalFooter>
       </Modal>
   </div>
 );
