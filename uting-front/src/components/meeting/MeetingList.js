@@ -165,8 +165,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             }
         }
         if (coinCheck === true) {
-            // sumManner += avgManner;
-            // sumAge += avgAge;
             //
 
             let new_numOfMan = numOfMan + room.numOfMan;
@@ -175,12 +173,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
             const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
 
-            // let new_status = "대기";
-            // console.log(new_numOfMan, new_numOfWoman, room.maxNum * 2)
-            // if ((new_numOfMan + new_numOfWoman - room.maxNum * 2) === 0) {
-            //     console.log("아니 여기 왜 안들어가?")
-            //     new_status = "진행";
-            // }
             let data = {
                 title: room.title,
                 maxNum: Number(room.maxNum),
@@ -193,8 +185,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 session: sessionUser,
                 flag: 1,
             }
-            //console.log(typeof data.groupmember)
-            //const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
             let meetingRoomParticipants = [];
             room.users.map((per) => {
                 meetingRoomParticipants.push(per.nickname);
