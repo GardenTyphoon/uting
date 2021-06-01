@@ -1,7 +1,7 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import {useHistory } from "react-router";
 import styled from 'styled-components';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress,Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Progress,Input,Alert } from 'reactstrap';
 import axios from 'axios';
 import socketio from "socket.io-client";
 import "./Vote.css"
@@ -210,6 +210,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
            
             if(res.data==="success"){
                 setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
+               
                 setTimeout(()=>{
                     window.location.href="http://localhost:3000/main"
                 },1500)
@@ -220,7 +221,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
     return (
         
-        <div>
+        <div>]
             <Modal isOpen={toggleEndMeetingBtn}>
                 <ModalHeader>
                     미팅 종료 투표

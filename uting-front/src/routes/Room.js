@@ -336,7 +336,10 @@ const Room = () => {
         setToggleMidLeave(false);
         //alert("미팅 방을 나갑니다.");
         setGetalert({"flag":false,"message":"미팅 방을 나갑니다."});
-        window.location.href = "http://localhost:3000/main";
+        setTimeout(()=>{
+          window.location.href = "http://localhost:3000/main";
+        },[1500])
+        
       }
     }
   };
