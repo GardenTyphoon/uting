@@ -8,6 +8,27 @@ background-image: url("../img/Intro이미지.png");
 .signinclass{
   margin-bottom: 20%;
 }
+.intrologo{
+  
+  margin-left: 90%;
+}
+.intromessage{
+  
+  margin-left: 50%;
+  margin-top: 5%;
+  margin-right: 10%;
+}
+.Logoutcontainer{
+    background-color:white;
+    display:flex;
+    align-items: center;
+    font-family : NanumSquare_acR;
+    border-radius: 20px;
+    margin-top: 40%;
+    padding-top: 60px;
+    padding-bottom: 60px;
+
+}
 .IntroContainer {
   background-color: #f6cdcd;
   border: 5px black;
@@ -16,23 +37,28 @@ background-image: url("../img/Intro이미지.png");
   margin-top: 150px;
   border-radius: 10px;
   margin-bottom: 150px;
+  padding-right: 5%;
 }
 .LogInOutBtn {
-  top: 5%;
-  left: 90%;
-  width: 200px;
-  height: 50px;
-  font-family: NanumSquare_acR;
-  border-radius: 10px;
-  background-color: #dd9998;
-  color: white;
-  border: none;
-  margin-top: 350px;
-  margin-left: 690px;
+    width:100px;
+    border:none;
+    color:rgb(247, 247, 247);
+    background-color: #da6a6a;
+    border-radius: 10px;
+    padding:20px;
+    margin-left: 13%;
+
+}
+.logoutname{
+  margin-left: 13%;
+  font-weight: bold;
+  color: #f18a8a;
+  font-size: 20px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .MiddleBtn {
   position: absolute;
-  left: 45%;
+  left: 30%;
   top: 60%;
   width: 200px;
   font-family: NanumSquare_acR;
@@ -41,6 +67,7 @@ background-image: url("../img/Intro이미지.png");
   border: none;
   padding: 10px;
   background: linear-gradient(to bottom, #e7a97c, #ff6994);
+  margin-top: 35%;
 }
 .diva{
   float: right;
@@ -57,7 +84,14 @@ background-image: url("../img/Intro이미지.png");
 .divad:hover { color: black; text-decoration: none;}
 
 .signinclass{
-  width: 350px;
-  padding-top: 300px;
   margin-left: 40%;
+  padding-bottom: 20%;
+ 
+}
+.col1{
+  margin-top: 35%;
+  width: 180px;
+}
+.col2{
+  
 }
