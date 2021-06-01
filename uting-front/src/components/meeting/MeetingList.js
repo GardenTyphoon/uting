@@ -12,45 +12,6 @@ import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
 import { ConsoleLogger } from 'amazon-chime-sdk-js';
-let mannerColor;
-function mannerCredit(avgManner) {
-    if (avgManner === 4.5) {
-        mannerColor = "#e96363"; //빨강
-        return "A+";
-    }
-    else if (avgManner < 4.5 && avgManner >= 4.0) {
-        mannerColor = "#fdc95d"; //주황
-        return "A0";
-    }
-    else if (avgManner < 4.0 && avgManner >= 3.5) {
-        mannerColor = "#f28e72"; //탁한분홍
-        return "B+";
-    }
-    else if (avgManner < 3.5 && avgManner >= 3.0) {
-        mannerColor = "#72c4bf"; //청록?
-        return "B0";
-    }
-    else if (avgManner < 3.0 && avgManner >= 2.5) {
-        mannerColor = "#6d9eca"; //바다색
-        return "C+";
-    }
-    else if (avgManner < 2.5 && avgManner >= 2.0) {
-        mannerColor = "#7668ac"; //보라색
-        return "C0";
-    }
-    else if (avgManner < 2.0 && avgManner >= 1.5) {
-        mannerColor = "#B29FFC"; //갈색
-        return "D+";
-    }
-    else if (avgManner < 1.5 && avgManner >= 1.0) {
-        mannerColor = "#444C57"; //먹색
-        return "D0";
-    }
-    else {
-        mannerColor = "#000000";
-        return "F";
-    }
-}
 
 function birthToAge(birth) {
     console.log(birth)
@@ -75,8 +36,53 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [roomObj, setRoomObj] = useState({})
     const [prevFilter, setPrevFilter] = useState("")
     const [tooltipOpen, setTooltipOpen] = useState(false);
-    const [getalert, setGetalert] = useState({ "flag": false, "message": "" })
+    const [getalert, setGetalert] = useState({ "flag": false, "message": "" });
+    const [groupMannerInfo, setGroupMannerInfo] =useState({});
+    const [resstatus,setResstatus]=useState("")
+    const [groupMannerInfoTemp,setGroupMannerInfoTemp]=useState([])
+    //let groupMannerInfoTemp = [];
+    function getMannerCreditAndColor(avgManner) {
+        let color;
+        let credit;
+        if (avgManner === 4.5) {
+            color = "#e96363"; //빨강
+            credit="A+";
+        }
+        else if (avgManner < 4.5 && avgManner >= 4.0) {
+            color="#fdc95d"; //주황
+            credit="A0";
+        }
+        else if (avgManner < 4.0 && avgManner >= 3.5) {
+            color="#f28e72"; //탁한분홍
+            credit="B+";
 
+        }else if (avgManner < 3.5 && avgManner >= 3.0) {
+            color="#72c4bf"; //청록?
+            credit="B0";
+        }
+        else if (avgManner < 3.0 && avgManner >= 2.5) {
+            color="#6d9eca"; //바다색
+            credit="C+";
+        }
+        else if (avgManner < 2.5 && avgManner >= 2.0) {
+            color="#7668ac"; //보라색
+            credit="C0";
+        }
+        else if (avgManner < 2.0 && avgManner >= 1.5) {
+            color="#B29FFC"; //갈색
+            credit="D+";
+        }
+        else if (avgManner < 1.5 && avgManner >= 1.0) {
+            color="#444C57"; //먹색
+            credit="D0";
+        }
+        else {
+            color="#000000";
+            credit="F";
+        }
+        return({"color":color, "credit":credit})
+    }
+    
     let sessionUser = sessionStorage.getItem("nickname");
 
     let toggleAlert =(e)=>{
@@ -258,7 +264,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             "http://localhost:3001/groups/info",
             sessionObject
         );
-        console.log(typeof (res.data.member));
         let onlyMe = [sessionUser];
         if (res.data === "no") setGroupMember(onlyMe);
         else setGroupMember(res.data.member);
@@ -277,11 +282,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             settoolTipId(title);
         }
     }
-    useEffect(() => {
-        getMeetings()
-        getGroupInfo()
-    }, []);
+   
 
+    
 
     useEffect(() => {
         if (checkState === true) {
@@ -290,16 +293,26 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [checkState])
 
 
-    let getMeetings = async () => {
-        await axios
-            .get('http://localhost:3001/meetings')
-            .then(({ data }) => {
-                setView(data)
-                setOriginList(data)
-            })
-            .catch((err) => { });
-
+    let getMeetings = async (e) => {
+        const res = await axios.post('http://localhost:3001/meetings/')
+        console.log(res)
+        let arr =[]
+        res.data.map((room)=>arr.push(getMannerCreditAndColor(room.avgManner)))
+        setGroupMannerInfo(arr)
+        setView(res.data)
+        setOriginList(res.data)
+       
+       
+       setResstatus("200")
     }
+    useEffect(() => {
+        getMeetings()
+        getGroupInfo()
+ 
+    }, []);
+    useEffect(()=>{
+       console.log(groupMannerInfo[0])
+    },[groupMannerInfo])
 
     useEffect(() => {
         const filteredName = originList.filter((data) => {
@@ -332,23 +345,20 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [filterage])
 
     useEffect(() => {
-
-        //setView(originList)
         getMeetings();
-
+       
     }, [getorigin])
 
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
-
+                
                 <div style={{ marginRight: "25px" }}>
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
-
                             <img src={MeetingRoom}
                                 className="MeetingRoomImg"
-                                style={{ borderColor: mannerColor }}
+                                style={{ borderColor:groupMannerInfo[Number(index)].color}}
                                 id={"Tooltip-" + room._id.substr(0, 10)}
                                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
@@ -358,9 +368,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
-                                <div style={{ display: "flex", justifyContent: "center", color: mannerColor, marginTop: "15%" }}>
+                                <div style={{ display: "flex", justifyContent: "center", color:groupMannerInfo[index].color, marginTop: "15%" }}>
                                     <div style={{ marginRight: "7%", fontWeight: "bold" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
-                                    <div style={{ fontWeight: "bold" }}>{mannerCredit(room.avgManner)}</div>
+                                    <div style={{ fontWeight: "bold" }}>{groupMannerInfo[index].credit}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight: "bold" }}>{room.avgAge}살</div>
                             </Col>
@@ -388,7 +398,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                         {room.users.map(user =>
 
-                            <div>{user.nickname}  {mannerCredit(user.mannerCredit)}  {user.age}살 <br></br></div>)}
+                            <div>{user.nickname} {getMannerCreditAndColor(user.mannerCredit).credit}   {user.age}살 <br></br></div>)}
                     </Tooltip>
 
 
