@@ -11,10 +11,8 @@ import socketio from "socket.io-client";
 import utingLogo from "../img/utingLogo.png";
 import helpLogo from '../img/help.png';
 import Filter from "../components/main/Filter.js";
-
+import introLog from '../img/배경없는유팅로고.png'
 import CollegeRanking from "../components/main/CollegeRanking.js";
-//import { ToastContainer, toast } from 'react-toastify';
-//import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import renewImg from "../img/새로고침.svg";
@@ -51,7 +49,11 @@ const Main = () => {
   const [tutorialmodal, setTutorialModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-
+  const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  
+  let toggleAlert =(e)=>{
+    setGetalert({...getalert,"flag":!getalert.flag})
+  }
 
   const tutorialtoggle = (e) => setTutorialModal(!tutorialmodal);
   let sessionEmail = sessionStorage.getItem("email");
@@ -285,7 +287,16 @@ const Main = () => {
         />
         </div>
        
-        <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
+        <Modal isOpen={getalert.flag} >
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
+          
+        </ModalBody>
+      </Modal>
+      <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
           <ModalHeader style={{ marginLeft: "40%" }} toggle={tutorialtoggle}>
             U-TING 메뉴얼
           </ModalHeader>

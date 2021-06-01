@@ -25,6 +25,7 @@ import EndMeetingControl from './EndMeetingControl';
 import { useNavigation } from '../../providers/NavigationProvider';
 import axios from "axios";
 import reportImg from "../../img/report.png";
+import introLog from '../../img/배경없는유팅로고.png'
 const MeetingControls = ({participantss}) => {
   const { toggleNavbar, closeRoster, showRoster } = useNavigation();
   const [toggleReport, setToggleReport] = useState(false);
@@ -128,16 +129,13 @@ const MeetingControls = ({participantss}) => {
         </ModalFooter>
       </Modal>
       <Modal isOpen={getalert.flag} >
-        <ModalHeader>
-          U-TING 메시지
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
         </ModalHeader>
-        <ModalBody>
-          <div>{getalert.message}</div>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
           
         </ModalBody>
-        <ModalFooter>
-        <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
-        </ModalFooter>
       </Modal>
       </ControlBar>
   );
