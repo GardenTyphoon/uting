@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Link, Switch, Router } from 'react-router-dom';
+import { Route, Link, Switch, Router, useHistory } from 'react-router-dom';
 import "./SignIn.css"
 import axios from 'axios';
 import { Container, Row, Col,Button,Modal,ModalBody,ModalFooter, ModalHeader } from 'reactstrap';
@@ -7,6 +7,7 @@ import { Container, Row, Col,Button,Modal,ModalBody,ModalFooter, ModalHeader } f
 import introLog from '../../img/배경없는유팅로고.png'
 
 const SignIn = () => {
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [islogined, setIslogined] = useState(false);
