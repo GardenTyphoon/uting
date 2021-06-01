@@ -197,8 +197,8 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
           그룹을 떠나시겠습니까?
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={()=>setClickLeaveGroup(false)}>예</Button>{' '}
-          <Button color="secondary" onClick={()=>leaveGroup()}>아니요</Button>
+          <Button color="primary" onClick={()=>leaveGroup()}>예</Button>{' '}
+          <Button color="secondary" onClick={()=>setClickLeaveGroup(false)}>아니요</Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={addMemberModal}>
