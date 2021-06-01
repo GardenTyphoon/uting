@@ -7,7 +7,7 @@ import MeetingRoom from '../../img/MeetingRoom.png'
 import './MeetingList.css'
 import { Container, Row, Col, Tooltip, Modal, ModalFooter, ModalHeader, ModalBody, Button } from 'reactstrap';
 import socketio from "socket.io-client";
-
+import introLog from '../../img/배경없는유팅로고.png'
 import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
@@ -37,7 +37,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [prevFilter, setPrevFilter] = useState("")
     const [tooltipOpen, setTooltipOpen] = useState(false);
     const [getalert, setGetalert] = useState({ "flag": false, "message": "" })
-    const [groupMannerInfo, setGroupMannerInfo] =useState({});
+   // const [groupMannerInfo, setGroupMannerInfo] =useState([]);
+    let groupMannerInfo=[];
     function getMannerCreditAndColor(avgManner) {
         let color;
         let credit;
@@ -276,8 +277,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     useEffect(() => {
         getMeetings()
         getGroupInfo()
+ 
     }, []);
 
+    
 
     useEffect(() => {
         if (checkState === true) {
@@ -286,12 +289,20 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [checkState])
 
 
-    let getMeetings = async () => {
+    let getMeetings = async (e) => {
         await axios
             .get('http://localhost:3001/meetings')
             .then(({ data }) => {
                 setView(data)
                 setOriginList(data)
+                let groupMannerInfoTemp = [];
+        console.log(data)
+        data.map((room)=>groupMannerInfoTemp.push(getMannerCreditAndColor(room.avgManner)))
+
+        console.log(groupMannerInfoTemp)
+        groupMannerInfo=groupMannerInfoTemp;   
+        console.log(groupMannerInfo)
+               
             })
             .catch((err) => { });
 
@@ -329,24 +340,18 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     useEffect(() => {
         getMeetings();
-        let data = [];
-        viewRoomList.map((room)=>
-            data.push(getMannerCreditAndColor(room.avgManner)))
-        console.log(data);
-        setGroupMannerInfo(data);
+       
     }, [getorigin])
 
     return (//tr map 한다음에 key넣어주기
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
                 <div style={{ marginRight: "25px" }}>
-                    
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
-
                             <img src={MeetingRoom}
                                 className="MeetingRoomImg"
-                                style={{ borderColor:groupMannerInfo[index].color}}
+                                style={{ borderColor:groupMannerInfo.length!==0?groupMannerInfo[index].color:"black"}}
                                 id={"Tooltip-" + room._id.substr(0, 10)}
                                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
@@ -356,9 +361,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
-                                <div style={{ display: "flex", justifyContent: "center", color: groupMannerInfo[index].color, marginTop: "15%" }}>
+                                <div style={{ display: "flex", justifyContent: "center", color:"black", marginTop: "15%" }}>
                                     <div style={{ marginRight: "7%", fontWeight: "bold" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
-                                    <div style={{ fontWeight: "bold" }}>{groupMannerInfo[index].credit}</div>
+                                    <div style={{ fontWeight: "bold" }}>{room.avgManner}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight: "bold" }}>{room.avgAge}살</div>
                             </Col>
@@ -386,7 +391,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                         {room.users.map(user =>
 
-                            <div>{user.nickname}  {getMannerCreditAndColor(user.mannerCredit).credit}  {user.age}살 <br></br></div>)}
+                            <div>{user.nickname}  {user.mannerCredit}  {user.age}살 <br></br></div>)}
                     </Tooltip>
 
 
@@ -395,17 +400,14 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 </div>
             )}
             <Modal isOpen={getalert.flag} >
-                <ModalHeader>
-                    U-TING 메시지
-                </ModalHeader>
-                <ModalBody>
-                    <div>{getalert.message}</div>
-
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="warning" onClick={(e) => toggleAlert(e)}>확인</Button>
-                </ModalFooter>
-            </Modal>
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"15px",height:"50px"}}>{getalert.message}</div>
+          
+        </ModalBody>
+      </Modal>
         </div>
 
     )
