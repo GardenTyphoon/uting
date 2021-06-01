@@ -52,7 +52,7 @@ const Main = () => {
   const [error, setError] = useState('');
 
 
-  const tutorialtoggle = () => setTutorialModal(!tutorialmodal);
+  const tutorialtoggle = (e) => setTutorialModal(!tutorialmodal);
   let sessionEmail = sessionStorage.getItem("email");
   let sessionUser = sessionStorage.getItem("nickname");
 
@@ -75,7 +75,7 @@ const Main = () => {
   useEffect(() => {}, [addEvent]);
 
   useEffect(() => {
-    setTutorialModal(true);
+   // setTutorialModal(true);
 
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
@@ -194,6 +194,7 @@ const Main = () => {
     <div className="mainContainer">
       <div className="mainTop">
         <img className="utingLogo" src={utingLogo} />
+        <button style={{border:"0",backgroundColor:"rgb(255,228,225)",marginRight:"1%",position:"absolute",marginLeft:"90%"}} onClick={(e)=>tutorialtoggle(e)} >유팅메뉴얼<img style={{width:"20px",height:"20px",marginLeft:"7px"}} src={helpLogo}></img></button>
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
@@ -269,7 +270,9 @@ const Main = () => {
             />
           </div>
         </div>
-        <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+        
+        <div style={{display:"flex", flexDirection:"column", alignItems:"center",backgroundColor:"#ffe4e1"}}>
+        
         <Profile />
         <Groups
           groupSocket={(e) => groupSocket(e)}
