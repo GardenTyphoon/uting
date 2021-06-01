@@ -63,12 +63,11 @@ const Intro = () => {
     <div className="IntroContainer">
       
         <Row className="signinclass">
-          <Col>
-          <div className="col1">
+          
+          <div style={{display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
           <img className="intrologo" src={introLog}/>
           <img className="intromessage" src={intromessage}></img>
           </div>
-           </Col>
            <Col>
            <div className="col2">
            {isLoggedIn === false ?<><SignIn /><div className="createaccount">
@@ -89,12 +88,6 @@ const Intro = () => {
           </Col>
         </Row>
  
-        
-  
-      
-      <Container>
-       
-      </Container>
       <div className="diva" ><Link className="divad" to="/ad">광고 문의</Link></div>
     </div>
   );
