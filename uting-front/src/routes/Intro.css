@@ -5,19 +5,6 @@
 /*
 background-image: url("../img/Intro이미지.png");
 */
-.signinclass{
-  margin-bottom: 20%;
-}
-.intrologo{
-  
-  margin-left: 90%;
-}
-.intromessage{
-  
-  margin-left: 50%;
-  margin-top: 5%;
-  margin-right: 10%;
-}
 .Logoutcontainer{
     background-color:white;
     display:flex;
@@ -32,12 +19,20 @@ background-image: url("../img/Intro이미지.png");
 .IntroContainer {
   background-color: #f6cdcd;
   border: 5px black;
-  margin-right: 250px;
-  margin-left: 250px;
-  margin-top: 150px;
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width : 70vw;
+  min-width:850px;
+  height: 60vh;
+  min-height:450px;
+  position: absolute;
+  left:15%;
+  top:15%;
   border-radius: 10px;
-  margin-bottom: 150px;
-  padding-right: 5%;
+
+  overflow: hidden;
 }
 .LogInOutBtn {
     width:100px;
@@ -57,9 +52,7 @@ background-image: url("../img/Intro이미지.png");
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 .MiddleBtn {
-  position: absolute;
-  left: 30%;
-  top: 60%;
+  
   width: 200px;
   font-family: NanumSquare_acR;
   border-radius: 10px;
@@ -67,7 +60,7 @@ background-image: url("../img/Intro이미지.png");
   border: none;
   padding: 10px;
   background: linear-gradient(to bottom, #e7a97c, #ff6994);
-  margin-top: 35%;
+
 }
 .diva{
   float: right;
@@ -83,12 +76,12 @@ background-image: url("../img/Intro이미지.png");
 .divad:visited { color: black; text-decoration: none;}
 .divad:hover { color: black; text-decoration: none;}
 
-.signinclass{
-  margin-left: 40%;
-  padding-bottom: 20%;
- 
-}
 .col1{
   margin-top: 35%;
   width: 180px;
+}
+.col2{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
