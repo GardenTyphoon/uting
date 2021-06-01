@@ -135,6 +135,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         }
         else {
             setGetalert({ "flag": true, "message": "정해진 인원수가 맞지 않아 입장이 불가합니다." })
+            setTimeout(()=>{
+                setGetalert({"flag":false,"message":""})
+               },1500)
         }
     }
     const attendRoomByID = async (room, groupMembersInfo) => {
@@ -408,7 +411,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
           <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
         </ModalHeader>
         <ModalBody style={{height:"90px"}}>
-          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"15px",height:"50px"}}>{getalert.message}</div>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
           
         </ModalBody>
       </Modal>
