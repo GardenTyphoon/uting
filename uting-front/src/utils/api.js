@@ -53,7 +53,7 @@ export async function endMeeting(meetingId){
     const data = {title : meetingId};
     const res = await axios.post('http://localhost:3001/meetings/end', data);
 
-    if(!res.ok){
-        throw new Error('Server error ending meeting');
-    }
+    // if(!res.ok){
+    //     throw new Error('Server error ending meeting');
+    // }
 }

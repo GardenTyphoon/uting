@@ -7,7 +7,7 @@ import socketio from "socket.io-client";
 import "./Vote.css"
 import { ToastContainer, toast } from "react-toastify";
 import { endMeeting } from "../../utils/api";
-
+import introLog from '../../img/배경없는유팅로고.png'
 const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meetingMembers},ref) => {
 
     const history = useHistory();
@@ -25,6 +25,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     const [goManner,setGoManner] = useState({"name":"","manner":""})
     const [getalert,setGetalert]=useState({"flag":false,"message":""})
   
+    let sessionUser = sessionStorage.getItem("nickname");
     let toggleAlert =(e)=>{
       setGetalert({...getalert,"flag":!getalert.flag})
     }
@@ -183,6 +184,9 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             document.getElementsByName("realmanner").values="default"
             setCopyParticipants(arr)
             setGoManner({"name":"","manner":""})
+            setTimeout(()=>{
+                setGetalert({"flag":false,"message":""})
+            },2000)
             
         }
     }
@@ -202,7 +206,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             let data ={
                 title:meeting_id,
                 user:mem.nickname,
-                gender:mem.gender
+                gender:mem.gender,
+                session: sessionUser,
             }
             console.log(data)
 
@@ -210,18 +215,25 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
            
             if(res.data==="success"){
                 setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
-               
                 setTimeout(()=>{
-                    window.location.href="http://localhost:3000/main"
-                },1500)
-                
+                    setGetalert({"flag":false,"message":""})
+                    window.location.href = "http://localhost:3000/main";
+                   },1500)
+            }
+            else if(res.data === "last"){
+                setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
+                setTimeout(async () => {
+                    await endMeeting(meeting_id);
+                    setGetalert({"flag":false,"message":""})
+                    window.location.href = "http://localhost:3000/main";
+                }, 1500)
             }
         }
         
     }
     return (
         
-        <div>]
+        <div>
             <Modal isOpen={toggleEndMeetingBtn}>
                 <ModalHeader>
                     미팅 종료 투표
@@ -266,17 +278,14 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 </ModalFooter>
             </Modal>
             <Modal isOpen={getalert.flag} >
-            <ModalHeader>
-                U-TING 메시지
-                </ModalHeader>
-            <ModalBody>
-            <div>{getalert.message}</div>
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
           
-            </ModalBody>
-            <ModalFooter>
-                <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
-                </ModalFooter>
-            </Modal>
+        </ModalBody>
+      </Modal>
             
             {startVote === true ?
                 <div className="voteContainer">

@@ -31,6 +31,7 @@ import airplane from "../img/airplane.png"
 import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
 import "./Room.css"
+import introLog from '../img/배경없는유팅로고.png'
 const McBotContainer = styled.div`
   width: 250px;
   height: 500px;
@@ -335,12 +336,22 @@ const Room = () => {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
         //alert("미팅 방을 나갑니다.");
-        setGetalert({"flag":false,"message":"미팅 방을 나갑니다."});
+        
+        setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
         setTimeout(()=>{
+          setGetalert({"flag":false,"message":""})
           window.location.href = "http://localhost:3000/main";
-        },[1500])
+         },2000)
         
       }
+      else if(res.data === "last"){
+        setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
+        setTimeout(async () => {
+            await endMeeting(meeting_id);
+            setGetalert({"flag":false,"message":""})
+            window.location.href = "http://localhost:3000/main";
+        }, 1500)
+    }
     }
   };
 
@@ -565,16 +576,13 @@ useEffect(()=>{
       </Modal>
 
       <Modal isOpen={getalert.flag} >
-        <ModalHeader>
-          U-TING 메시지
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
         </ModalHeader>
-        <ModalBody>
-          <div>{getalert.message}</div>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"18px",height:"50px"}}>{getalert.message}</div>
           
         </ModalBody>
-        <ModalFooter>
-        <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
-        </ModalFooter>
       </Modal>
     </div>
   );

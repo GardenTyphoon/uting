@@ -3,9 +3,8 @@ import { Route, Link, Switch, Router } from 'react-router-dom';
 import "./SignIn.css"
 import axios from 'axios';
 import { Container, Row, Col,Button,Modal,ModalBody,ModalFooter, ModalHeader } from 'reactstrap';
-//import { ToastContainer, toast } from 'react-toastify';
-//import 'react-toastify/dist/ReactToastify.css';
 
+import introLog from '../../img/배경없는유팅로고.png'
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -53,12 +52,18 @@ const SignIn = () => {
       setIslogined(false);
       //alert("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
       setGetalert({"flag":true,"message":"아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다."})
+      setTimeout(()=>{
+        setGetalert({"flag":false,"message":""})
+       },1500)
       //toast("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
       
     }
     else if(res.data==="hell"){
       //alert("신고가 3번이상 누적된 사용자로서 더 이상 U-TING 서비스 사용이 불가합니다.")
       setGetalert({"flag":true,"message":"신고가 3번이상 누적된 사용자로서 더 이상 U-TING 서비스 사용이 불가합니다."})
+      setTimeout(()=>{
+        setGetalert({"flag":false,"message":""})
+       },1500)
     }
     else {
       try {
@@ -114,16 +119,13 @@ const SignIn = () => {
         </Col>
       </Row>
       <Modal isOpen={getalert.flag} >
-        <ModalHeader>
-          U-TING 메시지
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
         </ModalHeader>
-        <ModalBody>
-          <div>{getalert.message}</div>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"18px",height:"50px"}}>{getalert.message}</div>
           
         </ModalBody>
-        <ModalFooter>
-        <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
-        </ModalFooter>
       </Modal>
     </Container>
   );
