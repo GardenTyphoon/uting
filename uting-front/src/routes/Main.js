@@ -197,7 +197,7 @@ const Main = () => {
 
       <div className="mainBottom">
         <div className="CollegeRanking">
-          <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder" }}>
+          <div style={{ fontFamily: "NanumSquare_acR", fontWeight: "bolder", marginBottom:"8%", marginTop:"3%" }}>
             학교별 매너학점 TOP10
           </div>
           <CollegeRanking />
