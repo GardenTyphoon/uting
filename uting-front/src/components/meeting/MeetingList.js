@@ -290,16 +290,26 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [checkState])
 
 
-    let getMeetings = async () => {
-        await axios
-            .get('http://localhost:3001/meetings')
-            .then(({ data }) => {
-                setView(data)
-                setOriginList(data)
-            })
-            .catch((err) => { });
-
+    let getMeetings = async (e) => {
+        const res = await axios.post('/api/meetings/')
+        console.log(res)
+        let arr =[]
+        res.data.map((room)=>arr.push(getMannerCreditAndColor(room.avgManner)))
+        setGroupMannerInfo(arr)
+        setView(res.data)
+        setOriginList(res.data)
+       
+       
+       setResstatus("200")
     }
+    useEffect(() => {
+        getMeetings()
+        getGroupInfo()
+ 
+    }, []);
+    useEffect(()=>{
+       console.log(groupMannerInfo[0])
+    },[groupMannerInfo])
 
     useEffect(() => {
         const filteredName = originList.filter((data) => {
