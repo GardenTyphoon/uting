@@ -93,7 +93,7 @@ const Profile = () => {
         )}
       </button>
       <div style={{ display: "flex", flexDirection: "column", width:"100px" }}>
-        <div style={{  marginLeft: "15%", color: "#896E6E", fontWeight:"550" }}>
+        <div style={{  marginLeft: "15%", color: "#896E6E", fontWeight:"bold" }}>
           {ProfileInfo.nickname}
         </div>
         <div
@@ -105,7 +105,7 @@ const Profile = () => {
           }}
         >
           <img style={{ width: "30px", marginRight: "3%" }} src={ucoin}></img>
-          <div style={{ color: "#896E6E" }}>{ProfileInfo.ucoin}</div>
+          <div style={{ color: "#896E6E" , fontWeight:"bold"}}>{ProfileInfo.ucoin}</div>
           <button
             onClick={coinWindow}
             style={{
