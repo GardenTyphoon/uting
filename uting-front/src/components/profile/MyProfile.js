@@ -5,7 +5,7 @@ import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col } from "reactstrap";
-const MyProfile = () => {
+const MyProfile = ({choicename}) => {
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
@@ -29,10 +29,10 @@ const MyProfile = () => {
 
   const getMyProfile = async (e) => {
     // db에서 현재 session에 로근인 되어 있는 사용자에 대한 정보를 가지고 옴
-    let sessionUser = sessionStorage.getItem("email");
+    let sessionUser = choicename;
 
     const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
-      sessionUser: sessionUser,
+      sessionUser: choicename,type:"myprofile"
     });
 
     if (res.data.imgURL !== "") {
@@ -180,7 +180,7 @@ const MyProfile = () => {
               readOnly
             />
           </div>
-          <div>
+          {sessionStorage.getItem("nickname")===choicename? <div>
             e-mail
             <input
               style={{
@@ -196,7 +196,8 @@ const MyProfile = () => {
               value={ProfileInfo.email}
               readOnly
             />
-          </div>
+          </div>:""}
+         
           <div className="introduce">
             introduce
             <textarea
@@ -233,7 +234,7 @@ const MyProfile = () => {
               readOnly
             />
           </div>
-          <div>
+          {sessionStorage.getItem("nickname")===choicename? <div>
             ucoin
             <input
               style={{
@@ -249,7 +250,8 @@ const MyProfile = () => {
               value={ProfileInfo.ucoin}
               readOnly
             />
-          </div>
+          </div>:""}
+         
         </Col>
         <Col className="ProfileImgAndName">
           {imgBase64 === "" ? (
@@ -277,14 +279,12 @@ const MyProfile = () => {
           ) : (
             ""
           )}
-          {ProfileInfo.name}
+          {sessionStorage.getItem("nickname")===choicename?<>{ProfileInfo.name}</>:""}
         </Col>
       </Row>
 
       <Row>
-        <button className="ProfileBtn" onClick={onClick}>
-          {btn}
-        </button>
+      {sessionStorage.getItem("nickname")===choicename?<button className="ProfileBtn" onClick={onClick}>{btn}</button>:""}
       </Row>
     </Container>
   );

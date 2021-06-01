@@ -153,9 +153,17 @@ router.post("/checknickname", function (req, res, next) {
 router.post("/viewMyProfile", function (req, res, next) {
   User.find(function (err, user) {
     user.forEach((per) => {
-      if (req.body.sessionUser === per.email) {
-        res.send(per);
+      if(req.body.type==="profile"){
+        if (req.body.sessionUser === per.email) {
+          res.send(per);
+        }
       }
+      if(req.body.type==="myprofile"){
+        if (req.body.sessionUser === per.nickname) {
+          res.send(per);
+        }
+      }
+      
     });
   });
 });
