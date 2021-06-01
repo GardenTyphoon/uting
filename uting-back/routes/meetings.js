@@ -30,15 +30,14 @@ const app = process.env.npm_config_app || 'meeting';
 
 
 // GET meetings list 
-router.get('/', async function(req, res, next) {
+router.post('/', async function(req, res, next) {
   Meeting.find({}).then((meetings)=>{ 
-    res.json(meetings);
+    res.send(meetings);
   }).catch((err) => {
     res.send(err);
   });
   console.log(attendeeCache);
 });
-
 
 // getAttendee
 router.post('/attendee', async function (req, res, next) {
