@@ -70,7 +70,8 @@ const Filter = ({filterRoomTitle,filterManner,filterAge}) => {
     return (
         <>
         <Dropdown  className="FilteredBy" isOpen={dropdownOpen} toggle={toggle}>
-      <DropdownToggle className="FilteredBy" style={{background:"transparent", color:"#8F6F6F", border:"none"}}caret>
+      <DropdownToggle className="FilteredBy" style={{background:"transparent", color:"rgb(89,57,70)",
+                  fontWeight:"bold", border:"none"}}caret>
         Filter
       </DropdownToggle>
       <DropdownMenu>
