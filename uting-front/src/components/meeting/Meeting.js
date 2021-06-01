@@ -73,7 +73,7 @@ const Meeting = ({ checkFunc }) => {
     };
     const getMyGroupMember = async () => {
         console.log("불렀음")
-        let res = await axios.post('http://localhost:3001/groups/getMyGroupMember', { sessionUser: sessionUser });
+        let res = await axios.post('/api/groups/getMyGroupMember', { sessionUser: sessionUser });
         console.log(res);
         let onlyMe = [sessionUser];
         if(res.data==="no") setGroupMembers(onlyMe);
@@ -86,7 +86,7 @@ const Meeting = ({ checkFunc }) => {
     }, [])
     const makeRoom = async (e) => {
         e.preventDefault();
-        const res = await axios.post('http://localhost:3001/meetings/check',{"title":room})
+        const res = await axios.post('/api/meetings/check',{"title":room})
         console.log(res.data)
         if(res.data===true){
             alert("이미 존재하는 방 이름입니다.")
@@ -105,7 +105,7 @@ const Meeting = ({ checkFunc }) => {
                 console.log("room.title", room.title);
                 console.log("room.maxNum", room.num);
                 for (let i = 0; i < groupMembers.length; i++) {
-                    let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMembers[i] });
+                    let userInfo = await axios.post('/api/users/userInfo', { "userId": groupMembers[i] });
                     groupMembersInfo.push({
                         "nickname": userInfo.data.nickname,
                         "introduce": userInfo.data.introduce,
@@ -178,7 +178,7 @@ const Meeting = ({ checkFunc }) => {
         
                         setAppMeetingInfo(roomTitle, sessionUser, 'ap-northeast-2');
                         if(roomTitle!==undefined){
-                            const socket = socketio.connect('http://localhost:3001');
+                            const socket = socketio.connect('/api');
                             console.log("groupMembersSocketId",groupMembersSocketId)
                             socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
                         }

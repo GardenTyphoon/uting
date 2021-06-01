@@ -37,10 +37,11 @@ const Intro = () => {
 
     let data = { email: sessionStorage.getItem("email") }
     console.log(data)
-    const res = await axios.post('http://localhost:3001/users/logout', data)
+    const res = await axios.post('/api/users/logout', data)
     if (res.data === "success") {
       sessionStorage.clear();
-      window.location.href = "http://localhost:3000/";
+      history.push('/')
+      // window.location.href = "http://localhost:3000/";
     }
     if (res.data === "no") {
       alert("Error")

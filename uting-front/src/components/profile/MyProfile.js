@@ -9,7 +9,7 @@ const MyProfile = ({choicename}) => {
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
-  const [staticpath, setStaticpath] = useState("http://localhost:3001");
+  const [staticpath, setStaticpath] = useState("/api");
   const [ProfileInfo, setProfileInfo] = useState({
     _id:"",
     name: "",
@@ -31,7 +31,7 @@ const MyProfile = ({choicename}) => {
     // db에서 현재 session에 로근인 되어 있는 사용자에 대한 정보를 가지고 옴
     let sessionUser = choicename;
 
-    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
+    const res = await axios.post("/api/users/viewMyProfile", {
       sessionUser: choicename,type:"myprofile"
     });
 
@@ -80,14 +80,14 @@ const MyProfile = ({choicename}) => {
         formData.append("currentUser", sessionStorage.getItem("email"));
 
         let res = await axios.post(
-          "http://localhost:3001/users/modifyMyProfileImg",
+          "/api/users/modifyMyProfileImg",
           formData
         );
         
         ProfileInfo["imgURL"] = res.data.url;
       }
       let res = await axios.post(
-        "http://localhost:3001/users/modifyMyProfile",
+        "/api/users/modifyMyProfile",
         ProfileInfo
       );
     }

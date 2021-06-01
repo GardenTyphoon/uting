@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export async function fetchMeeting(data){
     const response = await fetch(
-        `http://localhost:3001/meetings/create`,
+        '/api/meetings/create',
         {
             method: 'POST',
             headers: {
@@ -32,7 +32,7 @@ export function createGetAttendeeCallback(meetingId){
                 meetingId : meetingId,
                 attendee : chimeAttendeeId
             }
-            res = await axios.post("http://localhost:3001/meetings/attendee", data)
+            res = await axios.post("/api/meetings/attendee", data)
             
             if(res.data.Name!==""){
                 return{
@@ -51,7 +51,7 @@ export async function endMeeting(meetingId){
 
     console.log(meetingId)
     const data = {title : meetingId};
-    const res = await axios.post('http://localhost:3001/meetings/end', data);
+    const res = await axios.post('/api/meetings/end', data);
 
     // if(!res.ok){
     //     throw new Error('Server error ending meeting');

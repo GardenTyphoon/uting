@@ -18,7 +18,7 @@ const postLogConfig = {
   name: 'SDK_LOGS',
   batchSize: 85,
   intervalMs: 2000,
-  url: 'http://localhost:3001/meetings/logs',
+  url: '/api/meetings/logs',
   logLevel
 };
 

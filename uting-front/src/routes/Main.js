@@ -80,7 +80,7 @@ const Main = () => {
   useEffect(() => {
    // setTutorialModal(true);
 
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("/api");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -163,7 +163,7 @@ const Main = () => {
       currentSocketId: socketId,
     };
     const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
+      "/api/users/savesocketid",
       data
     );
     console.log(res);

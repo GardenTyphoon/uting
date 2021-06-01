@@ -57,7 +57,7 @@ const AdminBad = () => {
 
       let getReported =async(e)=>{
         await axios
-            .get('http://localhost:3001/reports')
+            .get('/api/reports')
             .then(({ data }) => {
               setReportedList(data)
             })
@@ -75,10 +75,10 @@ const AdminBad = () => {
         let data={
           nickname:choice.target
         }
-        const res = await axios.post("http://localhost:3001/users/report",data)
+        const res = await axios.post("/api/users/report",data)
         if(res.data==="success"){
 
-          const response = await axios.post("http://localhost:3001/reports/delete",{"_id":choice._id})
+          const response = await axios.post("/api/reports/delete",{"_id":choice._id})
           if(response.data==="success"){
             alert(choice.target+"님을 완전히 신고처리 하였습니다.")
             getReported()
@@ -89,7 +89,7 @@ const AdminBad = () => {
 
       let pass = async(e)=>{
         console.log("봐주기",choice)
-        const response = await axios.post("http://localhost:3001/reports/delete",{"_id":choice._id})
+        const response = await axios.post("/api/reports/delete",{"_id":choice._id})
           if(response.data==="success"){
             alert(choice.target+"님을 한 번 봐주었습니다..")
             getReported()

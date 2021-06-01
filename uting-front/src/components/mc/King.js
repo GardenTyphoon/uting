@@ -78,12 +78,12 @@ const King = ({
       socketIdList: participantsSocketIdList,
       gameNum: 2,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("/api");
     socket.emit("gameStart", data);
   };
 
   const globalizeRole = () => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("/api");
     socket.emit("notifyRole", {
       socketIdList: participantsSocketIdList,
       role: forRole,
@@ -122,7 +122,7 @@ const King = ({
     data = {
       socketIdList: participantsSocketIdList,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect("/api");
     socket.emit("endGame", data);
   };
 

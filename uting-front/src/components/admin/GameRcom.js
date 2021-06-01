@@ -50,7 +50,7 @@ const GameRecom = ({tab}) => {
       type : "game",
       content : newGame
     }
-    const res = await axios.post("http://localhost:3001/mcs/",data);
+    const res = await axios.post("/api/mcs/",data);
     setAddModal(false)
     setCheck(!check)
   }
@@ -59,7 +59,7 @@ const GameRecom = ({tab}) => {
     let data = {
       type:"game"
     }
-    const res = await axios.post("http://localhost:3001/mcs/list",data)
+    const res = await axios.post("/api/mcs/list",data)
     setGameList(res.data);
   }
 
