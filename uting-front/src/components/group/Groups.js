@@ -19,8 +19,10 @@ import {
 import axios from "axios";
 import AddMember from "./AddMember";
 import "../../App.css";
+import AnotherProfile from "../profile/MyProfile"
 
 import socketio from "socket.io-client";
+import { ConsoleLogger } from "amazon-chime-sdk-js";
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
@@ -82,9 +84,16 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   const [checkMem, setCheckMem] = useState(false);
   const [groupSocketIdList, setGroupSocketIdList] = useState([]);
   const [clickLeaveGroup, setClickLeaveGroup] = useState(false);
-
+  const [toggleOtherProfile, setToggleOtherProfile] = useState(false);
+  const [anotherName, setAnotherName] = useState("");
   let [modalStatus, setModalStatus] = useState(false);
   let sessionUser = sessionStorage.getItem("nickname");
+
+  const showProfile = (data) => {
+    console.log(data)
+    setToggleOtherProfile(true)
+    setAnotherName(data);
+  }
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionUser };
     const res = await axios.post(
@@ -176,7 +185,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
         ? ""
         : groupMember.map((data, member) => {
           if (data !== currentUser) {
-            return <button style={{border:"0px", background:"transparent"}}><Member>{data}</Member></button>;
+            return <button style={{border:"0px", background:"transparent"}}  onClick={(e)=>showProfile(data)} ><Member>{data}</Member></button>;
           }
         })}
       <button style={{border:"0px", background:"transparent"}}><PlusIcon onClick={toggelAddMember}>+</PlusIcon></button>
@@ -188,8 +197,8 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
           그룹을 떠나시겠습니까?
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={()=>setClickLeaveGroup(false)}>아니요</Button>{' '}
-          <Button color="secondary" onClick={()=>leaveGroup()}>예</Button>
+          <Button color="primary" onClick={()=>setClickLeaveGroup(false)}>예</Button>{' '}
+          <Button color="secondary" onClick={()=>leaveGroup()}>아니요</Button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={addMemberModal}>
@@ -200,7 +209,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
           그룹 생성
         </ModalHeader>
         <AddMember
-          currentsocketId={currentsocketId}
+          currentsocketId={currentsocketId} 
           prevMember={checkMem}
           checkMember={(e) => toggleCheckMem(e)}
           modalState={(e) => toggleModalStatus(e)}
@@ -208,6 +217,25 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
           preMemSocketIdList={groupSocketIdList}
           groupMemList={groupMember}
         ></AddMember>
+      </Modal>
+      <Modal isOpen={toggleOtherProfile} toggle={()=>setToggleOtherProfile(!toggleOtherProfile)}>
+     
+        <ModalBody style={{background:"#FFB4AC"}}>
+         <button
+         onClick={(e) => {
+           setToggleOtherProfile(false);
+         }}  
+         style={{
+           background: "transparent",
+           border: "none",
+           position: "absolute",
+           left: "90%",
+         }}
+       >
+         X
+       </button>
+          <AnotherProfile choicename={anotherName} />
+        </ModalBody>
       </Modal>
     </GroupBox>
   );

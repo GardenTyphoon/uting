@@ -101,6 +101,8 @@ export const RemoteVideos = (props) => {
             <MyProfile choicename={anotherName}  />
         </ModalBody>
       </Modal>
+
+      
     </>
   );
 };
