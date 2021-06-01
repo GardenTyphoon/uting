@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import camera_on from '../../img/cam_on.png';
 import camera_off from '../../img/cam_off.png';
 import { useAppState } from '../../providers/AppStateProvider';
@@ -25,10 +25,10 @@ const temp = {
   borderRadius: "30px"
 }
 const info = {
-  fontFamily: "NanumSquare_acR",
-  textAlign: "center",
+
 }
 
+let alive = [];
 
 export const RemoteVideos = (props) => {
   const { roster } = useRosterState();
@@ -36,12 +36,22 @@ export const RemoteVideos = (props) => {
   const [remoteView, setremoteView] = useState(true);
   const [toggleprofile, setToggleProfile] = useState(false);
   const [anotherName,setAnotherName]=useState("")
+  const [alive, setalive] = useState({});   
+
+
   const toggleProfileBtn = (e) => {
     setAnotherName(e)
     setToggleProfile(!toggleprofile);
   }
-  console.log(tiles.length);
 
+
+  const onChange = (tileId) => {
+    setalive({
+        ...alive,
+        [tileId]: !alive[tileId],
+    });
+    console.log(alive)
+  };
   
   return (
     <>
@@ -60,23 +70,18 @@ export const RemoteVideos = (props) => {
               gridAutoFlow="dense"
               color="white"
               >
-                <Grid
-                  responsive
-                  gridTemplateRows="repeat(1, 2vw)"
-                  gridTemplateColumns="repeat(3, 33%)"
-                  gridAutoFlow="dense"
-                  color="white">
-                    <div onClick={() => setremoteView(!remoteView)}>
-                      {remoteView ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>}
+               <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"10px"}}>
+                    <div onClick={() => onChange(tileId)}>
+                      {alive[tileId] ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>}
                     </div>
                     <button
                       onClick={(e) => {
                       toggleProfileBtn(name);
                       }}  
                       className="anotherbutton"
-                      ><div style={info}>{name}</div></button>
-                </Grid>
-              {remoteView ? <RemoteVideo  {...props} key={tileId} tileId={tileId} /> : <div style={temp}></div>}
+                      >{name}</button>
+                </div>
+              {alive[tileId] ? <RemoteVideo  {...props} key={tileId} tileId={tileId} /> : <div style={temp}></div>}
             </Grid>
           
           </div>

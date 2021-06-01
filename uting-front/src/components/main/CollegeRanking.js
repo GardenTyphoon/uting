@@ -6,6 +6,7 @@ const CollegeRankingContainer = styled.div`
     margin-top:10px;
   background : white;
   width:15vw;
+  min-width:180px;
     max-width:200px;
   display:flex;
   flex-direction:column;
@@ -18,6 +19,7 @@ const CollegeContainer = styled.div`
     font-family: NanumSquare_acR;
     border-radius:10px;
     width:13vw;
+    min-width:155px;
     max-width:180px;
     padding:5px;
     margin:5px;
