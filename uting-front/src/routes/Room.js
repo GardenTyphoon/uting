@@ -78,7 +78,6 @@ const Room = () => {
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
   const [flagMessage,setFlagMessage]=useState(false);
   const [iloveyou,setIloveyou]=useState({"mylove":"","socketid":"","lovemessage":""})
-  const [loveflag,setLoveflag]=useState(false);
 
   let toggleFlagMessage =()=>{
     setFlagMessage(!flagMessage)
@@ -362,23 +361,16 @@ const Room = () => {
 }
 
 let goLove =()=>{
-  console.log(iloveyou)
-  setLoveflag(true)
-    const socket = socketio.connect("http://localhost:3001");
-    console.log(iloveyou)
     let data ={
       mylove:iloveyou.mylove,
       message:iloveyou.lovemessage,
       socketid:iloveyou.socketid,
       sender:sessionStorage.getItem("nickname")
     }
-    console.log(data)
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("golove", { lovemessage: data});
   
 }
-useEffect(()=>{
-  
-},[loveflag])
 
 useEffect(()=>{
   console.log(iloveyou)
