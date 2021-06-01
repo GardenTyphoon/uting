@@ -75,6 +75,11 @@ const Room = () => {
   const [toggleHelp, setToggleHelp] = useState(false);
   const [chimeinfo, setChimeinfo] = useState([]);
   const [maxNum, setmaxNum] = useState();
+  const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  
+  let toggleAlert =(e)=>{
+    setGetalert({...getalert,"flag":!getalert.flag})
+  }
 
   let putSocketid = async (e) => {
     let data = {
@@ -153,7 +158,9 @@ const Room = () => {
       reportRequester: sessionStorage.getItem("nickname"),
     });
     console.log(res.data);
-    alert(res.data);
+    //alert(res.data);
+    setGetalert({"flag":true,"message":res.data})
+    
   };
 
   useEffect(() => {
@@ -196,6 +203,7 @@ const Room = () => {
   }, [intervalMessageCheck]);
 
   useEffect(() => {
+    setGetalert({"flag":false,"message":""});
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
@@ -322,7 +330,8 @@ const Room = () => {
       if (res.data === "success") {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
-        alert("미팅 방을 나갑니다.");
+        //alert("미팅 방을 나갑니다.");
+        setGetalert({"flag":false,"message":"미팅 방을 나갑니다."});
         window.location.href = "http://localhost:3000/main";
       }
     }
@@ -487,6 +496,19 @@ const Room = () => {
           <Button color="primary" onClick={() => setToggleHelp()}>
             확인
           </Button>
+        </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={getalert.flag} >
+        <ModalHeader>
+          U-TING 메시지
+        </ModalHeader>
+        <ModalBody>
+          <div>{getalert.message}</div>
+          
+        </ModalBody>
+        <ModalFooter>
+        <Button color="warning" onClick={(e)=>toggleAlert(e)}>확인</Button>
         </ModalFooter>
       </Modal>
     </div>
