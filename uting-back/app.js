@@ -170,6 +170,19 @@ app.io.on("connection", function (socket) {
     app.io.to(socket.id).emit("currentSocketId", data);
   });
 
+  socket.on("golove",function(lovemessage){
+    console.log("-------------------*******************----------")
+    console.log(lovemessage)
+    console.log("-------------------*******************----------")
+    let data ={
+      type:"golove",
+      sender:lovemessage.lovemessage.sender,
+      message:lovemessage.lovemessage.message
+    }
+    console.log(data)
+    app.io.to(lovemessage.lovemessage.socketid).emit("room",data)
+  })
+
   socket.on("joinRoom", function (roomId) {
     socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
   });
