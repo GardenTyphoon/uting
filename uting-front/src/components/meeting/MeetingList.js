@@ -136,6 +136,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         }
         else {
             setGetalert({ "flag": true, "message": "정해진 인원수가 맞지 않아 입장이 불가합니다." })
+            setTimeout(()=>{
+                setGetalert({ "flag": false, "message": "" })
+            },1500)
         }
     }
     const attendRoomByID = async (room, groupMembersInfo) => {
@@ -220,7 +223,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             }
         }
         else if (coinCheck === false) {
-            alert("그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요.")
+            setGetalert({ "flag": true, "message": "그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요."})
+            setTimeout(()=>{
+                setGetalert({ "flag": false, "message": "" })
+            },1500)
         }
 
 
