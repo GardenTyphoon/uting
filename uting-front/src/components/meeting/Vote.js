@@ -8,6 +8,7 @@ import "./Vote.css"
 import { ToastContainer, toast } from "react-toastify";
 import { endMeeting } from "../../utils/api";
 import introLog from '../../img/배경없는유팅로고.png'
+import { SOCKET } from "../../utils/constants";
 const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meetingMembers},ref) => {
 
     const history = useHistory();
@@ -43,7 +44,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
 
     const onClickAgree = (e) => {
-        const socket = socketio.connect("http://localhost:3001");
+        const socket = socketio.connect(SOCKET);
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -51,7 +52,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
 
     const onClickDisagree = (e) => {
-        const socket = socketio.connect("http://localhost:3001");
+        const socket = socketio.connect(SOCKET);
         socket.emit("endMeetingDisagree", { participantsSocketIdList, numOfDisagree: numOfDisagree + 1 });
         setNumOfDisagree(numOfDisagree + 1);
         setIsVote(!isVote);
@@ -60,7 +61,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
 
 
     const emitStartVote = () => {
-        const socket = socketio.connect("http://localhost:3001");
+        const socket = socketio.connect(SOCKET);
         socket.emit("startVote", { socketidList:participantsSocketIdList });
         console.log(participantsSocketIdList);
         console.log("emitvote")
@@ -168,7 +169,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             name:goManner.name,
             manner:goManner.manner
         }
-        const res = await axios.post("http://localhost:3001/users/manner",data)
+        const res = await axios.post("/api/users/manner",data)
         console.log(res)
         if(res.data==="success"){
             let arr = copyParticipants
@@ -211,13 +212,14 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
             }
             console.log(data)
 
-            const res = await axios.post("http://localhost:3001/meetings/leavemember",data)
+            const res = await axios.post("/api/meetings/leavemember",data)
            
             if(res.data==="success"){
                 setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
                 setTimeout(()=>{
                     setGetalert({"flag":false,"message":""})
-                    window.location.href = "http://localhost:3000/main";
+                    // history.push('/main')
+                    window.location.href = "/main";
                    },1500)
             }
             else if(res.data === "last"){
@@ -225,7 +227,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 setTimeout(async () => {
                     await endMeeting(meeting_id);
                     setGetalert({"flag":false,"message":""})
-                    window.location.href = "http://localhost:3000/main";
+                    // history.push('/main')
+                    window.location.href = "/main";
                 }, 1500)
             }
         }

@@ -70,7 +70,7 @@ const AdminAd = () => {
         status:e.status,
       }
       setClickData(data)
-      let staticpath = "http://localhost:3001";
+      let staticpath = "/api";
       setImgBase64(staticpath + e.file);
     };
     let isOpen = () => {
@@ -79,7 +79,7 @@ const AdminAd = () => {
 
     let getAd = async(e)=>{
       await axios
-      .get('http://localhost:3001/ads/')
+      .get('/api/ads/')
       .then(({ data }) => {
         setRequestList(data)
       })
@@ -88,7 +88,7 @@ const AdminAd = () => {
 
     let reject = async (e)=>{
       console.log("reject")
-      const res = await axios.post("http://localhost:3001/ads/reject",{_id:clickData._id})
+      const res = await axios.post("/api/ads/reject",{_id:clickData._id})
       console.log(res.data)
       if(res.data==="delete"){
         setModal(false)
@@ -98,7 +98,7 @@ const AdminAd = () => {
 
     let accept = async (e)=>{
       
-      const res = await axios.post("http://localhost:3001/ads/accept",{_id:clickData._id,type:clickData.status})
+      const res = await axios.post("/api/ads/accept",{_id:clickData._id,type:clickData.status})
       console.log(res.data)
       console.log(clickData)
       if(res.data==="success"){

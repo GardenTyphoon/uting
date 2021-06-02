@@ -32,6 +32,7 @@ import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
 import "./Room.css"
 import introLog from '../img/배경없는유팅로고.png'
+import { SOCKET } from "../utils/constants";
 const McBotContainer = styled.div`
   width: 250px;
   height: 500px;
@@ -98,7 +99,7 @@ const Room = () => {
     };
     //console.log("socketId.id",socketId)
     const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
+      "/api/users/savesocketid",
       data
     );
     //console.log(res)
@@ -115,7 +116,7 @@ const Room = () => {
       preMember: participants,
     };
     const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
+      "/api/users/preMemSocketid",
       data
     );
 
@@ -145,7 +146,7 @@ const Room = () => {
     const _id = meetingId;
     if (meetingId !== "") {
       const res = await axios.post(
-        "http://localhost:3001/meetings/getparticipants",
+        "/api/meetings/getparticipants",
         { _id: meetingId }
       );
       let par = [];
@@ -206,7 +207,7 @@ const Room = () => {
 
   useEffect(() => {
     setGetalert({"flag":false,"message":""});
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -299,7 +300,7 @@ const Room = () => {
     let data = {
       currentUser: e,
     };
-    const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
+    const res = await axios.post("/api/users/cutUcoin", data);
     console.log(res);
   };
 
@@ -328,7 +329,7 @@ const Room = () => {
       console.log(data);
 
       const res = await axios.post(
-        "http://localhost:3001/meetings/leavemember",
+        "/api/meetings/leavemember",
         data
       );
       console.log(res);
@@ -340,7 +341,8 @@ const Room = () => {
         setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
         setTimeout(()=>{
           setGetalert({"flag":false,"message":""})
-          window.location.href = "http://localhost:3000/main";
+          // history.push('/main')
+          window.location.href = "/main";
          },2000)
         
       }
@@ -349,7 +351,8 @@ const Room = () => {
         setTimeout(async () => {
             await endMeeting(meeting_id);
             setGetalert({"flag":false,"message":""})
-            window.location.href = "http://localhost:3000/main";
+            // history.push('/main')
+            window.location.href = "/main";
         }, 1500)
     }
     }
@@ -384,7 +387,7 @@ let goLove =()=>{
       socketid:iloveyou.socketid,
       sender:sessionStorage.getItem("nickname")
     }
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.emit("golove", { lovemessage: data});
   
 }

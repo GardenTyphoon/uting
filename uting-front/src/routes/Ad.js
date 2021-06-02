@@ -61,7 +61,7 @@ const Ad = () => {
             formData.append("img", imgFile);
             formData.append("requester", content.last + content.first);
             let res = await axios.post(
-              "http://localhost:3001/ads/uploadAdImg",
+              "/api/ads/uploadAdImg",
               formData
             );
             
@@ -76,7 +76,7 @@ const Ad = () => {
             title:content.title,
         }
         console.log(data)
-        const res = await axios.post("http://localhost:3001/ads/save",data)
+        const res = await axios.post("/api/ads/save",data)
         console.log(res)
         if(res.data==="요청완료"){
             alert("접수가 완료되었습니다.")

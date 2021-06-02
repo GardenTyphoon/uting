@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import socketio from "socket.io-client";
 import introLog from '../../img/배경없는유팅로고.png'
+import { SOCKET } from "../../utils/constants";
 const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId,preMemSocketIdList }) => {
  
   const [newmember,setNewmember] = useState("")
@@ -36,7 +37,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
     let data ={
       "addMember":newmember
     }
-    const res = await axios.post('http://localhost:3001/users/logined', data);
+    const res = await axios.post('/api/users/logined', data);
  
     if(res.data.status===true){
       setSocketId(res.data.socketid)
@@ -45,7 +46,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         "memberNickname":res.data.nickname
         
       }
-      const resgroup = await axios.post('http://localhost:3001/groups/',groupData);
+      const resgroup = await axios.post('/api/groups/',groupData);
       
       setSocketCnt(true);
       modalState(true);
@@ -75,7 +76,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
   useEffect(()=>{
     
     console.log(preMemSocketIdList)
-    const socket = socketio.connect('http://localhost:3001');
+    const socket = socketio.connect(SOCKET);
     socket.emit('message',{"socketid":socketId})
     
     setPrecheck(true);
@@ -93,7 +94,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         }
       }
       if(check===true){
-        const socket = socketio.connect('http://localhost:3001');
+        const socket = socketio.connect(SOCKET);
           socket.emit('premessage',{"socketidList":preMemSocketIdList})
       
 

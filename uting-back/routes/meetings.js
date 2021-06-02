@@ -39,7 +39,6 @@ router.post('/', async function(req, res, next) {
   console.log(attendeeCache);
 });
 
-
 // getAttendee
 router.post('/attendee', async function (req, res, next) {
   const title = req.body.meetingId;

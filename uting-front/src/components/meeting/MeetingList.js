@@ -12,6 +12,7 @@ import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
 import { ConsoleLogger } from 'amazon-chime-sdk-js';
+import { SOCKET } from '../../utils/constants';
 
 function birthToAge(birth) {
     console.log(birth)
@@ -48,11 +49,15 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             color = "#e96363"; //빨강
             credit="A+";
         }
+        else if (avgManner < 4.5 && avgManner >= 4.0) {
+            color="#fdc95d"; //주황
+            credit="A0";
+        }
         else if (avgManner < 4.0 && avgManner >= 3.5) {
             color="#f28e72"; //탁한분홍
             credit="B+";
-        }
-        else if (avgManner < 3.5 && avgManner >= 3.0) {
+
+        }else if (avgManner < 3.5 && avgManner >= 3.0) {
             color="#72c4bf"; //청록?
             credit="B0";
         }
@@ -87,12 +92,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     const updateNewParticipants_to_OriginParticipants = async (meetingRoomParticipants) => {
 
-        const socket = socketio.connect("http://localhost:3001");
+        const socket = socketio.connect(SOCKET);
         let data = {
             preMember: meetingRoomParticipants
         };
         const res = await axios.post(
-            "http://localhost:3001/users/preMemSocketid",
+            "/api/users/preMemSocketid",
             data
         );
         console.log(res);
@@ -110,7 +115,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         let groupMembersInfo = []
         console.log(groupMember)
         for (let i = 0; i < groupMember.length; i++) {
-            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
+            let userInfo = await axios.post('/api/users/userInfo', { "userId": groupMember[i] });
             console.log(userInfo.data)
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
@@ -203,7 +208,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                 setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
-                    const socket = socketio.connect('http://localhost:3001');
+                    const socket = socketio.connect(SOCKET);
                     console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
@@ -231,7 +236,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             room: roomObj
         }
         console.log("saveMeetingUsers", data)
-        const res = await axios.post("http://localhost:3001/meetings/savemember", data)
+        const res = await axios.post("/api/meetings/savemember", data)
         console.log(res)
 
     }
@@ -244,7 +249,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     // useEffect(() => {
 
     //     groupSocketList.push(currentsocketId.id)
-    //    const socket = socketio.connect('http://localhost:3001');
+    //    const socket = socketio.connect('/api');
     //     socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
     //         //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
 
@@ -254,7 +259,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
         let sessionObject = { sessionUser: sessionUser };
         const res = await axios.post(
-            "http://localhost:3001/groups/info",
+            "/api/groups/info",
             sessionObject
         );
         let onlyMe = [sessionUser];
@@ -287,14 +292,16 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     let getMeetings = async (e) => {
-        const res = await axios.post('http://localhost:3001/meetings/')
+        const res = await axios.post('/api/meetings/')
         console.log(res)
         let arr =[]
         res.data.map((room)=>arr.push(getMannerCreditAndColor(room.avgManner)))
-
         setGroupMannerInfo(arr)
         setView(res.data)
         setOriginList(res.data)
+       
+       
+       setResstatus("200")
     }
     useEffect(() => {
         getMeetings()
@@ -347,10 +354,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 <div style={{ marginRight: "25px" }}>
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
-
                             <img src={MeetingRoom}
                                 className="MeetingRoomImg"
-                                style={{ borderColor:groupMannerInfo[index].color}}
+                                style={{ borderColor:groupMannerInfo[Number(index)].color}}
                                 id={"Tooltip-" + room._id.substr(0, 10)}
                                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
@@ -360,14 +366,14 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                             <Col xs="5" style={{ display: "flex", alignItems: "center" }}>{room.title}</Col>
                             <Col xs="2">
-                                <div style={{ display: "flex", justifyContent: "center", color: groupMannerInfo[index].color, marginTop: "15%" }}>
+                                <div style={{ display: "flex", justifyContent: "center", color:groupMannerInfo[index].color, marginTop: "15%" }}>
                                     <div style={{ marginRight: "7%", fontWeight: "bold" }}>{room.avgManner !== null ? room.avgManner : ""}</div>
                                     <div style={{ fontWeight: "bold" }}>{groupMannerInfo[index].credit}</div>
                                 </div>
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight: "bold" }}>{room.avgAge}살</div>
                             </Col>
                             <Col xs="3">
-                                <button className="joinBtn" onClick={() => canAttend(room)}>참가</button>
+                               <button className="joinBtn" onClick={() => canAttend(room)}>{room.maxNum*2===room.numOfMan+room.numOfWoman?"미팅중" : "참가"}</button>
                                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <img style={{ width: "10%", height: "15%", marginRight: "8%" }} src={woman} />
                                     <img style={{ width: "13%", height: "22%", marginRight: "8%" }} src={man} />
@@ -390,7 +396,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                         {room.users.map(user =>
 
-                            <div>{user.nickname}  {user.mannerCredit}  {user.age}살 <br></br></div>)}
+                            <div>{user.nickname} {getMannerCreditAndColor(user.mannerCredit).credit}   {user.age}살 <br></br></div>)}
                     </Tooltip>
 
 

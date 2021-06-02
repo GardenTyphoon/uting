@@ -23,6 +23,7 @@ import AnotherProfile from "../profile/MyProfile"
 
 import socketio from "socket.io-client";
 import { ConsoleLogger } from "amazon-chime-sdk-js";
+import { SOCKET } from "../../utils/constants";
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
@@ -97,7 +98,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionUser };
     const res = await axios.post(
-      "http://localhost:3001/groups/info",
+      "/api/groups/info",
       data
     );
     console.log(res.data.member);
@@ -105,20 +106,20 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   };
 
   const leaveGroup = async () => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     setClickLeaveGroup(false)
      let groupMemberExceptMe = [];
      groupMember.map((mem)=>{if(mem!==sessionUser){groupMemberExceptMe.push(mem)}})
      console.log(groupMemberExceptMe);
      
      let res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
+      "/api/users/preMemSocketid",
       {preMember:groupMemberExceptMe}
     );
     console.log(res.data);
     socket.emit("leaveGroup", { socketIdList: res.data, leavingUsers:sessionUser });
    
-    res = await axios.post("http://localhost:3001/groups/leaveGroup", { userNickname: sessionUser });
+    res = await axios.post("/api/groups/leaveGroup", { userNickname: sessionUser });
    
     window.location.reload();
   }
@@ -128,7 +129,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
       preMember: groupMember,
     };
     const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
+      "/api/users/preMemSocketid",
       data
     );
 

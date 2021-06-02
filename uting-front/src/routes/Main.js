@@ -22,6 +22,7 @@ import { useAppState } from "../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
 import { createGetAttendeeCallback, fetchMeeting } from "../utils/api";
 import { minWidth } from "styled-system";
+import { SOCKET } from "../utils/constants";
 
 const Main = () => {
   const history = useHistory();
@@ -80,7 +81,7 @@ const Main = () => {
   useEffect(() => {
    // setTutorialModal(true);
 
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -163,7 +164,7 @@ const Main = () => {
       currentSocketId: socketId,
     };
     const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
+      "/api/users/savesocketid",
       data
     );
     console.log(res);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Link, Switch, Router } from 'react-router-dom';
+import { Route, Link, Switch, Router, useHistory } from 'react-router-dom';
 import "./SignIn.css"
 import axios from 'axios';
 import { Container, Row, Col,Button,Modal,ModalBody,ModalFooter, ModalHeader } from 'reactstrap';
@@ -7,6 +7,7 @@ import { Container, Row, Col,Button,Modal,ModalBody,ModalFooter, ModalHeader } f
 import introLog from '../../img/배경없는유팅로고.png'
 
 const SignIn = () => {
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [islogined, setIslogined] = useState(false);
@@ -45,7 +46,7 @@ const SignIn = () => {
       email: email,
       password: password
     }
-    let res = await axios.post('http://localhost:3001/users/signin', data);
+    let res = await axios.post('/api/users/signin', data);
     
     setGetalert({"flag":false,"message":""});
     if (res.data === "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.") {
@@ -77,11 +78,13 @@ const SignIn = () => {
         //소켓
         
         if(email==="admin@ajou.ac.kr"&&password==="admin"){
-          window.location.href = 'http://localhost:3000/admin';
+          history.push('/admin')
+          // window.location.href = 'http://localhost:3000/admin';
         }
         else{
           setTimeout(()=>{
-            window.location.href = 'http://localhost:3000/main';
+            history.push('/main')
+            // window.location.href = 'http://localhost:3000/main';
           },1000)
           
         }

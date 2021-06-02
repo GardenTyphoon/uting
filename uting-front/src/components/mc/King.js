@@ -13,6 +13,7 @@ import {
 import socketio, { Socket } from "socket.io-client";
 import explain1 from "../../img/왕겜1.png";
 import explain2 from "../../img/왕겜1.png";
+import { SOCKET } from "../../utils/constants";
 
 const items = [
   //for 설명서
@@ -78,12 +79,12 @@ const King = ({
       socketIdList: participantsSocketIdList,
       gameNum: 2,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.emit("gameStart", data);
   };
 
   const globalizeRole = () => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.emit("notifyRole", {
       socketIdList: participantsSocketIdList,
       role: forRole,
@@ -122,7 +123,7 @@ const King = ({
     data = {
       socketIdList: participantsSocketIdList,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.emit("endGame", data);
   };
 

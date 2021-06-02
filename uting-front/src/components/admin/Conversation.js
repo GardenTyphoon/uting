@@ -48,7 +48,7 @@ const Conversation = ({tab}) => {
       type : "conversation",
       content : newConversation
     }
-    const res = await axios.post("http://localhost:3001/mcs/",data);
+    const res = await axios.post("/api/mcs/",data);
     setAddModal(false)
     setCheck(!check)
   }
@@ -57,7 +57,7 @@ const Conversation = ({tab}) => {
     let data = {
       type:"conversation"
     }
-    const res = await axios.post("http://localhost:3001/mcs/list",data)
+    const res = await axios.post("/api/mcs/list",data)
     setConversationList(res.data);
   }
 

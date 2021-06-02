@@ -113,7 +113,7 @@ const SignUp = () => {
         phone: userinfo.phone
       };
 
-      const res = await axios.post("http://localhost:3001/users/signup", data);
+      const res = await axios.post("/api/users/signup", data);
       console.log(res.data);
 
       setUserinfo({
@@ -127,7 +127,7 @@ const SignUp = () => {
       });
       setGetalert({"flag":true,"message":"회원가입이 완료되었습니다."})
       setTimeout(()=>{
-        window.location.href = "http://localhost:3000/";
+        history.push('/');
       },1500)
       
     } else {
@@ -147,7 +147,7 @@ const SignUp = () => {
 
     if (data.email.slice(-6) === ".ac.kr") {
       const res = await axios.post(
-        "http://localhost:3001/users/sendEmail",
+        "/api/users/sendEmail",
         data
       );
       setGetalert({"flag":true,"message":"해당 이메일로 인증코드를 전송했습니다."})
@@ -189,7 +189,7 @@ const SignUp = () => {
       nickname: userinfo.nickname
     }
 
-    const res = await axios.post("http://localhost:3001/users/checknickname", data)
+    const res = await axios.post("/api/users/checknickname", data)
     if (res.data === "exist") {
       setGetalert({"flag":true,"message":"이미 존재하는 닉네임입니다."})
         setTimeout(()=>{

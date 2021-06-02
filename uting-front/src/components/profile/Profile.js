@@ -42,11 +42,11 @@ const Profile = () => {
   }, []);
 
   const getProfile = async (e) => {
-    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
+    const res = await axios.post("/api/users/viewMyProfile", {
       sessionUser: sessionUser,type:"profile"
     });
     if (res.data.imgURL !== "") {
-      let staticpath = "http://localhost:3001";
+      let staticpath = "/api";
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {
