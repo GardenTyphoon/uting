@@ -341,8 +341,8 @@ const Room = () => {
         setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
         setTimeout(()=>{
           setGetalert({"flag":false,"message":""})
-          history.push('/main')
-          // window.location.href = "http://localhost:3000/main";
+          // history.push('/main')
+          window.location.href = "/main";
          },2000)
         
       }
@@ -351,8 +351,8 @@ const Room = () => {
         setTimeout(async () => {
             await endMeeting(meeting_id);
             setGetalert({"flag":false,"message":""})
-            history.push('/main')
-            // window.location.href = "http://localhost:3000/main";
+            // history.push('/main')
+            window.location.href = "/main";
         }, 1500)
     }
     }

@@ -218,8 +218,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
                 setTimeout(()=>{
                     setGetalert({"flag":false,"message":""})
-                    history.push('/main')
-                    // window.location.href = "http://localhost:3000/main";
+                    // history.push('/main')
+                    window.location.href = "/main";
                    },1500)
             }
             else if(res.data === "last"){
@@ -227,8 +227,8 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
                 setTimeout(async () => {
                     await endMeeting(meeting_id);
                     setGetalert({"flag":false,"message":""})
-                    history.push('/main')
-                    // window.location.href = "http://localhost:3000/main";
+                    // history.push('/main')
+                    window.location.href = "/main";
                 }, 1500)
             }
         }
