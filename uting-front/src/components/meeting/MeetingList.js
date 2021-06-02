@@ -376,7 +376,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                                 <div style={{ display: "flex", justifyContent: "center", color: "#9A7D7D", fontSize: "small", fontWeight: "bold" }}>{room.avgAge}살</div>
                             </Col>
                             <Col xs="3">
-                                <button className="joinBtn" onClick={() => canAttend(room)}>참가</button>
+                               <button className="joinBtn" onClick={() => canAttend(room)}>{room.maxNum*2===room.numOfMan+room.numOfWoman?"미팅중" : "참가"}</button>
                                 <Col style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                                     <img style={{ width: "10%", height: "15%", marginRight: "8%" }} src={woman} />
                                     <img style={{ width: "13%", height: "22%", marginRight: "8%" }} src={man} />
