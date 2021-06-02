@@ -12,6 +12,7 @@ import { useAppState } from '../../providers/AppStateProvider';
 import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting, attendMeeting } from '../../utils/api';
 import { ConsoleLogger } from 'amazon-chime-sdk-js';
+import { SOCKET } from '../../utils/constants';
 
 function birthToAge(birth) {
     console.log(birth)
@@ -91,7 +92,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     const updateNewParticipants_to_OriginParticipants = async (meetingRoomParticipants) => {
 
-        const socket = socketio.connect("/api");
+        const socket = socketio.connect(SOCKET);
         let data = {
             preMember: meetingRoomParticipants
         };
@@ -210,7 +211,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
                 setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
-                    const socket = socketio.connect('/api');
+                    const socket = socketio.connect(SOCKET);
                     console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }

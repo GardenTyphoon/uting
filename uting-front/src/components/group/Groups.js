@@ -23,6 +23,7 @@ import AnotherProfile from "../profile/MyProfile"
 
 import socketio from "socket.io-client";
 import { ConsoleLogger } from "amazon-chime-sdk-js";
+import { SOCKET } from "../../utils/constants";
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
@@ -105,7 +106,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   };
 
   const leaveGroup = async () => {
-    const socket = socketio.connect("/api");
+    const socket = socketio.connect(SOCKET);
     setClickLeaveGroup(false)
      let groupMemberExceptMe = [];
      groupMember.map((mem)=>{if(mem!==sessionUser){groupMemberExceptMe.push(mem)}})

@@ -8,6 +8,7 @@ import { useMeetingManager } from 'amazon-chime-sdk-component-library-react';
 import { createGetAttendeeCallback, fetchMeeting } from '../../utils/api';
 import "./Meeting.css";
 import { alignItems } from 'styled-system';
+import { SOCKET } from "../../utils/constants";
 
 function birthToAge(birth) {
   let year = birth.slice(0, 4);
@@ -178,7 +179,7 @@ const Meeting = ({ checkFunc }) => {
         
                         setAppMeetingInfo(roomTitle, sessionUser, 'ap-northeast-2');
                         if(roomTitle!==undefined){
-                            const socket = socketio.connect('/api');
+                            const socket = socketio.connect(SOCKET);
                             console.log("groupMembersSocketId",groupMembersSocketId)
                             socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": roomTitle })
                         }

@@ -8,6 +8,7 @@ import "./Vote.css"
 import { ToastContainer, toast } from "react-toastify";
 import { endMeeting } from "../../utils/api";
 import introLog from '../../img/배경없는유팅로고.png'
+import { SOCKET } from "../../utils/constants";
 const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meetingMembers},ref) => {
 
     const history = useHistory();
@@ -43,7 +44,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
 
     const onClickAgree = (e) => {
-        const socket = socketio.connect("/api");
+        const socket = socketio.connect(SOCKET);
         socket.emit("endMeetingAgree", { participantsSocketIdList, numOfAgree: numOfAgree + 1 });
         setNumOfAgree(numOfAgree + 1);
         setIsVote(!isVote);
@@ -51,7 +52,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
     }
 
     const onClickDisagree = (e) => {
-        const socket = socketio.connect("/api");
+        const socket = socketio.connect(SOCKET);
         socket.emit("endMeetingDisagree", { participantsSocketIdList, numOfDisagree: numOfDisagree + 1 });
         setNumOfDisagree(numOfDisagree + 1);
         setIsVote(!isVote);
@@ -60,7 +61,7 @@ const Vote = forwardRef(({participantsSocketIdList, participants,meeting_id,meet
 
 
     const emitStartVote = () => {
-        const socket = socketio.connect("/api");
+        const socket = socketio.connect(SOCKET);
         socket.emit("startVote", { socketidList:participantsSocketIdList });
         console.log(participantsSocketIdList);
         console.log("emitvote")

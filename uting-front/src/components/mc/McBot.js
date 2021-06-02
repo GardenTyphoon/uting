@@ -27,6 +27,7 @@ import {
 } from "reactstrap";
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
+import { SOCKET } from "../../utils/constants";
 
 const Box = styled.div`
   border: 2px solid rgb(255, 255, 255);
@@ -106,7 +107,7 @@ const McBot = ({
   };
 
   let getMusicName = (e) => {
-    const socket = socketio.connect("/api");
+    const socket = socketio.connect(SOCKET);
     if (e === 1) {
       console.log(e);
       console.log(participantsSocketIdList);
@@ -130,12 +131,12 @@ const McBot = ({
   };
 
   let pause = () => {
-    const socket = socketio.connect("/api");
+    const socket = socketio.connect(SOCKET);
     socket.emit("musicpause", { socketIdList: participantsSocketIdList });
   };
 
   let play = () => {
-    const socket = socketio.connect("/api");
+    const socket = socketio.connect(SOCKET);
     socket.emit("replay", { socketIdList: participantsSocketIdList });
   };
 

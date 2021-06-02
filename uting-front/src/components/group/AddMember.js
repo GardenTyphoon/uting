@@ -19,6 +19,7 @@ import {
 import axios from "axios";
 import socketio from "socket.io-client";
 import introLog from '../../img/배경없는유팅로고.png'
+import { SOCKET } from "../../utils/constants";
 const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsocketId,preMemSocketIdList }) => {
  
   const [newmember,setNewmember] = useState("")
@@ -75,7 +76,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
   useEffect(()=>{
     
     console.log(preMemSocketIdList)
-    const socket = socketio.connect('/api');
+    const socket = socketio.connect(SOCKET);
     socket.emit('message',{"socketid":socketId})
     
     setPrecheck(true);
@@ -93,7 +94,7 @@ const AddMember = ({ currentUser, modalState, checkMember, prevMember,currentsoc
         }
       }
       if(check===true){
-        const socket = socketio.connect('/api');
+        const socket = socketio.connect(SOCKET);
           socket.emit('premessage',{"socketidList":preMemSocketIdList})
       
 

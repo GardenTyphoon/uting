@@ -17,9 +17,15 @@
  /**
   * Create HTTP server.
   */
+
+ var corsOpt = {
+   cors:{
+     origin: '*'
+   }
+ }
  
  var server = http.createServer(app);
- app.io.attach(server);
+ app.io.attach(server, corsOpt);
  //const io = require('socket.io')(server);
  
  

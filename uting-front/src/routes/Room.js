@@ -32,6 +32,7 @@ import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
 import "./Room.css"
 import introLog from '../img/배경없는유팅로고.png'
+import { SOCKET } from "../utils/constants";
 const McBotContainer = styled.div`
   width: 250px;
   height: 500px;
@@ -206,7 +207,7 @@ const Room = () => {
 
   useEffect(() => {
     setGetalert({"flag":false,"message":""});
-    const socket = socketio.connect("/api");
+    const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -386,7 +387,7 @@ let goLove =()=>{
       socketid:iloveyou.socketid,
       sender:sessionStorage.getItem("nickname")
     }
-    const socket = socketio.connect("/api");
+    const socket = socketio.connect(SOCKET);
     socket.emit("golove", { lovemessage: data});
   
 }
