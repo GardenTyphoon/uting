@@ -1,2 +1,2 @@
 export const BACKEND_URL = '/api';
-export const SOCKET = '/api';
+export const SOCKET = '/';
