@@ -41,12 +41,17 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [resstatus,setResstatus]=useState("")
     const [groupMannerInfoTemp,setGroupMannerInfoTemp]=useState([])
     //let groupMannerInfoTemp = [];
-    function getMannerCreditAndColor(avgManner) {
+  
+        function getMannerCreditAndColor(avgManner) {
         let color;
         let credit;
         if (avgManner === 4.5) {
             color = "#e96363"; //빨강
             credit="A+";
+        }
+        else if (avgManner < 4.5 && avgManner >= 4.0) {
+            color = "#fdc95d"; //주황
+            credit= "A0";
         }
         else if (avgManner < 4.0 && avgManner >= 3.5) {
             color="#f28e72"; //탁한분홍
@@ -296,6 +301,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         console.log(res)
         let arr =[]
         res.data.map((room)=>arr.push(getMannerCreditAndColor(room.avgManner)))
+        console.log(res.data);
+
         setGroupMannerInfo(arr)
         setView(res.data)
         setOriginList(res.data)
@@ -343,8 +350,10 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [filterage])
 
     useEffect(() => {
+        console.log("여깅ㄱ여깅")
+        setView([]);
         getMeetings();
-       
+    
     }, [getorigin])
 
     return (//tr map 한다음에 key넣어주기
@@ -352,6 +361,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             {viewRoomList.map((room, index) =>
                 
                 <div style={{ marginRight: "25px" }}>
+                    {console.log(viewRoomList)}
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
                             <img src={MeetingRoom}
