@@ -23,7 +23,7 @@ import {Button,
     ModalFooter,
     ModalHeader,
     Row, } from 'reactstrap';
-
+    import introLog from '../../img/배경없는유팅로고.png'
 
 const RightButton = styled.div`
     position: relative;
@@ -40,7 +40,8 @@ const AdminBad = () => {
     const [reportedList,setReportedList]=useState([])
     const [choice,setChoice]=useState({})
     const [modal, setModal] = useState(false);
-
+    const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  
     const toggle = (e) => {
       if(e==="none"){
         setChoice({})
@@ -57,7 +58,7 @@ const AdminBad = () => {
 
       let getReported =async(e)=>{
         await axios
-            .get('http://localhost:3001/reports')
+            .get('http://localhost:3001/reports/')
             .then(({ data }) => {
               setReportedList(data)
             })
@@ -76,12 +77,17 @@ const AdminBad = () => {
           nickname:choice.target
         }
         const res = await axios.post("http://localhost:3001/users/report",data)
+        console.log(res)
         if(res.data==="success"){
 
           const response = await axios.post("http://localhost:3001/reports/delete",{"_id":choice._id})
           if(response.data==="success"){
-            alert(choice.target+"님을 완전히 신고처리 하였습니다.")
+            setGetalert({"flag":true,"message":choice.target+"님을 완전히 신고처리 하였습니다."})
             getReported()
+
+            setTimeout(()=>{
+              setGetalert({"flag":false,"message":""})
+            },1500)
           }
         }
         setModal(false)
@@ -91,8 +97,11 @@ const AdminBad = () => {
         console.log("봐주기",choice)
         const response = await axios.post("http://localhost:3001/reports/delete",{"_id":choice._id})
           if(response.data==="success"){
-            alert(choice.target+"님을 한 번 봐주었습니다..")
+            setGetalert({"flag":true,"message":choice.target+"님을 한 번 봐주었습니다.."})
             getReported()
+            setTimeout(()=>{
+              setGetalert({"flag":false,"message":""})
+            },1500)
           }
         setModal(false)
 
@@ -128,17 +137,28 @@ const AdminBad = () => {
 
       </CardBody>
 
+
       <Modal isOpen={modal} >
         <ModalHeader toggle={(e)=>toggle("none")}>
           신고처리 및 봐주기
         </ModalHeader>
         <ModalBody>
-          <div>"{choice.target}"님이 "{choice.content}" 이유로 신고되었습니다.</div>
+          <div>[{choice.target}]님이 <span style={{color:'red'}}>{choice.content}</span> 이유로 신고되었습니다.</div>
         </ModalBody>
         <ModalFooter>
           <Button color="danger" onClick={(e)=>goHell(e)}>신고처리</Button>{' '}
           <Button color="warning" onClick={(e)=>pass(e)}>봐주기</Button>
         </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={getalert.flag} >
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
+          
+        </ModalBody>
       </Modal>
     </Collapse>
   </Card>
