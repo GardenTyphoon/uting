@@ -70,16 +70,18 @@ export const RemoteVideos = (props) => {
               gridAutoFlow="dense"
               color="white"
               >
-               <div style={{display:"flex", flexDirection:"row", alignItems:"center", marginBottom:"10px"}}>
+               <div style={{display:"inline-flex", flexDirection:"row", alignItems:"center", marginBottom:"10px"}}>
                     <div onClick={() => onChange(tileId)}>
                       {alive[tileId] ? <img style={my_style} src={camera_on} /> : <img style={my_style} src={camera_off}/>}
                     </div>
+                    <div style={{width:"100%", textAlign:"center"}}>
                     <button
                       onClick={(e) => {
                       toggleProfileBtn(name);
                       }}  
                       className="anotherbutton"
                       >{name}</button>
+                      </div>  
                 </div>
               {alive[tileId] ? <RemoteVideo  {...props} key={tileId} tileId={tileId} /> : <div style={temp}></div>}
             </Grid>

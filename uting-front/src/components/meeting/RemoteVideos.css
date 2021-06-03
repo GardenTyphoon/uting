@@ -14,10 +14,9 @@
     border-radius:10px;
     margin-bottom:6px;
     width:60px;
-    margin-left:23%;
     box-shadow:1px 1px 5px grey ;
     font-family: "NanumSquare_acR";
-    text-align: center;
+    margin-right: 24px;
 }
 .anotherbutton:active{
     box-shadow:1px 1px 5px white;

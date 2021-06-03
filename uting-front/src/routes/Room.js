@@ -374,7 +374,9 @@ const Room = () => {
             setGetalert({"flag":false,"message":""})
             window.location.href = "http://localhost:3000/main";
         }, 1500)
-    }
+
+      }
+      
     }
   };
 
