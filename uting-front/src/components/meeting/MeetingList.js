@@ -40,13 +40,18 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     const [groupMannerInfo, setGroupMannerInfo] =useState({});
     const [resstatus,setResstatus]=useState("")
     const [groupMannerInfoTemp,setGroupMannerInfoTemp]=useState([])
-    //let groupMannerInfoTemp = [];
-    function getMannerCreditAndColor(avgManner) {
+  
+  
+        function getMannerCreditAndColor(avgManner) {
         let color;
         let credit;
         if (avgManner === 4.5) {
             color = "#e96363"; //빨강
             credit="A+";
+        }
+        else if (avgManner < 4.5 && avgManner >= 4.0) {
+            color = "#fdc95d"; //주황
+            credit= "A0";
         }
         else if (avgManner < 4.0 && avgManner >= 3.5) {
             color="#f28e72"; //탁한분홍
@@ -95,7 +100,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             "http://localhost:3001/users/preMemSocketid",
             data
         );
-        console.log(res);
         let arr = []
         for (let i = 0; i < res.data.length; i++) {
             arr.push(res.data[i].socketid)
@@ -104,14 +108,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         socket.emit("newParticipants", { socketIdList: arr });
     }
     const canAttend = async (room) => {
-        console.log("나 들어갈수있엉?")
         let myGroupWoman = 0;
         let myGroupMan = 0;
         let groupMembersInfo = []
-        console.log(groupMember)
         for (let i = 0; i < groupMember.length; i++) {
             let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
-            console.log(userInfo.data)
+           
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
                 "introduce": userInfo.data.introduce,
@@ -125,9 +127,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (userInfo.data.gender === "woman") { myGroupWoman++; }
             else { myGroupMan++; }
         }
-        console.log(groupMembersInfo)
         if (room.numOfMan + myGroupMan <= room.maxNum && room.numOfWoman + myGroupWoman <= room.maxNum) {
-            console.log("웅")
+           
             attendRoomByID(room, groupMembersInfo);
         }
         else {
@@ -139,7 +140,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }
     const attendRoomByID = async (room, groupMembersInfo) => {
 
-        console.log(groupMember)
         setRoomObj(room)
 
         // setFlag(true)
@@ -158,7 +158,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (groupMembersInfo[i].nickname != sessionUser) {
                 groupMembersSocketId.push(groupMembersInfo[i].socketid);
             }
-            console.log(groupMembersSocketId)
             sumManner += groupMembersInfo[i].mannerCredit;
             
             sumAge += birthToAge(groupMembersInfo[i].birth);
@@ -209,7 +208,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
                     const socket = socketio.connect('http://localhost:3001');
-                    console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
                 await meetingManager.start();
@@ -230,14 +228,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     let saveMeetingUsers = async (e) => {
-        console.log("saveMeetingUsers", roomObj)
         let data = {
             member: groupMember,
             room: roomObj
         }
-        console.log("saveMeetingUsers", data)
         const res = await axios.post("http://localhost:3001/meetings/savemember", data)
-        console.log(res)
+     
 
     }
 
@@ -293,9 +289,11 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     let getMeetings = async (e) => {
         const res = await axios.post('http://localhost:3001/meetings/')
-        console.log(res)
+       
         let arr =[]
         res.data.map((room)=>arr.push(getMannerCreditAndColor(room.avgManner)))
+       
+
         setGroupMannerInfo(arr)
         setView(res.data)
         setOriginList(res.data)
@@ -308,9 +306,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         getGroupInfo()
  
     }, []);
-    useEffect(()=>{
-       console.log(groupMannerInfo[0])
-    },[groupMannerInfo])
 
     useEffect(() => {
         const filteredName = originList.filter((data) => {
@@ -343,8 +338,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [filterage])
 
     useEffect(() => {
+        setView([]);
         getMeetings();
-       
+    
     }, [getorigin])
 
     return (//tr map 한다음에 key넣어주기
@@ -352,6 +348,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             {viewRoomList.map((room, index) =>
                 
                 <div style={{ marginRight: "25px" }}>
+                   
                     <Container className="MeetingRoom">
                         <Row style={{ width: "100%" }}>
                             <img src={MeetingRoom}
