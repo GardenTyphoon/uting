@@ -410,7 +410,9 @@ let goLove =()=>{
       socketid:iloveyou.socketid,
       sender:sessionStorage.getItem("nickname")
     }
-    const socket = socketio.connect(SOCKET);
+    toast(iloveyou.mylove+"님에게 정상적으로 메시지를 보냈습니다.")
+    document.getElementsByName("loveinput").values="";
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("golove", { lovemessage: data});
   
 }
@@ -513,7 +515,7 @@ useEffect(()=>{
           </select>
           </div>
           <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center", margin:"10px"}}>
-          <input className="loveinput" placeholder="메시지를 입력해주세요." style={{width:"260px",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
+          <input name="loveinput" className="loveinput" placeholder="메시지를 입력해주세요." style={{width:"180px",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
           <button style={{border:"0",backgroundColor:"rgb(255,228,225)"}} onClick={(e)=>goLove(e)}>
             <img src={airplane} style={{width:"40px",height:"40px"}}/>
           </button>
