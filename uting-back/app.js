@@ -252,6 +252,19 @@ app.io.on("connection", function (socket) {
       app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
   });
+
+  socket.on("midleave",function(msg){
+    let data={
+      type:"midleave",
+      midleaveUser:msg.midleaveUser,
+    }
+    for (let i = 0; i < Object.keys(msg.memlist).length; i++) {
+      app.io.to(msg.memlist[i].socketid).emit("room", data);
+    }
+  })
+
+
+
   socket.on("notifyTurn", function (msg) {
     let data = {
       type: "notifyTurn",

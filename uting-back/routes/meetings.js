@@ -281,6 +281,7 @@ router.post('/leavemember', async function(req,res,next){
         if(req.body.gender==="man"){
           perObj.numOfMan=perObj.numOfMan-1
         }
+        console.log(perObj)
         Meeting.findByIdAndUpdate(
           perObj._id,
           {
