@@ -26,6 +26,7 @@ const Profile = () => {
   });
   const [toggleprofile, setToggleProfile] = useState(false);
   const toggleProfileBtn = (e) => setToggleProfile(!toggleprofile);
+  const [checkProfile,setCheckProfile]=useState(false)
 
   let sessionUser = sessionStorage.getItem("email");
 
@@ -41,6 +42,13 @@ const Profile = () => {
     getProfile();
   }, []);
 
+  let checkMyprofile=(e)=>{
+    setCheckProfile(e)
+    if(e===true){
+      getProfile();
+    }
+  }
+
   const getProfile = async (e) => {
     const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
       sessionUser: sessionUser,type:"profile"
@@ -55,6 +63,7 @@ const Profile = () => {
       ucoin: res.data.ucoin,
     };
     setProfileInfo(data);
+    setCheckProfile(false)
   };
 
   return (
@@ -138,7 +147,7 @@ const Profile = () => {
             </button>
           </Row>
           <Row>
-          <MyProfile choicename={sessionStorage.getItem("nickname")} />
+          <MyProfile choicename={sessionStorage.getItem("nickname")} checkProfile={(e)=>checkMyprofile(e)} />
           </Row>
         </ModalBody>
       </Modal>

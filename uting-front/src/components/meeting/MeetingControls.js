@@ -60,7 +60,7 @@ const MeetingControls = ({participantss}) => {
     //alert(res.data);
     setGetalert({"flag":true,"message":res.data})
     setTimeout(()=>{
-      setToggleReport(!toggleReport)
+      setToggleReport(false)
     },1000)
     
   };

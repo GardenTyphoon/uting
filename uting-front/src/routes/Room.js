@@ -409,6 +409,9 @@ let goLove =()=>{
       socketid:iloveyou.socketid,
       sender:sessionStorage.getItem("nickname")
     }
+    toast(mylove+"님에게 정상적으로 메시지를 보냈습니다.")
+    document.getElementsByName("loveinput").values="";
+    document.getElementsByName("mylove").values="";
     const socket = socketio.connect("http://localhost:3001");
     socket.emit("golove", { lovemessage: data});
   
