@@ -115,7 +115,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         let groupMembersInfo = []
         console.log(groupMember)
         for (let i = 0; i < groupMember.length; i++) {
-            let userInfo = await axios.post('/api/users/userInfo', { "userId": groupMember[i] });
+            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
             console.log(userInfo.data)
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
@@ -125,8 +125,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 "ucoin": userInfo.data.ucoin,
                 "gender": userInfo.data.gender,
                 "birth" : userInfo.data.birth,
+                "socketid":userInfo.data.socketid,
             });
-            if (groupMembersInfo.gender === "woman") { myGroupWoman++; }
+            if (userInfo.data.gender === "woman") { myGroupWoman++; }
             else { myGroupMan++; }
         }
         console.log(groupMembersInfo)
