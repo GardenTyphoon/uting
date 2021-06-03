@@ -94,7 +94,7 @@ const EarInMal = ({
   }
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
-    setTurn(member[rand]);
+    setTurn(member[0]);
     console.log("participantsForTurn :" + participantsForTurn); //for debug
     var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
@@ -394,8 +394,8 @@ const EarInMal = ({
             display: "grid",
             width: "170px",
             height: "160px",
-            gridTemplateColumns: "1.5fr 1.2fr 1.5fr",
-            gridTemplateRows: "0.5fr 2fr 15%",
+            gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            gridTemplateRows: "10% 1fr 15%",
           }}
         >
           {turnFlag ? (
@@ -405,12 +405,12 @@ const EarInMal = ({
                   <h5
                     style={{
                       fontSize: "medium",
-                      gridColumn: "1/4",
+                      gridColumn: "1/5",
                     }}
                   >
                     질문 알려주기
                   </h5>
-                  <div style={{ gridColumn: "1/4", gridRow: "2/3" }}>
+                  <div style={{ gridColumn: "1/5", gridRow: "2/4" }}>
                     {participants.map((member) => (
                       <Button
                         outline
@@ -453,15 +453,31 @@ const EarInMal = ({
                 </>
               ) : (
                 <>
-                  <h5 style={{ fontSize: "medium", gridColumn: "1/4" }}>
+                  <h5
+                    style={{
+                      fontSize: "medium",
+                      gridColumn: "1/5",
+                      margin: "0px",
+                    }}
+                  >
                     질문할 사용자 선택
                   </h5>
-                  <div style={{ gridColumn: "1/4", girdRow: "2/3" }}>
+                  <div
+                    style={{
+                      gridColumn: "1/5",
+                      girdRow: "1/3",
+                      padding: "0px",
+                    }}
+                  >
                     {participants.map((member, index) => (
                       <Button
                         outline
                         color="secondary"
-                        style={{ border: 0 }}
+                        style={{
+                          border: 0,
+                          padding: "0px",
+                          marginRight: "5%",
+                        }}
                         key={index}
                         value={member}
                         onClick={questionToWhom}
