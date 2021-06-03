@@ -5,7 +5,7 @@ import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col } from "reactstrap";
-const MyProfile = ({choicename}) => {
+const MyProfile = ({choicename,checkProfile}) => {
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
@@ -90,6 +90,8 @@ const MyProfile = ({choicename}) => {
         "http://localhost:3001/users/modifyMyProfile",
         ProfileInfo
       );
+
+      checkProfile(true)
     }
   };
   useEffect(() => {
