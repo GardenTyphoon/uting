@@ -82,6 +82,7 @@ const Room = () => {
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
   const [flagMessage,setFlagMessage]=useState(true);
   const [iloveyou,setIloveyou]=useState({"mylove":"","socketid":"","lovemessage":""})
+  const [existMidleave,setExistMidleave]=useState(false);
 
   let toggleFlagMessage =()=>{
     setFlagMessage(!flagMessage)
@@ -96,7 +97,7 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    //console.log("socketId.id",socketId)
+    console.log("socketId.id",socketId)
     const res = await axios.post(
       "http://localhost:3001/users/savesocketid",
       data
@@ -162,6 +163,7 @@ const Room = () => {
       console.log(res.data.maxNum)
       setmaxNum(res.data.maxNum);
       setReady(true);
+      setExistMidleave(false)
     }
   };
 
@@ -274,6 +276,10 @@ const Room = () => {
       else if(data.type==="golove"){
         toast(data.sender+"님이 - >"+data.message)
       }
+      else if(data.type==="midleave"){
+        toast(data.midleaveUser+"님이 퇴장하셨습니다.")
+        setExistMidleave(true)
+      }
     });
     return () => {
       socket.removeListener("room");
@@ -281,6 +287,14 @@ const Room = () => {
       socket.removeListener("connect");
     };
   }, []);
+
+  useEffect(()=>{
+    if(existMidleave===true){
+      console.log("여깅")
+      getparticipants();
+    }
+  },[existMidleave])
+
   useEffect(() => {
     if (socketFlag === true) {
       setTimeout(() => {
@@ -313,6 +327,7 @@ const Room = () => {
     // users 디비에 ucoin차감하기
     let ismember = false;
     let mem = {};
+    console.log("meetingMembers",meetingMembers)
     for (let i = 0; i < meetingMembers.length; i++) {
       if (meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
         ismember = true;
@@ -336,6 +351,14 @@ const Room = () => {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
         //alert("미팅 방을 나갑니다.");
+        for(let i=0;i<parObj.length;i++){
+          if(parObj[i].nickname===sessionStorage.getItem("nickname")){
+            parObj.splice(i, 1);
+            i--;
+          }
+        }
+        const socket = socketio.connect("http://localhost:3001");
+        socket.emit("midleave", { memlist: parObj,midleaveUser:sessionStorage.getItem("nickname")});
         
         setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
         setTimeout(()=>{
