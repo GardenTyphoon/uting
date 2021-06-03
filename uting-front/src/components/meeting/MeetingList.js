@@ -112,7 +112,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         let myGroupMan = 0;
         let groupMembersInfo = [];
         for (let i = 0; i < groupMember.length; i++) {
-            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
+            let userInfo = await axios.post('/api/users/userInfo', { "userId": groupMember[i] });
           
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
