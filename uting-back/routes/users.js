@@ -502,10 +502,12 @@ router.post('/report',function(req,res,next){
       );
 
     }
+    else if(ismemeber===false){
+      res.send("fail")
+    }
     
   });
 })
-
 
 
 

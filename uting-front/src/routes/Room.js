@@ -398,6 +398,10 @@ const Room = () => {
       socketid: iloveyou.socketid,
       sender: sessionStorage.getItem("nickname"),
     };
+    toast(iloveyou.mylove + "님에게 정상적으로 메시지를 보냈습니다.");
+    document.getElementsByName("loveinput").values = "";
+    const socket = socketio.connect("http://localhost:3001");
+    socket.emit("golove", { lovemessage: data });
     const socket = socketio.connect(SOCKET);
     socket.emit("golove", { lovemessage: data });
   };
