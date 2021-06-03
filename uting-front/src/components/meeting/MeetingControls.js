@@ -61,6 +61,7 @@ const MeetingControls = ({participantss}) => {
     setGetalert({"flag":true,"message":res.data})
     setTimeout(()=>{
       setToggleReport(false)
+      setGetalert({"flag":false,"message":""})
     },1000)
     
   };
