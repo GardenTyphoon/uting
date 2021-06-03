@@ -120,8 +120,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 "ucoin": userInfo.data.ucoin,
                 "gender": userInfo.data.gender,
                 "birth" : userInfo.data.birth,
+                "socketid":userInfo.data.socketid,
             });
-            if (groupMembersInfo.gender === "woman") { myGroupWoman++; }
+            if (userInfo.data.gender === "woman") { myGroupWoman++; }
             else { myGroupMan++; }
         }
         console.log(groupMembersInfo)
@@ -131,6 +132,9 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         }
         else {
             setGetalert({ "flag": true, "message": "정해진 인원수가 맞지 않아 입장이 불가합니다." })
+            setTimeout(()=>{
+                setGetalert({ "flag": false, "message": "" })
+            },1500)
         }
     }
     const attendRoomByID = async (room, groupMembersInfo) => {
@@ -154,6 +158,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (groupMembersInfo[i].nickname != sessionUser) {
                 groupMembersSocketId.push(groupMembersInfo[i].socketid);
             }
+            console.log(groupMembersSocketId)
             sumManner += groupMembersInfo[i].mannerCredit;
             
             sumAge += birthToAge(groupMembersInfo[i].birth);
