@@ -36,7 +36,7 @@ const Box = styled.div`
   padding: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-  height: 180px;
+  height: 230px;
   font-size: large;
   font-weight: 500;
 `;
@@ -173,10 +173,12 @@ const McBot = ({
 
   useEffect(() => {
     if (gameNum === 1) {
+      setContent("");
       setContentFade(true);
       setNumber(4);
       setGameNum(1);
     } else if (gameNum === 2) {
+      setContent("");
       setContentFade(true);
       setNumber(4);
       setGameNum(2);
@@ -305,7 +307,7 @@ const McBot = ({
                     <Button
                       outline
                       color="secondary"
-                      style={{ border: 0}}
+                      style={{ border: 0 }}
                       onClick={() => setGameNum(1)}
                     >
                       귓속말 게임

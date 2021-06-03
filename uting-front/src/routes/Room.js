@@ -27,15 +27,15 @@ import MeetingControls from "../components/meeting/MeetingControls";
 import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png";
 import help from "../img/help.png";
-import airplane from "../img/airplane.png"
+import airplane from "../img/airplane.png";
 import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
-import "./Room.css"
-import introLog from '../img/배경없는유팅로고.png'
+import "./Room.css";
+import introLog from "../img/배경없는유팅로고.png";
 import { SOCKET } from "../utils/constants";
 const McBotContainer = styled.div`
   width: 350px;
-  height: 500px;
+  height: 550px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
@@ -55,7 +55,7 @@ const Room = () => {
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
   const [participantsSocketId, setParticipantsSocketId] = useState([]);
-  const [parObj,setParObj]=useState({})
+  const [parObj, setParObj] = useState({});
   const [vote, setVote] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [musicsrc, setMusicsrc] = useState("");
@@ -80,29 +80,30 @@ const Room = () => {
   const [toggleHelp, setToggleHelp] = useState(false);
   const [chimeinfo, setChimeinfo] = useState([]);
   const [maxNum, setmaxNum] = useState();
-  const [getalert,setGetalert]=useState({"flag":false,"message":""})
-  const [flagMessage,setFlagMessage]=useState(true);
-  const [iloveyou,setIloveyou]=useState({"mylove":"","socketid":"","lovemessage":""})
-  const [existMidleave,setExistMidleave]=useState(false);
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
+  const [flagMessage, setFlagMessage] = useState(true);
+  const [iloveyou, setIloveyou] = useState({
+    mylove: "",
+    socketid: "",
+    lovemessage: "",
+  });
+  const [existMidleave, setExistMidleave] = useState(false);
 
-  let toggleFlagMessage =()=>{
-    setFlagMessage(!flagMessage)
-  }
-  
-  let toggleAlert =(e)=>{
-    setGetalert({...getalert,"flag":!getalert.flag})
-  }
+  let toggleFlagMessage = () => {
+    setFlagMessage(!flagMessage);
+  };
+
+  let toggleAlert = (e) => {
+    setGetalert({ ...getalert, flag: !getalert.flag });
+  };
 
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    console.log("socketId.id",socketId)
-    const res = await axios.post(
-      "/api/users/savesocketid",
-      data
-    );
+    console.log("socketId.id", socketId);
+    const res = await axios.post("/api/users/savesocketid", data);
     //console.log(res)
     setSocketFlag(true);
   };
@@ -116,17 +117,14 @@ const Room = () => {
     let data = {
       preMember: participants,
     };
-    const res = await axios.post(
-      "/api/users/preMemSocketid",
-      data
-    );
+    const res = await axios.post("/api/users/preMemSocketid", data);
 
     if (res.data.socketid !== "undefined") {
-      setParObj(res.data)
-      console.log(res.data)
-      let arr=[]
-      for(let i=0;i<res.data.length;i++){
-        arr.push(res.data[i].socketid)
+      setParObj(res.data);
+      console.log(res.data);
+      let arr = [];
+      for (let i = 0; i < res.data.length; i++) {
+        arr.push(res.data[i].socketid);
       }
       setParticipantsSocketId(arr);
       console.log(arr);
@@ -146,25 +144,24 @@ const Room = () => {
 
     const _id = meetingId;
     if (meetingId !== "") {
-      const res = await axios.post(
-        "/api/meetings/getparticipants",
-        { _id: meetingId }
-      );
+      const res = await axios.post("/api/meetings/getparticipants", {
+        _id: meetingId,
+      });
       let par = [];
-      for (let i = 0; i < (res.data.users).length; i++) {
+      for (let i = 0; i < res.data.users.length; i++) {
         par.push(res.data.users[i].nickname);
-        setChimeinfo()
+        setChimeinfo();
       }
-      console.log("이거", res.data.chime_info)
+      console.log("이거", res.data.chime_info);
       setMeetingMembers(res.data.users);
-      console.log(res.data)
+      console.log(res.data);
       setMeeting_id(meetingId);
       setParticipants(par);
       setChimeinfo(res.data.chime_info);
-      console.log(res.data.maxNum)
+      console.log(res.data.maxNum);
       setmaxNum(res.data.maxNum);
       setReady(true);
-      setExistMidleave(false)
+      setExistMidleave(false);
     }
   };
 
@@ -208,7 +205,7 @@ const Room = () => {
   }, [intervalMessageCheck]);
 
   useEffect(() => {
-    setGetalert({"flag":false,"message":""});
+    setGetalert({ flag: false, message: "" });
     const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
@@ -273,13 +270,11 @@ const Room = () => {
       } else if (data.type === "notifyRole") {
         toast(data.message);
         setRole(data.role);
-      }
-      else if(data.type==="golove"){
-        toast(data.sender+"님이 - >"+data.message)
-      }
-      else if(data.type==="midleave"){
-        toast(data.midleaveUser+"님이 퇴장하셨습니다.")
-        setExistMidleave(true)
+      } else if (data.type === "golove") {
+        toast(data.sender + "님이 - >" + data.message);
+      } else if (data.type === "midleave") {
+        toast(data.midleaveUser + "님이 퇴장하셨습니다.");
+        setExistMidleave(true);
       }
     });
     return () => {
@@ -289,12 +284,12 @@ const Room = () => {
     };
   }, []);
 
-  useEffect(()=>{
-    if(existMidleave===true){
-      console.log("여깅")
+  useEffect(() => {
+    if (existMidleave === true) {
+      console.log("여깅");
       getparticipants();
     }
-  },[existMidleave])
+  }, [existMidleave]);
 
   useEffect(() => {
     if (socketFlag === true) {
@@ -328,7 +323,7 @@ const Room = () => {
     // users 디비에 ucoin차감하기
     let ismember = false;
     let mem = {};
-    console.log("meetingMembers",meetingMembers)
+    console.log("meetingMembers", meetingMembers);
     for (let i = 0; i < meetingMembers.length; i++) {
       if (meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
         ismember = true;
@@ -343,81 +338,73 @@ const Room = () => {
       };
       console.log(data);
 
-      const res = await axios.post(
-        "/api/meetings/leavemember",
-        data
-      );
+      const res = await axios.post("/api/meetings/leavemember", data);
       console.log(res);
       if (res.data === "success") {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
         //alert("미팅 방을 나갑니다.");
-        for(let i=0;i<parObj.length;i++){
-          if(parObj[i].nickname===sessionStorage.getItem("nickname")){
+        for (let i = 0; i < parObj.length; i++) {
+          if (parObj[i].nickname === sessionStorage.getItem("nickname")) {
             parObj.splice(i, 1);
             i--;
           }
         }
         const socket = socketio.connect(SOCKET);
-        socket.emit("midleave", { memlist: parObj,midleaveUser:sessionStorage.getItem("nickname")});
-        
-        setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
-        setTimeout(()=>{
-          setGetalert({"flag":false,"message":""})
-          window.location.href = "/main";
-         },2000)
-        
-      }
-      else if(res.data === "last"){
-        setGetalert({"flag":true,"message":"미팅 방을 나갑니다."})
-        setTimeout(async () => {
-            await endMeeting(meeting_id);
-            setGetalert({"flag":false,"message":""})
-            window.location.href = "/main";
-        }, 1500)
+        socket.emit("midleave", {
+          memlist: parObj,
+          midleaveUser: sessionStorage.getItem("nickname"),
+        });
 
+        setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
+        setTimeout(() => {
+          setGetalert({ flag: false, message: "" });
+          window.location.href = "/main";
+        }, 2000);
+      } else if (res.data === "last") {
+        setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
+        setTimeout(async () => {
+          await endMeeting(meeting_id);
+          setGetalert({ flag: false, message: "" });
+          window.location.href = "/main";
+        }, 1500);
       }
-      
     }
   };
 
-  
-  let onChangehandler=(e)=>{
+  let onChangehandler = (e) => {
     let { name, value } = e.target;
-    console.log(parObj)
-    if(name==="mylove")
-    {
-        for(let i=0;i<parObj.length;i++){
-          if(parObj[i].nickname===value){
-            setIloveyou({...iloveyou,["mylove"]:value,["socketid"]:parObj[i].socketid})
-          }
+    console.log(parObj);
+    if (name === "mylove") {
+      for (let i = 0; i < parObj.length; i++) {
+        if (parObj[i].nickname === value) {
+          setIloveyou({
+            ...iloveyou,
+            ["mylove"]: value,
+            ["socketid"]: parObj[i].socketid,
+          });
         }
-        //value는 학점줄 닉네임
+      }
+      //value는 학점줄 닉네임
+    } else if (name === "lovemessage") {
+      setIloveyou({ ...iloveyou, ["lovemessage"]: value });
     }
-    else if(name==="lovemessage")
-    {
+  };
 
-      setIloveyou({...iloveyou,["lovemessage"]:value})
-
-    }
-    
-}
-
-let goLove =()=>{
-    let data ={
-      mylove:iloveyou.mylove,
-      message:iloveyou.lovemessage,
-      socketid:iloveyou.socketid,
-      sender:sessionStorage.getItem("nickname")
-    }
+  let goLove = () => {
+    let data = {
+      mylove: iloveyou.mylove,
+      message: iloveyou.lovemessage,
+      socketid: iloveyou.socketid,
+      sender: sessionStorage.getItem("nickname"),
+    };
     const socket = socketio.connect(SOCKET);
-    socket.emit("golove", { lovemessage: data});
-  
-}
+    socket.emit("golove", { lovemessage: data });
+  };
 
-useEffect(()=>{
-  console.log(iloveyou)
-},[iloveyou])
+  useEffect(() => {
+    console.log(iloveyou);
+  }, [iloveyou]);
   useEffect(() => {
     saveParticipantsSocketId();
   }, [participants]);
@@ -435,7 +422,6 @@ useEffect(()=>{
         overflow: "hidden",
       }}
     >
-
       <div
         style={{
           width: "75%",
@@ -445,9 +431,9 @@ useEffect(()=>{
           flexDirection: "column",
         }}
       >
-        <MeetingRoom info={chimeinfo} max={maxNum}/>
-        <div style={{height: "15%"}}></div> {/* 이걸로 조정해뒀음 */}
-        <MeetingControls participantss={participants}/>
+        <MeetingRoom info={chimeinfo} max={maxNum} />
+        <div style={{ height: "20%" }}></div> {/* 이걸로 조정해뒀음 */}
+        <MeetingControls participantss={participants} />
       </div>
       <div
         style={{
@@ -457,14 +443,14 @@ useEffect(()=>{
           alignItems: "flex-end",
         }}
       >
-        
         <Dropdown
           direction="down"
           isOpen={endMeetingBtn}
           toggle={() => {
             setEndMeetingBtn(!endMeetingBtn);
-            endMeetingBtn===false?setFlagMessage(false):setFlagMessage(true)
-            
+            endMeetingBtn === false
+              ? setFlagMessage(false)
+              : setFlagMessage(true);
           }}
         >
           <DropdownToggle
@@ -497,30 +483,85 @@ useEffect(()=>{
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
         ></Vote>
-        
-        
-        <div style={{height: "10%"}}></div> {/* 이걸로 조정해뒀음 */}
-        
-        {flagMessage===true?
-        <div style={{display:"flex", flexDirection:"column",marginBottom:"10%"}}>
-          <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center"}} >
-          <div >To.</div><select className="loveinput"  name="mylove" style={{width:"250px",marginLeft:"10px",marginRight:"50px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
-            
-          <option value="" selected>받는 사람</option>
-            {participants.map((data,i)=>{
-                    return(data!==sessionStorage.getItem("nickname")?<option  value={data} >{data}</option>:"")
-                   })}
-          </select>
+        <div style={{ height: "10%" }}></div> {/* 이걸로 조정해뒀음 */}
+        {flagMessage === true ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "10%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "NanumSquare_acR",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div>To.</div>
+              <select
+                className="loveinput"
+                name="mylove"
+                style={{
+                  width: "250px",
+                  marginLeft: "10px",
+                  marginRight: "50px",
+                  border: "0",
+                  backgroundColor: "rgb(255,228,225)",
+                  borderBottom: "2px solid gray",
+                }}
+                onChange={(e) => onChangehandler(e)}
+              >
+                <option value="" selected>
+                  받는 사람
+                </option>
+                {participants.map((data, i) => {
+                  return data !== sessionStorage.getItem("nickname") ? (
+                    <option value={data}>{data}</option>
+                  ) : (
+                    ""
+                  );
+                })}
+              </select>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "NanumSquare_acR",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "10px",
+              }}
+            >
+              <input
+                className="loveinput"
+                placeholder="메시지를 입력해주세요."
+                style={{
+                  width: "260px",
+                  marginLeft: "10%",
+                  border: "0",
+                  backgroundColor: "rgb(255,228,225)",
+                  borderBottom: "2px solid gray",
+                }}
+                type="text"
+                name="lovemessage"
+                onChange={(e) => onChangehandler(e)}
+              />
+              <button
+                style={{ border: "0", backgroundColor: "rgb(255,228,225)" }}
+                onClick={(e) => goLove(e)}
+              >
+                <img src={airplane} style={{ width: "40px", height: "40px" }} />
+              </button>
+            </div>
           </div>
-          <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center", margin:"10px"}}>
-          <input className="loveinput" placeholder="메시지를 입력해주세요." style={{width:"260px",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
-          <button style={{border:"0",backgroundColor:"rgb(255,228,225)"}} onClick={(e)=>goLove(e)}>
-            <img src={airplane} style={{width:"40px",height:"40px"}}/>
-          </button>
-          
-          
-          </div>
-          </div>:""}
+        ) : (
+          ""
+        )}
         <McBotContainer>
           <button
             onClick={() => setToggleHelp(!toggleHelp)}
@@ -528,13 +569,13 @@ useEffect(()=>{
               borderStyle: "none",
               background: "transparent",
               position: "relative",
-              left: "90px",
+              left: "43%",
             }}
-          > 
+          >
             <img src={help} width="25" />
           </button>
           {intervalMessage}
-          
+
           <McBot
             participantsSocketIdList={participantsSocketId}
             currentSocketId={socketId}
@@ -549,18 +590,17 @@ useEffect(()=>{
             role={role}
             gameNum_2={gameNum}
           ></McBot>
-        <div>
-        <ReactAudioPlayer
-          style={{width: "300px"}}
-          id="audio"
-          src={musicsrc}
-          controls
-        />
-         </div>
+          <div>
+            <ReactAudioPlayer
+              style={{ width: "300px", marginTop: "20px" }}
+              id="audio"
+              src={musicsrc}
+              controls
+            />
+          </div>
         </McBotContainer>
-       
       </div>
-    
+
       <Modal isOpen={!ready}>
         <ModalBody
           style={{
@@ -579,15 +619,22 @@ useEffect(()=>{
       <Modal isOpen={toggleMidLeave}>
         <ModalHeader>중도 퇴장</ModalHeader>
         <ModalBody>
-          <span style={{color:"red",fontWeight:"bold"}}>중도 퇴장</span>을 하시면 <span style={{fontWeight:"bold"}}>U COIN이 1 차감</span>하게 됩니다.<br/>
-          그래도 퇴장을 원하시면 <span style={{fontWeight:"bold"}}>나가기</span>를 눌러주세요.
+          <span style={{ color: "red", fontWeight: "bold" }}>중도 퇴장</span>을
+          하시면 <span style={{ fontWeight: "bold" }}>U COIN이 1 차감</span>하게
+          됩니다.
+          <br />
+          그래도 퇴장을 원하시면{" "}
+          <span style={{ fontWeight: "bold" }}>나가기</span>를 눌러주세요.
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}>나가기</Button>{' '}
-          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>취소</Button>
+          <Button color="primary" onClick={(e) => midLeave(e)}>
+            나가기
+          </Button>{" "}
+          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>
+            취소
+          </Button>
         </ModalFooter>
       </Modal>
-
 
       <Modal size="lg" isOpen={toggleHelp}>
         <ModalHeader>mc봇 사용법</ModalHeader>
@@ -601,13 +648,32 @@ useEffect(()=>{
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={getalert.flag} >
-        <ModalHeader style={{height:"70px",textAlign:"center"}}>
-          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
         </ModalHeader>
-        <ModalBody style={{height:"90px"}}>
-          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"18px",height:"50px"}}>{getalert.message}</div>
-          
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
         </ModalBody>
       </Modal>
     </div>
