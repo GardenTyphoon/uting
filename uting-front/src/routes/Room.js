@@ -32,7 +32,6 @@ import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
 import "./Room.css"
 import introLog from '../img/배경없는유팅로고.png'
-import { SOCKET } from "../utils/constants";
 const McBotContainer = styled.div`
   width: 250px;
   height: 500px;
@@ -83,6 +82,7 @@ const Room = () => {
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
   const [flagMessage,setFlagMessage]=useState(true);
   const [iloveyou,setIloveyou]=useState({"mylove":"","socketid":"","lovemessage":""})
+  const [existMidleave,setExistMidleave]=useState(false);
 
   let toggleFlagMessage =()=>{
     setFlagMessage(!flagMessage)
@@ -97,9 +97,9 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    //console.log("socketId.id",socketId)
+    console.log("socketId.id",socketId)
     const res = await axios.post(
-      "/api/users/savesocketid",
+      "http://localhost:3001/users/savesocketid",
       data
     );
     //console.log(res)
@@ -116,7 +116,7 @@ const Room = () => {
       preMember: participants,
     };
     const res = await axios.post(
-      "/api/users/preMemSocketid",
+      "http://localhost:3001/users/preMemSocketid",
       data
     );
 
@@ -146,7 +146,7 @@ const Room = () => {
     const _id = meetingId;
     if (meetingId !== "") {
       const res = await axios.post(
-        "/api/meetings/getparticipants",
+        "http://localhost:3001/meetings/getparticipants",
         { _id: meetingId }
       );
       let par = [];
@@ -163,6 +163,7 @@ const Room = () => {
       console.log(res.data.maxNum)
       setmaxNum(res.data.maxNum);
       setReady(true);
+      setExistMidleave(false)
     }
   };
 
@@ -207,7 +208,7 @@ const Room = () => {
 
   useEffect(() => {
     setGetalert({"flag":false,"message":""});
-    const socket = socketio.connect(SOCKET);
+    const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -275,6 +276,10 @@ const Room = () => {
       else if(data.type==="golove"){
         toast(data.sender+"님이 - >"+data.message)
       }
+      else if(data.type==="midleave"){
+        toast(data.midleaveUser+"님이 퇴장하셨습니다.")
+        setExistMidleave(true)
+      }
     });
     return () => {
       socket.removeListener("room");
@@ -282,6 +287,14 @@ const Room = () => {
       socket.removeListener("connect");
     };
   }, []);
+
+  useEffect(()=>{
+    if(existMidleave===true){
+      console.log("여깅")
+      getparticipants();
+    }
+  },[existMidleave])
+
   useEffect(() => {
     if (socketFlag === true) {
       setTimeout(() => {
@@ -300,7 +313,7 @@ const Room = () => {
     let data = {
       currentUser: e,
     };
-    const res = await axios.post("/api/users/cutUcoin", data);
+    const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
     console.log(res);
   };
 
@@ -314,6 +327,7 @@ const Room = () => {
     // users 디비에 ucoin차감하기
     let ismember = false;
     let mem = {};
+    console.log("meetingMembers",meetingMembers)
     for (let i = 0; i < meetingMembers.length; i++) {
       if (meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
         ismember = true;
@@ -329,7 +343,7 @@ const Room = () => {
       console.log(data);
 
       const res = await axios.post(
-        "/api/meetings/leavemember",
+        "http://localhost:3001/meetings/leavemember",
         data
       );
       console.log(res);
@@ -337,12 +351,19 @@ const Room = () => {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
         //alert("미팅 방을 나갑니다.");
+        for(let i=0;i<parObj.length;i++){
+          if(parObj[i].nickname===sessionStorage.getItem("nickname")){
+            parObj.splice(i, 1);
+            i--;
+          }
+        }
+        const socket = socketio.connect("http://localhost:3001");
+        socket.emit("midleave", { memlist: parObj,midleaveUser:sessionStorage.getItem("nickname")});
         
         setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
         setTimeout(()=>{
           setGetalert({"flag":false,"message":""})
-          // history.push('/main')
-          window.location.href = "/main";
+          window.location.href = "http://localhost:3000/main";
          },2000)
         
       }
@@ -351,10 +372,11 @@ const Room = () => {
         setTimeout(async () => {
             await endMeeting(meeting_id);
             setGetalert({"flag":false,"message":""})
-            // history.push('/main')
-            window.location.href = "/main";
+            window.location.href = "http://localhost:3000/main";
         }, 1500)
-    }
+
+      }
+      
     }
   };
 
@@ -387,7 +409,7 @@ let goLove =()=>{
       socketid:iloveyou.socketid,
       sender:sessionStorage.getItem("nickname")
     }
-    const socket = socketio.connect(SOCKET);
+    const socket = socketio.connect("http://localhost:3001");
     socket.emit("golove", { lovemessage: data});
   
 }

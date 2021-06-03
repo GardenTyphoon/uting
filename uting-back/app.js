@@ -19,7 +19,7 @@ var members = [];
 var app = express();
 
 mongoose
-  .connect("mongodb://mongo/uting", {
+  .connect("mongodb://localhost:27017/uting", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -41,7 +41,7 @@ app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'uploads')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use("/", indexRouter);
+app.use("/api", indexRouter);
 app.use("/users", usersRouter);
 app.use("/meetings", meetingsRouter);
 app.use("/groups", groupsRouter);
@@ -65,6 +65,14 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 app.io = require("socket.io")();
+
+// 대충 써봣는데 되는지 모름. 테스트 해보자구
+// app.io = require('socket.io')(app, {
+//   cors: {
+//     origin: ["127.0.0.1:3000"],
+//     methods: ["GET", "POST"],
+//   }
+// });
 
 /*
 Room.js
@@ -244,6 +252,19 @@ app.io.on("connection", function (socket) {
       app.io.to(msg.participantsSocketIdList[i]).emit("room", data);
     }
   });
+
+  socket.on("midleave",function(msg){
+    let data={
+      type:"midleave",
+      midleaveUser:msg.midleaveUser,
+    }
+    for (let i = 0; i < Object.keys(msg.memlist).length; i++) {
+      app.io.to(msg.memlist[i].socketid).emit("room", data);
+    }
+  })
+
+
+
   socket.on("notifyTurn", function (msg) {
     let data = {
       type: "notifyTurn",

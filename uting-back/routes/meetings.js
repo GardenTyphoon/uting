@@ -29,6 +29,7 @@ const log = message => {
 const app = process.env.npm_config_app || 'meeting';
 
 
+
 // GET meetings list 
 router.post('/', async function(req, res, next) {
   Meeting.find({}).then((meetings)=>{ 
@@ -280,6 +281,7 @@ router.post('/leavemember', async function(req,res,next){
         if(req.body.gender==="man"){
           perObj.numOfMan=perObj.numOfMan-1
         }
+        console.log(perObj)
         Meeting.findByIdAndUpdate(
           perObj._id,
           {
