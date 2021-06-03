@@ -402,8 +402,6 @@ const Room = () => {
     document.getElementsByName("loveinput").values = "";
     const socket = socketio.connect(SOCKET);
     socket.emit("golove", { lovemessage: data });
-    const socket = socketio.connect(SOCKET);
-    socket.emit("golove", { lovemessage: data });
   };
 
   useEffect(() => {

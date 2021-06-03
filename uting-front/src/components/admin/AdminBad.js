@@ -23,7 +23,7 @@ import {Button,
     ModalFooter,
     ModalHeader,
     Row, } from 'reactstrap';
-
+import introLog from "../../img/배경없는유팅로고.png";
 
 const RightButton = styled.div`
     position: relative;
