@@ -11,7 +11,7 @@
 
 ### 시스템 구조
 ---
-![image](https://user-images.githubusercontent.com/76544552/120684155-5486cd80-c4d9-11eb-91ba-edf39c645a16.png)  
+![image](https://user-images.githubusercontent.com/76544552/120697755-1396b500-c4e9-11eb-86e3-db2f0ff8acac.png)
 
 
 * Front-End : React.js를 이용하여 구현  
