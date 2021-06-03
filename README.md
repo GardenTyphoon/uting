@@ -8,7 +8,16 @@
 
 ### Build
 ---
+#### Requirement
 
+|name|version|etc|
+|------|---|---|
+|Node.js|v16.2.0||
+|Npm|v7.13.0||
+|Ubuntu|18.04 LTS||
+|Docker|v20.10.5|If use docker and nginx|
+|Nginx|v1.20.0|If use docker and nginx|
+---
 * Clone repository
 
 		git clone https://github.com/GardenTyphoon/uting.git
@@ -36,8 +45,6 @@
         
         docker-compose up --build
         
-	* Pre-installed Docker, Nginx
-	*  ! Docker version (20.10.5) 
 
 ### Tech
 ---
@@ -50,7 +57,9 @@
 	+ Mc Bot
 	+ 실시간 게임
 
-* Docker and Nginx
+
+* Docker and Nginx  
+	+ Deploy
 
 
 
@@ -60,15 +69,21 @@
 ![image](https://user-images.githubusercontent.com/76544552/120697755-1396b500-c4e9-11eb-86e3-db2f0ff8acac.png)
 
 
-* Front-End : React.js를 이용하여 구현  
+* React.js
+	* Front-end server 구현
 
-* Back-End : Node.js를 이용하여 구현  
+* Node.js
+	* Back-End server 구현
 
-* Ngnix : Front_Back-End 와 Client 사이의 통신을 중개  
+* Ngnix 
+	* Client의 요청에 따라 서버에 대해 리버스 프록시로 작용함으로써 Front-End, Back-End와의 통신을 중개
 
-* AWS : 실시간 기능 구현을 위한 SocketIo, 화상 회의 기술 등 Back-End의 부담이 크므로 AWS 서비스를 연동  
-
-
+* Docker
+	*  컨테이너 환경을 구성하여 배포에 용이하고, Nginx와 함께 사용함으로써 무중단 배포가 이루어지도록 함.
+* SocketIo
+	*  WebSocket을 이용한 클라이언트 간, 혹은 클라이언트-서버 간 실시간 양방향 통신
+* Chime
+	* WebRTC를 이용하여 구현된 화상회의 기술. AWS에서 지원.
 
 ### Author
 ---
