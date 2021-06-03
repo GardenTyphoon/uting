@@ -15,7 +15,7 @@ import { ConsoleLogger } from 'amazon-chime-sdk-js';
 import { SOCKET } from '../../utils/constants';
 
 function birthToAge(birth) {
-    console.log(birth)
+  
     let year = birth.slice(0, 4);
     return 2021 - Number(year) + 1;
 }
@@ -100,7 +100,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             "/api/users/preMemSocketid",
             data
         );
-        console.log(res);
         let arr = []
         for (let i = 0; i < res.data.length; i++) {
             arr.push(res.data[i].socketid)
@@ -109,14 +108,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         socket.emit("newParticipants", { socketIdList: arr });
     }
     const canAttend = async (room) => {
-        console.log("나 들어갈수있엉?")
         let myGroupWoman = 0;
         let myGroupMan = 0;
-        let groupMembersInfo = []
-        console.log(groupMember)
+        let groupMembersInfo = [];
         for (let i = 0; i < groupMember.length; i++) {
-            let userInfo = await axios.post('http://localhost:3001/users/userInfo', { "userId": groupMember[i] });
-            console.log(userInfo.data)
+            let userInfo = await axios.post('/api/users/userInfo', { "userId": groupMember[i] });
+          
             groupMembersInfo.push({
                 "nickname": userInfo.data.nickname,
                 "introduce": userInfo.data.introduce,
@@ -130,9 +127,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             if (userInfo.data.gender === "woman") { myGroupWoman++; }
             else { myGroupMan++; }
         }
-        console.log(groupMembersInfo)
         if (room.numOfMan + myGroupMan <= room.maxNum && room.numOfWoman + myGroupWoman <= room.maxNum) {
-            console.log("웅")
+           
             attendRoomByID(room, groupMembersInfo);
         }
         else {
@@ -144,10 +140,8 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }
     const attendRoomByID = async (room, groupMembersInfo) => {
 
-        console.log(groupMember)
         setRoomObj(room)
 
-        // setFlag(true)
         const userNum = room.users.length;
         let sumManner = room.avgManner * userNum;
         let sumAge = room.avgAge * userNum;
@@ -176,7 +170,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
             }
         }
         if (coinCheck === true) {
-            //
+            
 
             let new_numOfMan = numOfMan + room.numOfMan;
             let new_numOfWoman = numOfWoman + room.numOfWoman;
@@ -201,7 +195,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 meetingRoomParticipants.push(per.nickname);
 
             })
-            updateNewParticipants_to_OriginParticipants(meetingRoomParticipants); //현재 들어가려는 미팅룸에 있는 애들이 가지고 있는 로컬 participantsSocketId를 업데이트
+            updateNewParticipants_to_OriginParticipants(meetingRoomParticipants);
 
             try {
                 const { JoinInfo } = await fetchMeeting(data);
@@ -213,7 +207,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
                 setAppMeetingInfo(room.title, sessionUser, 'ap-northeast-2');
                 if (room.title !== undefined) {
                     const socket = socketio.connect(SOCKET);
-                    console.log("groupMembersSocketId", groupMembersSocketId)
                     socket.emit('makeMeetingRoomMsg', { "groupMembersSocketId": groupMembersSocketId, "roomtitle": room.title })
                 }
                 await meetingManager.start();
@@ -237,14 +230,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
 
     let saveMeetingUsers = async (e) => {
-        console.log("saveMeetingUsers", roomObj)
         let data = {
             member: groupMember,
             room: roomObj
         }
-        console.log("saveMeetingUsers", data)
         const res = await axios.post("/api/meetings/savemember", data)
-        console.log(res)
+       
 
     }
 
@@ -300,7 +291,7 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
 
     let getMeetings = async (e) => {
         const res = await axios.post('/api/meetings/')
-        console.log(res)
+        
         let arr =[]
         res.data.map((room)=>arr.push(getMannerCreditAndColor(room.avgManner)))
         setGroupMannerInfo(arr)
@@ -315,9 +306,6 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
         getGroupInfo()
  
     }, []);
-    useEffect(()=>{
-       console.log(groupMannerInfo[0])
-    },[groupMannerInfo])
 
     useEffect(() => {
         const filteredName = originList.filter((data) => {
@@ -350,11 +338,12 @@ export default function MeetingList({ checkState, groupSocketList, currentsocket
     }, [filterage])
 
     useEffect(() => {
+        setView([]);
         getMeetings();
        
     }, [getorigin])
 
-    return (//tr map 한다음에 key넣어주기
+    return (
         <div className="RoomListContainer" >
             {viewRoomList.map((room, index) =>
                 

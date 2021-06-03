@@ -32,8 +32,9 @@ import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
 import "./Room.css"
 import introLog from '../img/배경없는유팅로고.png'
+import { SOCKET } from "../utils/constants";
 const McBotContainer = styled.div`
-  width: 250px;
+  width: 350px;
   height: 500px;
   background: #fbbcb5;
   border-radius: 15px;
@@ -99,7 +100,7 @@ const Room = () => {
     };
     console.log("socketId.id",socketId)
     const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
+      "/api/users/savesocketid",
       data
     );
     //console.log(res)
@@ -116,7 +117,7 @@ const Room = () => {
       preMember: participants,
     };
     const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
+      "/api/users/preMemSocketid",
       data
     );
 
@@ -146,7 +147,7 @@ const Room = () => {
     const _id = meetingId;
     if (meetingId !== "") {
       const res = await axios.post(
-        "http://localhost:3001/meetings/getparticipants",
+        "/api/meetings/getparticipants",
         { _id: meetingId }
       );
       let par = [];
@@ -208,7 +209,7 @@ const Room = () => {
 
   useEffect(() => {
     setGetalert({"flag":false,"message":""});
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -313,7 +314,7 @@ const Room = () => {
     let data = {
       currentUser: e,
     };
-    const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
+    const res = await axios.post("/api/users/cutUcoin", data);
     console.log(res);
   };
 
@@ -343,7 +344,7 @@ const Room = () => {
       console.log(data);
 
       const res = await axios.post(
-        "http://localhost:3001/meetings/leavemember",
+        "/api/meetings/leavemember",
         data
       );
       console.log(res);
@@ -357,13 +358,13 @@ const Room = () => {
             i--;
           }
         }
-        const socket = socketio.connect("http://localhost:3001");
+        const socket = socketio.connect(SOCKET);
         socket.emit("midleave", { memlist: parObj,midleaveUser:sessionStorage.getItem("nickname")});
         
         setGetalert({"flag":true,"message":"미팅 방을 나갑니다."});
         setTimeout(()=>{
           setGetalert({"flag":false,"message":""})
-          window.location.href = "http://localhost:3000/main";
+          window.location.href = "/main";
          },2000)
         
       }
@@ -372,7 +373,7 @@ const Room = () => {
         setTimeout(async () => {
             await endMeeting(meeting_id);
             setGetalert({"flag":false,"message":""})
-            window.location.href = "http://localhost:3000/main";
+            window.location.href = "/main";
         }, 1500)
 
       }
@@ -500,12 +501,12 @@ useEffect(()=>{
         ></Vote>
         
         
-        <div style={{height: "43%"}}></div> {/* 이걸로 조정해뒀음 */}
+        <div style={{height: "10%"}}></div> {/* 이걸로 조정해뒀음 */}
         
         {flagMessage===true?
         <div style={{display:"flex", flexDirection:"column",marginBottom:"10%"}}>
           <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center"}} >
-          <div >To.</div><select className="loveinput"  name="mylove" style={{width:"180px",marginLeft:"10px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
+          <div >To.</div><select className="loveinput"  name="mylove" style={{width:"250px",marginLeft:"10px",marginRight:"50px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
             
           <option value="" selected>받는 사람</option>
             {participants.map((data,i)=>{
@@ -552,7 +553,7 @@ useEffect(()=>{
           ></McBot>
         <div>
         <ReactAudioPlayer
-          style={{width: "230px"}}
+          style={{width: "300px"}}
           id="audio"
           src={musicsrc}
           controls
