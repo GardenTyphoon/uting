@@ -32,6 +32,16 @@
     background-color:#68D2FF;
     border:none;
 }
+.joinBtn2{
+    font-weight: bold;
+    margin-bottom:10%;
+    margin-left:20%;
+    border-radius: 15px;
+    width:60%;
+    color:white;
+    background-color:#4a555a;
+    border:none;
+}
 .RoomListContainer{
     overflow: auto;
 }
