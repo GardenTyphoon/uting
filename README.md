@@ -70,7 +70,7 @@
 
 
 * React.js
-	* Front-end server 구현
+	* Front-end client 구현
 
 * Node.js
 	* Back-End server 구현
