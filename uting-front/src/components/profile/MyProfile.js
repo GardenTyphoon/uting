@@ -323,6 +323,15 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
       <Row>
       {sessionStorage.getItem("nickname")===choicename?<button className="ProfileBtn" onClick={onClick}>{btn}</button>:""}
       </Row>
+      <Modal isOpen={getalert.flag} >
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
+          
+        </ModalBody>
+      </Modal>
     </Container>
   );
 };
