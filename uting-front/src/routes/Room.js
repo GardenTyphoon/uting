@@ -34,13 +34,12 @@ import "./Room.css"
 import introLog from '../img/배경없는유팅로고.png'
 const McBotContainer = styled.div`
   width: 350px;
-  height: 500px;
+  height: 550px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
   padding: 20px;
   font-family: NanumSquare_acR;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,7 +176,7 @@ const Room = () => {
     ];
     //let index = Math.floor(Math.random() * messageArr.length);
     console.log(intervalMessageCheck);
-    if (intervalMessageCheck < 4) {
+   /* if (intervalMessageCheck < 4) {
       if (intervalMessageCheck === 0) {
         setTimeout(() => {
           setIntervalMessage(messageArr[0]);
@@ -203,7 +202,7 @@ const Room = () => {
           setIntervalFade(4);
         }, 1200000);
       }
-    }
+    }*/
   }, [intervalMessageCheck]);
 
   useEffect(() => {
@@ -279,6 +278,7 @@ const Room = () => {
       else if(data.type==="midleave"){
         toast(data.midleaveUser+"님이 퇴장하셨습니다.")
         setExistMidleave(true)
+        getparticipants()
       }
     });
     return () => {
