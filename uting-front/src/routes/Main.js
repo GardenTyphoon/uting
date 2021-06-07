@@ -59,6 +59,7 @@ const Main = () => {
   let sessionEmail = sessionStorage.getItem("email");
   let sessionUser = sessionStorage.getItem("nickname");
 
+
   const gotoAdminPage = () => {
     history.push({
       pathname: `/admin`,
@@ -196,7 +197,8 @@ const Main = () => {
   return (
     <div className="mainContainer">
       <div className="mainTop">
-        <img className="utingLogo" src={utingLogo} />
+          <img className="utingLogo"  onClick={()=>history.push("/")}  src={utingLogo} />
+        
         <button style={{border:"0",backgroundColor:"rgb(255,228,225)",marginRight:"1%",position:"absolute",right:"0px",marginBottom:"5%"}} onClick={(e)=>tutorialtoggle(e)} ><span style={{color:"rgb(89,57,70)",fontFamily: "NanumSquare_acR",fontWeight:"bold"}}>유팅메뉴얼</span><img style={{width:"20px",height:"20px",marginLeft:"7px",marginBottom:"10px"}} src={helpLogo}></img></button>
       </div>
       <div className="mainBottom">
