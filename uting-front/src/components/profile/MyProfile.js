@@ -7,6 +7,7 @@ import "./MyProfile.css";
 import { Container, Row, Col,Modal,ModalBody,ModalHeader } from "reactstrap";
 import introLog from '../../img/배경없는유팅로고.png'
 const MyProfile = ({choicename,checkProfilefunc}) => {
+
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
@@ -246,6 +247,7 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
                 width: "100%",
                 resize:"none",
               }}
+              maxLength="50"
               name="introduce"
               class="modify"
               value={ProfileInfo.introduce}
