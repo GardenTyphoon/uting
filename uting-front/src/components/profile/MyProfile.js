@@ -5,7 +5,7 @@ import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col } from "reactstrap";
-const MyProfile = ({choicename,checkProfile}) => {
+const MyProfile = ({choicename,checkProfile,checkProfilefunc}) => {
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
@@ -79,19 +79,22 @@ const MyProfile = ({choicename,checkProfile}) => {
         formData.append("img", imgFile);
         formData.append("currentUser", sessionStorage.getItem("email"));
 
-        let res = await axios.post(
+        const res = await axios.post(
           "http://localhost:3001/users/modifyMyProfileImg",
           formData
         );
         
         ProfileInfo["imgURL"] = res.data.url;
       }
-      let res = await axios.post(
+      const res2 = await axios.post(
         "http://localhost:3001/users/modifyMyProfile",
         ProfileInfo
       );
-
-      checkProfile(true)
+      if(res2.data==="success")
+      {
+        checkProfilefunc(true)
+      }
+      
     }
   };
   useEffect(() => {
