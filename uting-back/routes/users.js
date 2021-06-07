@@ -221,7 +221,9 @@ router.post("/modifyMyProfile", function (req, res, next) {
         imgURL: req.body.imgURL,
       },
     },
-    (err, us) => {}
+    (err, us) => {
+      res.send("success")
+    }
   );
 });
 
