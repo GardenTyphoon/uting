@@ -88,7 +88,14 @@ const Room = () => {
     lovemessage: "",
   });
   const [existMidleave, setExistMidleave] = useState(false);
+  window.addEventListener("keydown", function(e){
 
+    console.log(e.keyCode);
+   if(e.keyCode === 116){
+      console.log("f5")
+      e.preventDefault();
+    }
+  })
   let toggleFlagMessage = () => {
     setFlagMessage(!flagMessage);
   };
