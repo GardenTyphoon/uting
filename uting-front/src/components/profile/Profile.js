@@ -25,7 +25,10 @@ const Profile = () => {
     ucoin: "",
   });
   const [toggleprofile, setToggleProfile] = useState(false);
-  const toggleProfileBtn = (e) => setToggleProfile(!toggleprofile);
+  const toggleProfileBtn = (e) => {
+    setToggleProfile(!toggleprofile)
+    
+  };
   const [checkProfile,setCheckProfile]=useState(false)
 
   let sessionUser = sessionStorage.getItem("email");
@@ -42,11 +45,14 @@ const Profile = () => {
     getProfile();
   }, []);
 
-  let checkMyprofile=(e)=>{
-    setCheckProfile(e)
-    if(e===true){
+  useEffect(()=>{
+    if(checkProfile===true){
       getProfile();
     }
+  },[checkProfile])
+
+  let checkMyprofile=(e)=>{
+    setCheckProfile(e)
   }
 
   const getProfile = async (e) => {
@@ -147,7 +153,7 @@ const Profile = () => {
             </button>
           </Row>
           <Row>
-          <MyProfile choicename={sessionStorage.getItem("nickname")} checkProfile={(e)=>checkMyprofile(e)} />
+          <MyProfile choicename={sessionStorage.getItem("nickname")} checkProfilefunc={(e)=>checkMyprofile(e)} />
           </Row>
         </ModalBody>
       </Modal>
