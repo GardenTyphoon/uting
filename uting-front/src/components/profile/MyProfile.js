@@ -5,7 +5,9 @@ import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col } from "reactstrap";
+
 const MyProfile = ({choicename,checkProfilefunc}) => {
+
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
