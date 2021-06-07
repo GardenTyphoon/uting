@@ -35,7 +35,7 @@ const Box = styled.div`
   padding: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-  height: 180px;
+  height: 270px;
   font-size: large;
   font-weight: 500;
 `;

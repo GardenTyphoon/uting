@@ -499,7 +499,7 @@ router.post('/report',function(req,res,next){
       );
 
     }
-    else if(ismemeber===false){
+    else if(ismember===false){
       res.send("fail")
     }
     

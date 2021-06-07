@@ -19,7 +19,6 @@ import {
   CarouselCaption,
 } from "reactstrap";
 import "./EarInMal.css";
-
 const items = [
   //for 설명서
   {
@@ -111,7 +110,7 @@ const EarInMal = ({
   /*useEffect(() => {
     if (!startButtonFade) {
       data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
-      const socket = socketio.connect("http://localhost:3001");
+      const socket = socketio.connect("/api");
       socket.emit("gameStart", data);
     }
   }, [startButtonFade]);*/
@@ -394,8 +393,8 @@ const EarInMal = ({
             display: "grid",
             width: "170px",
             height: "160px",
-            gridTemplateColumns: "1.5fr 1.2fr 1.5fr",
-            gridTemplateRows: "0.5fr 2fr 15%",
+            gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            gridTemplateRows: "10% 1fr 15%",
           }}
         >
           {turnFlag ? (
@@ -405,12 +404,14 @@ const EarInMal = ({
                   <h5
                     style={{
                       fontSize: "medium",
-                      gridColumn: "1/4",
+                      gridColumn: "1/5",
+                      gridRow:"1/2",
+            
                     }}
                   >
                     질문 알려주기
                   </h5>
-                  <div style={{ gridColumn: "1/4", gridRow: "2/3" }}>
+                  <div style={{ gridColumn: "1/5", gridRow: "2/3",marginTop:"10%" }}>
                     {participants.map((member) => (
                       <Button
                         outline
@@ -430,9 +431,8 @@ const EarInMal = ({
                     style={{
                       border: 0,
                       float: "left",
-                      paddingBottom: "10px",
-                      gridColumn: "1/2",
-                      gridRow: "3/5",
+                      gridColumn: "1/3",
+                      gridRow: "4/5",
                     }}
                     onClick={giveTurn}
                   >
@@ -443,8 +443,8 @@ const EarInMal = ({
                     color="danger"
                     style={{
                       border: 0,
-                      gridColumn: "3/4",
-                      gridRow: "3/5",
+                      gridColumn: "3/5",
+                      gridRow: "4/5",
                     }}
                     onClick={ending}
                   >
@@ -453,10 +453,10 @@ const EarInMal = ({
                 </>
               ) : (
                 <>
-                  <h5 style={{ fontSize: "medium", gridColumn: "1/4" }}>
+                  <h5 style={{ fontSize: "medium", gridColumn: "1/5" }}>
                     질문할 사용자 선택
                   </h5>
-                  <div style={{ gridColumn: "1/4", girdRow: "2/3" }}>
+                  <div style={{ gridColumn: "1/5", girdRow: "1/3" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
@@ -502,7 +502,7 @@ const EarInMal = ({
                   >
                     {question}
                   </div>
-                  <div style={{ gridColumn: "1/4", gridRow: "2" }}>
+                  <div style={{ gridColumn: "1/5", gridRow: "2" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
@@ -523,12 +523,12 @@ const EarInMal = ({
                     style={{
                       fontSize: "medium",
                       float: "left",
-                      gridColumn: "1/3",
+                      gridColumn: "1/5",
                     }}
                   >
                     Turn : {turn}님
                   </div>
-                  <div style={{ gridColumn: "1/4" }}>차례를 기다리세요</div>
+                  <div style={{ gridColumn: "1/5" }}>차례를 기다리세요</div>
                 </>
               )}
             </>

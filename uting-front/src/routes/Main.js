@@ -65,14 +65,14 @@ const Main = () => {
     });
   };
 
-  let checkList = (e) => {
+  const checkList = (e) => {
     if (e === true) {
       setCheckRoomList(true);
       setToggleMakeMeeting(false);
     }
   };
 
-  let groupSocket = (e) => {
+  const groupSocket = (e) => {
     setGroupSocketList(e);
   };
   useEffect(() => {}, [addEvent]);
@@ -130,7 +130,7 @@ const Main = () => {
     }
   }, [roomtitle]);
 
-  let goRoom = async () => {
+  const goRoom = async () => {
     let temp = {
       title: roomtitle,
       session: sessionUser,
@@ -156,7 +156,7 @@ const Main = () => {
     }
   };
 
-  let putSocketid = async (e) => {
+  const putSocketid = async (e) => {
     console.log(socketId);
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
@@ -172,11 +172,11 @@ const Main = () => {
     putSocketid();
   }, [socketId]);
 
-  let filterRoomTitle = (e) => {
+  const filterRoomTitle = (e) => {
     setFilterRoomName(e);
   };
 
-  let filterManner = (e) => {
+  const filterManner = (e) => {
     let data = {
       first: e.first,
       last: e.last,
@@ -185,7 +185,7 @@ const Main = () => {
     setFiltermanner(data);
   };
 
-  let filterAge = (e) => {
+  const filterAge = (e) => {
     let data = {
       first: e.first,
       last: e.last,
