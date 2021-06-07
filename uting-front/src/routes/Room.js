@@ -85,7 +85,7 @@ const Room = () => {
   window.addEventListener("keydown", function(e){
 
     console.log(e.keyCode);
-   if(e.keyCode === 116){
+   if( ( e.ctrlKey==true && (e.keyCode == 78 || e.keyCode==82)) || e.keyCode === 116){
       console.log("f5")
       e.preventDefault();
     }

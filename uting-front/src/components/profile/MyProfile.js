@@ -217,6 +217,7 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
                 width: "100%",
                 resize:"none",
               }}
+              maxLength="50"
               name="introduce"
               class="modify"
               value={ProfileInfo.introduce}
