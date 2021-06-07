@@ -212,8 +212,8 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
                 marginLeft: "10px",
                 fontWeight: "600",
                 width: "100%",
+                resize:"none",
               }}
-              type="text"
               name="introduce"
               class="modify"
               value={ProfileInfo.introduce}
