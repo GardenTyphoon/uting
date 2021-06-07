@@ -5,7 +5,9 @@ import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col } from "reactstrap";
-const MyProfile = ({choicename,checkProfile,checkProfilefunc}) => {
+
+const MyProfile = ({choicename,checkProfilefunc}) => {
+
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
@@ -213,8 +215,8 @@ const MyProfile = ({choicename,checkProfile,checkProfilefunc}) => {
                 marginLeft: "10px",
                 fontWeight: "600",
                 width: "100%",
+                resize:"none",
               }}
-              type="text"
               name="introduce"
               class="modify"
               value={ProfileInfo.introduce}
