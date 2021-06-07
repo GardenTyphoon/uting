@@ -4,14 +4,15 @@ import ajou_logo from "../../img/ajou_logo.png";
 import axios from "axios";
 import FormData from "form-data";
 import "./MyProfile.css";
-import { Container, Row, Col } from "reactstrap";
-
+import { Container, Row, Col,Modal,ModalBody,ModalHeader } from "reactstrap";
+import introLog from '../../img/배경없는유팅로고.png'
 const MyProfile = ({choicename,checkProfilefunc}) => {
 
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
   const [staticpath, setStaticpath] = useState("http://localhost:3001");
+  const [getalert,setGetalert]=useState({"flag":false,"message":""})
   const [ProfileInfo, setProfileInfo] = useState({
     _id:"",
     name: "",
@@ -28,6 +29,7 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
   });
 
   const [btn, setBtn] = useState("프로필 편집");
+  const [imgcheck,setImgcheck]=useState(false)
 
   const getMyProfile = async (e) => {
     // db에서 현재 session에 로근인 되어 있는 사용자에 대한 정보를 가지고 옴
@@ -67,6 +69,7 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
       }
     } else {
       // 편집한 프로필을 저장하고, 다시 readOnly
+      if(imgcheck!==true){
       setBtn("프로필 편집");
       setCheck(false);
       var inputs = document.getElementsByClassName("modify");
@@ -74,27 +77,36 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
         inputs[i].readOnly = true;
       }
 
-      if (imgFile != null) {
-        //새로 업로드하려는 이미지가 있으면
-        let formData = new FormData();
-
-        formData.append("img", imgFile);
-        formData.append("currentUser", sessionStorage.getItem("email"));
-
-        const res = await axios.post(
-          "http://localhost:3001/users/modifyMyProfileImg",
-          formData
+      
+        if (imgFile != null) {
+          //새로 업로드하려는 이미지가 있으면
+          let formData = new FormData();
+  
+          formData.append("img", imgFile);
+          formData.append("currentUser", sessionStorage.getItem("email"));
+  
+          const res = await axios.post(
+            "http://localhost:3001/users/modifyMyProfileImg",
+            formData
+          );
+          
+          ProfileInfo["imgURL"] = res.data.url;
+        }
+        const res2 = await axios.post(
+          "http://localhost:3001/users/modifyMyProfile",
+          ProfileInfo
         );
-        
-        ProfileInfo["imgURL"] = res.data.url;
+        if(res2.data==="success")
+        {
+          checkProfilefunc(true)
+        }
       }
-      const res2 = await axios.post(
-        "http://localhost:3001/users/modifyMyProfile",
-        ProfileInfo
-      );
-      if(res2.data==="success")
-      {
-        checkProfilefunc(true)
+     
+      else{
+        setGetalert({"flag":true,"message":"잘못된 파일을 업로드하여 프로필 수정이 불가합니다."})
+        setTimeout(()=>{
+          setGetalert({"flag":false,"message":""})
+      },1500)
       }
       
     }
@@ -106,18 +118,36 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
   const onChangeImg = async (event) => {
     // 이미지를 선택했으면
     let reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64 = reader.result;
-      if (base64) {
-        setImgBase64(base64.toString());
-      }
-    };
+   
+   let check=false;
     if (event.target.files[0]) {
       reader.readAsDataURL(event.target.files[0]);
       // 이미지 이름 저장해둠
-      setImgFile(event.target.files[0]);
+      if((event.target.files[0].name).slice(-4, (event.target.files[0].name).length)===".jpg"||(event.target.files[0].name).slice(-4, (event.target.files[0].name).length)===".png"){
+        setImgFile(event.target.files[0]);
+        setImgcheck(false)
+      }
+      else{
+        setImgBase64("")
+        
+        setImgcheck(true)
+        check=true;
+        setGetalert({"flag":true,"message":"이미지 파일만 업로드 가능합니다."})
+        setTimeout(()=>{
+          setGetalert({"flag":false,"message":""})
+      },1500)
+      }
     }
+    if(check!==true){
+      reader.onloadend = () => {
+        const base64 = reader.result;
+        
+        if (base64) {
+          setImgBase64(base64.toString());
+        }
+      };
+    }
+   
   };
 
   const onChange = (event) => {
@@ -294,7 +324,17 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
       <Row>
       {sessionStorage.getItem("nickname")===choicename?<button className="ProfileBtn" onClick={onClick}>{btn}</button>:""}
       </Row>
+      <Modal isOpen={getalert.flag} >
+        <ModalHeader style={{height:"70px",textAlign:"center"}}>
+          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{height:"90px"}}>
+          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"20px",height:"50px"}}>{getalert.message}</div>
+          
+        </ModalBody>
+      </Modal>
     </Container>
+    
   );
 };
 export default MyProfile;
