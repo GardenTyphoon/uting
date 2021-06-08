@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Input, Button, Table,Modal,ModalBody,ModalHeader } from "reactstrap";
+import { Input, Button, Table, Modal, ModalBody, ModalHeader } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { is } from "date-fns/locale";
@@ -70,15 +70,20 @@ const SignUp = () => {
   /*닉네임 중복 확인*/
   const [checkNickname, setCheckNickname] = useState(false);
 
-  const [getalert,setGetalert]=useState({"flag":false,"message":""})
-  
-  let toggleAlert =(e)=>{
-    setGetalert({...getalert,"flag":!getalert.flag})
+  const [getalert, setGetalert] = useState({ "flag": false, "message": "" })
+
+  const [validPhone, setValidPhone] = useState(false);
+
+  let toggleAlert = (e) => {
+    setGetalert({ ...getalert, "flag": !getalert.flag })
   }
   let onChangehandler = (e) => {
     let { name, value } = e.target;
     if (name === "check-email") {
       setUsercode(value);
+    } else if (name === "phone") {
+      if (value.length === 11) setValidPhone(true);
+      else setValidPhone(false);
     } else {
       setUserinfo({
         ...userinfo,
@@ -103,38 +108,40 @@ const SignUp = () => {
       identity !== "" &&
       checkNickname === true
     ) {
-      let data = {
-        name: userinfo.name,
-        nickname: userinfo.nickname,
-        gender: userinfo.gender,
-        birth: userinfo.birth,
-        email: userinfo.email,
-        password: userinfo.password,
-        phone: userinfo.phone
-      };
+      if (checkPassword(userinfo.password)) {
+        let data = {
+          name: userinfo.name,
+          nickname: userinfo.nickname,
+          gender: userinfo.gender,
+          birth: userinfo.birth,
+          email: userinfo.email,
+          password: userinfo.password,
+          phone: userinfo.phone
+        };
 
-      const res = await axios.post("/api/users/signup", data);
-      console.log(res.data);
+        const res = await axios.post("/api/users/signup", data);
+        console.log(res.data);
 
-      setUserinfo({
-        name: "",
-        nickname: "",
-        gender: "",
-        birth: "",
-        email: "",
-        password: "",
-        phone: "",
-      });
-      setGetalert({"flag":true,"message":"회원가입이 완료되었습니다."})
-      setTimeout(()=>{
-        history.push('/');
-      },1500)
-      
+        setUserinfo({
+          name: "",
+          nickname: "",
+          gender: "",
+          birth: "",
+          email: "",
+          password: "",
+          phone: "",
+        });
+        setGetalert({ "flag": true, "message": "회원가입이 완료되었습니다." })
+        setTimeout(() => {
+          history.push('/');
+        }, 1500)
+      }
+
     } else {
-      setGetalert({"flag":true,"message":"입력하지 않은 정보가 있습니다."})
-      setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "입력하지 않은 정보가 있습니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   };
 
@@ -150,18 +157,18 @@ const SignUp = () => {
         "/api/users/sendEmail",
         data
       );
-      setGetalert({"flag":true,"message":"해당 이메일로 인증코드를 전송했습니다."})
-      setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "해당 이메일로 인증코드를 전송했습니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
       setCode(res.data);
       console.log(res);
-      
+
     } else {
-      setGetalert({"flag":true,"message":"대학교 이메일로만 가입이 가능합니다."})
-      setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "대학교 이메일로만 가입이 가능합니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   };
 
@@ -170,17 +177,17 @@ const SignUp = () => {
     if (code === usercode) {
       setCheckcode(true);
       if (checkcode === true) {
-        setGetalert({"flag":true,"message":"인증코드 확인이 완료되었습니다."})
-        setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+        setGetalert({ "flag": true, "message": "인증코드 확인이 완료되었습니다." })
+        setTimeout(() => {
+          setGetalert({ "flag": false, "message": "" })
+        }, 1500)
       }
     } else {
       setCheckcode(false);
-      setGetalert({"flag":true,"message":"인증코드가 틀렸습니다."})
-        setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "인증코드가 틀렸습니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   };
 
@@ -191,17 +198,17 @@ const SignUp = () => {
 
     const res = await axios.post("/api/users/checknickname", data)
     if (res.data === "exist") {
-      setGetalert({"flag":true,"message":"이미 존재하는 닉네임입니다."})
-        setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "이미 존재하는 닉네임입니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
     if (res.data === "no") {
       setCheckNickname(true)
-      setGetalert({"flag":true,"message":"사용가능한 닉네임입니다."})
-        setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "사용가능한 닉네임입니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   }
 
@@ -230,19 +237,32 @@ const SignUp = () => {
       setIdentity("false");
     }
   }
+  function checkPassword(password) {
 
+    var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+
+
+    if (false === reg.test(password)) {
+      alert('비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다.');
+      return false;
+    } else {
+      console.log("통과");
+      return true;
+    }
+
+  }
   useEffect(() => {
     if (identity === "true") {
-      setGetalert({"flag":true,"message":"본인인증 성공 !"})
-        setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
-      
+      setGetalert({ "flag": true, "message": "본인인증 성공 !" })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
+
     } else if (identity === "false") {
-      setGetalert({"flag":true,"message":"본인인증 실패"})
-        setTimeout(()=>{
-        setGetalert({"flag":false,"message":""})
-      },1500)
+      setGetalert({ "flag": true, "message": "본인인증 실패" })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   }, [identity]);
 
@@ -266,10 +286,11 @@ const SignUp = () => {
             type="text"
             name="phone"
             placeholder="01000000000"
-            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            maxLength="11"
+            style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
-          {identity !== "true" ? (
+          {identity !== "true" && validPhone === true ? (
             <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
           ) : (
             <button onClick={onClickCertification} className="gradientBtn" disabled>본인인증</button>
@@ -289,8 +310,9 @@ const SignUp = () => {
           <Input
             type="text"
             name="nickname"
-            placeholder="닉네임"
-            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            placeholder="8글자 이내의 닉네임"
+            maxLength="8"
+            style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           <button className="gradientBtn" onClick={(e) => overlapNickname()} >중복확인</button>
@@ -313,7 +335,7 @@ const SignUp = () => {
             type="email"
             name="email"
             placeholder="대학 이메일"
-            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           <button className="gradientBtn" onClick={(e) => sendEmail(e)}>이메일 인증</button>
@@ -324,7 +346,7 @@ const SignUp = () => {
             type="text"
             name="check-email"
             placeholder="인증코드"
-            style={{ width: "40vw", marginBottom: "20px", minWidth:"370px" }}
+            style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
           <button className="gradientBtn" onClick={(e) => check(e)}>확인</button>
@@ -333,7 +355,7 @@ const SignUp = () => {
         <Input
           type="password"
           name="password"
-          placeholder="password"
+          placeholder="영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
           style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />
@@ -344,12 +366,12 @@ const SignUp = () => {
         <button className="gradientBtnDisabled" onClick={(e) => onSignupSubmit(e)} disabled >가입</button>
       )}
       <Modal isOpen={getalert.flag} >
-        <ModalHeader style={{height:"70px",textAlign:"center"}}>
-          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img style={{ width: "40px", height: "40px", marginLeft: "210px", marginBottom: "1000px" }} src={introLog}></img>
         </ModalHeader>
-        <ModalBody style={{height:"90px"}}>
-          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"18px",height:"50px"}}>{getalert.message}</div>
-          
+        <ModalBody style={{ height: "90px" }}>
+          <div style={{ textAlign: "center", marginTop: "4%", marginBottom: "8%", fontFamily: "NanumSquare_acR", fontWeight: "bold", fontSize: "18px", height: "50px" }}>{getalert.message}</div>
+
         </ModalBody>
       </Modal>
     </SignUpContainer>

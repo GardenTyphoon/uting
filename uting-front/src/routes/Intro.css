@@ -90,3 +90,9 @@ background-image: url("../img/Intro이미지.png");
   flex-direction: column;
   align-items: center;
 }
+.findAccount{
+  font-family: "NanumSquare_acR";
+  margin-bottom:10px;
+  font-size:small;
+  color:gray;
+}
