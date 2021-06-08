@@ -13,10 +13,7 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
   
-  let toggleAlert =(e)=>{
-    setGetalert({...getalert,"flag":!getalert.flag})
-  }
-
+ 
   const enterEvent = (e) => {
     if(e.key==="Enter"){
       console.log(e.key)
@@ -110,6 +107,7 @@ const SignIn = () => {
             required
             value={sessionStorage.getItem("email")}
             onChange={(e) => onChangehandler(e)}
+            onKeyPress={(e)=>enterEvent(e)}
           />
           <input
             className="signInInput"
