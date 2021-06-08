@@ -17,22 +17,10 @@ import {
   ModalFooter,
 } from "reactstrap";
 import axios from "axios";
+import jwtAxios from "../../utils/jwtAxios";
 import AddMember from "./AddMember";
 import "../../App.css";
 import socketio from "socket.io-client";
-
-var token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGI0ZTEzYTRiMjQyMTBhMTUzMGFkMjQiLCJuYW1lIjoi7KGw66-87KCcIiwibmlja25hbWUiOiLriITrpqztj7AiLCJnZW5kZXIiOiJtYW4iLCJiaXJ0aCI6IjE5OTgwMjA0IiwiZW1haWwiOiJtaW5qZUBham91LmFjLmtyIiwicGhvbmUiOiIwMTA4ODY4OTQ1NyIsImltZ1VSTCI6IiIsIm1hbm5lckNyZWRpdCI6My41LCJzb2NrZXRpZCI6Il9sU1BvUUQwcTEzaEh0dXFBQUFCIiwidWNvaW4iOjAsImJlUmVwb3J0ZWQiOjAsImlhdCI6MTYyMjQ4NTczMCwiZXhwIjoxNjIyNTA3MzMwLCJpc3MiOiJ1dGluZy5jb20iLCJzdWIiOiJ1c2VySW5mbyJ9.rr1h_hYg5rWq73EFjlgY8ydzrALY5SPnbfh02CI96mE";
-
-axios.interceptors.request.use(
-  (config) => {
-    config.headers["x-access-token"] = token;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
@@ -113,16 +101,19 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
     });
     console.log(groupMemberExceptMe);
 
-    let res = await axios.post("http://localhost:3001/users/preMemSocketid", {
-      preMember: groupMemberExceptMe,
-    });
+    let res = await jwtAxios.post(
+      "http://localhost:3001/users/preMemSocketid",
+      {
+        preMember: groupMemberExceptMe,
+      }
+    );
     console.log(res.data);
     socket.emit("leaveGroup", {
       socketIdList: res.data,
       leavingUsers: sessionUser,
     });
 
-    res = await axios.post("http://localhost:3001/groups/leaveGroup", {
+    res = await jwtAxios.post("http://localhost:3001/groups/leaveGroup", {
       userNickname: sessionUser,
     });
 

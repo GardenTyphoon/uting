@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ProfileNoImage from "../../img/ProfileNoImage.jpg";
 import ajou_logo from "../../img/ajou_logo.png";
-import axios from "axios";
+import jwtAxios from "../../utils/jwtAxios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col } from "reactstrap";
@@ -11,7 +11,7 @@ const MyProfile = () => {
   const [check, setCheck] = useState(false);
   const [staticpath, setStaticpath] = useState("http://localhost:3001");
   const [ProfileInfo, setProfileInfo] = useState({
-    _id:"",
+    _id: "",
     name: "",
     nickname: "",
     gender: "",
@@ -31,7 +31,7 @@ const MyProfile = () => {
     // db에서 현재 session에 로근인 되어 있는 사용자에 대한 정보를 가지고 옴
     let sessionUser = sessionStorage.getItem("email");
 
-    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
+    const res = await jwtAxios.post("/users/viewMyProfile", {
       sessionUser: sessionUser,
     });
 
@@ -39,7 +39,7 @@ const MyProfile = () => {
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {
-      _id : res.data._id,
+      _id: res.data._id,
       name: res.data.name,
       nickname: res.data.nickname,
       gender: res.data.gender,
@@ -79,17 +79,11 @@ const MyProfile = () => {
         formData.append("img", imgFile);
         formData.append("currentUser", sessionStorage.getItem("email"));
 
-        let res = await axios.post(
-          "http://localhost:3001/users/modifyMyProfileImg",
-          formData
-        );
-        
+        let res = await jwtAxios.post("/users/modifyMyProfileImg", formData);
+
         ProfileInfo["imgURL"] = res.data.url;
       }
-      let res = await axios.post(
-        "http://localhost:3001/users/modifyMyProfile",
-        ProfileInfo
-      );
+      await jwtAxios.post("/users/modifyMyProfile", ProfileInfo);
     }
   };
   useEffect(() => {

@@ -5,7 +5,6 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 const mongoose = require("mongoose");
-var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var meetingsRouter = require("./routes/meetings");
 var groupsRouter = require("./routes/groups");
@@ -13,6 +12,7 @@ var authMiddleware = require("./middlewares/auth");
 var adsRouter = require("./routes/ads");
 var reportsRouter = require("./routes/reports");
 var mcsRouter = require("./routes/mcs");
+
 var config = require("./config");
 var clients = [];
 var members = [];
@@ -44,8 +44,6 @@ app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'uploads')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use("/groups", authMiddleware);
-app.use("/api", indexRouter);
 app.use("/users", usersRouter);
 app.use("/meetings", meetingsRouter);
 app.use("/groups", groupsRouter);

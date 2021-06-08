@@ -8,12 +8,13 @@ import Main from "./routes/Main";
 import Room from "./routes/Room";
 import Admin from "./routes/Admin";
 import Ucoin from "./routes/Ucoin";
-import Ad from "./routes/Ad"
+import Ad from "./routes/Ad";
 import DeviceSetup from "./components/device/DeviceSetup";
-import meetingConfig from './meetingConfig';
-import { MeetingProvider } from 'amazon-chime-sdk-component-library-react';
-import { AppStateProvider } from './providers/AppStateProvider';
-import { NavigationProvider } from './providers/NavigationProvider';
+import meetingConfig from "./meetingConfig";
+import { MeetingProvider } from "amazon-chime-sdk-component-library-react";
+import { AppStateProvider } from "./providers/AppStateProvider";
+import { NavigationProvider } from "./providers/NavigationProvider";
+import axios from "axios";
 
 function App() {
   return (

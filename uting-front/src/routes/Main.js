@@ -151,10 +151,7 @@ const Main = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
-      data
-    );
+    const res = await axios.post("/users/savesocketid", data);
     console.log(res);
   };
   useEffect(() => {

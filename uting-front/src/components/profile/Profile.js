@@ -64,7 +64,7 @@ const Profile = () => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        width: "180px"
+        width: "180px",
       }}
     >
       <button
@@ -91,8 +91,8 @@ const Profile = () => {
           />
         )}
       </button>
-      <div style={{ display: "flex", flexDirection: "column", width:"100px" }}>
-        <div style={{  marginLeft: "15%", color: "#896E6E", fontWeight:"550" }}>
+      <div style={{ display: "flex", flexDirection: "column", width: "100px" }}>
+        <div style={{ marginLeft: "15%", color: "#896E6E", fontWeight: "550" }}>
           {ProfileInfo.nickname}
         </div>
         <div
@@ -112,20 +112,20 @@ const Profile = () => {
               borderRadius: "10px",
               padding: "5px",
               fontSize: "small",
-              marginLeft:"5px"
+              marginLeft: "5px",
             }}
           >
             충전
           </button>
         </div>
       </div>
-      <Modal isOpen={toggleprofile} >
-        <ModalBody isOpen={toggleprofile} style={{background:"#FFB4AC"}} >
+      <Modal isOpen={toggleprofile}>
+        <ModalBody isOpen={toggleprofile} style={{ background: "#FFB4AC" }}>
           <Row>
             <button
               onClick={(e) => {
                 toggleProfileBtn(e);
-              }}  
+              }}
               style={{
                 background: "transparent",
                 border: "none",

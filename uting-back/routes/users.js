@@ -124,7 +124,7 @@ router.post("/signin", function (req, res, next) {
               },
               secret,
               {
-                expiresIn: "10s", //s , h ,d sec, hour, day
+                expiresIn: "3h", //s , h ,d sec, hour, day
                 issuer: "uting.com",
                 subject: "userInfo",
               },

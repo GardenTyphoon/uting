@@ -7,37 +7,7 @@ import firebase from "./firebase";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "amazon-chime-sdk-component-library-react";
-import axios from "axios";
-var token = sessionStorage.getItem("token");
 
-axios.interceptors.request.use(
-  (config) => {
-    console.log(config);
-    config.headers["x-access-token"] = token;
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-axios.interceptors.response.use(
-  (response) => {
-    console.log(response);
-    return response;
-  },
-  (error) => {
-    console.log(error);
-    if (!error.response) {
-      return error;
-    }
-
-    if (error.response.status === 401) {
-      window.location = "/";
-    } else {
-      return error;
-    }
-  }
-);
 
 ReactDOM.render(
   <React.StrictMode>

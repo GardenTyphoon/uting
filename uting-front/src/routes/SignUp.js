@@ -59,16 +59,16 @@ const SignUp = () => {
   const [usercode, setUsercode] = useState("");
 
   /*인증코드 옳은지 확인용*/
-  const [checkcode, setCheckcode] = useState();
+  const [checkcode, setCheckcode] = useState(true);
 
   /*본인인증과 연관된 가맹점 내부 주문번호*/
   const [merchantid, setMerchantid] = useState(`mid_${new Date().getTime()}`);
 
   /*본인인증 성공 여부*/
-  const [identity, setIdentity] = useState("");
+  const [identity, setIdentity] = useState("true");
 
   /*닉네임 중복 확인*/
-  const [checkNickname, setCheckNickname] = useState(false);
+  const [checkNickname, setCheckNickname] = useState(true);
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
@@ -109,7 +109,6 @@ const SignUp = () => {
       };
 
       const res = await axios.post("http://localhost:3001/users/signup", data);
-      console.log(res.data);
 
       setUserinfo({
         name: "",
