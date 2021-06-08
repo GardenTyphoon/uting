@@ -71,6 +71,10 @@ const Intro = () => {
         <Col>
           <div className="col2">
             {isLoggedIn === false ? <><SignIn />
+              <div className="findAccount" >
+                  <button style={{background:"transparent", border:"none", color:"gray"}}>아이디 찾기</button> |  
+                  <button style={{background:"transparent", border:"none", color:"gray"}}>비밀번호 찾기</button>
+              </div>
               <div className="createaccount">
                 <button className="MiddleBtn" onClick={onClick}>
                   계정 만들기
@@ -80,7 +84,9 @@ const Intro = () => {
               <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                 <div className="Logoutcontainer">
                   <span className="logoutname">{sessionStorage.getItem("nickname")}님 <br></br> 반갑습니다.</span>
-                  <button onClick={(e) => logout(e)} className="LogInOutBtn">Logout</button></div>
+                  <button onClick={(e) => logout(e)} className="LogInOutBtn">Logout</button>
+                </div>
+               
                 <button className="MiddleBtn" onClick={goMain}>
                   미팅 즐기러 가기
                 </button>
