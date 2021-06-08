@@ -13,11 +13,14 @@ const SignIn = () => {
   const [islogined, setIslogined] = useState(false);
   const [error, setError] = useState("");
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
-  
-  let toggleAlert =(e)=>{
-    setGetalert({...getalert,"flag":!getalert.flag})
-  }
 
+  const enterEvent = (e) => {
+    if(e.key==="Enter"){
+      console.log(e.key)
+      onSubmit();
+    }
+    
+  }
   /*컴포넌트 마운트 될 때마다 로그인 했는지 안했는지 확인*/
   useEffect(() => {
     if (sessionStorage.getItem("email")) {
@@ -41,7 +44,7 @@ const SignIn = () => {
 
   /*로그인 하는 함수*/
   const onSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     let data = {
       email: email,
       password: password
@@ -106,6 +109,7 @@ const SignIn = () => {
             required
             value={sessionStorage.getItem("email")}
             onChange={(e) => onChangehandler(e)}
+            onKeyPress={(e)=>enterEvent(e)}
           />
           <input
             className="signInInput"
@@ -114,6 +118,7 @@ const SignIn = () => {
             placeholder="Password"
             required
             value={password}
+            onKeyPress={(e)=>enterEvent(e)}
             onChange={(e) => onChangehandler(e)}
           />
         </Col>
