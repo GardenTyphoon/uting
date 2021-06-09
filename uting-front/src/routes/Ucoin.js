@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "reactstrap";
-import axios from "axios";
+import jwtAxios from "../utils/jwtAxios";
 import "./Ucoin.css";
 
 const Ucoin = () => {
@@ -17,6 +17,7 @@ const Ucoin = () => {
   var IMP = window.IMP;
   IMP.init("imp28864295");
 
+  let currentUser = sessionStorage.getItem("nickname");
   useEffect(() => {
     getProfile();
   }, []);
@@ -64,7 +65,7 @@ const Ucoin = () => {
 
   const addUcoin = () => {
     console.log(ProfileInfo._id);
-    const res = axios.post("http://localhost:3001/users/addUcoin", {
+    const res = jwtAxios.post("http://localhost:3001/users/addUcoin", {
       userId: ProfileInfo._id,
       ucoin: ProfileInfo.ucoin,
       chargingCoin: chargingCoin,
@@ -72,9 +73,12 @@ const Ucoin = () => {
   };
 
   const getProfile = async (e) => {
-    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
-      sessionUser: `${sessionStorage.getItem("email")}`,
-    });
+    const res = await jwtAxios.post(
+      "http://localhost:3001/users/viewMyProfile",
+      {
+        sessionUser: `${sessionStorage.getItem("email")}`,
+      }
+    );
     let data = {
       _id: res.data._id,
       name: res.data.name,
@@ -110,7 +114,7 @@ const Ucoin = () => {
           background: "white",
         }}
       >
-        <dt>{ProfileInfo.nickname} 님</dt>
+        <dt>{currentUser} 님</dt>
         <dd>
           현재 보유 Ucoin : <strong> {ProfileInfo.ucoin} UCOIN</strong>
         </dd>
@@ -148,7 +152,7 @@ const Ucoin = () => {
               />
             </td>
             <td>5</td>
-            <td>7000</td>
+            <td>7125</td>
             <td>5%</td>
           </tr>
           <tr>
@@ -161,7 +165,7 @@ const Ucoin = () => {
               />
             </td>
             <td>10</td>
-            <td>13000</td>
+            <td>13500</td>
             <td>10%</td>
           </tr>
           <tr>
@@ -174,8 +178,8 @@ const Ucoin = () => {
               />
             </td>
             <td>50</td>
-            <td>60000</td>
-            <td>15%</td>
+            <td>31500</td>
+            <td>30%</td>
           </tr>
         </tbody>
       </Table>

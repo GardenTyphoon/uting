@@ -304,7 +304,7 @@ const McBot = ({
                     <Button
                       outline
                       color="secondary"
-                      style={{ border: 0}}
+                      style={{ border: 0 }}
                       onClick={() => setGameNum(1)}
                     >
                       귓속말 게임

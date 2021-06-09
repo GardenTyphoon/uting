@@ -325,7 +325,7 @@ const SignUp = () => {
         <Input
           type="password"
           name="password"
-          placeholder="영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
+          placeholder="대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
           style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />
