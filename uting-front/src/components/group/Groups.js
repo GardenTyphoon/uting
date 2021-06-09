@@ -76,10 +76,7 @@ const GroupTitle = styled.div`
   margin-bottom: 8%;
 `;
 
-const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
-  const [currentUser, setCurrentUser] = useState(
-    sessionStorage.getItem("nickname")
-  );
+const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyNickname  }) => {
   const [addMemberModal, setAddMemberModal] = useState(false);
   const [groupMember, setGroupMember] = useState([]);
   const [checkMem, setCheckMem] = useState(false);
@@ -87,8 +84,8 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
   const [clickLeaveGroup, setClickLeaveGroup] = useState(false);
   const [toggleOtherProfile, setToggleOtherProfile] = useState(false);
   const [anotherName, setAnotherName] = useState("");
+  const [sessionUser,setSessionUser]=useState(sessionStorage.getItem("nickname"))
   let [modalStatus, setModalStatus] = useState(false);
-  let sessionUser = sessionStorage.getItem("nickname");
 
   const showProfile = (data) => {
     console.log(data)
@@ -96,7 +93,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
     setAnotherName(data);
   }
   const getGroupInfo = async (e) => {
-    let data = { sessionUser: sessionUser };
+    let data = { sessionUser: sessionStorage.getItem("nickname") };
     const res = await axios.post(
       "/api/groups/info",
       data
@@ -104,6 +101,12 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
     console.log(res.data.member);
     setGroupMember(res.data.member);
   };
+
+  useEffect(()=>{
+    if(modifyNickname==="success"){
+      getGroupInfo()
+    }
+  },[modifyNickname])
 
   const leaveGroup = async () => {
     const socket = socketio.connect(SOCKET);
