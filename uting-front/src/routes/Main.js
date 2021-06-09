@@ -47,8 +47,7 @@ const Main = () => {
   const toggleGetorigin = (e) => setGetorigin(!getorigin);
   const [socketId, setSocketId] = useState("");
   const [tutorialmodal, setTutorialModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [modifyNickname, setModifyNickname] = useState("");
   const [getalert,setGetalert]=useState({"flag":false,"message":""})
   
   let toggleAlert =(e)=>{
@@ -59,6 +58,10 @@ const Main = () => {
   let sessionEmail = sessionStorage.getItem("email");
   let sessionUser = sessionStorage.getItem("nickname");
 
+  const modNickname =(e)=>{
+    console.log(e)
+    setModifyNickname(e)
+  }
 
   const gotoAdminPage = () => {
     history.push({
@@ -280,12 +283,13 @@ const Main = () => {
         
         <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
         
-        <Profile />
+        <Profile modNickname={(e)=>modNickname(e)} />
         <Groups
           groupSocket={(e) => groupSocket(e)}
           currentsocketId={socketId}
           checkGroup={checkGroup}
           checkAnother={checkAnother}
+          modifyNickname={modifyNickname}
         />
         </div>
        
