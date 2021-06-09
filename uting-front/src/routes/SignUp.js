@@ -249,7 +249,7 @@ const SignUp = () => {
         <div style={{ marginBottom: "10px" }}>전화번호</div>
         <InputandBtn>
           <Input
-            type="text"
+            type="number"
             name="phone"
             placeholder="01000000000"
             maxLength="11"
