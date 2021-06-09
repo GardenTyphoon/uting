@@ -6,7 +6,7 @@ import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col,Modal,ModalBody,ModalHeader } from "reactstrap";
 import introLog from '../../img/배경없는유팅로고.png'
-const MyProfile = ({choicename,checkProfilefunc}) => {
+const MyProfile = ({choicename,checkProfilefunc,modNickname}) => {
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
@@ -97,6 +97,17 @@ const MyProfile = ({choicename,checkProfilefunc}) => {
         if(res2.data==="success")
         {
           checkProfilefunc(true)
+          if(originNickname!==ProfileInfo.nickname){
+            let data ={
+              originNickname:originNickname,
+              reNickname:ProfileInfo.nickname
+            }
+            const res3= await axios.post("/api/groups/modifyNickname",data)
+            if(res3.data==="success"){
+              modNickname("success")
+              sessionStorage.setItem("nickname",ProfileInfo.nickname)
+            }
+          }
         }
       }
      
