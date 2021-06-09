@@ -8,6 +8,16 @@ import Main from "./routes/Main";
 import Room from "./routes/Room";
 import Admin from "./routes/Admin";
 import Ucoin from "./routes/Ucoin";
+<<<<<<< HEAD
+import Ad from "./routes/Ad";
+import DeviceSetup from "./components/device/DeviceSetup";
+import meetingConfig from "./meetingConfig";
+import { MeetingProvider } from "amazon-chime-sdk-component-library-react";
+import { AppStateProvider } from "./providers/AppStateProvider";
+import { NavigationProvider } from "./providers/NavigationProvider";
+import axios from "axios";
+
+=======
 import Ad from "./routes/Ad"
 import DeviceSetup from "./components/device/DeviceSetup";
 import meetingConfig from './meetingConfig';
@@ -15,13 +25,17 @@ import { MeetingProvider } from 'amazon-chime-sdk-component-library-react';
 import { AppStateProvider } from './providers/AppStateProvider';
 import { NavigationProvider } from './providers/NavigationProvider';
 import { ToastContainer, toast } from "react-toastify";
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
 function App() {
   return (
     <div>
       <BrowserRouter>
         <AppStateProvider>
           <MeetingProvider {...meetingConfig}>
+<<<<<<< HEAD
+=======
           <ToastContainer />
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
             <NavigationProvider>
               <Switch>
                 <Route exact path="/" component={Intro}></Route>

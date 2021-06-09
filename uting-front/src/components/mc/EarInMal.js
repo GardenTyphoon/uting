@@ -88,16 +88,15 @@ const EarInMal = ({
   };
 
   function getRandomInt(min, max) {
-    //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
   }
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
+    console.log("participantsForTurn :" + participantsForTurn);
     var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
-    //console.log("tmp : " + tmp);
+
     setParticipantsForTurn(tmp);
   };
 
@@ -106,15 +105,6 @@ const EarInMal = ({
     determineTurn(participantsForTurn);
     setFlag(true);
   };
-
-  /*useEffect(() => {
-    if (!startButtonFade) {
-      data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
-      const socket = socketio.connect("/api");
-      socket.emit("gameStart", data);
-    }
-  }, [startButtonFade]);*/
-
   const globalizeGameStart = () => {
     data = {
       gameName: "귓속말게임",
@@ -126,15 +116,10 @@ const EarInMal = ({
   };
 
   useEffect(() => {
-    //console.log("participantsForTurnSet :" + participantsForTurn);
     if (participantsForTurnSet) {
       setParticipantsForTurn(participantsForTurnSet);
     }
   }, [participantsForTurnSet]);
-
-  /*useEffect(() => {
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
-  }, [participantsForTurn]);*/
 
   useEffect(() => {
     if (gameStartFlag) {
@@ -157,14 +142,14 @@ const EarInMal = ({
   useEffect(async () => {
     if (flag) {
       globalizeGameStart();
-      globalizeTurn(); //+
+      globalizeTurn();
       setFlag(false);
     }
   }, [flag]);
 
   useEffect(async () => {
     if (giveTurnFlag) {
-      globalizeTurn(); //+
+      globalizeTurn();
       setGiveTurnFlag(false);
     }
   }, [giveTurnFlag]);
@@ -180,7 +165,6 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       remainParticipants: participantsForTurn,
     });
-    //.emit("notifyMember", { turnSocketId: toSendSckId });
   };
 
   useEffect(() => {
@@ -405,13 +389,18 @@ const EarInMal = ({
                     style={{
                       fontSize: "medium",
                       gridColumn: "1/5",
-                      gridRow:"1/2",
-            
+                      gridRow: "1/2",
                     }}
                   >
                     질문 알려주기
                   </h5>
-                  <div style={{ gridColumn: "1/5", gridRow: "2/3",marginTop:"10%" }}>
+                  <div
+                    style={{
+                      gridColumn: "1/5",
+                      gridRow: "2/3",
+                      marginTop: "10%",
+                    }}
+                  >
                     {participants.map((member) => (
                       <Button
                         outline

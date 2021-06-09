@@ -4,40 +4,40 @@ import { Input, Button, Table } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { is } from "date-fns/locale";
-import "./SignUp.css"
+import "./SignUp.css";
 
 const SignUpContainer = styled.div`
-  margin:0 auto; 
-  padding:10vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  background-color:#FFE4E1;
+  margin: 0 auto;
+  padding: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffe4e1;
 `;
 const SignUpTitle = styled.div`
   font-family: NanumSquare_acR;
-  font-size:x-large;
-  font-weight:900;
-  font-color:
+  font-size: x-large;
+  font-weight: 900;
+  font-color: ;
 `;
 const SignUpBox = styled.div`
   font-family: NanumSquare_acR;
   border: 1.5px solid rgb(221, 221, 221);
   border-radius: 7px;
   margin-top: 15px;
-  margin-bottom:15px;
-  padding:20px;
+  margin-bottom: 15px;
+  padding: 20px;
   background-color: white;
-  width:45vw;
-  min-width:500px;
-  font-weight:bold;
-  font-size:large;
+  width: 45vw;
+  min-width: 500px;
+  font-weight: bold;
+  font-size: large;
 `;
 const InputandBtn = styled.div`
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
 
 const SignUp = () => {
   let history = useHistory();
@@ -112,11 +112,13 @@ const SignUp = () => {
           birth: userinfo.birth,
           email: userinfo.email,
           password: userinfo.password,
-          phone: userinfo.phone
+          phone: userinfo.phone,
         };
 
-        const res = await axios.post("http://localhost:3001/users/signup", data);
-        console.log(res.data);
+        const res = await axios.post(
+          "http://localhost:3001/users/signup",
+          data
+        );
 
         setUserinfo({
           name: "",
@@ -147,10 +149,8 @@ const SignUp = () => {
         "http://localhost:3001/users/sendEmail",
         data
       );
-      alert("해당 이메일로 인증코드를 전송했습니다.")
+      alert("해당 이메일로 인증코드를 전송했습니다.");
       setCode(res.data);
-      console.log(res);
-
     } else {
       alert("대학교 이메일로만 가입이 가능합니다.");
     }
@@ -171,18 +171,21 @@ const SignUp = () => {
 
   let overlapNickname = async (e) => {
     let data = {
-      nickname: userinfo.nickname
-    }
+      nickname: userinfo.nickname,
+    };
 
-    const res = await axios.post("http://localhost:3001/users/checknickname", data)
+    const res = await axios.post(
+      "http://localhost:3001/users/checknickname",
+      data
+    );
     if (res.data === "exist") {
-      alert("이미 존재하는 닉네임입니다.")
+      alert("이미 존재하는 닉네임입니다.");
     }
     if (res.data === "no") {
-      setCheckNickname(true)
-      alert("사용가능한 닉네임입니다.")
+      setCheckNickname(true);
+      alert("사용가능한 닉네임입니다.");
     }
-  }
+  };
 
   /*본인인증*/
   function onClickCertification() {
@@ -210,18 +213,17 @@ const SignUp = () => {
     }
   }
   function checkPassword(password) {
-
     var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
-
     if (false === reg.test(password)) {
-      alert('비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다.');
+      alert(
+        "비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다."
+      );
       return false;
     } else {
       console.log("통과");
       return true;
     }
-
   }
   useEffect(() => {
     if (identity === "true") {
@@ -230,7 +232,6 @@ const SignUp = () => {
       alert("본인인증 실패");
     }
   }, [identity]);
-
 
   return (
     <SignUpContainer>
@@ -255,16 +256,23 @@ const SignUp = () => {
             maxLength="11"
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
-
           />
           {identity !== "true" && validPhone === true ? (
-            <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
+            <button onClick={onClickCertification} className="gradientBtn">
+              본인인증
+            </button>
           ) : (
-            <button onClick={onClickCertification} className="gradientBtn" disabled>본인인증</button>
+            <button
+              onClick={onClickCertification}
+              className="gradientBtn"
+              disabled
+            >
+              본인인증
+            </button>
           )}
         </InputandBtn>
 
-        <div style={{ marginBottom: "10px" }} >생년월일</div>
+        <div style={{ marginBottom: "10px" }}>생년월일</div>
         <Input
           type="text"
           name="birth"
@@ -274,7 +282,7 @@ const SignUp = () => {
           onChange={(e) => onChangehandler(e)}
         />
         <div>닉네임</div>
-        <InputandBtn >
+        <InputandBtn>
           <Input
             type="text"
             name="nickname"
@@ -283,16 +291,18 @@ const SignUp = () => {
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
-          <button className="gradientBtn" onClick={(e) => overlapNickname()} >중복확인</button>
+          <button className="gradientBtn" onClick={(e) => overlapNickname()}>
+            중복확인
+          </button>
         </InputandBtn>
-
 
         <div style={{ marginBottom: "10px" }}>성별</div>
         <Input
           type="select"
           name="gender"
           style={{ marginBottom: "20px" }}
-          onChange={(e) => onChangehandler(e)}>
+          onChange={(e) => onChangehandler(e)}
+        >
           <option>선택해주세요.</option>
           <option value="woman">여</option>
           <option value="man">남</option>
@@ -306,10 +316,12 @@ const SignUp = () => {
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
-          <button className="gradientBtn" onClick={(e) => sendEmail(e)}>이메일 인증</button>
+          <button className="gradientBtn" onClick={(e) => sendEmail(e)}>
+            이메일 인증
+          </button>
         </InputandBtn>
         <div style={{ marginBottom: "10px" }}>이메일 인증코드</div>
-        <InputandBtn >
+        <InputandBtn>
           <Input
             type="text"
             name="check-email"
@@ -317,7 +329,9 @@ const SignUp = () => {
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
-          <button className="gradientBtn" onClick={(e) => check(e)}>확인</button>
+          <button className="gradientBtn" onClick={(e) => check(e)}>
+            확인
+          </button>
         </InputandBtn>
         <div style={{ marginBottom: "10px" }}>비밀번호</div>
 
@@ -330,9 +344,17 @@ const SignUp = () => {
         />
       </SignUpBox>
       {checkcode === true ? (
-        <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)}>가입</button>
+        <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)}>
+          가입
+        </button>
       ) : (
-        <button className="gradientBtnDisabled" onClick={(e) => onSignupSubmit(e)} disabled >가입</button>
+        <button
+          className="gradientBtnDisabled"
+          onClick={(e) => onSignupSubmit(e)}
+          disabled
+        >
+          가입
+        </button>
       )}
     </SignUpContainer>
   );
