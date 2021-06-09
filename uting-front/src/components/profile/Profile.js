@@ -15,7 +15,7 @@ import {
   Row,
 } from "reactstrap";
 
-const Profile = () => {
+const Profile = ({modNickname}) => {
   const history = useHistory();
   const [imgBase64, setImgBase64] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({
@@ -153,7 +153,7 @@ const Profile = () => {
             </button>
           </Row>
           <Row>
-          <MyProfile choicename={sessionStorage.getItem("nickname")} checkProfilefunc={(e)=>checkMyprofile(e)} />
+          <MyProfile modNickname={(e)=>modNickname(e)} choicename={sessionStorage.getItem("nickname")} checkProfilefunc={(e)=>checkMyprofile(e)} />
           </Row>
         </ModalBody>
       </Modal>

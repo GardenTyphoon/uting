@@ -75,7 +75,7 @@ const GroupTitle = styled.div`
   margin-bottom: 8%;
 `;
 
-const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
+const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyNickname }) => {
   const [currentUser, setCurrentUser] = useState(
     sessionStorage.getItem("nickname")
   );
@@ -95,6 +95,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
     setAnotherName(data);
   }
   const getGroupInfo = async (e) => {
+    console.log(sessionUser)
     let data = { sessionUser: sessionUser };
     const res = await axios.post(
       "http://localhost:3001/groups/info",
@@ -103,6 +104,13 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket }) => {
     console.log(res.data.member);
     setGroupMember(res.data.member);
   };
+
+  useEffect(()=>{
+    if(modifyNickname==="success"){
+      window.location.reload()
+      console.log(groupSocketIdList)
+    }
+  },[modifyNickname])
 
   const leaveGroup = async () => {
     const socket = socketio.connect("http://localhost:3001");

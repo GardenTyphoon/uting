@@ -103,4 +103,42 @@ router.post('/info', function(req, res,next){
     })
 
   });
+
+
+  router.post('/modifyNickname',function(req,res,next){
+    console.log(req.body.originNickname)
+    console.log(req.body.reNickname)
+
+    let exist=false;
+    let foundPer;
+    let memList=[];
+    
+    Group.find(function(err,group){
+      group.forEach(per=>{
+        per.member.forEach(mem=>{
+          if(req.body.originNickname === mem){
+            exist=true;
+            foundPer=per;
+            console.log(per)
+          } 
+        })
+      })
+      if(exist===true){
+        
+        for(let i=0;i<foundPer.member.length;i++){
+          if(foundPer.member[i]===req.body.originNickname){
+            foundPer.member[i]=req.body.reNickname
+          }
+        }
+        Group.findByIdAndUpdate(foundPer._id,{$set:{member:foundPer.member}},(err,gr)=>{
+            res.send("success");
+        })
+      }
+      if(exist===false){
+        res.send("fail")
+      }
+  
+    })
+  })
+
 module.exports = router;
