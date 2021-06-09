@@ -59,21 +59,27 @@ const SignUp = () => {
   const [usercode, setUsercode] = useState("");
 
   /*인증코드 옳은지 확인용*/
-  const [checkcode, setCheckcode] = useState(true);
+  const [checkcode, setCheckcode] = useState();
 
   /*본인인증과 연관된 가맹점 내부 주문번호*/
   const [merchantid, setMerchantid] = useState(`mid_${new Date().getTime()}`);
 
   /*본인인증 성공 여부*/
-  const [identity, setIdentity] = useState("true");
+  const [identity, setIdentity] = useState("");
 
   /*닉네임 중복 확인*/
-  const [checkNickname, setCheckNickname] = useState(true);
+  const [checkNickname, setCheckNickname] = useState(false);
+
+  const [validPhone, setValidPhone] = useState(false);
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
+
     if (name === "check-email") {
       setUsercode(value);
+    } else if (name === "phone") {
+      if (value.length === 11) setValidPhone(true);
+      else setValidPhone(false);
     } else {
       setUserinfo({
         ...userinfo,
@@ -98,29 +104,34 @@ const SignUp = () => {
       identity !== "" &&
       checkNickname === true
     ) {
-      let data = {
-        name: userinfo.name,
-        nickname: userinfo.nickname,
-        gender: userinfo.gender,
-        birth: userinfo.birth,
-        email: userinfo.email,
-        password: userinfo.password,
-        phone: userinfo.phone,
-      };
+      if (checkPassword(userinfo.password)) {
+        let data = {
+          name: userinfo.name,
+          nickname: userinfo.nickname,
+          gender: userinfo.gender,
+          birth: userinfo.birth,
+          email: userinfo.email,
+          password: userinfo.password,
+          phone: userinfo.phone,
+        };
 
-      const res = await axios.post("http://localhost:3001/users/signup", data);
+        const res = await axios.post(
+          "http://localhost:3001/users/signup",
+          data
+        );
 
-      setUserinfo({
-        name: "",
-        nickname: "",
-        gender: "",
-        birth: "",
-        email: "",
-        password: "",
-        phone: "",
-      });
-      alert("회원가입이 완료되었습니다.");
-      window.location.href = "http://localhost:3000/";
+        setUserinfo({
+          name: "",
+          nickname: "",
+          gender: "",
+          birth: "",
+          email: "",
+          password: "",
+          phone: "",
+        });
+        alert("회원가입이 완료되었습니다.");
+        window.location.href = "http://localhost:3000/";
+      }
     } else {
       alert("입력하지 않은 정보가 있습니다.");
     }
@@ -140,7 +151,6 @@ const SignUp = () => {
       );
       alert("해당 이메일로 인증코드를 전송했습니다.");
       setCode(res.data);
-      console.log(res);
     } else {
       alert("대학교 이메일로만 가입이 가능합니다.");
     }
@@ -202,7 +212,19 @@ const SignUp = () => {
       setIdentity("false");
     }
   }
+  function checkPassword(password) {
+    var reg = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
 
+    if (false === reg.test(password)) {
+      alert(
+        "비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다."
+      );
+      return false;
+    } else {
+      console.log("통과");
+      return true;
+    }
+  }
   useEffect(() => {
     if (identity === "true") {
       alert("본인인증 성공 !");
@@ -228,13 +250,14 @@ const SignUp = () => {
         <div style={{ marginBottom: "10px" }}>전화번호</div>
         <InputandBtn>
           <Input
-            type="text"
+            type="number"
             name="phone"
             placeholder="01000000000"
+            maxLength="11"
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
-          {identity !== "true" ? (
+          {identity !== "true" && validPhone === true ? (
             <button onClick={onClickCertification} className="gradientBtn">
               본인인증
             </button>
@@ -255,6 +278,7 @@ const SignUp = () => {
           name="birth"
           placeholder="yyyymmdd"
           style={{ marginBottom: "20px" }}
+          maxLength="8"
           onChange={(e) => onChangehandler(e)}
         />
         <div>닉네임</div>
@@ -262,7 +286,8 @@ const SignUp = () => {
           <Input
             type="text"
             name="nickname"
-            placeholder="닉네임"
+            placeholder="8글자 이내의 닉네임"
+            maxLength="8"
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
@@ -309,10 +334,11 @@ const SignUp = () => {
           </button>
         </InputandBtn>
         <div style={{ marginBottom: "10px" }}>비밀번호</div>
+
         <Input
           type="password"
           name="password"
-          placeholder="password"
+          placeholder="영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
           style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />

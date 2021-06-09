@@ -19,7 +19,6 @@ import {
   CarouselCaption,
 } from "reactstrap";
 import "./EarInMal.css";
-
 const items = [
   //for 설명서
   {
@@ -89,16 +88,15 @@ const EarInMal = ({
   };
 
   function getRandomInt(min, max) {
-    //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
   }
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
+    console.log("participantsForTurn :" + participantsForTurn);
     var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
-    //console.log("tmp : " + tmp);
+
     setParticipantsForTurn(tmp);
   };
 
@@ -107,15 +105,6 @@ const EarInMal = ({
     determineTurn(participantsForTurn);
     setFlag(true);
   };
-
-  /*useEffect(() => {
-    if (!startButtonFade) {
-      data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
-      const socket = socketio.connect("http://localhost:3001");
-      socket.emit("gameStart", data);
-    }
-  }, [startButtonFade]);*/
-
   const globalizeGameStart = () => {
     data = {
       gameName: "귓속말게임",
@@ -127,15 +116,10 @@ const EarInMal = ({
   };
 
   useEffect(() => {
-    //console.log("participantsForTurnSet :" + participantsForTurn);
     if (participantsForTurnSet) {
       setParticipantsForTurn(participantsForTurnSet);
     }
   }, [participantsForTurnSet]);
-
-  /*useEffect(() => {
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
-  }, [participantsForTurn]);*/
 
   useEffect(() => {
     if (gameStartFlag) {
@@ -158,14 +142,14 @@ const EarInMal = ({
   useEffect(async () => {
     if (flag) {
       globalizeGameStart();
-      globalizeTurn(); //+
+      globalizeTurn();
       setFlag(false);
     }
   }, [flag]);
 
   useEffect(async () => {
     if (giveTurnFlag) {
-      globalizeTurn(); //+
+      globalizeTurn();
       setGiveTurnFlag(false);
     }
   }, [giveTurnFlag]);
@@ -181,7 +165,6 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       remainParticipants: participantsForTurn,
     });
-    //.emit("notifyMember", { turnSocketId: toSendSckId });
   };
 
   useEffect(() => {
@@ -285,13 +268,18 @@ const EarInMal = ({
         onExiting={() => setAnimating(true)}
         onExited={() => setAnimating(false)}
       >
-        <img src={item.src} alt={item.altText} />
+        <img
+          src={item.src}
+          alt={item.altText}
+          style={{ paddingBottom: "5%" }}
+        />
         <br />
         {idx === 0 ? (
           <div style={{ textAlign: "left" }}>
-            <strong>1. (차례인 유저)질문상대 선택하고 질문하기</strong>
+            <strong>1. 질문상대 선택하고 질문하기</strong>
             <div>
-              질문 예시 : 이상형이 누구에요?? 여기서 마음에 드는 사람 있어요??
+              차례인 유저는 원하는 상대에게 질문을 한다. (질문은 선택된
+              유저에게만 보여진다.)
             </div>
           </div>
         ) : idx === 1 ? (
@@ -306,8 +294,8 @@ const EarInMal = ({
           <div style={{ textAlign: "left" }}>
             <strong>3. 질문 알려주기</strong>
             <div>
-              질문이 궁금한 사람은 술을 마시고 질문한 사람에게 질문을 물어 볼 수
-              있다.
+              질문을 한 유저는 원하는 대상에게 질문을 알려줄 수 있다.(질문이
+              궁금한 사람은 술을 마시고 질문을 들을 수 있다.)
             </div>
           </div>
         )}
@@ -325,7 +313,7 @@ const EarInMal = ({
           <style>
             {`.custom-tag {
               max-width: 100%;
-              height: 250px;
+              height: 380px;
               background: white;
             }`}
           </style>
@@ -356,7 +344,7 @@ const EarInMal = ({
       </Modal>
       {!isGameStart ? (
         <>
-          <strong>귓속말게임</strong>
+          <strong style={{ paddingLeft: "10%" }}>귓속말게임</strong>
           <div
             style={{
               fontSize: "medium",
@@ -389,8 +377,8 @@ const EarInMal = ({
             display: "grid",
             width: "170px",
             height: "160px",
-            gridTemplateColumns: "1.5fr 1.2fr 1.5fr",
-            gridTemplateRows: "0.5fr 2fr 15%",
+            gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            gridTemplateRows: "10% 1fr 15%",
           }}
         >
           {turnFlag ? (
@@ -400,12 +388,19 @@ const EarInMal = ({
                   <h5
                     style={{
                       fontSize: "medium",
-                      gridColumn: "1/4",
+                      gridColumn: "1/5",
+                      gridRow: "1/2",
                     }}
                   >
                     질문 알려주기
                   </h5>
-                  <div style={{ gridColumn: "1/4", gridRow: "2/3" }}>
+                  <div
+                    style={{
+                      gridColumn: "1/5",
+                      gridRow: "2/3",
+                      marginTop: "10%",
+                    }}
+                  >
                     {participants.map((member) => (
                       <Button
                         outline
@@ -425,21 +420,20 @@ const EarInMal = ({
                     style={{
                       border: 0,
                       float: "left",
-                      padding: "10px",
-                      gridColumn: "1/2",
-                      gridRow: "3/5",
+                      gridColumn: "1/3",
+                      gridRow: "4/5",
                     }}
                     onClick={giveTurn}
                   >
-                    <h5 style={{ fontSize: "small" }}>턴 넘기기</h5>
+                    <h5 style={{ fontSize: "small" }}>턴넘기기</h5>
                   </Button>
                   <Button
                     outline
                     color="danger"
                     style={{
                       border: 0,
-                      gridColumn: "3/4",
-                      gridRow: "3/5",
+                      gridColumn: "3/5",
+                      gridRow: "4/5",
                     }}
                     onClick={ending}
                   >
@@ -448,10 +442,10 @@ const EarInMal = ({
                 </>
               ) : (
                 <>
-                  <h5 style={{ fontSize: "medium", gridColumn: "1/4" }}>
+                  <h5 style={{ fontSize: "medium", gridColumn: "1/5" }}>
                     질문할 사용자 선택
                   </h5>
-                  <div style={{ gridColumn: "1/4", girdRow: "2/3" }}>
+                  <div style={{ gridColumn: "1/5", girdRow: "1/3" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
@@ -497,7 +491,7 @@ const EarInMal = ({
                   >
                     {question}
                   </div>
-                  <div style={{ gridColumn: "1/4", gridRow: "2" }}>
+                  <div style={{ gridColumn: "1/5", gridRow: "2" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
@@ -518,12 +512,12 @@ const EarInMal = ({
                     style={{
                       fontSize: "medium",
                       float: "left",
-                      gridColumn: "1/3",
+                      gridColumn: "1/5",
                     }}
                   >
                     Turn : {turn}님
                   </div>
-                  <div style={{ gridColumn: "1/4" }}>차례를 기다리세요</div>
+                  <div style={{ gridColumn: "1/5" }}>차례를 기다리세요</div>
                 </>
               )}
             </>

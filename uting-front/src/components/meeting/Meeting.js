@@ -1,6 +1,6 @@
 import axios from "axios";
-import jwtAxios from "../../utils/jwtAxios";
 import React from "react";
+import jwtAxios from "../../utils/jwtAxios";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import socketio from "socket.io-client";
@@ -37,6 +37,7 @@ const Meeting = ({ checkFunc }) => {
   const [groupMembers, setGroupMembers] = useState([]);
   const [toggleShowWarningMess, setToggleShowWarningMess] = useState(false);
   const [roomtitle, setRoomtitle] = useState("");
+  const [groupmemeinfo, setGroupmemeinfo] = useState({});
   //const [roomtitle,setRoomtitle]=useState("")
   let sessionUser = sessionStorage.getItem("nickname");
   let groupMembersSocketId = [];
@@ -50,7 +51,6 @@ const Meeting = ({ checkFunc }) => {
   });
 
   const onChangehandler = (e) => {
-    console.log(groupMembers);
     const { name, value } = e.target;
     if (name === "title") {
       setRoom({
@@ -115,8 +115,14 @@ const Meeting = ({ checkFunc }) => {
             age: birthToAge(userInfo.data.birth),
             ucoin: userInfo.data.ucoin,
             gender: userInfo.data.gender,
+            socketid: userInfo.data.socketid,
           });
           if (userInfo.data.nickname != sessionUser) {
+            let data = {
+              nickname: userInfo.data.nickname,
+              socketid: userInfo.data.socketid,
+            };
+            setGroupmemeinfo(data);
             groupMembersSocketId.push(userInfo.data.socketid);
           }
           avgManner += userInfo.data.mannerCredit;
@@ -125,11 +131,10 @@ const Meeting = ({ checkFunc }) => {
             nowOfWoman += 1;
           } else nowOfMan += 1;
         }
-
         console.log(groupMembersInfo);
         let coinCheck = true;
         for (let i = 0; i < groupMembersInfo.length; i++) {
-          if (groupMembersInfo[i].ucoin < 0) {
+          if (groupMembersInfo[i].ucoin < 1) {
             coinCheck = false;
           }
         }
@@ -174,7 +179,9 @@ const Meeting = ({ checkFunc }) => {
               });
             }
 
-            history.push("/deviceSetup");
+            await meetingManager.start();
+
+            history.push(`/room/${roomTitle}`);
           } catch (error) {
             console.log(error);
           }

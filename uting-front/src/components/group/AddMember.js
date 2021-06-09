@@ -17,9 +17,9 @@ import {
   ModalFooter,
 } from "reactstrap";
 import axios from "axios";
-import jwtAxios from "../../utils/jwtAxios";
 import socketio from "socket.io-client";
-
+import jwtAxios from "../../utils/jwtAxios";
+import introLog from "../../img/배경없는유팅로고.png";
 const AddMember = ({
   currentUser,
   modalState,
@@ -32,6 +32,7 @@ const AddMember = ({
   const [socketCnt, setSocketCnt] = useState(false);
   const [socketId, setSocketId] = useState("");
   const [precheck, setPrecheck] = useState(false);
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
@@ -64,14 +65,22 @@ const AddMember = ({
             checkMember(true);
           }
         } else {
-          alert(
-            "현재 접속 중인 사용자가 아니거나, 닉네임이 올바르지 않습니다."
-          );
-          modalState(true);
+          setGetalert({
+            flag: true,
+            message:
+              "현재 접속 중인 사용자가 아니거나,닉네임이 올바르지 않습니다.",
+          });
+          setTimeout(() => {
+            setGetalert({ flag: false, message: "" });
+          }, 2000);
         }
         //가입된 사용자가 맞는지, 현재 로그인한 사용자가 맞는지
       });
   };
+
+  useEffect(() => {
+    setGetalert({ flag: false, message: "" });
+  }, []);
 
   useEffect(() => {
     console.log(preMemSocketIdList);
@@ -121,6 +130,34 @@ const AddMember = ({
           추가
         </Button>
       </ModalBody>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "15px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

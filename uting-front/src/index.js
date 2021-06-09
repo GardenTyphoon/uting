@@ -8,7 +8,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "amazon-chime-sdk-component-library-react";
 
-
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={lightTheme}>

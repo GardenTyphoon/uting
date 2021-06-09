@@ -2,9 +2,18 @@ import React, { useState, useEffect } from "react";
 import { Route, Link, Switch, Router } from "react-router-dom";
 import "./SignIn.css";
 import axios from "axios";
-import { Container, Row, Col } from "reactstrap";
-//import { ToastContainer, toast } from 'react-toastify';
-//import 'react-toastify/dist/ReactToastify.css';
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from "reactstrap";
+
+import introLog from "../../img/배경없는유팅로고.png";
 
 const loginInstance = axios.create((config) => {
   config.headers["Content-Type"] = "application/json";
@@ -15,7 +24,14 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [islogined, setIslogined] = useState(false);
   const [error, setError] = useState("");
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
 
+  const enterEvent = (e) => {
+    if (e.key === "Enter") {
+      console.log(e.key);
+      onSubmit();
+    }
+  };
   /*컴포넌트 마운트 될 때마다 로그인 했는지 안했는지 확인*/
   useEffect(() => {
     if (sessionStorage.getItem("email")) {
@@ -23,6 +39,7 @@ const SignIn = () => {
     } else {
       setIslogined(false);
     }
+    setGetalert({ flag: false, message: "" });
   }, []);
 
   const onChangehandler = (e) => {
@@ -36,7 +53,7 @@ const SignIn = () => {
 
   /*로그인 하는 함수*/
   const onSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
     let data = {
       email: email,
       password: password,
@@ -46,12 +63,23 @@ const SignIn = () => {
       .then((res) => {
         if (res.data.message === "login failed") {
           setIslogined(false);
-          alert("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
+          setGetalert({
+            flag: true,
+            message: "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.",
+          });
+          setTimeout(() => {
+            setGetalert({ flag: false, message: "" });
+          }, 1500);
           //toast("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.")
         } else if (res.data.message === "hell") {
-          alert(
-            "신고가 3번이상 누적된 사용자로서 더 이상 U-TING 서비스 사용이 불가합니다."
-          );
+          setGetalert({
+            flag: true,
+            message:
+              "신고가 3번이상 누적된 사용자로서 더 이상 U-TING 서비스 사용이 불가합니다.",
+          });
+          setTimeout(() => {
+            setGetalert({ flag: false, message: "" });
+          }, 1500);
         } else {
           console.log(res.data);
           try {
@@ -59,12 +87,14 @@ const SignIn = () => {
             sessionStorage.setItem("token", res.data.token);
             sessionStorage.setItem("nickname", res.data.perObj.nickname);
             sessionStorage.setItem("email", email);
-            alert("로그인 되었습니다.");
+            setGetalert({ flag: true, message: "로그인 되었습니다." });
 
             if (email === "admin@ajou.ac.kr" && password === "admin") {
               window.location.href = "http://localhost:3000/admin";
             } else {
-              window.location.href = "http://localhost:3000/main";
+              setTimeout(() => {
+                window.location.href = "http://localhost:3000/main";
+              }, 1000);
             }
           } catch (error) {
             setError(error.message);
@@ -87,6 +117,7 @@ const SignIn = () => {
             required
             value={sessionStorage.getItem("email")}
             onChange={(e) => onChangehandler(e)}
+            onKeyPress={(e) => enterEvent(e)}
           />
           <input
             className="signInInput"
@@ -95,6 +126,7 @@ const SignIn = () => {
             placeholder="Password"
             required
             value={password}
+            onKeyPress={(e) => enterEvent(e)}
             onChange={(e) => onChangehandler(e)}
           />
         </Col>
@@ -104,6 +136,34 @@ const SignIn = () => {
           </button>
         </Col>
       </Row>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
+      </Modal>
     </Container>
   );
 };

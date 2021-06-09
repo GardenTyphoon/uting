@@ -1,30 +1,32 @@
-.voteContainer{
-    font-family : NanumSquare_acR;
-    font-weight: 600;
-    background-color: #FFE4E1;
-    border-Radius: 20px;
-    padding:20px;
-    width:300px;
-    text-align: center;
+.voteContainer {
+  font-family: NanumSquare_acR;
+  font-weight: 600;
+  background-color: #ffe4e1;
+  border-radius: 20px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
 }
-.agreeBtn{
-    font-family : NanumSquare_acR;
-    background: #2CDB52;
-    border:none; 
-    border-radius: 10px;
-    width:80px;
-    margin:20px;
-    margin-right: 20px;
-    color:white;
+.agreeBtn {
+  font-family: NanumSquare_acR;
+  background: #2cdb52;
+  border: none;
+  border-radius: 10px;
+  width: 80px;
+  margin: 20px;
+  margin-right: 20px;
+  color: white;
 }
-.disAgreeBtn{
-    font-family : NanumSquare_acR;
-    background: #FB6060;
-    border:none;
-    border-radius: 10px;
-    margin:20px;
-    margin-left: 20px;
-    width:80px;
-    color:white;
-
+.disAgreeBtn {
+  font-family: NanumSquare_acR;
+  background: #fb6060;
+  border: none;
+  border-radius: 10px;
+  margin: 20px;
+  margin-left: 20px;
+  width: 80px;
+  color: white;
+}
+.meetingend {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }

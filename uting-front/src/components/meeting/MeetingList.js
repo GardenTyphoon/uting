@@ -5,9 +5,19 @@ import woman from "../../img/woman.png";
 import man from "../../img/man.png";
 import MeetingRoom from "../../img/MeetingRoom.png";
 import "./MeetingList.css";
-import { Container, Row, Col, Tooltip } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Tooltip,
+  Modal,
+  ModalFooter,
+  ModalHeader,
+  ModalBody,
+  Button,
+} from "reactstrap";
 import socketio from "socket.io-client";
-
+import introLog from "../../img/배경없는유팅로고.png";
 import { useAppState } from "../../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
 import {
@@ -16,39 +26,9 @@ import {
   attendMeeting,
 } from "../../utils/api";
 import { ConsoleLogger } from "amazon-chime-sdk-js";
-let mannerColor;
-function mannerCredit(avgManner) {
-  if (avgManner === 4.5) {
-    mannerColor = "#FF0000";
-    return "A+";
-  } else if (avgManner < 4.5 && avgManner >= 4.0) {
-    mannerColor = "#FC92A4";
-    return "A0";
-  } else if (avgManner < 4.0 && avgManner >= 3.5) {
-    mannerColor = "#FE5E16";
-    return "B+";
-  } else if (avgManner < 3.5 && avgManner >= 3.0) {
-    mannerColor = "#FE9D72";
-    return "B0";
-  } else if (avgManner < 3.0 && avgManner >= 2.5) {
-    mannerColor = "#97A1FF";
-    return "C+";
-  } else if (avgManner < 2.5 && avgManner >= 2.0) {
-    mannerColor = "#020DEC";
-    return "C0";
-  } else if (avgManner < 2.0 && avgManner >= 1.5) {
-    mannerColor = "#767171";
-    return "D+";
-  } else if (avgManner < 1.5 && avgManner >= 1.0) {
-    mannerColor = "#151515";
-    return "D0";
-  } else {
-    mannerColor = "#000000";
-    return "F";
-  }
-}
 
 function birthToAge(birth) {
+  console.log(birth);
   let year = birth.slice(0, 4);
   return 2021 - Number(year) + 1;
 }
@@ -80,8 +60,50 @@ export default function MeetingList({
   const [roomObj, setRoomObj] = useState({});
   const [prevFilter, setPrevFilter] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
+  const [groupMannerInfo, setGroupMannerInfo] = useState({});
+  const [resstatus, setResstatus] = useState("");
+  const [groupMannerInfoTemp, setGroupMannerInfoTemp] = useState([]);
+
+  function getMannerCreditAndColor(avgManner) {
+    let color;
+    let credit;
+    if (avgManner === 4.5) {
+      color = "#e96363"; //빨강
+      credit = "A+";
+    } else if (avgManner < 4.5 && avgManner >= 4.0) {
+      color = "#fdc95d"; //주황
+      credit = "A0";
+    } else if (avgManner < 4.0 && avgManner >= 3.5) {
+      color = "#f28e72"; //탁한분홍
+      credit = "B+";
+    } else if (avgManner < 3.5 && avgManner >= 3.0) {
+      color = "#72c4bf"; //청록?
+      credit = "B0";
+    } else if (avgManner < 3.0 && avgManner >= 2.5) {
+      color = "#6d9eca"; //바다색
+      credit = "C+";
+    } else if (avgManner < 2.5 && avgManner >= 2.0) {
+      color = "#7668ac"; //보라색
+      credit = "C0";
+    } else if (avgManner < 2.0 && avgManner >= 1.5) {
+      color = "#B29FFC"; //갈색
+      credit = "D+";
+    } else if (avgManner < 1.5 && avgManner >= 1.0) {
+      color = "#444C57"; //먹색
+      credit = "D0";
+    } else {
+      color = "#000000";
+      credit = "F";
+    }
+    return { color: color, credit: credit };
+  }
 
   let sessionUser = sessionStorage.getItem("nickname");
+
+  let toggleAlert = (e) => {
+    setGetalert({ ...getalert, flag: !getalert.flag });
+  };
 
   const updateNewParticipants_to_OriginParticipants = async (
     meetingRoomParticipants
@@ -94,10 +116,54 @@ export default function MeetingList({
       "http://localhost:3001/users/preMemSocketid",
       data
     );
-    console.log(res);
-    socket.emit("newParticipants", { socketIdList: res.data });
+    let arr = [];
+    for (let i = 0; i < res.data.length; i++) {
+      arr.push(res.data[i].socketid);
+    }
+
+    socket.emit("newParticipants", { socketIdList: arr });
   };
-  const attendRoomByID = async (room) => {
+  const canAttend = async (room) => {
+    let myGroupWoman = 0;
+    let myGroupMan = 0;
+    let groupMembersInfo = [];
+    for (let i = 0; i < groupMember.length; i++) {
+      let userInfo = await axios.post("http://localhost:3001/users/userInfo", {
+        userId: groupMember[i],
+      });
+
+      groupMembersInfo.push({
+        nickname: userInfo.data.nickname,
+        introduce: userInfo.data.introduce,
+        mannerCredit: userInfo.data.mannerCredit,
+        age: birthToAge(userInfo.data.birth),
+        ucoin: userInfo.data.ucoin,
+        gender: userInfo.data.gender,
+        birth: userInfo.data.birth,
+        socketid: userInfo.data.socketid,
+      });
+      if (userInfo.data.gender === "woman") {
+        myGroupWoman++;
+      } else {
+        myGroupMan++;
+      }
+    }
+    if (
+      room.numOfMan + myGroupMan <= room.maxNum &&
+      room.numOfWoman + myGroupWoman <= room.maxNum
+    ) {
+      attendRoomByID(room, groupMembersInfo);
+    } else {
+      setGetalert({
+        flag: true,
+        message: "정해진 인원수가 맞지 않아 입장이 불가합니다.",
+      });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
+    }
+  };
+  const attendRoomByID = async (room, groupMembersInfo) => {
     setRoomObj(room);
 
     // setFlag(true)
@@ -108,38 +174,25 @@ export default function MeetingList({
     let numOfWoman = 0;
     let numOfMan = 0;
 
-    let groupMembersInfo = [];
     let groupMembersSocketId = [];
 
-    for (let i = 0; i < groupMember.length; i++) {
-      let userInfo = await axios.post("http://localhost:3001/users/userInfo", {
-        userId: groupMember[i],
-      });
-      groupMembersInfo.push({
-        nickname: userInfo.data.nickname,
-        introduce: userInfo.data.introduce,
-        mannerCredit: userInfo.data.mannerCredit,
-        age: birthToAge(userInfo.data.birth),
-        ucoin: userInfo.data.ucoin,
-        gender: userInfo.data.gender,
-      });
-      if (userInfo.data.nickname != sessionUser) {
-        groupMembersSocketId.push(userInfo.data.socketid);
+    for (let i = 0; i < groupMembersInfo.length; i++) {
+      if (groupMembersInfo[i].nickname != sessionUser) {
+        groupMembersSocketId.push(groupMembersInfo[i].socketid);
       }
-      sumManner += userInfo.data.mannerCredit;
-      sumAge += birthToAge(userInfo.data.birth);
-      if (userInfo.data.gender === "woman") numOfWoman += 1;
+      sumManner += groupMembersInfo[i].mannerCredit;
+
+      sumAge += birthToAge(groupMembersInfo[i].birth);
+      if (groupMembersInfo[i].gender === "woman") numOfWoman += 1;
       else numOfMan += 1;
     }
     let coinCheck = true;
-    for (let i = 0; i < groupMembersInfo.length; i++) {
+    for (let i = 0; i < groupMembersInfo[i].length; i++) {
       if (groupMembersInfo[i].ucoin < 0) {
         coinCheck = false;
       }
     }
     if (coinCheck === true) {
-      // sumManner += avgManner;
-      // sumAge += avgAge;
       //
 
       let new_numOfMan = numOfMan + room.numOfMan;
@@ -148,12 +201,6 @@ export default function MeetingList({
       const avgManner = sumManner / (new_numOfMan + new_numOfWoman);
       const avgAge = parseInt(sumAge / (new_numOfMan + new_numOfWoman));
 
-      // let new_status = "대기";
-      // console.log(new_numOfMan, new_numOfWoman, room.maxNum * 2)
-      // if ((new_numOfMan + new_numOfWoman - room.maxNum * 2) === 0) {
-      //     console.log("아니 여기 왜 안들어가?")
-      //     new_status = "진행";
-      // }
       let data = {
         title: room.title,
         maxNum: Number(room.maxNum),
@@ -163,10 +210,9 @@ export default function MeetingList({
         numOfWoman: new_numOfWoman,
         numOfMan: new_numOfMan,
         groupmember: groupMembersInfo,
+        session: sessionUser,
         flag: 1,
       };
-      //console.log(typeof data.groupmember)
-      //const response = await axios.post("http://localhost:3001/meetings/newmembers", data)
       let meetingRoomParticipants = [];
       room.users.map((per) => {
         meetingRoomParticipants.push(per.nickname);
@@ -183,14 +229,14 @@ export default function MeetingList({
         setAppMeetingInfo(room.title, sessionUser, "ap-northeast-2");
         if (room.title !== undefined) {
           const socket = socketio.connect("http://localhost:3001");
-          console.log("groupMembersSocketId", groupMembersSocketId);
           socket.emit("makeMeetingRoomMsg", {
             groupMembersSocketId: groupMembersSocketId,
             roomtitle: room.title,
           });
         }
+        await meetingManager.start();
 
-        history.push("/deviceSetup");
+        history.push(`/room/${room.title}`);
       } catch (error) {
         console.log(error);
       }
@@ -202,17 +248,14 @@ export default function MeetingList({
   };
 
   let saveMeetingUsers = async (e) => {
-    console.log("saveMeetingUsers", roomObj);
     let data = {
       member: groupMember,
       room: roomObj,
     };
-    console.log("saveMeetingUsers", data);
     const res = await axios.post(
       "http://localhost:3001/meetings/savemember",
       data
     );
-    console.log(res);
   };
 
   useEffect(() => {
@@ -235,7 +278,6 @@ export default function MeetingList({
       "http://localhost:3001/groups/info",
       sessionObject
     );
-    console.log(typeof res.data.member);
     let onlyMe = [sessionUser];
     if (res.data === "no") setGroupMember(onlyMe);
     else setGroupMember(res.data.member);
@@ -251,10 +293,6 @@ export default function MeetingList({
       settoolTipId(title);
     }
   };
-  useEffect(() => {
-    getMeetings();
-    getGroupInfo();
-  }, []);
 
   useEffect(() => {
     if (checkState === true) {
@@ -262,15 +300,22 @@ export default function MeetingList({
     }
   }, [checkState]);
 
-  let getMeetings = async () => {
-    await axios
-      .get("http://localhost:3001/meetings")
-      .then(({ data }) => {
-        setView(data);
-        setOriginList(data);
-      })
-      .catch((err) => {});
+  let getMeetings = async (e) => {
+    const res = await axios.post("http://localhost:3001/meetings/");
+
+    let arr = [];
+    res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));
+
+    setGroupMannerInfo(arr);
+    setView(res.data);
+    setOriginList(res.data);
+
+    setResstatus("200");
   };
+  useEffect(() => {
+    getMeetings();
+    getGroupInfo();
+  }, []);
 
   useEffect(() => {
     const filteredName = originList.filter((data) => {
@@ -305,7 +350,8 @@ export default function MeetingList({
   }, [filterage]);
 
   useEffect(() => {
-    setView(originList);
+    setView([]);
+    getMeetings();
   }, [getorigin]);
 
   return (
@@ -317,12 +363,8 @@ export default function MeetingList({
             <Row style={{ width: "100%" }}>
               <img
                 src={MeetingRoom}
-                style={{
-                  padding: "1%",
-                  width: "10%",
-                  borderRadius: "50%",
-                  marginRight: "5%",
-                }}
+                className="MeetingRoomImg"
+                style={{ borderColor: groupMannerInfo[Number(index)].color }}
                 id={"Tooltip-" + room._id.substr(0, 10)}
                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
@@ -336,14 +378,16 @@ export default function MeetingList({
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    color: mannerColor,
+                    color: groupMannerInfo[index].color,
                     marginTop: "15%",
                   }}
                 >
-                  <div style={{ marginRight: "7%" }}>
+                  <div style={{ marginRight: "7%", fontWeight: "bold" }}>
                     {room.avgManner !== null ? room.avgManner : ""}
                   </div>
-                  <div>{mannerCredit(room.avgManner)}</div>
+                  <div style={{ fontWeight: "bold" }}>
+                    {groupMannerInfo[index].credit}
+                  </div>
                 </div>
                 <div
                   style={{
@@ -351,18 +395,23 @@ export default function MeetingList({
                     justifyContent: "center",
                     color: "#9A7D7D",
                     fontSize: "small",
+                    fontWeight: "bold",
                   }}
                 >
                   {room.avgAge}살
                 </div>
               </Col>
               <Col xs="3">
-                <button
-                  className="joinBtn"
-                  onClick={() => attendRoomByID(room)}
-                >
-                  참가
-                </button>
+                {room.maxNum * 2 === room.numOfMan + room.numOfWoman ? (
+                  <button className="joinBtn2" onClick={() => canAttend(room)}>
+                    미팅중
+                  </button>
+                ) : (
+                  <button className="joinBtn" onClick={() => canAttend(room)}>
+                    참가
+                  </button>
+                )}
+
                 <Col
                   style={{
                     display: "flex",
@@ -401,13 +450,42 @@ export default function MeetingList({
           >
             {room.users.map((user) => (
               <div>
-                {user.nickname} {mannerCredit(user.mannerCredit)} {user.age}살{" "}
+                {user.nickname}{" "}
+                {getMannerCreditAndColor(user.mannerCredit).credit} {user.age}살{" "}
                 <br></br>
               </div>
             ))}
           </Tooltip>
         </div>
       ))}
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "15px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 }

@@ -5,13 +5,6 @@ const { Meeting }=require('../model');
 const fs = require('fs');
 const {v4:uuid} = require('uuid');
 const AWS = require('aws-sdk');
-// const { response } = require('express');
-/* eslint-enable */
-
-// let hostname = '127.0.0.1';
-// let port = 8080;
-// let protocol = 'http';
-// let options = {};
 
 const chime = new AWS.Chime({ region: 'us-east-1' });
 const alternateEndpoint = process.env.ENDPOINT;
@@ -26,7 +19,6 @@ if (alternateEndpoint) {
   );
 }
 
-// @TODO 밑에 캐시 두 개 데이터 베이스에 넣어서 관리하면 될 것 같습니둥
 const meetingCache = {};
 const attendeeCache = {};
 
@@ -37,16 +29,16 @@ const log = message => {
 const app = process.env.npm_config_app || 'meeting';
 
 
+
 // GET meetings list 
-router.get('/', async function(req, res, next) {
+router.post('/', async function(req, res, next) {
   Meeting.find({}).then((meetings)=>{ 
-    res.json(meetings);
+    res.send(meetings);
   }).catch((err) => {
     res.send(err);
   });
-  console.log(meetingCache);
+  console.log(attendeeCache);
 });
-
 
 // getAttendee
 router.post('/attendee', async function (req, res, next) {
@@ -222,15 +214,15 @@ router.post('/savemember', function(req, res,next){
 })
 
 router.post('/getparticipants', function(req,res,next){
-  console.log("+++++++++++++++++++++++++++++++++++++")
-  console.log("getparticipants!!",req.body)
-  console.log("+++++++++++++++++++++++++++++++++++++")
-  let arr=[]
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
       if(obj.title===req.body._id){
-        console.log(obj.users)
-        res.send(obj.users);
+        temp = {
+          users: obj.users,
+          maxNum: obj.maxNum,
+          chime_info: attendeeCache[obj.title],
+        }
+        res.send(temp);
       }
     })
   })
@@ -259,7 +251,7 @@ let flag=false;
 router.post('/leavemember', async function(req,res,next){
   console.log("--------------------------")
   console.log(req.body)
-  Meeting.find(function (err, meeting) {
+  Meeting.find(async function (err, meeting) {
     //console.log(user)
     meeting.forEach((meet) => {
       if (req.body.title === meet.title) {
@@ -270,17 +262,8 @@ router.post('/leavemember', async function(req,res,next){
     if (isroom === true) {
       //삭제
       if(perObj.numOfWoman+perObj.numOfMan === 1){
-        Meeting.deleteOne({_id:perObj._id}).then(async (result)=>{
-          const title = req.body.title;
-
-          await chime.deleteMeeting({
-            MeetingId: meetingCache[title].Meeting.MeetingId
-          }).promise();
-        
-          delete meetingCache[title];
-          delete attendeeCache[title];
-
-          res.send("success");
+        Meeting.deleteOne({_id:perObj._id}).then((result)=>{
+          res.send("last");
         })
       }
       else{
@@ -330,6 +313,21 @@ router.post('/leavemember', async function(req,res,next){
 router.post('/logs', function(req, res, next){
   console.log('Writing logs to cloudwatch');
   res.redirect('back');
+})
+
+router.post('/end', async function(req, res, next){
+  console.log(req.body, "여기임")
+  const title = req.body.title;
+
+
+  await chime.deleteMeeting({
+    MeetingId: meetingCache[title].Meeting.MeetingId
+  }).promise();
+
+  delete meetingCache[title];
+  delete attendeeCache[title];
+  res.statusCode = 200;
+  res.end();
 })
 
 module.exports = router;

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import MyProfile from "./MyProfile";
-import ProfileNoImage from "../../img/ProfileNoImage.jpg";
+import ProfileNoImage from "../../img/MeetingRoom.png";
 import ucoin from "../../img/ucoin.png";
 import {
   Button,
@@ -15,7 +15,7 @@ import {
   Row,
 } from "reactstrap";
 
-const Profile = () => {
+const Profile = ({ modNickname }) => {
   const history = useHistory();
   const [imgBase64, setImgBase64] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({
@@ -25,7 +25,10 @@ const Profile = () => {
     ucoin: "",
   });
   const [toggleprofile, setToggleProfile] = useState(false);
-  const toggleProfileBtn = (e) => setToggleProfile(!toggleprofile);
+  const toggleProfileBtn = (e) => {
+    setToggleProfile(!toggleprofile);
+  };
+  const [checkProfile, setCheckProfile] = useState(false);
 
   let sessionUser = sessionStorage.getItem("email");
 
@@ -41,9 +44,20 @@ const Profile = () => {
     getProfile();
   }, []);
 
+  useEffect(() => {
+    if (checkProfile === true) {
+      getProfile();
+    }
+  }, [checkProfile]);
+
+  let checkMyprofile = (e) => {
+    setCheckProfile(e);
+  };
+
   const getProfile = async (e) => {
     const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
       sessionUser: sessionUser,
+      type: "profile",
     });
     if (res.data.imgURL !== "") {
       let staticpath = "http://localhost:3001";
@@ -55,6 +69,7 @@ const Profile = () => {
       ucoin: res.data.ucoin,
     };
     setProfileInfo(data);
+    setCheckProfile(false);
   };
 
   return (
@@ -65,13 +80,18 @@ const Profile = () => {
         flexDirection: "row",
         alignItems: "center",
         width: "180px",
+        marginBottom: "20px",
       }}
     >
       <button
         onClick={(e) => {
           toggleProfileBtn(e);
         }}
-        style={{ borderRadius: "16px", padding: "0%", borderColor: "#FF6895" }}
+        style={{
+          borderRadius: "16px",
+          padding: "0%",
+          border: "2px solid #e2e2e2e2",
+        }}
       >
         {imgBase64 === "" ? (
           <img
@@ -92,7 +112,9 @@ const Profile = () => {
         )}
       </button>
       <div style={{ display: "flex", flexDirection: "column", width: "100px" }}>
-        <div style={{ marginLeft: "15%", color: "#896E6E", fontWeight: "550" }}>
+        <div
+          style={{ marginLeft: "15%", color: "#896E6E", fontWeight: "bold" }}
+        >
           {ProfileInfo.nickname}
         </div>
         <div
@@ -104,7 +126,9 @@ const Profile = () => {
           }}
         >
           <img style={{ width: "30px", marginRight: "3%" }} src={ucoin}></img>
-          <div style={{ color: "#896E6E" }}>{ProfileInfo.ucoin}</div>
+          <div style={{ color: "#896E6E", fontWeight: "bold" }}>
+            {ProfileInfo.ucoin}
+          </div>
           <button
             onClick={coinWindow}
             style={{
@@ -137,7 +161,11 @@ const Profile = () => {
             </button>
           </Row>
           <Row>
-            <MyProfile />
+            <MyProfile
+              modNickname={(e) => modNickname(e)}
+              choicename={sessionStorage.getItem("nickname")}
+              checkProfilefunc={(e) => checkMyprofile(e)}
+            />
           </Row>
         </ModalBody>
       </Modal>

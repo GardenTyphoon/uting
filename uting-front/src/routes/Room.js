@@ -12,6 +12,7 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
+  Input,
 } from "reactstrap";
 import axios from "axios";
 import McBot from "../components/mc/McBot";
@@ -26,17 +27,19 @@ import MeetingControls from "../components/meeting/MeetingControls";
 import "react-toastify/dist/ReactToastify.css";
 import reportImg from "../img/report.png";
 import help from "../img/help.png";
+import airplane from "../img/airplane.png";
 import McBotTutorial from "../components/mc/McBotTutorial";
+import { backgroundColor } from "styled-system";
+import "./Room.css";
+import introLog from "../img/배경없는유팅로고.png";
 const McBotContainer = styled.div`
-  width: 250px;
-  height: 390px;
+  width: 350px;
+  height: 550px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
   padding: 20px;
-  padding-top: 10px;
   font-family: NanumSquare_acR;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,6 +53,7 @@ const Room = () => {
   const [socketFlag, setSocketFlag] = useState(false);
   const [socketId, setSocketId] = useState("");
   const [participantsSocketId, setParticipantsSocketId] = useState([]);
+  const [parObj, setParObj] = useState({});
   const [vote, setVote] = useState(false);
   const [participants, setParticipants] = useState([]);
   const [musicsrc, setMusicsrc] = useState("");
@@ -72,17 +76,43 @@ const Room = () => {
   const [role, setRole] = useState();
   const [gameNum, setGameNum] = useState();
   const [toggleHelp, setToggleHelp] = useState(false);
+  const [chimeinfo, setChimeinfo] = useState([]);
+  const [maxNum, setmaxNum] = useState();
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
+  const [flagMessage, setFlagMessage] = useState(true);
+  const [iloveyou, setIloveyou] = useState({
+    mylove: "",
+    socketid: "",
+    lovemessage: "",
+  });
+  const [existMidleave, setExistMidleave] = useState(false);
+  window.addEventListener("keydown", function (e) {
+    console.log(e.keyCode);
+    if (
+      (e.ctrlKey == true && (e.keyCode == 78 || e.keyCode == 82)) ||
+      e.keyCode === 116
+    ) {
+      console.log("f5");
+      e.preventDefault();
+    }
+  });
+  let toggleFlagMessage = () => {
+    setFlagMessage(!flagMessage);
+  };
+
+  let toggleAlert = (e) => {
+    setGetalert({ ...getalert, flag: !getalert.flag });
+  };
+
   let putSocketid = async (e) => {
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    //console.log("socketId.id",socketId)
     const res = await axios.post(
       "http://localhost:3001/users/savesocketid",
       data
     );
-    //console.log(res)
     setSocketFlag(true);
   };
 
@@ -100,9 +130,15 @@ const Room = () => {
       data
     );
 
-    if (res.data !== "undefined") {
-      setParticipantsSocketId(res.data);
+    if (res.data.socketid !== "undefined") {
+      setParObj(res.data);
       console.log(res.data);
+      let arr = [];
+      for (let i = 0; i < res.data.length; i++) {
+        arr.push(res.data[i].socketid);
+      }
+      setParticipantsSocketId(arr);
+      console.log(arr);
     }
   };
   useEffect(() => {
@@ -119,34 +155,26 @@ const Room = () => {
 
     const _id = meetingId;
     if (meetingId !== "") {
-      console.log("meetingId", meetingId);
       const res = await axios.post(
         "http://localhost:3001/meetings/getparticipants",
         { _id: meetingId }
       );
       let par = [];
-      for (let i = 0; i < res.data.length; i++) {
-        par.push(res.data[i].nickname);
+      for (let i = 0; i < res.data.users.length; i++) {
+        par.push(res.data.users[i].nickname);
+        setChimeinfo();
       }
-      setMeetingMembers(res.data);
-      console.log(par);
+      console.log("이거", res.data.chime_info);
+      setMeetingMembers(res.data.users);
+      console.log(res.data);
       setMeeting_id(meetingId);
       setParticipants(par);
+      setChimeinfo(res.data.chime_info);
+      console.log(res.data.maxNum);
+      setmaxNum(res.data.maxNum);
       setReady(true);
+      setExistMidleave(false);
     }
-  };
-
-  const submitReport = async () => {
-    let reportNickname = document.getElementsByName("reportNickname");
-    let reportContent = document.getElementsByName("reportContent");
-    const res = await axios.post("http://localhost:3001/reports/saveReport", {
-      reportTarget:
-        reportNickname[0].options[reportNickname[0].selectedIndex].value,
-      reportContent: reportContent[0].value,
-      reportRequester: sessionStorage.getItem("nickname"),
-    });
-    console.log(res.data);
-    alert(res.data);
   };
 
   useEffect(() => {
@@ -159,19 +187,19 @@ const Room = () => {
     ];
     //let index = Math.floor(Math.random() * messageArr.length);
     console.log(intervalMessageCheck);
-    if (intervalMessageCheck < 4) {
+    /* if (intervalMessageCheck < 4) {
       if (intervalMessageCheck === 0) {
         setTimeout(() => {
           setIntervalMessage(messageArr[0]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(2);
-        }, 600000);
+        }, 6000);
       } else if (intervalMessageCheck === 1) {
         setTimeout(() => {
           setIntervalMessage(messageArr[1]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(1);
-        }, 1200000);
+        }, 6000);
       } else if (intervalMessageCheck === 2) {
         setTimeout(() => {
           setIntervalMessage(messageArr[2]);
@@ -185,10 +213,11 @@ const Room = () => {
           setIntervalFade(4);
         }, 1200000);
       }
-    }
+    }*/
   }, [intervalMessageCheck]);
 
   useEffect(() => {
+    setGetalert({ flag: false, message: "" });
     const socket = socketio.connect("http://localhost:3001");
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
@@ -253,6 +282,12 @@ const Room = () => {
       } else if (data.type === "notifyRole") {
         toast(data.message);
         setRole(data.role);
+      } else if (data.type === "golove") {
+        toast(data.sender + "님이 - >" + data.message);
+      } else if (data.type === "midleave") {
+        toast(data.midleaveUser + "님이 퇴장하셨습니다.");
+        setExistMidleave(true);
+        getparticipants();
       }
     });
     return () => {
@@ -261,6 +296,14 @@ const Room = () => {
       socket.removeListener("connect");
     };
   }, []);
+
+  useEffect(() => {
+    if (existMidleave === true) {
+      console.log("여깅");
+      getparticipants();
+    }
+  }, [existMidleave]);
+
   useEffect(() => {
     if (socketFlag === true) {
       setTimeout(() => {
@@ -293,6 +336,7 @@ const Room = () => {
     // users 디비에 ucoin차감하기
     let ismember = false;
     let mem = {};
+    console.log("meetingMembers", meetingMembers);
     for (let i = 0; i < meetingMembers.length; i++) {
       if (meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
         ismember = true;
@@ -315,12 +359,71 @@ const Room = () => {
       if (res.data === "success") {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
-        alert("미팅 방을 나갑니다.");
-        window.location.href = "http://localhost:3000/main";
+        //alert("미팅 방을 나갑니다.");
+        for (let i = 0; i < parObj.length; i++) {
+          if (parObj[i].nickname === sessionStorage.getItem("nickname")) {
+            parObj.splice(i, 1);
+            i--;
+          }
+        }
+        const socket = socketio.connect("http://localhost:3001");
+        socket.emit("midleave", {
+          memlist: parObj,
+          midleaveUser: sessionStorage.getItem("nickname"),
+        });
+
+        setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
+        setTimeout(() => {
+          setGetalert({ flag: false, message: "" });
+          window.location.href = "http://localhost:3000/main";
+        }, 2000);
+      } else if (res.data === "last") {
+        setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
+        setTimeout(async () => {
+          await endMeeting(meeting_id);
+          setGetalert({ flag: false, message: "" });
+          window.location.href = "http://localhost:3000/main";
+        }, 1500);
       }
     }
   };
 
+  let onChangehandler = (e) => {
+    let { name, value } = e.target;
+    console.log(parObj);
+    if (name === "mylove") {
+      for (let i = 0; i < parObj.length; i++) {
+        if (parObj[i].nickname === value) {
+          setIloveyou({
+            ...iloveyou,
+            ["mylove"]: value,
+            ["socketid"]: parObj[i].socketid,
+          });
+        }
+      }
+      //value는 학점줄 닉네임
+    } else if (name === "lovemessage") {
+      setIloveyou({ ...iloveyou, ["lovemessage"]: value });
+    }
+  };
+
+  let goLove = () => {
+    let data = {
+      mylove: iloveyou.mylove,
+      message: iloveyou.lovemessage,
+      socketid: iloveyou.socketid,
+      sender: sessionStorage.getItem("nickname"),
+    };
+    toast(iloveyou.mylove + "님에게 정상적으로 메시지를 보냈습니다.");
+    document.getElementsByName("loveinput").values = "";
+    document.getElementsByName("mylove").values = "";
+    const socket = socketio.connect("http://localhost:3001");
+    socket.emit("golove", { lovemessage: data });
+  };
+
+  useEffect(() => {
+    console.log(iloveyou);
+  }, [iloveyou]);
   useEffect(() => {
     saveParticipantsSocketId();
   }, [participants]);
@@ -335,6 +438,7 @@ const Room = () => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        overflow: "hidden",
       }}
     >
       <div
@@ -344,83 +448,28 @@ const Room = () => {
           float: "left",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
         }}
       >
-        <MeetingRoom />
-        <MeetingControls />
+        <MeetingRoom info={chimeinfo} max={maxNum} />
+        <div style={{ height: "15%" }}></div> {/* 이걸로 조정해뒀음 */}
+        <MeetingControls participantss={participants} />
       </div>
       <div
         style={{
           width: "20%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "space-evenly",
+          alignItems: "flex-end",
         }}
       >
-        <div>
-          <button
-            onClick={() => setToggleReport(!toggleReport)}
-            style={{
-              borderStyle: "none",
-              background: "transparent",
-              position: "relative",
-              left: "90px",
-              bottom: "10px",
-            }}
-          >
-            <img src={reportImg} width="30" />
-          </button>
-        </div>
-        <ReactAudioPlayer
-          style={{ width: "250px" }}
-          id="audio"
-          src={musicsrc}
-          controls
-        />
-        <McBotContainer>
-          <button
-            onClick={() => setToggleHelp(!toggleHelp)}
-            style={{
-              borderStyle: "none",
-              background: "transparent",
-              position: "relative",
-              left: "90px",
-            }}
-          >
-            <img src={help} width="25" />
-          </button>
-          {intervalMessage}
-          <McBot
-            participantsSocketIdList={participantsSocketId}
-            currentSocketId={socketId}
-            participants={participants}
-            respondFlag={respondFlag}
-            gameStartFlag={gameStartFlag}
-            gameEndFlag={gameEndFlag}
-            gameTurn={gameTurn}
-            question={question}
-            participantsForTurn={participantsForTurn}
-            intervalFade={intervalFade}
-            role={role}
-            gameNum_2={gameNum}
-          ></McBot>
-        </McBotContainer>
-
-        <Vote
-          ref={voteRef}
-          participantsSocketIdList={participantsSocketId}
-          participants={participants}
-          meeting_id={meeting_id}
-          meetingMembers={meetingMembers}
-        ></Vote>
-
         <Dropdown
-          direction="up"
+          direction="down"
           isOpen={endMeetingBtn}
           toggle={() => {
             setEndMeetingBtn(!endMeetingBtn);
+            endMeetingBtn === false
+              ? setFlagMessage(false)
+              : setFlagMessage(true);
           }}
         >
           <DropdownToggle
@@ -446,8 +495,129 @@ const Room = () => {
             <DropdownItem onClick={() => midLeaveBtn()}>중도 퇴장</DropdownItem>
           </DropdownMenu>
         </Dropdown>
+        <Vote
+          ref={voteRef}
+          participantsSocketIdList={participantsSocketId}
+          participants={participants}
+          meeting_id={meeting_id}
+          meetingMembers={meetingMembers}
+        ></Vote>
+        <div style={{ height: "10%" }}></div> {/* 이걸로 조정해뒀음 */}
+        {flagMessage === true ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "10%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "NanumSquare_acR",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div>To.</div>
+              <select
+                className="loveinput"
+                name="mylove"
+                style={{
+                  width: "100%",
+                  marginLeft: "10px",
+                  border: "0",
+                  backgroundColor: "rgb(255,228,225)",
+                  borderBottom: "2px solid gray",
+                }}
+                onChange={(e) => onChangehandler(e)}
+              >
+                <option value="" selected>
+                  받는 사람
+                </option>
+                {participants.map((data, i) => {
+                  return data !== sessionStorage.getItem("nickname") ? (
+                    <option value={data}>{data}</option>
+                  ) : (
+                    ""
+                  );
+                })}
+              </select>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "NanumSquare_acR",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "10px",
+              }}
+            >
+              <input
+                className="loveinput"
+                placeholder="메시지를 입력해주세요."
+                style={{
+                  width: "150%",
+                  marginLeft: "10%",
+                  border: "0",
+                  backgroundColor: "rgb(255,228,225)",
+                  borderBottom: "2px solid gray",
+                }}
+                type="text"
+                name="lovemessage"
+                onChange={(e) => onChangehandler(e)}
+              />
+              <button
+                style={{ border: "0", backgroundColor: "rgb(255,228,225)" }}
+                onClick={(e) => goLove(e)}
+              >
+                <img src={airplane} style={{ width: "40px", height: "40px" }} />
+              </button>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+        <McBotContainer>
+          <button
+            onClick={() => setToggleHelp(!toggleHelp)}
+            style={{
+              borderStyle: "none",
+              background: "transparent",
+              position: "relative",
+              left: "90px",
+            }}
+          >
+            <img src={help} width="25" />
+          </button>
+          {intervalMessage}
+
+          <McBot
+            participantsSocketIdList={participantsSocketId}
+            currentSocketId={socketId}
+            participants={participants}
+            respondFlag={respondFlag}
+            gameStartFlag={gameStartFlag}
+            gameEndFlag={gameEndFlag}
+            gameTurn={gameTurn}
+            question={question}
+            participantsForTurn={participantsForTurn}
+            intervalFade={intervalFade}
+            role={role}
+            gameNum_2={gameNum}
+          ></McBot>
+          <div>
+            <ReactAudioPlayer
+              style={{ width: "300px" }}
+              id="audio"
+              src={musicsrc}
+              controls
+            />
+          </div>
+        </McBotContainer>
       </div>
-      <ToastContainer />
 
       <Modal isOpen={!ready}>
         <ModalBody
@@ -467,42 +637,18 @@ const Room = () => {
       <Modal isOpen={toggleMidLeave}>
         <ModalHeader>중도 퇴장</ModalHeader>
         <ModalBody>
-          중도 퇴장을 하시면 U COIN이 1 차감하게 됩니다. 그래도 퇴장을 원하시면
-          나가기를 눌러주세요.
+          <span style={{ color: "red", fontWeight: "bold" }}>중도 퇴장</span>을
+          하시면 <span style={{ fontWeight: "bold" }}>U COIN이 1 차감</span>하게
+          됩니다.
+          <br />
+          그래도 퇴장을 원하시면{" "}
+          <span style={{ fontWeight: "bold" }}>나가기</span>를 눌러주세요.
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}></Button>{" "}
-          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>
-            취소
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <Modal isOpen={toggleReport}>
-        <ModalHeader>사용자 신고</ModalHeader>
-        <ModalBody>
-          <select name="reportNickname">
-            <option value="default" selected>
-              신고 할 닉네임을 선택해주세요.
-            </option>
-            {participants.map((mem) => {
-              if (mem != sessionStorage.getItem("nickname")) {
-                return <option value={mem}>{mem}</option>;
-              }
-            })}
-          </select>
-          <textarea
-            name="reportContent"
-            placeholder="신고 사유를 적어주세요."
-          ></textarea>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => submitReport()}>
-            신고하기
+          <Button color="primary" onClick={(e) => midLeave(e)}>
+            나가기
           </Button>{" "}
-          <Button
-            color="secondary"
-            onClick={() => setToggleReport(!toggleReport)}
-          >
+          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>
             취소
           </Button>
         </ModalFooter>
@@ -518,6 +664,35 @@ const Room = () => {
             확인
           </Button>
         </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
       </Modal>
     </div>
   );

@@ -15,7 +15,9 @@ import SignIn from "../components/user/SignIn";
 import Main from "./Main";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
-
+import introLog from "../img/인트로유팅로고.png";
+import intromessage from "../img/인트로메시지.png";
+import labelsticker from "../img/라벨지.png";
 const Intro = () => {
   const history = useHistory();
   const [toggleSignIn, setToggleSignIn] = useState(false);
@@ -31,19 +33,18 @@ const Intro = () => {
     });
   };
 
-  let logout = async(e)=>{
-    
-    let data={email:sessionStorage.getItem("email")}
-    console.log(data)
-    const res = await axios.post('http://localhost:3001/users/logout',data)
-    if(res.data==="success"){
+  let logout = async (e) => {
+    let data = { email: sessionStorage.getItem("email") };
+    console.log(data);
+    const res = await axios.post("http://localhost:3001/users/logout", data);
+    if (res.data === "success") {
       sessionStorage.clear();
       window.location.href = "http://localhost:3000/";
     }
-    if(res.data==="no"){
-      alert("Error")
+    if (res.data === "no") {
+      alert("Error");
     }
-  }
+  };
 
   const toggleSignInBtn = (e) => {
     setToggleSignIn(!toggleSignIn);
@@ -59,53 +60,82 @@ const Intro = () => {
 
   return (
     <div className="IntroContainer">
-      {isLoggedIn === false ? (
-        <div >
-          <button
-            className="LogInOutBtn"
-            onClick={(e) => {
-              toggleSignInBtn(e);
-            }}
-          >
-            로그인
-          </button>
-          <button className="MiddleBtn" onClick={onClick}>
-            계정 만들기
-          </button>
+      <Row className="signinclass">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            marginRight: "20px",
+          }}
+        >
+          <img className="intrologo" src={introLog} />
+          <img className="intromessage" src={intromessage}></img>
         </div>
-      ) : (
-        <div>
-          <button onClick={(e)=>logout(e)} className="LogInOutBtn">logout</button>
-          <button className="MiddleBtn" onClick={goMain}>
-            미팅 즐기러 가기
-          </button>
-        </div>
-      )}
-      
-      <Container>
-        <Modal isOpen={toggleSignIn} style={{ width: "50%" , maxWidth:"350px"}}>
-          <ModalBody isOpen={toggleSignIn}>
-            <button
-              onClick={(e) => {
-                toggleSignInBtn(e);
-              }}
-              style={{
-                background: "transparent",
-                border: "none",
-                position: "absolute",
-                left: "90%",
-              }}
-            >
-              X
-            </button>
+        <Col>
+          <div className="col2">
+            {isLoggedIn === false ? (
+              <>
+                <SignIn />
+                <div className="findAccount">
+                  <button
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "gray",
+                    }}
+                  >
+                    아이디 찾기
+                  </button>{" "}
+                  |
+                  <button
+                    style={{
+                      background: "transparent",
+                      border: "none",
+                      color: "gray",
+                    }}
+                  >
+                    비밀번호 찾기
+                  </button>
+                </div>
+                <div className="createaccount">
+                  <button className="MiddleBtn" onClick={onClick}>
+                    계정 만들기
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                <div className="Logoutcontainer">
+                  <span className="logoutname">
+                    {sessionStorage.getItem("nickname")}님 <br></br> 반갑습니다.
+                  </span>
+                  <button onClick={(e) => logout(e)} className="LogInOutBtn">
+                    Logout
+                  </button>
+                </div>
 
-            <Row>
-              <SignIn />
-            </Row>
-          </ModalBody>
-        </Modal>
-      </Container>
-      <div className="diva" ><Link className="divad" to="/ad">광고 문의</Link></div>
+                <button className="MiddleBtn" onClick={goMain}>
+                  미팅 즐기러 가기
+                </button>
+              </div>
+            )}
+          </div>
+        </Col>
+      </Row>
+
+      <div className="diva">
+        <Link className="divad" to="/ad">
+          광고 문의
+        </Link>
+      </div>
     </div>
   );
 };

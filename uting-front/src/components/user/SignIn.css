@@ -1,40 +1,44 @@
-@font-face{
-    font-family:'NanumSquare_acR';
-    src:url('./../../ttf/NanumSquare_acR.ttf');
+@font-face {
+  font-family: "NanumSquare_acR";
+  src: url("./../../ttf/NanumSquare_acR.ttf");
 }
 
-.SignInContainer{
-    background-color:white;
-    
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    font-family : NanumSquare_acR;
-    padding:3%;
-    border-radius: 20px;
+.SignInContainer {
+  background-color: white;
+
+  font-family: NanumSquare_acR;
+  border-radius: 20px;
+
+  padding-top: 10%;
+  padding-bottom: 10%;
+
+  margin-bottom: 20px;
 }
-.InputContainer{
-    display:flex;
-    flex-direction: column;
-    width:50%;
+.InputContainer {
+  display: flex;
+  flex-direction: column;
+  padding-right: 0px;
 }
-.SignInBtnContainer{
-    display: flex;
-    align-items:center;
+.SignInBtnContainer {
+  display: flex;
+  align-items: center;
 }
-.DoSignIn{
-    width:100%;
-    border:none;
-    color:black;
-    background-color: #F6CDCD;
-    border-radius: 10px;
-    padding-top:15%;
-    padding-bottom:15%;
+.DoSignIn {
+  width: 70px;
+  min-width: 70px;
+  border: none;
+  color: black;
+  background-color: #f6cdcd;
+  border-radius: 10px;
+  padding-top: 25%;
+  padding-bottom: 25%;
 }
-.signInInput{
-    background-color: #F6CDCD;
-    
-    border: none;
-    margin: 10px;
-    padding: 5px;
+.signInInput {
+  background-color: #f6cdcd;
+
+  border-radius: 10px;
+  border: none;
+  margin: 10px;
+  padding: 12px;
+  width: 220px;
 }
