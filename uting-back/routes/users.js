@@ -7,6 +7,13 @@ const { User } = require("../model");
 let nodemailer = require("nodemailer");
 let smtpTransport = require("nodemailer-smtp-transport");
 const { exec } = require("child_process");
+<<<<<<< HEAD
+const crypto = require("crypto");
+const config = require("../config");
+const jwt = require("jsonwebtoken");
+const { rejects } = require("assert");
+=======
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
 
 fs.readdir("uploads", (error) => {
   // uploads 폴더 없으면 생성
@@ -29,7 +36,10 @@ const upload = multer({
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
+<<<<<<< HEAD
+=======
   console.log(req.body);
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
     smtpTransport({
@@ -61,20 +71,35 @@ router.post("/sendEmail", async function (req, res, next) {
 });
 
 router.post("/signup", function (req, res, next) {
+<<<<<<< HEAD
+  const encrypted = crypto
+    .createHmac("sha1", config.secret)
+    .update(req.body.password)
+    .digest("base64");
+=======
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
   const user = new User({
     name: req.body.name,
     nickname: req.body.nickname,
     gender: req.body.gender,
     birth: req.body.birth,
     email: req.body.email,
+<<<<<<< HEAD
+    password: encrypted,
+=======
     password: req.body.password,
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
     phone: req.body.phone,
     imgURL: "",
     mannerCredit: 3.5,
     status: false,
     socketid: "",
     ucoin: Number(0),
+<<<<<<< HEAD
+    beReported: Number(0),
+=======
     beReported:Number(0),
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
   });
 
   user.save((err) => {
@@ -83,6 +108,78 @@ router.post("/signup", function (req, res, next) {
 });
 
 router.post("/signin", function (req, res, next) {
+<<<<<<< HEAD
+  const { email, password } = req.body;
+  const secret = req.app.get("jwt-secret");
+  let perObj = {};
+
+  const check = (user) => {
+    if (!user) {
+      // user does not exist
+      throw new Error("login failed");
+    } else {
+      // user exists, check the password
+      if (user.verify(password)) {
+        if (user.beReported >= 3) {
+          res.send("hell");
+        } else {
+          perObj = user;
+          // create a promise that generates jwt asynchronously
+          const p = new Promise((resolve, reject) => {
+            jwt.sign(
+              {
+                _id: user._id,
+                name: user.name,
+                nickname: user.nickname,
+                gender: user.gender,
+                birth: user.birth,
+                email: user.email,
+                phone: user.phone,
+                imgURL: user.imgURL,
+                mannerCredit: user.mannerCredit,
+                socketid: user.socketid,
+                ucoin: user.ucoin,
+                beReported: user.beReported,
+              },
+              secret,
+              {
+                expiresIn: "3h", //s , h ,d sec, hour, day
+                issuer: "uting.com",
+                subject: "userInfo",
+              },
+              (err, token) => {
+                if (err) {
+                  console.log(err);
+                  reject(err);
+                }
+                resolve(token);
+              }
+            );
+          });
+          return p;
+        }
+      } else {
+        throw new Error("login failed");
+      }
+    }
+  };
+
+  const respond = (token) => {
+    console.log(token);
+    res.json({
+      message: "logged in successfully",
+      token,
+      perObj,
+    });
+  };
+
+  const onError = (error) => {
+    res.status(200).json({
+      message: error.message,
+    });
+  };
+  User.findOneByEmail(email).then(check).then(respond).catch(onError);
+=======
   let ismember = false;
   let perObj = {};
 
@@ -130,16 +227,23 @@ router.post("/signin", function (req, res, next) {
       res.send("아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.");
     }
   });
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
 });
 
 router.post("/checknickname", function (req, res, next) {
   let ismember = false;
+<<<<<<< HEAD
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (req.body.nickname === per.nickname) {
+=======
   console.log(req.body.nickname);
   User.find(function (err, user) {
     //console.log(user)
     user.forEach((per) => {
       if (req.body.nickname === per.nickname) {
         console.log(per);
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
         ismember = true;
         res.send("exist");
       }
@@ -153,6 +257,11 @@ router.post("/checknickname", function (req, res, next) {
 router.post("/viewMyProfile", function (req, res, next) {
   User.find(function (err, user) {
     user.forEach((per) => {
+<<<<<<< HEAD
+      if (req.body.sessionUser === per.email) {
+        res.send(per);
+      }
+=======
       if(req.body.type==="profile"){
         if (req.body.sessionUser === per.email) {
           res.send(per);
@@ -164,6 +273,7 @@ router.post("/viewMyProfile", function (req, res, next) {
         }
       }
       
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
     });
   });
 });
@@ -218,7 +328,13 @@ router.post("/modifyMyProfile", function (req, res, next) {
         imgURL: req.body.imgURL,
       },
     },
+<<<<<<< HEAD
     (err, us) => {}
+=======
+    (err, us) => {
+      res.send("success")
+    }
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
   );
 });
 
@@ -244,10 +360,15 @@ router.post("/addUcoin", function (req, res, next) {
 router.post("/logined", function (req, res, next) {
   let ismember = false;
   User.find(function (err, user) {
+<<<<<<< HEAD
+    user.forEach((per) => {
+      if (req.body.addMember === per.nickname && per.status === true) {
+=======
     //console.log(user)
     user.forEach((per) => {
       if (req.body.addMember === per.nickname && per.status === true) {
         console.log(per);
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
         ismember = true;
         res.send(per);
       }
@@ -263,7 +384,10 @@ router.post("/savesocketid", function (req, res, next) {
   let ismember = false;
   let perObj = {};
   User.find(function (err, user) {
+<<<<<<< HEAD
+=======
     //console.log(user)
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
     user.forEach((per) => {
       if (req.body.currentUser === per.nickname) {
         ismember = true;
@@ -282,13 +406,20 @@ router.post("/savesocketid", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+<<<<<<< HEAD
+=======
             password: perObj.password,
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: req.body.currentSocketId.id,
+<<<<<<< HEAD
+            beReported: perObj.beReported,
+=======
             beReported:perObj.beReported
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
           },
         },
         (err, u) => {
@@ -311,7 +442,10 @@ router.post("/logout", function (req, res, next) {
       if (req.body.email === per.email) {
         ismember = true;
         perObj = per;
+<<<<<<< HEAD
+=======
         console.log("로그아웃", per);
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
       }
     });
     if (ismember === true) {
@@ -326,23 +460,36 @@ router.post("/logout", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+<<<<<<< HEAD
+=======
             password: perObj.password,
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
+<<<<<<< HEAD
+            beReported: perObj.beReported,
+          },
+        },
+        (err, u) => {
+=======
             beReported:perObj.beReported
           },
         },
         (err, u) => {
           console.log(perObj);
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
           res.send("success");
         }
       );
     }
     if (ismember === false) {
+<<<<<<< HEAD
+=======
       console.log("no!");
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
       res.send("no");
     }
   });
@@ -357,6 +504,12 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
+<<<<<<< HEAD
+            socketidList.push(per.socketid);
+          }
+        });
+      });
+=======
             console.log(mem + " : " + per.socketid);
             let data={
               nickname:per.nickname,
@@ -367,11 +520,25 @@ router.post("/preMemSocketid", function (req, res, next) {
         });
       });
       console.log("socketidList : " + socketidList);
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
       res.send(socketidList);
     });
   }
 });
 
+<<<<<<< HEAD
+router.post("/cutUcoin", function (req, res, next) {
+  let perObj = {};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (req.body.currentUser === per.nickname) {
+        ismember = true;
+        perObj = per;
+      }
+    });
+    if (ismember === true) {
+=======
 router.post("/cutUcoin",function(req,res,next){
   let perObj={};
   let ismember = false;
@@ -388,6 +555,7 @@ router.post("/cutUcoin",function(req,res,next){
     });
     if(ismember===true){
 
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -399,6 +567,14 @@ router.post("/cutUcoin",function(req,res,next){
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+<<<<<<< HEAD
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: perObj.mannerCredit,
+            ucoin: perObj.ucoin - 1,
+            socketid: perObj.socketid,
+            beReported: perObj.beReported,
+=======
             password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
@@ -406,12 +582,30 @@ router.post("/cutUcoin",function(req,res,next){
             ucoin: perObj.ucoin-1,
             socketid: perObj.socketid,
             beReported:perObj.beReported
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
           },
         },
         (err, u) => {
           res.send("success");
         }
       );
+<<<<<<< HEAD
+    }
+  });
+});
+
+router.post("/manner", function (req, res, next) {
+  let perObj = {};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (req.body.name === per.nickname) {
+        ismember = true;
+        perObj = per;
+      }
+    });
+    if (ismember === true) {
+=======
 
     }
     
@@ -430,6 +624,7 @@ router.post("/manner",function(req,res,next){
     
     });
     if(ismember===true){
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -441,6 +636,14 @@ router.post("/manner",function(req,res,next){
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+<<<<<<< HEAD
+            phone: perObj.phone,
+            imgURL: perObj.imgURL,
+            mannerCredit: (perObj.mannerCredit + req.body.manner) / 2,
+            ucoin: perObj.ucoin,
+            socketid: perObj.socketid,
+            beReported: perObj.beReported,
+=======
             password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
@@ -448,12 +651,30 @@ router.post("/manner",function(req,res,next){
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
             beReported:perObj.beReported
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
           },
         },
         (err, u) => {
           res.send("success");
         }
       );
+<<<<<<< HEAD
+    }
+  });
+});
+
+router.post("/report", function (req, res, next) {
+  let perObj = {};
+  let ismember = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (req.body.nickname === per.nickname) {
+        ismember = true;
+        perObj = per;
+      }
+    });
+    if (ismember === true) {
+=======
 
     }
     
@@ -473,6 +694,7 @@ router.post('/report',function(req,res,next){
     
     });
     if(ismember===true){
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
       User.findByIdAndUpdate(
         perObj._id,
         {
@@ -484,20 +706,36 @@ router.post('/report',function(req,res,next){
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+<<<<<<< HEAD
+
+=======
             password: perObj.password,
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
             ucoin: perObj.ucoin,
             socketid: perObj.socketid,
+<<<<<<< HEAD
+            beReported: perObj.beReported + 1,
+=======
             beReported:perObj.beReported+1
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
           },
         },
         (err, u) => {
           res.send("success");
         }
       );
+<<<<<<< HEAD
+    }
+  });
+});
+=======
 
+    }
+    else if(ismember===false){
+      res.send("fail")
     }
     
   });
@@ -505,5 +743,6 @@ router.post('/report',function(req,res,next){
 
 
 
+>>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
 
 module.exports = router;

@@ -33,14 +33,13 @@ import { backgroundColor } from "styled-system";
 import "./Room.css";
 import introLog from "../img/배경없는유팅로고.png";
 const McBotContainer = styled.div`
-  width: 250px;
-  height: 600px;
+  width: 350px;
+  height: 550px;
   background: #fbbcb5;
   border-radius: 15px;
   text-align: center;
   padding: 20px;
   font-family: NanumSquare_acR;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,6 +86,17 @@ const Room = () => {
     lovemessage: "",
   });
 
+  const [existMidleave, setExistMidleave] = useState(false);
+  window.addEventListener("keydown", function (e) {
+    console.log(e.keyCode);
+    if (
+      (e.ctrlKey == true && (e.keyCode == 78 || e.keyCode == 82)) ||
+      e.keyCode === 116
+    ) {
+      console.log("f5");
+      e.preventDefault();
+    }
+  });
   let toggleFlagMessage = () => {
     setFlagMessage(!flagMessage);
   };
@@ -100,12 +110,10 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    //console.log("socketId.id",socketId)
     const res = await axios.post(
       "http://localhost:3001/users/savesocketid",
       data
     );
-    //console.log(res)
     setSocketFlag(true);
   };
 
@@ -166,6 +174,7 @@ const Room = () => {
       console.log(res.data.maxNum);
       setmaxNum(res.data.maxNum);
       setReady(true);
+      setExistMidleave(false);
     }
   };
 
@@ -179,7 +188,7 @@ const Room = () => {
     ];
     //let index = Math.floor(Math.random() * messageArr.length);
     console.log(intervalMessageCheck);
-    if (intervalMessageCheck < 4) {
+    /* if (intervalMessageCheck < 4) {
       if (intervalMessageCheck === 0) {
         setTimeout(() => {
           setIntervalMessage(messageArr[0]);
@@ -205,7 +214,7 @@ const Room = () => {
           setIntervalFade(4);
         }, 1200000);
       }
-    }
+    }*/
   }, [intervalMessageCheck]);
 
   useEffect(() => {
@@ -276,6 +285,10 @@ const Room = () => {
         setRole(data.role);
       } else if (data.type === "golove") {
         toast(data.sender + "님이 - >" + data.message);
+      } else if (data.type === "midleave") {
+        toast(data.midleaveUser + "님이 퇴장하셨습니다.");
+        setExistMidleave(true);
+        getparticipants();
       }
     });
     return () => {
@@ -284,6 +297,14 @@ const Room = () => {
       socket.removeListener("connect");
     };
   }, []);
+
+  useEffect(() => {
+    if (existMidleave === true) {
+      console.log("여깅");
+      getparticipants();
+    }
+  }, [existMidleave]);
+
   useEffect(() => {
     if (socketFlag === true) {
       setTimeout(() => {
@@ -316,6 +337,7 @@ const Room = () => {
     // users 디비에 ucoin차감하기
     let ismember = false;
     let mem = {};
+    console.log("meetingMembers", meetingMembers);
     for (let i = 0; i < meetingMembers.length; i++) {
       if (meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
         ismember = true;
@@ -339,6 +361,17 @@ const Room = () => {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
         //alert("미팅 방을 나갑니다.");
+        for (let i = 0; i < parObj.length; i++) {
+          if (parObj[i].nickname === sessionStorage.getItem("nickname")) {
+            parObj.splice(i, 1);
+            i--;
+          }
+        }
+        const socket = socketio.connect("http://localhost:3001");
+        socket.emit("midleave", {
+          memlist: parObj,
+          midleaveUser: sessionStorage.getItem("nickname"),
+        });
 
         setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
         setTimeout(() => {
@@ -382,6 +415,10 @@ const Room = () => {
       socketid: iloveyou.socketid,
       sender: sessionStorage.getItem("nickname"),
     };
+    toast(iloveyou.mylove + "님에게 정상적으로 메시지를 보냈습니다.");
+    document.getElementsByName("loveinput").values = "";
+    document.getElementsByName("mylove").values = "";
+
     const socket = socketio.connect("http://localhost:3001");
     socket.emit("golove", { lovemessage: data });
   };
@@ -467,7 +504,7 @@ const Room = () => {
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
         ></Vote>
-        <div style={{ height: "43%" }}></div> {/* 이걸로 조정해뒀음 */}
+        <div style={{ height: "10%" }}></div> {/* 이걸로 조정해뒀음 */}
         {flagMessage === true ? (
           <div
             style={{
@@ -490,7 +527,7 @@ const Room = () => {
                 className="loveinput"
                 name="mylove"
                 style={{
-                  width: "180px",
+                  width: "100%",
                   marginLeft: "10px",
                   border: "0",
                   backgroundColor: "rgb(255,228,225)",
@@ -524,7 +561,7 @@ const Room = () => {
                 className="loveinput"
                 placeholder="메시지를 입력해주세요."
                 style={{
-                  width: "180px",
+                  width: "150%",
                   marginLeft: "10%",
                   border: "0",
                   backgroundColor: "rgb(255,228,225)",
@@ -575,7 +612,7 @@ const Room = () => {
           ></McBot>
           <div>
             <ReactAudioPlayer
-              style={{ width: "230px" }}
+              style={{ width: "300px" }}
               id="audio"
               src={musicsrc}
               controls

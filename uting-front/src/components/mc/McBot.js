@@ -35,7 +35,7 @@ const Box = styled.div`
   padding: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-  height: 180px;
+  height: 270px;
   font-size: large;
   font-weight: 500;
 `;
@@ -304,7 +304,7 @@ const McBot = ({
                     <Button
                       outline
                       color="secondary"
-                      style={{ border: 0}}
+                      style={{ border: 0 }}
                       onClick={() => setGameNum(1)}
                     >
                       귓속말 게임

@@ -19,7 +19,6 @@ import {
   CarouselCaption,
 } from "reactstrap";
 import "./EarInMal.css";
-
 const items = [
   //for 설명서
   {
@@ -89,16 +88,15 @@ const EarInMal = ({
   };
 
   function getRandomInt(min, max) {
-    //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
   }
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
-    setTurn(member[0]);
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
+    setTurn(member[rand]);
+    console.log("participantsForTurn :" + participantsForTurn);
     var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
-    //console.log("tmp : " + tmp);
+
     setParticipantsForTurn(tmp);
   };
 
@@ -107,15 +105,6 @@ const EarInMal = ({
     determineTurn(participantsForTurn);
     setFlag(true);
   };
-
-  /*useEffect(() => {
-    if (!startButtonFade) {
-      data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
-      const socket = socketio.connect("http://localhost:3001");
-      socket.emit("gameStart", data);
-    }
-  }, [startButtonFade]);*/
-
   const globalizeGameStart = () => {
     data = {
       gameName: "귓속말게임",
@@ -127,15 +116,10 @@ const EarInMal = ({
   };
 
   useEffect(() => {
-    //console.log("participantsForTurnSet :" + participantsForTurn);
     if (participantsForTurnSet) {
       setParticipantsForTurn(participantsForTurnSet);
     }
   }, [participantsForTurnSet]);
-
-  /*useEffect(() => {
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
-  }, [participantsForTurn]);*/
 
   useEffect(() => {
     if (gameStartFlag) {
@@ -158,14 +142,14 @@ const EarInMal = ({
   useEffect(async () => {
     if (flag) {
       globalizeGameStart();
-      globalizeTurn(); //+
+      globalizeTurn();
       setFlag(false);
     }
   }, [flag]);
 
   useEffect(async () => {
     if (giveTurnFlag) {
-      globalizeTurn(); //+
+      globalizeTurn();
       setGiveTurnFlag(false);
     }
   }, [giveTurnFlag]);
@@ -181,7 +165,6 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       remainParticipants: participantsForTurn,
     });
-    //.emit("notifyMember", { turnSocketId: toSendSckId });
   };
 
   useEffect(() => {
@@ -410,7 +393,12 @@ const EarInMal = ({
                   >
                     질문 알려주기
                   </h5>
-                  <div style={{ gridColumn: "1/5", gridRow: "2/4" }}>
+                  <div
+                    style={{
+                      gridColumn: "1/5",
+                      gridRow: "1/3",
+                    }}
+                  >
                     {participants.map((member) => (
                       <Button
                         outline
@@ -430,9 +418,8 @@ const EarInMal = ({
                     style={{
                       border: 0,
                       float: "left",
-                      paddingBottom: "10px",
-                      gridColumn: "1/2",
-                      gridRow: "3/5",
+                      gridColumn: "1/3",
+                      gridRow: "4/5",
                     }}
                     onClick={giveTurn}
                   >
@@ -443,8 +430,8 @@ const EarInMal = ({
                     color="danger"
                     style={{
                       border: 0,
-                      gridColumn: "3/4",
-                      gridRow: "3/5",
+                      gridColumn: "3/5",
+                      gridRow: "4/5",
                     }}
                     onClick={ending}
                   >
@@ -453,22 +440,10 @@ const EarInMal = ({
                 </>
               ) : (
                 <>
-                  <h5
-                    style={{
-                      fontSize: "medium",
-                      gridColumn: "1/5",
-                      margin: "0px",
-                    }}
-                  >
+                  <h5 style={{ fontSize: "medium", gridColumn: "1/5" }}>
                     질문할 사용자 선택
                   </h5>
-                  <div
-                    style={{
-                      gridColumn: "1/5",
-                      girdRow: "1/3",
-                      padding: "0px",
-                    }}
-                  >
+                  <div style={{ gridColumn: "1/5", girdRow: "1/3" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
@@ -518,7 +493,7 @@ const EarInMal = ({
                   >
                     {question}
                   </div>
-                  <div style={{ gridColumn: "1/4", gridRow: "2" }}>
+                  <div style={{ gridColumn: "1/5", gridRow: "2" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
@@ -539,12 +514,12 @@ const EarInMal = ({
                     style={{
                       fontSize: "medium",
                       float: "left",
-                      gridColumn: "1/3",
+                      gridColumn: "1/5",
                     }}
                   >
                     Turn : {turn}님
                   </div>
-                  <div style={{ gridColumn: "1/4" }}>차례를 기다리세요</div>
+                  <div style={{ gridColumn: "1/5" }}>차례를 기다리세요</div>
                 </>
               )}
             </>
