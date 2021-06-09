@@ -76,9 +76,7 @@ const GroupTitle = styled.div`
 `;
 
 const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyNickname }) => {
-  const [currentUser, setCurrentUser] = useState(
-    sessionStorage.getItem("nickname")
-  );
+  
   const [addMemberModal, setAddMemberModal] = useState(false);
   const [groupMember, setGroupMember] = useState([]);
   const [checkMem, setCheckMem] = useState(false);
@@ -86,8 +84,9 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
   const [clickLeaveGroup, setClickLeaveGroup] = useState(false);
   const [toggleOtherProfile, setToggleOtherProfile] = useState(false);
   const [anotherName, setAnotherName] = useState("");
+  const [sessionUser,setSessionUser]=useState(sessionStorage.getItem("nickname"))
   let [modalStatus, setModalStatus] = useState(false);
-  let sessionUser = sessionStorage.getItem("nickname");
+  //let sessionUser = sessionStorage.getItem("nickname");
 
   const showProfile = (data) => {
     console.log(data)
@@ -95,8 +94,8 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
     setAnotherName(data);
   }
   const getGroupInfo = async (e) => {
+    let data = { sessionUser: sessionStorage.getItem("nickname") };
     console.log(sessionUser)
-    let data = { sessionUser: sessionUser };
     const res = await axios.post(
       "http://localhost:3001/groups/info",
       data
@@ -107,7 +106,9 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
 
   useEffect(()=>{
     if(modifyNickname==="success"){
-      window.location.reload()
+      //window.location.reload()
+      
+      getGroupInfo()
       console.log(groupSocketIdList)
     }
   },[modifyNickname])
@@ -188,11 +189,11 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
   return (
     <GroupBox>
       <GroupTitle>Group Member</GroupTitle>
-      <Member>{currentUser}</Member>
+      <Member>{sessionStorage.getItem("nickname")}</Member>
       {groupMember === undefined
         ? ""
         : groupMember.map((data, member) => {
-          if (data !== currentUser) {
+          if (data !== sessionStorage.getItem("nickname")) {
             return <button style={{border:"0px", background:"transparent"}}  onClick={(e)=>showProfile(data)} ><Member>{data}</Member></button>;
           }
         })}
@@ -221,7 +222,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
           prevMember={checkMem}
           checkMember={(e) => toggleCheckMem(e)}
           modalState={(e) => toggleModalStatus(e)}
-          currentUser={currentUser}
+          currentUser={sessionStorage.getItem("nickname")}
           preMemSocketIdList={groupSocketIdList}
           groupMemList={groupMember}
         ></AddMember>
