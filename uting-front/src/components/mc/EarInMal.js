@@ -389,7 +389,6 @@ const EarInMal = ({
                     style={{
                       fontSize: "medium",
                       gridColumn: "1/5",
-                      gridRow: "1/2",
                     }}
                   >
                     질문 알려주기
@@ -397,8 +396,7 @@ const EarInMal = ({
                   <div
                     style={{
                       gridColumn: "1/5",
-                      gridRow: "2/3",
-                      marginTop: "10%",
+                      gridRow: "1/3",
                     }}
                   >
                     {participants.map((member) => (
@@ -450,7 +448,11 @@ const EarInMal = ({
                       <Button
                         outline
                         color="secondary"
-                        style={{ border: 0 }}
+                        style={{
+                          border: 0,
+                          padding: "0px",
+                          marginRight: "5%",
+                        }}
                         key={index}
                         value={member}
                         onClick={questionToWhom}

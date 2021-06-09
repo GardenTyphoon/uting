@@ -85,6 +85,7 @@ const Room = () => {
     socketid: "",
     lovemessage: "",
   });
+
   const [existMidleave, setExistMidleave] = useState(false);
   window.addEventListener("keydown", function (e) {
     console.log(e.keyCode);
@@ -417,6 +418,7 @@ const Room = () => {
     toast(iloveyou.mylove + "님에게 정상적으로 메시지를 보냈습니다.");
     document.getElementsByName("loveinput").values = "";
     document.getElementsByName("mylove").values = "";
+
     const socket = socketio.connect("http://localhost:3001");
     socket.emit("golove", { lovemessage: data });
   };
