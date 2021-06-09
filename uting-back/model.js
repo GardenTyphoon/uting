@@ -2,7 +2,6 @@ const { Int32 } = require("bson");
 const { Double } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-<<<<<<< HEAD
 const crypto = require("crypto");
 const config = require("./config");
 
@@ -198,191 +197,10 @@ const Mc = new Schema({
     required: true,
   },
 });
-=======
-const autoInc = require('mongoose-auto-increment');
-
-const User = new Schema({
-    name : {
-        type:String,
-        required:true
-    },
-    nickname : {
-        type:String,
-        required:true
-    },
-    gender : {
-        type:String,
-        required:true
-    },
-    birth : {
-        type:String,
-        required:true
-    },
-    email : {
-        type:String,
-        required:true
-    },
-    password : {
-        type:String,
-        required:true
-    },
-    phone:{
-        type:String,
-        required:true
-    },
-    introduce : {
-        type:String,
-        required:false
-    },
-    imgURL :{
-        type:String,
-        required:false
-    },
-    mannerCredit :{
-        type:Number,
-        required:true
-    },
-    ucoin:{
-        type:Number,
-        required:true
-    },
-    status:{
-        type:Boolean,
-        requried:true,
-    },
-    socketid:{
-        type:String,
-        requried:false,
-    },
-    beReported:{
-        type:Number,
-        required:false
-    },
-    
-})
-// User.plugin(autoInc.plugin, 'user');
-
-const Meeting = new Schema({
-    title : {
-        type:String,
-        required:true
-    },
-    maxNum : {
-        type:Number,
-        required:true
-    },
-    status : {
-        type:String,
-        required:true
-    },
-    roomImg : {
-        type:String,
-        required:false
-    },
-    avgManner : {
-        type:Number,
-        required:false
-    },
-    avgAge : {
-        type:Number,
-        required:false
-    },
-    users : {
-        type:Array,
-        required:false
-    },
-    numOfWoman:{
-        type:Number,
-        required:false
-    },
-    numOfMan:{
-        type:Number,
-        required:false
-    },
-    // sumManner:{
-    //     type:Number,
-    //     required:false
-    // },
-    // sumAge:{
-    //     type:Number,
-    //     required:false
-    // }
-})
-// Meeting.plugin(autoInc.plugin, 'meeting');
-
-const Group = new Schema({
-    member : {
-        type:Array,
-        required:true
-    }
-})
-const Ad = new Schema({
-    type : {
-        type:String,
-        required:true
-    },
-    name : {
-        type:String,
-        required:true
-    },
-    
-    email : {
-        type:String,
-        required:true
-    },
-    file : {
-        type:String,
-        required:true
-    },
-    contents : {
-        type:String,
-        required:true
-    },
-    title : {
-        type:String,
-        required:true
-    },
-    status : {
-        type:String,
-        required:true
-    },
-
-})
-// Ad.plugin(autoInc.plugin, 'ad');
-
-const Report = new Schema({
-    target : {
-        type:String,
-        required:true
-    },
-    content:{
-        type:String,
-        required:true
-    },
-    requester:{
-        type:String,
-        required:true
-    },
-})
-// Report.plugin(autoInc.plugin, 'report');
-
-const Mc = new Schema({
-    type : {
-        type:String,
-        required:true
-    },
-    content : {
-        type:String,
-        required:true
-    },
-})
-
->>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
 
 // autoInc.initialize(mongoose.connection);
 
 module.exports = {
-<<<<<<< HEAD
   User: mongoose.model("user", User),
   Meeting: mongoose.model("meeting", Meeting),
   Group: mongoose.model("group", Group),
@@ -390,12 +208,3 @@ module.exports = {
   Report: mongoose.model("report", Report),
   Mc: mongoose.model("mc", Mc),
 };
-=======
-    User : mongoose.model('user', User),
-    Meeting : mongoose.model('meeting', Meeting),
-    Group : mongoose.model('group',Group),
-    Ad : mongoose.model('ad', Ad),
-    Report : mongoose.model('report', Report),
-    Mc:mongoose.model('mc',Mc)
-}
->>>>>>> 018918c77b3fdc162d52b255aa22743d7a2db0c1
