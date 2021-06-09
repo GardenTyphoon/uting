@@ -72,6 +72,10 @@ const Intro = () => {
         <Col>
           <div className="col2">
             {isLoggedIn === false ? <><SignIn />
+              <div className="findAccount" >
+                  <button style={{background:"transparent", border:"none", color:"gray"}}>아이디 찾기</button> |  
+                  <button style={{background:"transparent", border:"none", color:"gray"}}>비밀번호 찾기</button>
+              </div>
               <div className="createaccount">
                 <button className="MiddleBtn" onClick={onClick}>
                   계정 만들기
