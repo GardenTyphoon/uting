@@ -184,11 +184,11 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
   return (
     <GroupBox>
       <GroupTitle>Group Member</GroupTitle>
-      <Member>{currentUser}</Member>
+      <Member>{sessionStorage.getItem("nickname")}</Member>
       {groupMember === undefined
         ? ""
         : groupMember.map((data, member) => {
-          if (data !== currentUser) {
+          if (data !== sessionStorage.getItem("nickname")) {
             return <button style={{border:"0px", background:"transparent"}}  onClick={(e)=>showProfile(data)} ><Member>{data}</Member></button>;
           }
         })}
@@ -217,7 +217,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
           prevMember={checkMem}
           checkMember={(e) => toggleCheckMem(e)}
           modalState={(e) => toggleModalStatus(e)}
-          currentUser={currentUser}
+          currentUser={sessionStorage.getItem("nickname")}
           preMemSocketIdList={groupSocketIdList}
           groupMemList={groupMember}
         ></AddMember>

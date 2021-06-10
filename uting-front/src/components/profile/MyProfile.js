@@ -7,11 +7,13 @@ import "./MyProfile.css";
 import { Container, Row, Col,Modal,ModalBody,ModalHeader } from "reactstrap";
 import introLog from '../../img/배경없는유팅로고.png'
 const MyProfile = ({choicename,checkProfilefunc,modNickname}) => {
+  const [imgcheck, setImgcheck] = useState(false);
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
   const [staticpath, setStaticpath] = useState("/api");
-  const [getalert,setGetalert]=useState({"flag":false,"message":""})
+  const [getalert,setGetalert]=useState({"flag":false,"message":""});
+  const [originNickname, setOriginNickname] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({
     _id:"",
     name: "",

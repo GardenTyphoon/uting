@@ -1,1 +1,3 @@
 node_modules
+# 밑에 바꿔줄것! 임시로 안되게 햇다!
+.travis.yml
