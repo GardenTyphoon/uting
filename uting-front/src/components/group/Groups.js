@@ -109,12 +109,9 @@ const Groups = ({
     setGroupMember(res.data.member);
   };
 
-  useEffect(() => {
-    if (modifyNickname === "success") {
-      //window.location.reload()
-
-      getGroupInfo();
-      console.log(groupSocketIdList);
+  useEffect(()=>{
+    if(modifyNickname==="success"){
+      getGroupInfo()
     }
   }, [modifyNickname]);
 
@@ -180,6 +177,7 @@ const Groups = ({
 
   useEffect(() => {
     getGroupInfo();
+    console.log(groupSocketIdList)
   }, []);
 
   useEffect(() => {

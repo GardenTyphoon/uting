@@ -106,12 +106,8 @@ router.post('/info', function(req, res,next){
 
 
   router.post('/modifyNickname',function(req,res,next){
-    console.log(req.body.originNickname)
-    console.log(req.body.reNickname)
-
     let exist=false;
     let foundPer;
-    let memList=[];
     
     Group.find(function(err,group){
       group.forEach(per=>{
@@ -119,7 +115,6 @@ router.post('/info', function(req, res,next){
           if(req.body.originNickname === mem){
             exist=true;
             foundPer=per;
-            console.log(per)
           } 
         })
       })
