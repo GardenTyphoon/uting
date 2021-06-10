@@ -213,7 +213,7 @@ const King = ({
       </Modal>
       {startButtonFade ? (
         <>
-          <strong style={{paddingLeft:"10%"}}>왕게임</strong>
+          <strong style={{ paddingLeft: "10%" }}>왕게임</strong>
           <div
             style={{
               fontSize: "medium",
