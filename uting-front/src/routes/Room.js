@@ -14,7 +14,7 @@ import {
   DropdownMenu,
   Input,
 } from "reactstrap";
-import axios from "axios";
+import defaultAxios from "../utils/defaultAxios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
 import socketio from "socket.io-client";
@@ -33,6 +33,7 @@ import { backgroundColor } from "styled-system";
 import "./Room.css";
 import introLog from "../img/배경없는유팅로고.png";
 import { SOCKET } from "../utils/constants";
+import baseurl from "../utils/baseurl";
 const McBotContainer = styled.div`
   width: 350px;
   height: 550px;
@@ -41,7 +42,6 @@ const McBotContainer = styled.div`
   text-align: center;
   padding: 20px;
   font-family: NanumSquare_acR;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,15 +87,18 @@ const Room = () => {
     socketid: "",
     lovemessage: "",
   });
-  const [existMidleave, setExistMidleave] = useState(false);
-  window.addEventListener("keydown", function(e){
 
+  const [existMidleave, setExistMidleave] = useState(false);
+  window.addEventListener("keydown", function (e) {
     console.log(e.keyCode);
-   if(e.keyCode === 116){
-      console.log("f5")
+    if (
+      (e.ctrlKey == true && (e.keyCode == 78 || e.keyCode == 82)) ||
+      e.keyCode === 116
+    ) {
+      console.log("f5");
       e.preventDefault();
     }
-  })
+  });
   let toggleFlagMessage = () => {
     setFlagMessage(!flagMessage);
   };
@@ -109,9 +112,7 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    console.log("socketId.id", socketId);
-    const res = await axios.post("/api/users/savesocketid", data);
-    //console.log(res)
+    const res = await defaultAxios.post("/users/savesocketid", data);
     setSocketFlag(true);
   };
 
@@ -124,7 +125,7 @@ const Room = () => {
     let data = {
       preMember: participants,
     };
-    const res = await axios.post("/api/users/preMemSocketid", data);
+    const res = await defaultAxios.post("/users/preMemSocketid", data);
 
     if (res.data.socketid !== "undefined") {
       setParObj(res.data);
@@ -151,7 +152,7 @@ const Room = () => {
 
     const _id = meetingId;
     if (meetingId !== "") {
-      const res = await axios.post("/api/meetings/getparticipants", {
+      const res = await defaultAxios.post("/meetings/getparticipants", {
         _id: meetingId,
       });
       let par = [];
@@ -182,7 +183,7 @@ const Room = () => {
     ];
     //let index = Math.floor(Math.random() * messageArr.length);
     console.log(intervalMessageCheck);
-    if (intervalMessageCheck < 4) {
+    /* if (intervalMessageCheck < 4) {
       if (intervalMessageCheck === 0) {
         setTimeout(() => {
           setIntervalMessage(messageArr[0]);
@@ -208,7 +209,7 @@ const Room = () => {
           setIntervalFade(4);
         }, 1200000);
       }
-    }
+    }*/
   }, [intervalMessageCheck]);
 
   useEffect(() => {
@@ -282,7 +283,7 @@ const Room = () => {
       } else if (data.type === "midleave") {
         toast(data.midleaveUser + "님이 퇴장하셨습니다.");
         setExistMidleave(true);
-        getparticipants()
+        getparticipants();
       }
     });
     return () => {
@@ -317,7 +318,7 @@ const Room = () => {
     let data = {
       currentUser: e,
     };
-    const res = await axios.post("/api/users/cutUcoin", data);
+    const res = await defaultAxios.post("/users/cutUcoin", data);
     console.log(res);
   };
 
@@ -346,7 +347,7 @@ const Room = () => {
       };
       console.log(data);
 
-      const res = await axios.post("/api/meetings/leavemember", data);
+      const res = await defaultAxios.post("/meetings/leavemember", data);
       console.log(res);
       if (res.data === "success") {
         cutUcoin(sessionStorage.getItem("nickname"));
@@ -367,14 +368,14 @@ const Room = () => {
         setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
-          window.location.href = "/main";
+          window.location.href = `${baseurl.baseFront}/main`;
         }, 2000);
       } else if (res.data === "last") {
         setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
         setTimeout(async () => {
           await endMeeting(meeting_id);
           setGetalert({ flag: false, message: "" });
-          window.location.href = "/main";
+          window.location.href = `${baseurl.baseFront}/main`;
         }, 1500);
       }
     }
@@ -432,7 +433,6 @@ const Room = () => {
         overflow: "hidden",
       }}
     >
-
       <div
         style={{
           width: "75%",
@@ -442,9 +442,9 @@ const Room = () => {
           flexDirection: "column",
         }}
       >
-        <MeetingRoom info={chimeinfo} max={maxNum}/>
-        <div style={{height: "15%"}}></div> {/* 이걸로 조정해뒀음 */}
-        <MeetingControls participantss={participants}/>
+        <MeetingRoom info={chimeinfo} max={maxNum} />
+        <div style={{ height: "15%" }}></div> {/* 이걸로 조정해뒀음 */}
+        <MeetingControls participantss={participants} />
       </div>
       <div
         style={{
@@ -454,14 +454,14 @@ const Room = () => {
           alignItems: "flex-end",
         }}
       >
-        
         <Dropdown
           direction="down"
           isOpen={endMeetingBtn}
           toggle={() => {
             setEndMeetingBtn(!endMeetingBtn);
-            endMeetingBtn===false?setFlagMessage(false):setFlagMessage(true)
-            
+            endMeetingBtn === false
+              ? setFlagMessage(false)
+              : setFlagMessage(true);
           }}
         >
           <DropdownToggle
@@ -494,30 +494,84 @@ const Room = () => {
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
         ></Vote>
-        
-        
-        <div style={{height: "10%"}}></div> {/* 이걸로 조정해뒀음 */}
-        
-        {flagMessage===true?
-        <div style={{display:"flex", flexDirection:"column",marginBottom:"10%"}}>
-          <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center"}} >
-          <div >To.</div><select className="loveinput"  name="mylove" style={{width:"100%",marginLeft:"10px",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} onChange={(e)=>onChangehandler(e)}>
-            
-          <option value="" selected>받는 사람</option>
-            {participants.map((data,i)=>{
-                    return(data!==sessionStorage.getItem("nickname")?<option  value={data} >{data}</option>:"")
-                   })}
-          </select>
+        <div style={{ height: "10%" }}></div> {/* 이걸로 조정해뒀음 */}
+        {flagMessage === true ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "10%",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "NanumSquare_acR",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <div>To.</div>
+              <select
+                className="loveinput"
+                name="mylove"
+                style={{
+                  width: "100%",
+                  marginLeft: "10px",
+                  border: "0",
+                  backgroundColor: "rgb(255,228,225)",
+                  borderBottom: "2px solid gray",
+                }}
+                onChange={(e) => onChangehandler(e)}
+              >
+                <option value="" selected>
+                  받는 사람
+                </option>
+                {participants.map((data, i) => {
+                  return data !== sessionStorage.getItem("nickname") ? (
+                    <option value={data}>{data}</option>
+                  ) : (
+                    ""
+                  );
+                })}
+              </select>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                fontFamily: "NanumSquare_acR",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "10px",
+              }}
+            >
+              <input
+                className="loveinput"
+                placeholder="메시지를 입력해주세요."
+                style={{
+                  width: "150%",
+                  marginLeft: "10%",
+                  border: "0",
+                  backgroundColor: "rgb(255,228,225)",
+                  borderBottom: "2px solid gray",
+                }}
+                type="text"
+                name="lovemessage"
+                onChange={(e) => onChangehandler(e)}
+              />
+              <button
+                style={{ border: "0", backgroundColor: "rgb(255,228,225)" }}
+                onClick={(e) => goLove(e)}
+              >
+                <img src={airplane} style={{ width: "40px", height: "40px" }} />
+              </button>
+            </div>
           </div>
-          <div style={{display:"flex",fontFamily:"NanumSquare_acR", flexDirection:"row",alignItems:"center", justifyContent:"center", margin:"10px"}}>
-          <input className="loveinput" placeholder="메시지를 입력해주세요." style={{width:"150%",marginLeft:"10%",border:"0",backgroundColor:"rgb(255,228,225)",borderBottom:"2px solid gray"}} type="text" name="lovemessage" onChange={(e)=>onChangehandler(e)}/>
-          <button style={{border:"0",backgroundColor:"rgb(255,228,225)"}} onClick={(e)=>goLove(e)}>
-            <img src={airplane} style={{width:"40px",height:"40px"}}/>
-          </button>
-          
-          
-          </div>
-          </div>:""}
+        ) : (
+          ""
+        )}
         <McBotContainer>
           <button
             onClick={() => setToggleHelp(!toggleHelp)}
@@ -527,11 +581,10 @@ const Room = () => {
               position: "relative",
               left: "90px",
             }}
-          > 
+          >
             <img src={help} width="25" />
           </button>
           {intervalMessage}
-          
           <McBot
             participantsSocketIdList={participantsSocketId}
             currentSocketId={socketId}
@@ -546,18 +599,17 @@ const Room = () => {
             role={role}
             gameNum_2={gameNum}
           ></McBot>
-        <div>
-        <ReactAudioPlayer
-          style={{width: "300px"}}
-          id="audio"
-          src={musicsrc}
-          controls
-        />
-         </div>
+          <div>
+            <ReactAudioPlayer
+              style={{ width: "300px" }}
+              id="audio"
+              src={musicsrc}
+              controls
+            />
+          </div>
         </McBotContainer>
-       
       </div>
-    
+
       <Modal isOpen={!ready}>
         <ModalBody
           style={{
@@ -576,15 +628,22 @@ const Room = () => {
       <Modal isOpen={toggleMidLeave}>
         <ModalHeader>중도 퇴장</ModalHeader>
         <ModalBody>
-          <span style={{color:"red",fontWeight:"bold"}}>중도 퇴장</span>을 하시면 <span style={{fontWeight:"bold"}}>U COIN이 1 차감</span>하게 됩니다.<br/>
-          그래도 퇴장을 원하시면 <span style={{fontWeight:"bold"}}>나가기</span>를 눌러주세요.
+          <span style={{ color: "red", fontWeight: "bold" }}>중도 퇴장</span>을
+          하시면 <span style={{ fontWeight: "bold" }}>U COIN이 1 차감</span>하게
+          됩니다.
+          <br />
+          그래도 퇴장을 원하시면{" "}
+          <span style={{ fontWeight: "bold" }}>나가기</span>를 눌러주세요.
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}>나가기</Button>{' '}
-          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>취소</Button>
+          <Button color="primary" onClick={(e) => midLeave(e)}>
+            나가기
+          </Button>{" "}
+          <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>
+            취소
+          </Button>
         </ModalFooter>
       </Modal>
-
 
       <Modal size="lg" isOpen={toggleHelp}>
         <ModalHeader>mc봇 사용법</ModalHeader>
@@ -598,18 +657,36 @@ const Room = () => {
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={getalert.flag} >
-        <ModalHeader style={{height:"70px",textAlign:"center"}}>
-          <img style={{width:"40px",height:"40px",marginLeft:"210px",marginBottom:"1000px"}} src={introLog}></img>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
         </ModalHeader>
-        <ModalBody style={{height:"90px"}}>
-          <div style={{textAlign:"center",marginTop:"4%",marginBottom:"8%",fontFamily:"NanumSquare_acR",fontWeight:"bold",fontSize:"18px",height:"50px"}}>{getalert.message}</div>
-          
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
         </ModalBody>
       </Modal>
     </div>
   );
 };
-
 
 export default Room;

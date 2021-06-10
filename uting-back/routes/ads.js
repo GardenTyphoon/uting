@@ -101,6 +101,13 @@ router.post('/accept', function(req,res,next){
 
 })
 
+router.post('/adslist', function(req, res, next) {
+  Ad.find({}).then((ads)=>{ 
+    res.send(ads);
+  }).catch((err) => {
+    res.send(err);
+  });
+});
 
 
 module.exports = router;

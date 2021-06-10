@@ -5,14 +5,15 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
 const mongoose = require("mongoose");
-var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var meetingsRouter = require("./routes/meetings");
 var groupsRouter = require("./routes/groups");
+var authMiddleware = require("./middlewares/auth");
 var adsRouter = require("./routes/ads");
 var reportsRouter = require("./routes/reports");
 var mcsRouter = require("./routes/mcs");
 
+var config = require("./config");
 var clients = [];
 var members = [];
 // PORT => 3001
@@ -26,11 +27,13 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log("Connect MongoDB"));
-//autoIncrement.initialize(mongoose.connection);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
+
+// set jwt secret hash
+app.set("jwt-secret", config.secret);
 
 app.use(cors());
 
@@ -41,7 +44,10 @@ app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'uploads')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+<<<<<<< HEAD
 app.use("/", indexRouter);
+=======
+>>>>>>> b74aac657ea620179c105c895744a86075c45b56
 app.use("/users", usersRouter);
 app.use("/meetings", meetingsRouter);
 app.use("/groups", groupsRouter);
@@ -66,6 +72,7 @@ app.use(function (err, req, res, next) {
 });
 app.io = require("socket.io")();
 
+<<<<<<< HEAD
 
 /*
 Room.js
@@ -89,8 +96,9 @@ sendMember
 makeMeetingRoomMsg
 */
 
+=======
+>>>>>>> b74aac657ea620179c105c895744a86075c45b56
 app.io.on("connection", function (socket) {
-  //console.log("Connected !");
   socket.on("login", function (data) {
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
@@ -99,7 +107,6 @@ app.io.on("connection", function (socket) {
     socket.emit("clientid", { id: clients[clients.length - 1].id });
   });
   socket.on("currentSocketId", function () {
-    console.log("currentSocketId:" + socket.id);
     let data = socket.id;
     app.io.to(socket.id).emit("currentSocketId", data);
   });
@@ -133,7 +140,6 @@ app.io.on("connection", function (socket) {
   });
 
   socket.on("entermessage", function (msg) {
-    console.log(msg._id);
     let data = {
       type: "entermessage",
       message: "호스트에의해 선택한 미팅방에 입장합니다 ^_^",
@@ -158,11 +164,11 @@ app.io.on("connection", function (socket) {
   });
 
   socket.on("currentSocketId", function () {
-    console.log("currentSocketId:" + socket.id);
     let data = socket.id;
     app.io.to(socket.id).emit("currentSocketId", data);
   });
 
+<<<<<<< HEAD
   socket.on("golove",function(lovemessage){
     console.log("-------------------*******************----------")
     console.log(lovemessage)
@@ -175,6 +181,17 @@ app.io.on("connection", function (socket) {
     console.log(data)
     app.io.to(lovemessage.lovemessage.socketid).emit("room",data)
   })
+=======
+  socket.on("golove", function (lovemessage) {
+    let data = {
+      type: "golove",
+      sender: lovemessage.lovemessage.sender,
+      message: lovemessage.lovemessage.message,
+    };
+    console.log(data);
+    app.io.to(lovemessage.lovemessage.socketid).emit("room", data);
+  });
+>>>>>>> b74aac657ea620179c105c895744a86075c45b56
 
   socket.on("joinRoom", function (roomId) {
     socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
@@ -184,7 +201,6 @@ app.io.on("connection", function (socket) {
       type: "startVote",
     };
     for (let i = 0; i < Object.keys(msg.socketidList).length; i++) {
-      console.log(msg.socketidList[i]);
       app.io.to(msg.socketidList[i]).emit("room", data);
     }
   });
@@ -246,6 +262,7 @@ app.io.on("connection", function (socket) {
     }
   });
 
+<<<<<<< HEAD
   socket.on("midleave",function(msg){
     let data={
       type:"midleave",
@@ -257,6 +274,17 @@ app.io.on("connection", function (socket) {
   })
 
 
+=======
+  socket.on("midleave", function (msg) {
+    let data = {
+      type: "midleave",
+      midleaveUser: msg.midleaveUser,
+    };
+    for (let i = 0; i < Object.keys(msg.memlist).length; i++) {
+      app.io.to(msg.memlist[i].socketid).emit("room", data);
+    }
+  });
+>>>>>>> b74aac657ea620179c105c895744a86075c45b56
 
   socket.on("notifyTurn", function (msg) {
     let data = {
@@ -269,22 +297,14 @@ app.io.on("connection", function (socket) {
     }
   });
   socket.on("sendMsg", function (msg) {
-    console.log("sendMsg : ");
-    console.log(msg);
-
     let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
     app.io.to(msg.turnSocketId).emit("room", data);
   });
   socket.on("sendQues", function (msg) {
-    console.log("sendQue : ");
-    console.log(msg);
-
     let data = { type: "receiveQues", mesg: msg.msg, user: msg.user };
     app.io.to(msg.turnSocketId).emit("room", data);
   });
   socket.on("respondMsg", function (msg) {
-    console.log("respondMsg : ");
-    console.log(msg);
     let data = { type: "receiveMsg", mesg: msg.msg, user: msg.user };
     for (let i = 0; i < msg.socketIdList.length; i++) {
       app.io.to(msg.socketIdList[i]).emit("room", data);
@@ -337,7 +357,6 @@ app.io.on("connection", function (socket) {
       type: "someoneLeaveGroup",
       message: msg.leavingUsers + "님이 그룹을 나갔습니다.",
     };
-    console.log(data);
     for (let i = 0; i < msg.socketIdList.length; i++) {
       app.io.to(msg.socketIdList[i]).emit("main", data);
     }

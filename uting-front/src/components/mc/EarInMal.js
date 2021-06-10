@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import socketio from "socket.io-client";
 import explain1 from "../../img/귓말겜1.png";
 import explain2 from "../../img/귓말겜2.png";
 import explain3 from "../../img/귓말겜3.png";
+import baseurl from "../../utils/baseurl";
 import {
   Button,
   Input,
@@ -90,16 +91,15 @@ const EarInMal = ({
   };
 
   function getRandomInt(min, max) {
-    //min ~ max 사이의 임의의 정수 반환
     return Math.floor(Math.random() * (max - min)) + min;
   }
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
+    console.log("participantsForTurn :" + participantsForTurn);
     var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
-    //console.log("tmp : " + tmp);
+
     setParticipantsForTurn(tmp);
   };
 
@@ -108,15 +108,6 @@ const EarInMal = ({
     determineTurn(participantsForTurn);
     setFlag(true);
   };
-
-  /*useEffect(() => {
-    if (!startButtonFade) {
-      data = { gameName: "귓속말게임", socketIdList: participantsSocketIdList };
-      const socket = socketio.connect("/api");
-      socket.emit("gameStart", data);
-    }
-  }, [startButtonFade]);*/
-
   const globalizeGameStart = () => {
     data = {
       gameName: "귓속말게임",
@@ -128,15 +119,10 @@ const EarInMal = ({
   };
 
   useEffect(() => {
-    //console.log("participantsForTurnSet :" + participantsForTurn);
     if (participantsForTurnSet) {
       setParticipantsForTurn(participantsForTurnSet);
     }
   }, [participantsForTurnSet]);
-
-  /*useEffect(() => {
-    console.log("participantsForTurn :" + participantsForTurn); //for debug
-  }, [participantsForTurn]);*/
 
   useEffect(() => {
     if (gameStartFlag) {
@@ -147,7 +133,7 @@ const EarInMal = ({
   const matchMemSckId = async (nickname) => {
     let tmp = [];
     tmp.push(nickname);
-    const res = await axios.post("/api/users/usersSocketIdx", {
+    const res = await defaultAxios.post("/users/usersSocketIdx", {
       users: tmp,
     });
     if (res.status == 200) {
@@ -159,14 +145,14 @@ const EarInMal = ({
   useEffect(async () => {
     if (flag) {
       globalizeGameStart();
-      globalizeTurn(); //+
+      globalizeTurn();
       setFlag(false);
     }
   }, [flag]);
 
   useEffect(async () => {
     if (giveTurnFlag) {
-      globalizeTurn(); //+
+      globalizeTurn();
       setGiveTurnFlag(false);
     }
   }, [giveTurnFlag]);
@@ -182,7 +168,6 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       remainParticipants: participantsForTurn,
     });
-    //.emit("notifyMember", { turnSocketId: toSendSckId });
   };
 
   useEffect(() => {
@@ -411,7 +396,12 @@ const EarInMal = ({
                   >
                     질문 알려주기
                   </h5>
-                  <div style={{ gridColumn: "1/5", gridRow: "1/3" }}>
+                  <div
+                    style={{
+                      gridColumn: "1/5",
+                      gridRow: "1/3",
+                    }}
+                  >
                     {participants.map((member) => (
                       <Button
                         outline
@@ -461,7 +451,11 @@ const EarInMal = ({
                       <Button
                         outline
                         color="secondary"
-                        style={{ border: 0 }}
+                        style={{
+                          border: 0,
+                          padding: "0px",
+                          marginRight: "5%",
+                        }}
                         key={index}
                         value={member}
                         onClick={questionToWhom}
@@ -523,7 +517,7 @@ const EarInMal = ({
                     style={{
                       fontSize: "medium",
                       float: "left",
-                      gridColumn: "1/3",
+                      gridColumn: "1/5",
                     }}
                   >
                     Turn : {turn}님

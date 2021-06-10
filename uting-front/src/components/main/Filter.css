@@ -1,10 +1,10 @@
-.FilteredBy{
-    font-family: NanumSquare_acR;
-    background-color: transparent;
-    border-color:#9A7D7D;
-    color:#8F6F6F;
-    border:1px solid;
-    border-radius: 10px;
-    width:100px;
-    height:35px;
+.FilteredBy {
+  font-family: NanumSquare_acR;
+  background-color: transparent;
+  border-color: #9a7d7d;
+  color: #8f6f6f;
+  border: 1px solid;
+  border-radius: 10px;
+  width: 100px;
+  height: 35px;
 }
