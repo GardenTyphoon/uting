@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Route, Link, Switch, Router } from "react-router-dom";
 import "./SignIn.css";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import {
   Container,
   Row,
@@ -14,10 +14,6 @@ import {
 } from "reactstrap";
 
 import introLog from "../../img/배경없는유팅로고.png";
-
-const loginInstance = axios.create((config) => {
-  config.headers["Content-Type"] = "application/json";
-});
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -58,8 +54,8 @@ const SignIn = () => {
       email: email,
       password: password,
     };
-    await loginInstance
-      .post("http://localhost:3001/users/signin", data)
+    await defaultAxios
+      .post("/users/signin", data)
       .then((res) => {
         if (res.data.message === "login failed") {
           setIslogined(false);

@@ -16,7 +16,7 @@ import {
   Input,
   Alert,
 } from "reactstrap";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import socketio from "socket.io-client";
 import "./Vote.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -178,7 +178,7 @@ const Vote = forwardRef(
         name: goManner.name,
         manner: goManner.manner,
       };
-      const res = await axios.post("http://localhost:3001/users/manner", data);
+      const res = await defaultAxios.post("/users/manner", data);
       console.log(res);
       if (res.data === "success") {
         let arr = copyParticipants;
@@ -222,10 +222,7 @@ const Vote = forwardRef(
         };
         console.log(data);
 
-        const res = await axios.post(
-          "http://localhost:3001/meetings/leavemember",
-          data
-        );
+        const res = await defaultAxios.post("/meetings/leavemember", data);
 
         if (res.data === "success") {
           setGetalert({ flag: true, message: "미팅 방을 나갑니다." });

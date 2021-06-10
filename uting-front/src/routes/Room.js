@@ -14,7 +14,7 @@ import {
   DropdownMenu,
   Input,
 } from "reactstrap";
-import axios from "axios";
+import defaultAxios from "../utils/defaultAxios";
 import McBot from "../components/mc/McBot";
 import Vote from "../components/meeting/Vote";
 import socketio from "socket.io-client";
@@ -110,10 +110,7 @@ const Room = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
-      data
-    );
+    const res = await defaultAxios.post("/users/savesocketid", data);
     setSocketFlag(true);
   };
 
@@ -126,10 +123,7 @@ const Room = () => {
     let data = {
       preMember: participants,
     };
-    const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
-      data
-    );
+    const res = await defaultAxios.post("/users/preMemSocketid", data);
 
     if (res.data.socketid !== "undefined") {
       setParObj(res.data);
@@ -156,10 +150,9 @@ const Room = () => {
 
     const _id = meetingId;
     if (meetingId !== "") {
-      const res = await axios.post(
-        "http://localhost:3001/meetings/getparticipants",
-        { _id: meetingId }
-      );
+      const res = await defaultAxios.post("/meetings/getparticipants", {
+        _id: meetingId,
+      });
       let par = [];
       for (let i = 0; i < res.data.users.length; i++) {
         par.push(res.data.users[i].nickname);
@@ -323,7 +316,7 @@ const Room = () => {
     let data = {
       currentUser: e,
     };
-    const res = await axios.post("http://localhost:3001/users/cutUcoin", data);
+    const res = await defaultAxios.post("/users/cutUcoin", data);
     console.log(res);
   };
 
@@ -352,10 +345,7 @@ const Room = () => {
       };
       console.log(data);
 
-      const res = await axios.post(
-        "http://localhost:3001/meetings/leavemember",
-        data
-      );
+      const res = await defaultAxios.post("/meetings/leavemember", data);
       console.log(res);
       if (res.data === "success") {
         cutUcoin(sessionStorage.getItem("nickname"));

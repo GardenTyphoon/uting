@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import woman from "../../img/woman.png";
 import man from "../../img/man.png";
 import MeetingRoom from "../../img/MeetingRoom.png";
@@ -112,10 +112,7 @@ export default function MeetingList({
     let data = {
       preMember: meetingRoomParticipants,
     };
-    const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
-      data
-    );
+    const res = await defaultAxios.post("/users/preMemSocketid", data);
     let arr = [];
     for (let i = 0; i < res.data.length; i++) {
       arr.push(res.data[i].socketid);
@@ -128,7 +125,7 @@ export default function MeetingList({
     let myGroupMan = 0;
     let groupMembersInfo = [];
     for (let i = 0; i < groupMember.length; i++) {
-      let userInfo = await axios.post("http://localhost:3001/users/userInfo", {
+      let userInfo = await defaultAxios.post("/users/userInfo", {
         userId: groupMember[i],
       });
 
@@ -252,10 +249,7 @@ export default function MeetingList({
       member: groupMember,
       room: roomObj,
     };
-    const res = await axios.post(
-      "http://localhost:3001/meetings/savemember",
-      data
-    );
+    const res = await defaultAxios.post("/meetings/savemember", data);
   };
 
   useEffect(() => {
@@ -274,10 +268,7 @@ export default function MeetingList({
 
   const getGroupInfo = async (e) => {
     let sessionObject = { sessionUser: sessionUser };
-    const res = await axios.post(
-      "http://localhost:3001/groups/info",
-      sessionObject
-    );
+    const res = await defaultAxios.post("/groups/info", sessionObject);
     let onlyMe = [sessionUser];
     if (res.data === "no") setGroupMember(onlyMe);
     else setGroupMember(res.data.member);
@@ -301,7 +292,7 @@ export default function MeetingList({
   }, [checkState]);
 
   let getMeetings = async (e) => {
-    const res = await axios.post("http://localhost:3001/meetings/");
+    const res = await defaultAxios.post("/meetings/");
 
     let arr = [];
     res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));

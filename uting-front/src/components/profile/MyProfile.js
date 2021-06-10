@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProfileNoImage from "../../img/MeetingRoom.png";
 import ajou_logo from "../../img/ajou_logo.png";
 import jwtAxios from "../../utils/jwtAxios";
-import axios from "axios"
+import defaultAxios from "../../utils/defaultAxios";
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col, Modal, ModalBody, ModalHeader } from "reactstrap";
@@ -36,7 +36,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
     // db에서 현재 session에 로근인 되어 있는 사용자에 대한 정보를 가지고 옴
     let sessionUser = choicename;
 
-    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
+    const res = await defaultAxios.post("/users/viewMyProfile", {
       sessionUser: choicename,
       type: "myprofile",
     });

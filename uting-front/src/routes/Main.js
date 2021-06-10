@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import defaultAxios from "../utils/defaultAxios";
 import Profile from "../components/profile/Profile";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import Meeting from "../components/meeting/Meeting";
@@ -167,10 +167,7 @@ const Main = () => {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    const res = await axios.post(
-      "http://localhost:3001/users/savesocketid",
-      data
-    );
+    const res = await defaultAxios.post("/users/savesocketid", data);
     console.log(res);
   };
   useEffect(() => {
@@ -240,7 +237,6 @@ const Main = () => {
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
-        
           <div
             style={{
               fontFamily: "NanumSquare_acR",
@@ -249,17 +245,17 @@ const Main = () => {
               fontWeight: "bold",
               marginBottom: "6%",
               marginTop: "20%",
-              marginLeft:"13%"
+              marginLeft: "13%",
             }}
           >
             학교별 매너학점 TOP10
           </div>
           <CollegeRanking />
-          <div style={{marginTop:"13%",marginLeft:"30%"}}>
+          <div style={{ marginTop: "13%", marginLeft: "30%" }}>
             <Advertising></Advertising>
           </div>
         </div>
-        
+
         <div className="Room">
           <div
             className="RoomTop"

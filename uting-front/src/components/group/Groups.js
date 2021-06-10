@@ -16,7 +16,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import jwtAxios from "../../utils/jwtAxios";
 import AddMember from "./AddMember";
 import "../../App.css";
@@ -104,14 +104,14 @@ const Groups = ({
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionStorage.getItem("nickname") };
     console.log(sessionUser);
-    const res = await axios.post("http://localhost:3001/groups/info", data);
+    const res = await defaultAxios.post("/groups/info", data);
     console.log(res.data.member);
     setGroupMember(res.data.member);
   };
 
-  useEffect(()=>{
-    if(modifyNickname==="success"){
-      getGroupInfo()
+  useEffect(() => {
+    if (modifyNickname === "success") {
+      getGroupInfo();
     }
   }, [modifyNickname]);
 
@@ -149,10 +149,7 @@ const Groups = ({
     let data = {
       preMember: groupMember,
     };
-    const res = await axios.post(
-      "http://localhost:3001/users/preMemSocketid",
-      data
-    );
+    const res = await defaultAxios.post("/users/preMemSocketid", data);
 
     if (res.data !== "undefined") {
       setGroupSocketIdList(res.data);

@@ -16,7 +16,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import socketio from "socket.io-client";
 import jwtAxios from "../../utils/jwtAxios";
 import introLog from "../../img/배경없는유팅로고.png";
@@ -51,10 +51,7 @@ const AddMember = ({
             host: currentUser,
             memberNickname: data.nickname,
           };
-          const resgroup = await axios.post(
-            "http://localhost:3001/groups/",
-            groupData
-          );
+          const resgroup = await defaultAxios.post("/groups/", groupData);
 
           setSocketCnt(true);
           modalState(true);

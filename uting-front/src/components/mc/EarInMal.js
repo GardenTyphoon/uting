@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import socketio from "socket.io-client";
 import explain1 from "../../img/귓말겜1.png";
 import explain2 from "../../img/귓말겜2.png";
@@ -130,7 +130,7 @@ const EarInMal = ({
   const matchMemSckId = async (nickname) => {
     let tmp = [];
     tmp.push(nickname);
-    const res = await axios.post("http://localhost:3001/users/usersSocketIdx", {
+    const res = await defaultAxios.post("/users/usersSocketIdx", {
       users: tmp,
     });
     if (res.status == 200) {

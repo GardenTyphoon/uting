@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Route, Link, Switch, Router } from "react-router-dom";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import styled from "styled-components";
 import McBotImg from "../../img/mc봇.png";
 import backImg from "../../img/뒤로가기.svg";
@@ -88,7 +88,7 @@ const McBot = ({
     let data = {
       type: "game",
     };
-    const res = await axios.post("http://localhost:3001/mcs/list", data);
+    const res = await defaultAxios.post("/mcs/list", data);
 
     //랜덤값생성
     let index = Math.floor(Math.random() * res.data.length);
@@ -99,7 +99,7 @@ const McBot = ({
     let data = {
       type: "conversation",
     };
-    const res = await axios.post("http://localhost:3001/mcs/list", data);
+    const res = await defaultAxios.post("/mcs/list", data);
     //랜덤값생성
     let index = Math.floor(Math.random() * res.data.length);
     setContent(res.data[index]);

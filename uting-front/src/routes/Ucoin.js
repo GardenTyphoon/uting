@@ -65,7 +65,7 @@ const Ucoin = () => {
 
   const addUcoin = () => {
     console.log(ProfileInfo._id);
-    const res = jwtAxios.post("http://localhost:3001/users/addUcoin", {
+    const res = jwtAxios.post("/users/addUcoin", {
       userId: ProfileInfo._id,
       ucoin: ProfileInfo.ucoin,
       chargingCoin: chargingCoin,
@@ -73,12 +73,9 @@ const Ucoin = () => {
   };
 
   const getProfile = async (e) => {
-    const res = await jwtAxios.post(
-      "http://localhost:3001/users/viewMyProfile",
-      {
-        sessionUser: `${sessionStorage.getItem("email")}`,
-      }
-    );
+    const res = await jwtAxios.post("/users/viewMyProfile", {
+      sessionUser: `${sessionStorage.getItem("email")}`,
+    });
     let data = {
       _id: res.data._id,
       name: res.data.name,

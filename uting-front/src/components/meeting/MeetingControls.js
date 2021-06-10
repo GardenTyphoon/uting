@@ -23,7 +23,7 @@ import {
 } from "reactstrap";
 import EndMeetingControl from "./EndMeetingControl";
 import { useNavigation } from "../../providers/NavigationProvider";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import reportImg from "../../img/report.png";
 import introLog from "../../img/배경없는유팅로고.png";
 const MeetingControls = ({ participantss }) => {
@@ -50,7 +50,7 @@ const MeetingControls = ({ participantss }) => {
   const submitReport = async () => {
     let reportNickname = document.getElementsByName("reportNickname");
     let reportContent = document.getElementsByName("reportContent");
-    const res = await axios.post("http://localhost:3001/reports/saveReport", {
+    const res = await defaultAxios.post("/reports/saveReport", {
       reportTarget:
         reportNickname[0].options[reportNickname[0].selectedIndex].value,
       reportContent: reportContent[0].value,

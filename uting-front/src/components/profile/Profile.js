@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import MyProfile from "./MyProfile";
 import ProfileNoImage from "../../img/MeetingRoom.png";
 import ucoin from "../../img/ucoin.png";
@@ -55,7 +55,7 @@ const Profile = ({ modNickname }) => {
   };
 
   const getProfile = async (e) => {
-    const res = await axios.post("http://localhost:3001/users/viewMyProfile", {
+    const res = await defaultAxios.post("/users/viewMyProfile", {
       sessionUser: sessionUser,
       type: "profile",
     });

@@ -1,4 +1,4 @@
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import React from "react";
 import jwtAxios from "../../utils/jwtAxios";
 import { useState, useEffect } from "react";
@@ -73,10 +73,9 @@ const Meeting = ({ checkFunc }) => {
   };
   const getMyGroupMember = async () => {
     console.log("불렀음");
-    let res = await axios.post(
-      "http://localhost:3001/groups/getMyGroupMember",
-      { sessionUser: sessionUser }
-    );
+    let res = await defaultAxios.post("/groups/getMyGroupMember", {
+      sessionUser: sessionUser,
+    });
     console.log(res);
     let onlyMe = [sessionUser];
     if (res.data === "no") setGroupMembers(onlyMe);
