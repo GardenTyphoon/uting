@@ -10,7 +10,7 @@
     "FormData": "^0.10.1",
     "amazon-chime-sdk-component-library-react": "^2.3.0",
     "amazon-chime-sdk-js": "^2.8.0",
-    "antd": "^4.15.0",
+    "antd": "^4.16.2",
     "axios": "^0.21.1",
     "babel-plugin-import": "^1.13.3",
     "blob": "^0.1.0",
@@ -64,5 +64,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@ant-design/icons": "^4.6.2"
   }
 }
