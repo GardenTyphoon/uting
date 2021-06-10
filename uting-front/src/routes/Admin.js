@@ -9,42 +9,32 @@ import AdminBad from '../components/admin/AdminBad';
 import AdminMc from '../components/admin/AdminMc';
 import AdminAd from '../components/admin/AdminAd';
 import MenuItem from "antd/lib/menu/MenuItem";
-const WhiteSpace = styled.div`
-  margin: 10px;
-`;
+
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
 
 
 const Admin = () => {
-  const [menustate,setMenustate]=useState(false)
-  // state = {
-  //   collapsed: false,
-  // };
-
-  const onCollapse = (menustate) => {
-    console.log("eee");
-    setMenustate(menustate);
+  const [menustate,setMenustate]=useState("")
+  const onSider = (e) => {
+    setMenustate(e.target.innerText)
   }
-
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
         <Sider
-          collapsible
-          menustate={menustate}
-          onCollapse={(e)=>onCollapse(menustate)}
+          onClick={(e)=>onSider(e)}
         >
           <div className="App-logo" />
-          <Menu  theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1" onSelect={console.log("1")}>
-              <span >Option 1</span>
+          <Menu  theme="dark" mode="inline">
+            <Menu.Item key="1" >
+              <span >MC봇 관리</span>
             </Menu.Item>
-            <Menu.Item key="2" onSelect={console.log("2")} >
-              <span >Option 2</span>
+            <Menu.Item key="2" >
+              <span >신고 관리</span>
             </Menu.Item>
-            <Menu.Item key="3" onSelect={console.log("3")}  >
-              <span >Option 3</span>
+            <Menu.Item key="3" >
+              <span >광고 관리</span>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -56,7 +46,9 @@ const Admin = () => {
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
-              Bill is a cat.
+              {menustate==="MC봇 관리"?<AdminMc></AdminMc>:
+              menustate==="신고 관리"?<AdminBad></AdminBad>:
+              menustate=="광고 관리"?<AdminAd></AdminAd>:"UTING관리자 페이지 입니다."}
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

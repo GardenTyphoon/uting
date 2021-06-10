@@ -109,23 +109,13 @@ const AdminAd = () => {
     }
       
     useEffect(()=>{
-      if(open===true){
         getAd()
-      }
-    },[open])
+    },[])
     
       
   return (
-    <Card>
-    <CardHeader>
-      <FlexBox>
-        {'광고 및 문의사항 관리'}
-        <RightButton>
-          <Button onClick={(e) => isOpen()}>OPEN</Button>
-        </RightButton>
-      </FlexBox>
-    </CardHeader>
-    <Collapse isOpen={open}>
+    <>
+  
       <CardBody>
 
       <div style={{width:"100%",height:"50%"}}>
@@ -157,8 +147,6 @@ const AdminAd = () => {
                         <div>{clickData.status==="false"?<Button color="warning" onClick={(e)=>accept(e)}>수락</Button>:""}<Button onClick={(e)=>modaltoggle(e)}>거절</Button></div>
                       </Fade>:""}
                     </Row>
-                    
-                    
                   </>
                   )
           })}</div>
@@ -179,8 +167,7 @@ const AdminAd = () => {
 
        
       </CardBody>
-    </Collapse>
-  </Card>
+  </>
   );
 };
 export default AdminAd;
