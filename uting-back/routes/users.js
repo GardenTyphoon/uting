@@ -264,7 +264,7 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => {}
+    (err, us) => { }
   );
 });
 
@@ -507,5 +507,24 @@ router.post("/report", function (req, res, next) {
     }
   });
 });
+router.post("/changePassword", function (req, res, next) {
 
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (per.name === req.body.userinfo.name && per.email === req.body.userinfo.email) {
+
+        if (!per.verify(req.body.userinfo.newPassword)) {
+          const encrypted = crypto
+            .createHmac("sha1", config.secret)
+            .update(req.body.userinfo.newPassword)
+            .digest("base64");
+          User.findByIdAndUpdate(per._id, { $set: { password:encrypted} }, (err, gr) => { });
+          res.send("비밀번호가 성공적으로 변경되었습니다.")
+        } else {
+          res.send("최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요.")
+        }
+      }
+    })
+  })
+})
 module.exports = router;

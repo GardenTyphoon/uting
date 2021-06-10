@@ -29,10 +29,15 @@ const FindPassword = () => {
         }
     };
     
-    const changePassword = () =>{
-        console.log(newPasswordTemp);
-        console.log(userinfo);
-        
+    const changePassword = async() =>{
+        if(newPasswordTemp === userinfo.newPassword){
+            let data = {userinfo:userinfo};
+            const res = await axios.post(
+                "http://localhost:3001/users/changePassword",
+                data
+            );
+            alert(res.data);
+        }
     }
     function onClickCertification() {
         /* 1. 가맹점 식별하기 */
@@ -91,7 +96,7 @@ const FindPassword = () => {
                      <div>
                          <div>새 비밀번호</div>
                          <input
-                         type="text"
+                         type="password"
                          name="newPasswordTemp"
                          placeholder="영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
                          style={{ width: "300px", fontFamily: "NanumSquare_acR", margin: "10px" }}
@@ -101,8 +106,8 @@ const FindPassword = () => {
                      <div>
                          <div>새 비밀번호 확인</div>
                          <input
-                         type="text"
-                         name="newPasswordTemp"
+                         type="password"
+                         name="newPassword"
                          placeholder="새 비밀번호를 한번 더 입력하세요."
                          style={{ width: "300px", fontFamily: "NanumSquare_acR", margin: "10px" }}
                          onChange={(e) => onChangehandler(e)}/>

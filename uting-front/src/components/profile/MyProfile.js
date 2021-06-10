@@ -4,7 +4,6 @@ import ajou_logo from "../../img/ajou_logo.png";
 import jwtAxios from "../../utils/jwtAxios";
 import axios from "axios"
 import FormData from "form-data";
-import axios from "axios";
 import "./MyProfile.css";
 import { Container, Row, Col, Modal, ModalBody, ModalHeader } from "reactstrap";
 import introLog from "../../img/배경없는유팅로고.png";
