@@ -44,7 +44,6 @@ app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'uploads')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/meetings", meetingsRouter);
 app.use("/groups", groupsRouter);

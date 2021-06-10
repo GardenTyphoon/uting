@@ -46,7 +46,7 @@ const AddMember = ({
     };
     const res = await jwtAxios
       .post("/users/logined", data)
-      .then(async (data) => {
+      .then(async ({ data }) => {
         if (data.status === true) {
           setSocketId(data.socketid);
           let groupData = {

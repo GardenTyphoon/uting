@@ -50,24 +50,6 @@ const MeetingControls = ({ participantss }) => {
   const submitReport = async () => {
     let reportNickname = document.getElementsByName("reportNickname");
     let reportContent = document.getElementsByName("reportContent");
-    const res = await axios.post("/api/reports/saveReport", {
-      reportTarget:
-        reportNickname[0].options[reportNickname[0].selectedIndex].value,
-      reportContent: reportContent[0].value,
-      reportRequester: sessionStorage.getItem("nickname"),
-    });
-    console.log(res.data);
-    //alert(res.data);
-    setGetalert({ flag: true, message: res.data });
-    setTimeout(() => {
-      setToggleReport(false);
-      setGetalert({ flag: false, message: "" });
-    }, 1000);
-  };
-
-  const submitReport = async () => {
-    let reportNickname = document.getElementsByName("reportNickname");
-    let reportContent = document.getElementsByName("reportContent");
     const res = await defaultAxios.post("/reports/saveReport", {
       reportTarget:
         reportNickname[0].options[reportNickname[0].selectedIndex].value,

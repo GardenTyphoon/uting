@@ -146,7 +146,30 @@ router.post("/signin", function (req, res, next) {
   };
 
   const respond = (token) => {
-    console.log(token);
+    User.findByIdAndUpdate(
+      perObj._id,
+      {
+        $set: {
+          status: true,
+          _id: perObj._id,
+          name: perObj.name,
+          nickname: perObj.nickname,
+          gender: perObj.gender,
+          birth: perObj.birth,
+          email: perObj.email,
+          password: perObj.password,
+          phone: perObj.phone,
+          imgURL: perObj.imgURL,
+          mannerCredit: perObj.mannerCredit,
+          socketid: perObj.socketid,
+          ucoin: perObj.ucoin,
+          beReported: perObj.beReported,
+        },
+      },
+      (err, u) => {
+        console.log(u);
+      }
+    );
     res.json({
       message: "logged in successfully",
       token,
@@ -386,7 +409,8 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
-      console.log("socketidList : " + socketidList);
+      console.log("socketidList : ");
+      console.log(socketidList);
       res.send(socketidList);
     });
   }
