@@ -4,7 +4,7 @@ import styled from "styled-components";
 const CollegeRankingContainer = styled.div`
   margin-top: 10px;
   background: white;
-  width: 15vw;
+  width: 20vw;
   min-width: 180px;
   max-width: 200px;
   display: flex;
@@ -17,7 +17,7 @@ const CollegeContainer = styled.div`
   color: black;
   font-family: NanumSquare_acR;
   border-radius: 10px;
-  width: 13vw;
+  width: 16vw;
   min-width: 155px;
   max-width: 180px;
   padding: 5px;
@@ -29,14 +29,7 @@ const CollegeRanking = () => {
   const collegeTop10 = [
     "아주대학교",
     "서울대학교",
-    "서강대학교",
-    "국민대학교",
     "연세대학교",
-    "고려대학교",
-    "한양대학교",
-    "건국대학교",
-    "동국대학교",
-    "홍익대학교",
   ];
   const rankingColor = ["#FF9D93", "#FFADA4", "#FBBCB5", "FFFEFE"];
   return (
