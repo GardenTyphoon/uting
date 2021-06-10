@@ -93,7 +93,7 @@ const Groups = ({
   const [sessionUser, setSessionUser] = useState(
     sessionStorage.getItem("nickname")
   );
-  let [modalStatus, setModalStatus] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
   //let sessionUser = sessionStorage.getItem("nickname");
 
   const showProfile = (data) => {
@@ -177,7 +177,6 @@ const Groups = ({
 
   useEffect(() => {
     getGroupInfo();
-    console.log(groupSocketIdList)
   }, []);
 
   useEffect(() => {
