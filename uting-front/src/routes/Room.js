@@ -30,6 +30,7 @@ import help from "../img/help.png";
 import airplane from "../img/airplane.png";
 import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
+import baseurl from "../utils/baseurl";
 import "./Room.css";
 import introLog from "../img/배경없는유팅로고.png";
 const McBotContainer = styled.div`
@@ -212,7 +213,7 @@ const Room = () => {
 
   useEffect(() => {
     setGetalert({ flag: false, message: "" });
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -357,7 +358,7 @@ const Room = () => {
             i--;
           }
         }
-        const socket = socketio.connect("http://localhost:3001");
+        const socket = socketio.connect(`${baseurl.baseBack}`);
         socket.emit("midleave", {
           memlist: parObj,
           midleaveUser: sessionStorage.getItem("nickname"),
@@ -366,14 +367,14 @@ const Room = () => {
         setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
-          window.location.href = "http://localhost:3000/main";
+          window.location.href = `${baseurl.baseFront}/main`;
         }, 2000);
       } else if (res.data === "last") {
         setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
         setTimeout(async () => {
           await endMeeting(meeting_id);
           setGetalert({ flag: false, message: "" });
-          window.location.href = "http://localhost:3000/main";
+          window.location.href = `${baseurl.baseFront}/main`;
         }, 1500);
       }
     }
@@ -409,7 +410,7 @@ const Room = () => {
     document.getElementsByName("loveinput").values = "";
     document.getElementsByName("mylove").values = "";
 
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("golove", { lovemessage: data });
   };
 

@@ -19,6 +19,8 @@ import introLog from "../img/인트로유팅로고.png";
 import intromessage from "../img/인트로메시지.png";
 import labelsticker from "../img/라벨지.png";
 import FindPassword from "../components/user/FindPassword";
+import baseurl from "../utils/baseurl";
+
 const Intro = () => {
   const history = useHistory();
   const [toggleSignIn, setToggleSignIn] = useState(false);
@@ -43,7 +45,7 @@ const Intro = () => {
     const res = await defaultAxios.post("/users/logout", data);
     if (res.data === "success") {
       sessionStorage.clear();
-      window.location.href = "http://localhost:3000/";
+      window.location.href = baseurl.baseFront;
     }
     if (res.data === "no") {
       alert("Error");

@@ -108,7 +108,7 @@ export default function MeetingList({
   const updateNewParticipants_to_OriginParticipants = async (
     meetingRoomParticipants
   ) => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     let data = {
       preMember: meetingRoomParticipants,
     };
@@ -225,7 +225,7 @@ export default function MeetingList({
 
         setAppMeetingInfo(room.title, sessionUser, "ap-northeast-2");
         if (room.title !== undefined) {
-          const socket = socketio.connect("http://localhost:3001");
+          const socket = socketio.connect(`${baseurl.baseBack}`);
           socket.emit("makeMeetingRoomMsg", {
             groupMembersSocketId: groupMembersSocketId,
             roomtitle: room.title,
@@ -257,14 +257,6 @@ export default function MeetingList({
       saveMeetingUsers();
     }
   }, [groupMember]);
-  // useEffect(() => {
-
-  //     groupSocketList.push(currentsocketId.id)
-  //    const socket = socketio.connect('http://localhost:3001');
-  //     socket.emit('entermessage', { "socketidList": groupSocketList, "roomid": "roomid~!", "_id":roomObj._id })
-  //         //socket.emit('hostentermessage',{"socketid":currentsocketId.id})
-
-  // }, [flag])
 
   const getGroupInfo = async (e) => {
     let sessionObject = { sessionUser: sessionUser };

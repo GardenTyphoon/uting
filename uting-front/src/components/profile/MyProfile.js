@@ -7,11 +7,13 @@ import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col, Modal, ModalBody, ModalHeader } from "reactstrap";
 import introLog from "../../img/배경없는유팅로고.png";
+import baseurl from "../../utils/baseurl";
+
 const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
   const [check, setCheck] = useState(false);
-  const [staticpath, setStaticpath] = useState("http://localhost:3001");
+  const [staticpath, setStaticpath] = useState(`${baseurl.baseBack}`);
   const [getalert, setGetalert] = useState({ flag: false, message: "" });
   const [originNickname, setOriginNickname] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({

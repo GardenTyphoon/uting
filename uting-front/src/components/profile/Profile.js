@@ -14,6 +14,7 @@ import {
   ModalFooter,
   Row,
 } from "reactstrap";
+import baseurl from "../../utils/baseurl";
 
 const Profile = ({ modNickname }) => {
   const history = useHistory();
@@ -35,7 +36,7 @@ const Profile = ({ modNickname }) => {
   const coinWindow = () => {
     const coinWin = window.open(
       //ret = 창 객체
-      "http://localhost:3000/ucoin",
+      `${baseurl.baseFront}/ucoin`,
       "_blank",
       "resizable=no, left=0, top=0, width=820, height=1020"
     );
@@ -60,7 +61,7 @@ const Profile = ({ modNickname }) => {
       type: "profile",
     });
     if (res.data.imgURL !== "") {
-      let staticpath = "http://localhost:3001";
+      let staticpath = `${baseurl.baseBack}`;
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {

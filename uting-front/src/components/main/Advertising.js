@@ -8,6 +8,7 @@ import {
   CarouselIndicators,
   CarouselCaption,
 } from "reactstrap";
+import baseurl from "../../utils/baseurl";
 
 const Advertising = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -23,7 +24,7 @@ const Advertising = () => {
     for (let i = 0; i < res.data.length; i++) {
       let response = { src: "", name: "" };
       if (res.data[i].status === "true") {
-        response.src = "http://localhost:3001" + res.data[i].file;
+        response.src = `${baseurl.baseBack}` + res.data[i].file;
         response.name = res.data[i].name;
         responseList.push(response);
       }

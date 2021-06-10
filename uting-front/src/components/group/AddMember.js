@@ -20,6 +20,7 @@ import defaultAxios from "../../utils/defaultAxios";
 import socketio from "socket.io-client";
 import jwtAxios from "../../utils/jwtAxios";
 import introLog from "../../img/배경없는유팅로고.png";
+import baseurl from "../../utils/baseurl";
 const AddMember = ({
   currentUser,
   modalState,
@@ -81,7 +82,7 @@ const AddMember = ({
 
   useEffect(() => {
     console.log(preMemSocketIdList);
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("message", { socketid: socketId });
 
     setPrecheck(true);
@@ -97,7 +98,7 @@ const AddMember = ({
       }
     }
     if (check === true) {
-      const socket = socketio.connect("http://localhost:3001");
+      const socket = socketio.connect(`${baseurl.baseBack}`);
       socket.emit("premessage", { socketidList: preMemSocketIdList });
     }
   }, [precheck]);

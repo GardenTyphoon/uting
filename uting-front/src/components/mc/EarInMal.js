@@ -4,6 +4,7 @@ import socketio from "socket.io-client";
 import explain1 from "../../img/귓말겜1.png";
 import explain2 from "../../img/귓말겜2.png";
 import explain3 from "../../img/귓말겜3.png";
+import baseurl from "../../utils/baseurl";
 import {
   Button,
   Input,
@@ -111,7 +112,7 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       gameNum: 1,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("gameStart", data);
   };
 
@@ -159,7 +160,7 @@ const EarInMal = ({
     console.log(participants);
     console.log(participantsSocketIdList);
 
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("notifyTurn", {
       turn: turn,
       socketIdList: participantsSocketIdList,
@@ -196,7 +197,7 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("sendQues", data);
     alert("전송완료!");
     setMsgModalFlag(false);
@@ -213,7 +214,7 @@ const EarInMal = ({
       socketIdList: participantsSocketIdList,
       msg: e.target.value,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("respondMsg", data);
     alert("전송완료!");
     setNeedToRespond(false);
@@ -225,7 +226,7 @@ const EarInMal = ({
       turnSocketId: toSendSckId,
       msg: msg,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("sendMsg", data);
     alert("전송완료~!");
   };
@@ -251,7 +252,7 @@ const EarInMal = ({
     data = {
       socketIdList: participantsSocketIdList,
     };
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     socket.emit("endGame", data);
   };
 

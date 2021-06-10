@@ -12,7 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "reactstrap";
-
+import baseurl from "../../utils/baseurl";
 import introLog from "../../img/배경없는유팅로고.png";
 
 const SignIn = () => {
@@ -86,10 +86,10 @@ const SignIn = () => {
             setGetalert({ flag: true, message: "로그인 되었습니다." });
 
             if (email === "admin@ajou.ac.kr") {
-              window.location.href = "http://localhost:3000/admin";
+              window.location.href = `${baseurl.baseFront}/admin`;
             } else {
               setTimeout(() => {
-                window.location.href = "http://localhost:3000/main";
+                window.location.href = `${baseurl.baseFront}/main`;
               }, 1000);
             }
           } catch (error) {

@@ -22,6 +22,7 @@ import AddMember from "./AddMember";
 import "../../App.css";
 import AnotherProfile from "../profile/MyProfile";
 
+import baseurl from "../../utils/baseurl";
 import socketio from "socket.io-client";
 import { ConsoleLogger } from "amazon-chime-sdk-js";
 
@@ -116,7 +117,7 @@ const Groups = ({
   }, [modifyNickname]);
 
   const leaveGroup = async () => {
-    const socket = socketio.connect("http://localhost:3001");
+    const socket = socketio.connect(`${baseurl.baseBack}`);
     setClickLeaveGroup(false);
     let groupMemberExceptMe = [];
     groupMember.map((mem) => {
@@ -126,19 +127,16 @@ const Groups = ({
     });
     console.log(groupMemberExceptMe);
 
-    let res = await jwtAxios.post(
-      "http://localhost:3001/users/preMemSocketid",
-      {
-        preMember: groupMemberExceptMe,
-      }
-    );
+    let res = await jwtAxios.post(`${baseurl.baseBack}/users/preMemSocketid`, {
+      preMember: groupMemberExceptMe,
+    });
     console.log(res.data);
     socket.emit("leaveGroup", {
       socketIdList: res.data,
       leavingUsers: sessionUser,
     });
 
-    res = await jwtAxios.post("http://localhost:3001/groups/leaveGroup", {
+    res = await jwtAxios.post(`${baseurl.baseBack}/groups/leaveGroup`, {
       userNickname: sessionUser,
     });
 

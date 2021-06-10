@@ -22,6 +22,7 @@ import "./Vote.css";
 import { ToastContainer, toast } from "react-toastify";
 import { endMeeting } from "../../utils/api";
 import introLog from "../../img/배경없는유팅로고.png";
+import baseurl from "../../utils/baseurl";
 const Vote = forwardRef(
   (
     { participantsSocketIdList, participants, meeting_id, meetingMembers },
@@ -57,7 +58,7 @@ const Vote = forwardRef(
     };
 
     const onClickAgree = (e) => {
-      const socket = socketio.connect("http://localhost:3001");
+      const socket = socketio.connect(`${baseurl.baseBack}`);
       socket.emit("endMeetingAgree", {
         participantsSocketIdList,
         numOfAgree: numOfAgree + 1,
@@ -68,7 +69,7 @@ const Vote = forwardRef(
     };
 
     const onClickDisagree = (e) => {
-      const socket = socketio.connect("http://localhost:3001");
+      const socket = socketio.connect(`${baseurl.baseBack}`);
       socket.emit("endMeetingDisagree", {
         participantsSocketIdList,
         numOfDisagree: numOfDisagree + 1,
@@ -79,7 +80,7 @@ const Vote = forwardRef(
     };
 
     const emitStartVote = () => {
-      const socket = socketio.connect("http://localhost:3001");
+      const socket = socketio.connect(`${baseurl.baseBack}`);
       socket.emit("startVote", { socketidList: participantsSocketIdList });
       console.log(participantsSocketIdList);
       console.log("emitvote");
@@ -228,14 +229,14 @@ const Vote = forwardRef(
           setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
           setTimeout(() => {
             setGetalert({ flag: false, message: "" });
-            window.location.href = "http://localhost:3000/main";
+            window.location.href = `${baseurl.baseFront}/main`;
           }, 1500);
         } else if (res.data === "last") {
           setGetalert({ flag: true, message: "미팅 방을 나갑니다." });
           setTimeout(async () => {
             await endMeeting(meeting_id);
             setGetalert({ flag: false, message: "" });
-            window.location.href = "http://localhost:3000/main";
+            window.location.href = `${baseurl.baseFront}/main`;
           }, 1500);
         }
       }

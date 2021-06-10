@@ -6,6 +6,7 @@ import classnames from "classnames";
 import Conversation from "./Conversation";
 import GameRecom from "./GameRcom";
 import ProfileNoImage from "../../img/ProfileNoImage.jpg";
+import baseurl from "../../utils/baseurl";
 import {
   Button,
   ButtonGroup,
@@ -69,7 +70,7 @@ const AdminAd = () => {
       status: e.status,
     };
     setClickData(data);
-    let staticpath = "http://localhost:3001";
+    let staticpath = `${baseurl.baseBack}`;
     setImgBase64(staticpath + e.file);
   };
   let isOpen = () => {
