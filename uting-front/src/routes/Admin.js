@@ -9,24 +9,16 @@ import AdminBad from '../components/admin/AdminBad';
 import AdminMc from '../components/admin/AdminMc';
 import AdminAd from '../components/admin/AdminAd';
 import MenuItem from "antd/lib/menu/MenuItem";
-const WhiteSpace = styled.div`
-  margin: 10px;
-`;
+
 const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
 
 
 const Admin = () => {
-  const [menustate,setMenustate]=useState(false)
-  // state = {
-  //   collapsed: false,
-  // };
-
+  const [menustate,setMenustate]=useState("")
   const onSider = (e) => {
-    console.log(e.target.innerText)
     setMenustate(e.target.innerText)
   }
-
 
     return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -34,7 +26,7 @@ const Admin = () => {
           onClick={(e)=>onSider(e)}
         >
           <div className="App-logo" />
-          <Menu  theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <Menu  theme="dark" mode="inline">
             <Menu.Item key="1" >
               <span >MC봇 관리</span>
             </Menu.Item>
@@ -56,7 +48,7 @@ const Admin = () => {
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               {menustate==="MC봇 관리"?<AdminMc></AdminMc>:
               menustate==="신고 관리"?<AdminBad></AdminBad>:
-              menustate=="광고 관리"?<AdminAd></AdminAd>:""}
+              menustate=="광고 관리"?<AdminAd></AdminAd>:"UTING관리자 페이지 입니다."}
             </div>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

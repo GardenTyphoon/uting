@@ -53,18 +53,12 @@ const AdminMc = () => {
     const toggle = tab => {
       if(activeTab !== tab) setActiveTab(tab);
     }
+
+    useEffect(()=>{
+      setActiveTab('1')
+    },[])
       
   return (
-    <Card>
-    <CardHeader>
-      <FlexBox>
-        {'MC봇 관리'}
-        <RightButton>
-          <Button onClick={(e) => isOpen()}>OPEN</Button>
-        </RightButton>
-      </FlexBox>
-    </CardHeader>
-    <Collapse isOpen={open}>
       <CardBody>
         mc봇에 대화추천 게임추천 데이터 CRUD할 예정
         <Nav tabs>
@@ -94,8 +88,6 @@ const AdminMc = () => {
         </TabPane>
       </TabContent>
       </CardBody>
-    </Collapse>
-  </Card>
   );
 };
 export default AdminMc;
