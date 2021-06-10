@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProfileNoImage from "../../img/MeetingRoom.png";
 import ajou_logo from "../../img/ajou_logo.png";
 import jwtAxios from "../../utils/jwtAxios";
+import axios from "axios"
 import FormData from "form-data";
 import "./MyProfile.css";
 import { Container, Row, Col, Modal, ModalBody, ModalHeader } from "reactstrap";

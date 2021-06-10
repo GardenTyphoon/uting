@@ -71,15 +71,32 @@ const SignUp = () => {
   const [checkNickname, setCheckNickname] = useState(false);
 
   const [validPhone, setValidPhone] = useState(false);
-
+  const [validBirth, setValidBirth] = useState(false);
+  const [validNickname, setValidNickname] = useState(false);
+  const [validPassword, setValidPassword] = useState(false);
+  const onlyNumber = /^[0-9]+$/; ;
+  const passwordContidion = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+  
   let onChangehandler = (e) => {
     let { name, value } = e.target;
-
+    if (name === "phone") {
+      if (value.length === 11 && onlyNumber.test(value)) setValidPhone(true);
+      else setValidPhone(false);
+    }
+    if (name === "birth") {
+      if (value.length === 8 && onlyNumber.test(value) ) setValidBirth(true);
+      else setValidBirth(false);
+    }
+    if (name === "nickname") {
+      if (value.length <= 8 && value.length>0) setValidNickname(true);
+      else setValidNickname(false);
+    }
+    if (name === "password") {
+      if (passwordContidion.text(value)) setValidPassword(true);
+      else setValidPassword(false);
+    }
     if (name === "check-email") {
       setUsercode(value);
-    } else if (name === "phone") {
-      if (value.length === 11) setValidPhone(true);
-      else setValidPhone(false);
     } else {
       setUserinfo({
         ...userinfo,
@@ -261,7 +278,7 @@ const SignUp = () => {
           {identity !== "true" && validPhone === true ? (
             <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
           ) : (
-            <button onClick={onClickCertification} className="gradientBtn" disabled>본인인증</button>
+            <button onClick={onClickCertification} className="gradientBtnDisabled" disabled>본인인증</button>
           )}
         </InputandBtn>
 
@@ -284,7 +301,10 @@ const SignUp = () => {
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
-          <button className="gradientBtn" onClick={(e) => overlapNickname()} >중복확인</button>
+          {validNickname===true ?
+          <button className="gradientBtn" onClick={(e) => overlapNickname()} >중복확인</button> :
+          <button className="gradientBtnDisabled" onClick={(e) => overlapNickname()} disabled >중복확인</button>
+          }
         </InputandBtn>
 
 
@@ -325,12 +345,12 @@ const SignUp = () => {
         <Input
           type="password"
           name="password"
-          placeholder="대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
+          placeholder="영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
           style={{ marginBottom: "20px" }}
           onChange={(e) => onChangehandler(e)}
         />
       </SignUpBox>
-      {checkcode === true ? (
+      {checkcode && validPhone && validBirth && validNickname && validPassword ? (
         <button className="gradientBtn" onClick={(e) => onSignupSubmit(e)}>가입</button>
       ) : (
         <button className="gradientBtnDisabled" onClick={(e) => onSignupSubmit(e)} disabled >가입</button>

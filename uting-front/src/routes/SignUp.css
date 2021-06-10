@@ -14,7 +14,7 @@
 
 .gradientBtnDisabled{
     font-family: NanumSquare_acR;
-    background: linear-gradient(to bottom, #FFA969, #FF7DA2);
+    background: linear-gradient(to bottom, #ffaa6963, #ff7da256);
     border:none;
     border-radius: 10px;
     color: white;
