@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "reactstrap";
-import axios from "axios";
+import jwtAxios from "../utils/jwtAxios";
 import "./Ucoin.css";
 
 const Ucoin = () => {
@@ -65,7 +65,7 @@ const Ucoin = () => {
 
   const addUcoin = () => {
     console.log(ProfileInfo._id);
-    const res = axios.post("/api/users/addUcoin", {
+    const res = jwtAxios.post("/users/addUcoin", {
       userId: ProfileInfo._id,
       ucoin: ProfileInfo.ucoin,
       chargingCoin: chargingCoin,
@@ -73,7 +73,7 @@ const Ucoin = () => {
   };
 
   const getProfile = async (e) => {
-    const res = await axios.post("/api/users/viewMyProfile", {
+    const res = await jwtAxios.post("/users/viewMyProfile", {
       sessionUser: `${sessionStorage.getItem("email")}`,
       type: "profile",
     });

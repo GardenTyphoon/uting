@@ -14,6 +14,7 @@ import socketio, { Socket } from "socket.io-client";
 import explain1 from "../../img/왕겜1.png";
 import explain2 from "../../img/왕겜1.png";
 import { SOCKET } from "../../utils/constants";
+import baseurl from "../../utils/baseurl";
 
 const items = [
   //for 설명서
@@ -214,7 +215,7 @@ const King = ({
       </Modal>
       {startButtonFade ? (
         <>
-          <strong style={{paddingLeft:"10%"}}>왕게임</strong>
+          <strong style={{ paddingLeft: "10%" }}>왕게임</strong>
           <div
             style={{
               fontSize: "medium",
