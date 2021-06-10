@@ -399,7 +399,7 @@ const EarInMal = ({
                   <div
                     style={{
                       gridColumn: "1/5",
-                      gridRow: "1/3",
+                      gridRow: "2/3",
                     }}
                   >
                     {participants.map((member) => (

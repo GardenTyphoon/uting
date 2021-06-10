@@ -16,7 +16,6 @@ import baseurl from "../../utils/baseurl";
 import introLog from "../../img/배경없는유팅로고.png";
 
 const SignIn = () => {
-  const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [islogined, setIslogined] = useState(false);
