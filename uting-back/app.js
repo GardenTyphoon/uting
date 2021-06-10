@@ -44,10 +44,6 @@ app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'uploads')));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-<<<<<<< HEAD
-app.use("/", indexRouter);
-=======
->>>>>>> b74aac657ea620179c105c895744a86075c45b56
 app.use("/users", usersRouter);
 app.use("/meetings", meetingsRouter);
 app.use("/groups", groupsRouter);
@@ -72,32 +68,6 @@ app.use(function (err, req, res, next) {
 });
 app.io = require("socket.io")();
 
-<<<<<<< HEAD
-
-/*
-Room.js
-connect
-clientid
-startVote
-endMeetingAgree
-endMeetingDisagree
-musicplay
-musicpause
-replay
-*/
-
-/*
-Main.js
-connect
-clientid
-premessage
-entermessage
-sendMember
-makeMeetingRoomMsg
-*/
-
-=======
->>>>>>> b74aac657ea620179c105c895744a86075c45b56
 app.io.on("connection", function (socket) {
   socket.on("login", function (data) {
     var clientInfo = new Object();
@@ -168,20 +138,6 @@ app.io.on("connection", function (socket) {
     app.io.to(socket.id).emit("currentSocketId", data);
   });
 
-<<<<<<< HEAD
-  socket.on("golove",function(lovemessage){
-    console.log("-------------------*******************----------")
-    console.log(lovemessage)
-    console.log("-------------------*******************----------")
-    let data ={
-      type:"golove",
-      sender:lovemessage.lovemessage.sender,
-      message:lovemessage.lovemessage.message
-    }
-    console.log(data)
-    app.io.to(lovemessage.lovemessage.socketid).emit("room",data)
-  })
-=======
   socket.on("golove", function (lovemessage) {
     let data = {
       type: "golove",
@@ -191,7 +147,6 @@ app.io.on("connection", function (socket) {
     console.log(data);
     app.io.to(lovemessage.lovemessage.socketid).emit("room", data);
   });
->>>>>>> b74aac657ea620179c105c895744a86075c45b56
 
   socket.on("joinRoom", function (roomId) {
     socket.join("room"); // 'room' 부분 미팅방 방제로 수정 예정
@@ -262,19 +217,6 @@ app.io.on("connection", function (socket) {
     }
   });
 
-<<<<<<< HEAD
-  socket.on("midleave",function(msg){
-    let data={
-      type:"midleave",
-      midleaveUser:msg.midleaveUser,
-    }
-    for (let i = 0; i < Object.keys(msg.memlist).length; i++) {
-      app.io.to(msg.memlist[i].socketid).emit("room", data);
-    }
-  })
-
-
-=======
   socket.on("midleave", function (msg) {
     let data = {
       type: "midleave",
@@ -284,7 +226,6 @@ app.io.on("connection", function (socket) {
       app.io.to(msg.memlist[i].socketid).emit("room", data);
     }
   });
->>>>>>> b74aac657ea620179c105c895744a86075c45b56
 
   socket.on("notifyTurn", function (msg) {
     let data = {
