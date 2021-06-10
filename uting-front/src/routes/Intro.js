@@ -15,13 +15,16 @@ import SignIn from "../components/user/SignIn";
 import Main from "./Main";
 import { Container, Row, Col } from "reactstrap";
 import axios from "axios";
-import introLog from "../img/인트로유팅로고.png";
-import intromessage from "../img/인트로메시지.png";
-import labelsticker from "../img/라벨지.png";
+import introLog from '../img/인트로유팅로고.png'
+import intromessage from '../img/인트로메시지.png'
+import labelsticker from '../img/라벨지.png'
+import FindPassword from "../components/user/FindPassword"
 const Intro = () => {
   const history = useHistory();
   const [toggleSignIn, setToggleSignIn] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [findIdModal, setFindIdModal] = useState(false);
+  const [findPasswordModal, setFindPasswordModal] = useState(false);
   const onClick = () => {
     history.push({
       pathname: `/signUp`,
@@ -32,7 +35,7 @@ const Intro = () => {
       pathname: `/main`,
     });
   };
-
+  const toggleFindPasswordModal = () => setFindPasswordModal(!findPasswordModal);
   let logout = async (e) => {
     let data = { email: sessionStorage.getItem("email") };
     console.log(data);
@@ -75,44 +78,18 @@ const Intro = () => {
         </div>
         <Col>
           <div className="col2">
-            {isLoggedIn === false ? (
-              <>
-                <SignIn />
-                <div className="findAccount">
-                  <button
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      color: "gray",
-                    }}
-                  >
-                    아이디 찾기
-                  </button>{" "}
-                  |
-                  <button
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      color: "gray",
-                    }}
-                  >
-                    비밀번호 찾기
-                  </button>
-                </div>
-                <div className="createaccount">
-                  <button className="MiddleBtn" onClick={onClick}>
-                    계정 만들기
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
+            {isLoggedIn === false ? <><SignIn />
+              <div className="findAccount" >
+                  <button  style={{background:"transparent", border:"none", color:"gray"}}>아이디 찾기</button> |  
+                  <button onClick={()=>toggleFindPasswordModal()} style={{background:"transparent", border:"none", color:"gray"}}>비밀번호 찾기</button>
+              </div>
+              <div className="createaccount">
+                <button className="MiddleBtn" onClick={onClick}>
+                  계정 만들기
+                </button>
+              </div></> 
+              : 
+              <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                 <div className="Logoutcontainer">
                   <span className="logoutname">
                     {sessionStorage.getItem("nickname")}님 <br></br> 반갑습니다.
@@ -126,16 +103,26 @@ const Intro = () => {
                   미팅 즐기러 가기
                 </button>
               </div>
-            )}
+            }
           </div>
         </Col>
       </Row>
 
-      <div className="diva">
-        <Link className="divad" to="/ad">
-          광고 문의
-        </Link>
-      </div>
+      <div className="diva" ><Link className="divad" to="/ad">광고 문의</Link></div>
+
+
+      <Modal isOpen={findPasswordModal}>
+        <ModalHeader toggle={toggleFindPasswordModal} style={{fontFamily:"NanumSquare_acR"}}>
+          비밀번호 찾기
+        </ModalHeader>
+        <ModalBody>
+          <FindPassword />
+        </ModalBody>
+        <ModalFooter>
+        <Button color="primary" onClick={()=>toggleFindPasswordModal()}>닫기</Button>
+        </ModalFooter>
+      </Modal>
+      
     </div>
   );
 };

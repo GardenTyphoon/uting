@@ -275,7 +275,7 @@ const SignUp = () => {
             onChange={(e) => onChangehandler(e)}
 
           />
-          {identity !== "true" && validPhone === true ? (
+          {validPhone === true ? (
             <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
           ) : (
             <button onClick={onClickCertification} className="gradientBtnDisabled" disabled>본인인증</button>
