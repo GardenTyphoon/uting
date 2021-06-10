@@ -106,10 +106,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
 
   useEffect(()=>{
     if(modifyNickname==="success"){
-      //window.location.reload()
-      
       getGroupInfo()
-      console.log(groupSocketIdList)
     }
   },[modifyNickname])
 
@@ -164,6 +161,7 @@ const Groups = ({ currentsocketId, checkGroup, checkAnother, groupSocket,modifyN
 
   useEffect(() => {
     getGroupInfo();
+    console.log(groupSocketIdList)
   }, []);
 
   useEffect(() => {
