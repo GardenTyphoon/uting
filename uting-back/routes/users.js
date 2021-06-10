@@ -1,4 +1,3 @@
-import authMiddleware from "../middlewares/auth";
 var express = require("express");
 var router = express.Router();
 const multer = require("multer");
@@ -39,9 +38,6 @@ router.post("/sendEmail", async function (req, res, next) {
     smtpTransport({
       service: "gmail",
       host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
       auth: {
         user: "uting4u@gmail.com",
         pass: "uting0515!",
@@ -181,7 +177,7 @@ router.post("/checknickname", function (req, res, next) {
   });
 });
 
-router.post("/viewMyProfile", authMiddleware, function (req, res, next) {
+router.post("/viewMyProfile", function (req, res, next) {
   User.find(function (err, user) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
@@ -237,7 +233,7 @@ router.post("/usersSocketIdx", function (req, res, next) {
     res.send(data);
   });
 });
-router.post("/modifyMyProfile", authMiddleware, function (req, res, next) {
+router.post("/modifyMyProfile", function (req, res, next) {
   User.findByIdAndUpdate(
     req.body._id,
     {
@@ -254,14 +250,9 @@ router.post("/modifyMyProfile", authMiddleware, function (req, res, next) {
   );
 });
 
-router.post(
-  "/modifyMyProfileImg",
-  authMiddleware,
-  upload.single("img"),
-  (req, res) => {
-    res.json({ url: `/uploads/${req.file.filename}` });
-  }
-);
+router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
+  res.json({ url: `/uploads/${req.file.filename}` });
+});
 
 router.post("/addUcoin", function (req, res, next) {
   let newUcoin = req.body.ucoin + req.body.chargingCoin;
@@ -278,7 +269,7 @@ router.post("/addUcoin", function (req, res, next) {
 });
 
 // 그룹 생성시 온라인 유저인지 확인
-router.post("/logined", authMiddleware, function (req, res, next) {
+router.post("/logined", function (req, res, next) {
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {
@@ -336,7 +327,7 @@ router.post("/savesocketid", function (req, res, next) {
   });
 });
 
-router.post("/logout", authMiddleware, function (req, res, next) {
+router.post("/logout", function (req, res, next) {
   let ismember = false;
   let perObj = {};
   User.find(function (err, user) {
@@ -517,23 +508,30 @@ router.post("/report", function (req, res, next) {
   });
 });
 router.post("/changePassword", function (req, res, next) {
-User.find(function (err, user) {
-  user.forEach((per) => {
-    if (per.name === req.body.userinfo.name && per.email === req.body.userinfo.email) {
-
-      if (!per.verify(req.body.userinfo.newPassword)) {
-        const encrypted = crypto
-          .createHmac("sha1", config.secret)
-          .update(req.body.userinfo.newPassword)
-          .digest("base64");
-        User.findByIdAndUpdate(per._id, { $set: { password:encrypted} }, (err, gr) => { });
-        res.send("비밀번호가 성공적으로 변경되었습니다.")
-      } else {
-        res.send("최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요.")
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (
+        per.name === req.body.userinfo.name &&
+        per.email === req.body.userinfo.email
+      ) {
+        if (!per.verify(req.body.userinfo.newPassword)) {
+          const encrypted = crypto
+            .createHmac("sha1", config.secret)
+            .update(req.body.userinfo.newPassword)
+            .digest("base64");
+          User.findByIdAndUpdate(
+            per._id,
+            { $set: { password: encrypted } },
+            (err, gr) => {}
+          );
+          res.send("비밀번호가 성공적으로 변경되었습니다.");
+        } else {
+          res.send(
+            "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."
+          );
+        }
       }
-    }
-  })
-})
-}
-}
+    });
+  });
+});
 module.exports = router;
