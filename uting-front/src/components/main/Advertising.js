@@ -65,7 +65,7 @@ const Advertising = () => {
           onExited={() => setAnimating(false)}
           key={item.src}
         >
-          <img style={{width:"300px"}} src={item.src} alt={item.altText} />
+          <img style={{width:"230px",height:"500px"}} src={item.src} alt={item.altText} />
           <CarouselCaption captionText={item.caption} captionHeader={item.caption} />
         </CarouselItem>
       );
@@ -79,8 +79,6 @@ const Advertising = () => {
       >
         <CarouselIndicators items={adslist} activeIndex={activeIndex} onClickHandler={goToIndex} />
         {slides}
-        <CarouselControl direction="prev" directionText="Previous" onClickHandler={previous} />
-        <CarouselControl direction="next" directionText="Next" onClickHandler={next} />
       </Carousel>
     );
   }
