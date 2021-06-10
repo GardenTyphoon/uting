@@ -17,6 +17,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import renewImg from "../img/새로고침.svg";
 import Tutorial from "../components/main/Tutorial.js";
+import Advertising from "../components/main/Advertising.js";
 
 import { useAppState } from "../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
@@ -252,8 +253,11 @@ const Main = () => {
             학교별 매너학점 TOP10
           </div>
           <CollegeRanking />
+          <div style={{marginTop:"30%",marginLeft:"10%"}}>
+            <Advertising></Advertising>
+          </div>
         </div>
-
+        
         <div className="Room">
           <div
             className="RoomTop"

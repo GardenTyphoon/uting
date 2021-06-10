@@ -67,10 +67,8 @@ const AdminBad = () => {
   };
 
   useEffect(() => {
-    if (open === true) {
       getReported();
-    }
-  }, [open]);
+  }, []);
 
   let goHell = async (e) => {
     console.log("나쁜사람", choice);
@@ -117,16 +115,8 @@ const AdminBad = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <FlexBox>
-          {"신고자 관리"}
-          <RightButton>
-            <Button onClick={(e) => isOpen()}>OPEN</Button>
-          </RightButton>
-        </FlexBox>
-      </CardHeader>
-      <Collapse isOpen={open}>
+    <>
+      
         <CardBody>
           <div style={{ width: "100%", height: "50%" }}>
             <span className="reportedlist">신고자 목록</span>
@@ -198,8 +188,7 @@ const AdminBad = () => {
             </div>
           </ModalBody>
         </Modal>
-      </Collapse>
-    </Card>
+    </>
   );
 };
 export default AdminBad;
