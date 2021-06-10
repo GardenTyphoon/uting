@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Input, Button, Table } from "reactstrap";
+import { Input, Button, Table, Modal, ModalHeader, ModalBody } from "reactstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { is } from "date-fns/locale";
 import "./SignUp.css"
-
+import introLog from "../img/배경없는유팅로고.png"
 const SignUpContainer = styled.div`
   margin:0 auto; 
   padding:10vh;
@@ -74,9 +74,16 @@ const SignUp = () => {
   const [validBirth, setValidBirth] = useState(false);
   const [validNickname, setValidNickname] = useState(false);
   const [validPassword, setValidPassword] = useState(false);
+
+  const [getalert, setGetalert] = useState({ "flag": false, "message": "" })
+
   const onlyNumber = /^[0-9]+$/; ;
   const passwordContidion = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
   
+  let toggleAlert = (e) => {
+    setGetalert({ ...getalert, "flag": !getalert.flag })
+  }
+
   let onChangehandler = (e) => {
     let { name, value } = e.target;
     if (name === "phone") {
@@ -144,11 +151,16 @@ const SignUp = () => {
           password: "",
           phone: "",
         });
-        alert("회원가입이 완료되었습니다.");
-        window.location.href = "http://localhost:3000/";
+        setGetalert({ "flag": true, "message": "회원가입이 완료되었습니다." })
+        setTimeout(() => {
+          history.push('/');
+        }, 1500)
       }
     } else {
-      alert("입력하지 않은 정보가 있습니다.");
+      setGetalert({ "flag": true, "message": "입력하지 않은 정보가 있습니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   };
 
@@ -164,12 +176,18 @@ const SignUp = () => {
         "http://localhost:3001/users/sendEmail",
         data
       );
-      alert("해당 이메일로 인증코드를 전송했습니다.")
+      setGetalert({ "flag": true, "message": "해당 이메일로 인증코드를 전송했습니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
       setCode(res.data);
       console.log(res);
 
     } else {
-      alert("대학교 이메일로만 가입이 가능합니다.");
+      setGetalert({ "flag": true, "message": "대학교 이메일로만 가입이 가능합니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   };
 
@@ -178,11 +196,17 @@ const SignUp = () => {
     if (code === usercode) {
       setCheckcode(true);
       if (checkcode === true) {
-        alert("인증코드 확인이 완료되었습니다.");
+        setGetalert({ "flag": true, "message": "인증코드 확인이 완료되었습니다." })
+        setTimeout(() => {
+          setGetalert({ "flag": false, "message": "" })
+        }, 1500)
       }
     } else {
       setCheckcode(false);
-      alert("인증코드가 틀렸습니다.");
+      setGetalert({ "flag": true, "message": "인증코드가 틀렸습니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   };
 
@@ -193,11 +217,17 @@ const SignUp = () => {
 
     const res = await axios.post("http://localhost:3001/users/checknickname", data)
     if (res.data === "exist") {
-      alert("이미 존재하는 닉네임입니다.")
+      setGetalert({ "flag": true, "message": "이미 존재하는 닉네임입니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
     if (res.data === "no") {
       setCheckNickname(true)
-      alert("사용가능한 닉네임입니다.")
+      setGetalert({ "flag": true, "message": "사용가능한 닉네임입니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   }
 
@@ -217,8 +247,7 @@ const SignUp = () => {
 
   /* 3. 콜백 함수 정의하기 */
   function callback(response) {
-    console.log("콜백함수");
-    console.log(response);
+   
     const { success, merchantid, name, phone, error_msg } = response;
     if (success) {
       setIdentity("true");
@@ -232,19 +261,27 @@ const SignUp = () => {
 
 
     if (false === reg.test(password)) {
-      alert('비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다.');
+      setGetalert({ "flag": true, "message": "비밀번호는 8자 이상이어야 하며, 숫자/대문자/소문자/특수문자를 모두 포함해야 합니다." })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
       return false;
     } else {
-      console.log("통과");
       return true;
     }
 
   }
   useEffect(() => {
     if (identity === "true") {
-      alert("본인인증 성공 !");
+      setGetalert({ "flag": true, "message": "본인인증 성공 !" })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     } else if (identity === "false") {
-      alert("본인인증 실패");
+      setGetalert({ "flag": true, "message": "본인인증 실패" })
+      setTimeout(() => {
+        setGetalert({ "flag": false, "message": "" })
+      }, 1500)
     }
   }, [identity]);
 
@@ -355,6 +392,15 @@ const SignUp = () => {
       ) : (
         <button className="gradientBtnDisabled" onClick={(e) => onSignupSubmit(e)} disabled >가입</button>
       )}
+      <Modal isOpen={getalert.flag} >
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img style={{ width: "40px", height: "40px", marginLeft: "210px", marginBottom: "1000px" }} src={introLog}></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div style={{ textAlign: "center", marginTop: "4%", marginBottom: "8%", fontFamily: "NanumSquare_acR", fontWeight: "bold", fontSize: "18px", height: "50px" }}>{getalert.message}</div>
+
+        </ModalBody>
+      </Modal>
     </SignUpContainer>
   );
 };
