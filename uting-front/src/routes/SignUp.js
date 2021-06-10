@@ -80,7 +80,7 @@ const SignUp = () => {
   let onChangehandler = (e) => {
     let { name, value } = e.target;
     if (name === "phone") {
-      if (value.length === 11 && onlyNumber.test(value)) setValidPhone(true);
+      if (value.length === 11 && onlyNumber.test(value) && value.slice(0,3)==="010") setValidPhone(true);
       else setValidPhone(false);
     }
     if (name === "birth") {
@@ -92,7 +92,7 @@ const SignUp = () => {
       else setValidNickname(false);
     }
     if (name === "password") {
-      if (passwordContidion.text(value)) setValidPassword(true);
+      if (passwordContidion.test(value)) setValidPassword(true);
       else setValidPassword(false);
     }
     if (name === "check-email") {
@@ -275,7 +275,7 @@ const SignUp = () => {
             onChange={(e) => onChangehandler(e)}
 
           />
-          {identity !== "true" && validPhone === true ? (
+          {validPhone === true ? (
             <button onClick={onClickCertification} className="gradientBtn" >본인인증</button>
           ) : (
             <button onClick={onClickCertification} className="gradientBtnDisabled" disabled>본인인증</button>
