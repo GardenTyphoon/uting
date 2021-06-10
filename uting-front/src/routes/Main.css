@@ -2,18 +2,20 @@
   font-family: "NanumSquare_acR";
   src: url("../ttf/NanumSquare_acR.ttf");
 }
-html, body {
-  margin:0px;
-  height:100%;
+html,
+body {
+  margin: 0px;
+  height: 100%;
 }
-html, body {
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
 }
 
-.font{
+.font {
   font-family: NanumSquare_acR;
 }
 .profile {
@@ -23,63 +25,66 @@ html, body {
 .profileModal {
   background-color: #ffb4ac;
 }
-.utingLogo{
+.utingLogo {
   width: 2vw;
-  height:2vw;
-  margin-left:20PX;
-  min-width:60px;
-  min-height: 60px; 
-  margin-top:5px;
+  height: 2vw;
+  margin-left: 20px;
+  min-width: 60px;
+  min-height: 60px;
+  margin-top: 5px;
   margin-bottom: 5px;
 }
 .makeRoomBtn {
   font-family: NanumSquare_acR;
-  width:100px;
-  height:35px;
+  width: 100px;
+  height: 35px;
   background: linear-gradient(to bottom, #ff9a51, #ff6994);
   border: none;
   border-radius: 10px;
   color: white;
 }
-.mainContainer{
+.mainContainer {
   background-color: #ffe4e1;
-  width:100%;
-  min-height:100vh;
+  width: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-.mainTop{
+.mainTop {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding-top: 30px;
 }
-.mainBottom{
+.mainBottom {
   display: flex;
   flex-direction: row;
   margin-top: 20px;
   justify-content: space-evenly;
 }
-.RoomTop{
+.RoomTop {
   display: flex;
   flex-direction: row;
   align-items: center;
-  
 }
-.CollegeRanking{
-  display:flex;
+.CollegeRanking {
+  display: flex;
   flex-direction: column;
   align-items: center;
-  width:200px;
+  width: 200px;
 }
-.Room{
-  width:50vw;
-  min-width:630px;
-  margin-left:5vw;
+.Room {
+  width: 50vw;
+  min-width: 630px;
+  margin-left: 5vw;
   margin-right: 3vw;
 }
-.renewbtn{
+.renewbtn {
   border: 0;
-  background-color: rgb(255,228,225);
+  background-color: rgb(255, 228, 225);
+}
+.renewbtn {
+  border: 0;
+  background-color: rgb(255, 228, 225);
 }

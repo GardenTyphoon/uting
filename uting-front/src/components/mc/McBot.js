@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Route, Link, Switch, Router } from "react-router-dom";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import styled from "styled-components";
 import McBotImg from "../../img/mc봇.png";
 import backImg from "../../img/뒤로가기.svg";
@@ -28,6 +28,7 @@ import {
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
 import { SOCKET } from "../../utils/constants";
+import baseurl from "../../utils/baseurl";
 
 const Box = styled.div`
   border: 2px solid rgb(255, 255, 255);
@@ -89,7 +90,7 @@ const McBot = ({
     let data = {
       type: "game",
     };
-    const res = await axios.post("/api/mcs/list", data);
+    const res = await defaultAxios.post("/mcs/list", data);
 
     //랜덤값생성
     let index = Math.floor(Math.random() * res.data.length);
@@ -100,7 +101,7 @@ const McBot = ({
     let data = {
       type: "conversation",
     };
-    const res = await axios.post("/api/mcs/list", data);
+    const res = await defaultAxios.post("/mcs/list", data);
     //랜덤값생성
     let index = Math.floor(Math.random() * res.data.length);
     setContent(res.data[index]);

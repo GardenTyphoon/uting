@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import defaultAxios from "../../utils/defaultAxios";
 import MyProfile from "./MyProfile";
 import ProfileNoImage from "../../img/MeetingRoom.png";
 import ucoin from "../../img/ucoin.png";
@@ -14,8 +14,9 @@ import {
   ModalFooter,
   Row,
 } from "reactstrap";
+import baseurl from "../../utils/baseurl";
 
-const Profile = ({modNickname}) => {
+const Profile = ({ modNickname }) => {
   const history = useHistory();
   const [imgBase64, setImgBase64] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({
@@ -25,14 +26,17 @@ const Profile = ({modNickname}) => {
     ucoin: "",
   });
   const [toggleprofile, setToggleProfile] = useState(false);
-  const toggleProfileBtn = (e) => setToggleProfile(!toggleprofile);
-  const [checkProfile,setCheckProfile]=useState(false)
+  const toggleProfileBtn = (e) => {
+    setToggleProfile(!toggleprofile);
+  };
+  const [checkProfile, setCheckProfile] = useState(false);
+
   let sessionUser = sessionStorage.getItem("email");
 
   const coinWindow = () => {
     const coinWin = window.open(
       //ret = 창 객체
-      "/ucoin",
+      `${baseurl.baseFront}/ucoin`,
       "_blank",
       "resizable=no, left=0, top=0, width=820, height=1020"
     );
@@ -41,22 +45,23 @@ const Profile = ({modNickname}) => {
     getProfile();
   }, []);
 
-  useEffect(()=>{
-    if(checkProfile===true){
+  useEffect(() => {
+    if (checkProfile === true) {
       getProfile();
     }
-  },[checkProfile])
+  }, [checkProfile]);
 
-  let checkMyprofile=(e)=>{
-    setCheckProfile(e)
-  }
+  let checkMyprofile = (e) => {
+    setCheckProfile(e);
+  };
 
   const getProfile = async (e) => {
-    const res = await axios.post("/api/users/viewMyProfile", {
-      sessionUser: sessionUser,type:"profile"
+    const res = await defaultAxios.post("/users/viewMyProfile", {
+      sessionUser: sessionUser,
+      type: "profile",
     });
     if (res.data.imgURL !== "") {
-      let staticpath = "/api";
+      let staticpath = `${baseurl.baseBack}`;
       setImgBase64(staticpath + res.data.imgURL);
     }
     let data = {
@@ -65,7 +70,7 @@ const Profile = ({modNickname}) => {
       ucoin: res.data.ucoin,
     };
     setProfileInfo(data);
-    setCheckProfile(false)
+    setCheckProfile(false);
   };
 
   return (
@@ -76,14 +81,18 @@ const Profile = ({modNickname}) => {
         flexDirection: "row",
         alignItems: "center",
         width: "180px",
-        marginBottom:"20px"
+        marginBottom: "20px",
       }}
     >
       <button
         onClick={(e) => {
           toggleProfileBtn(e);
         }}
-        style={{ borderRadius: "16px", padding: "0%",border:"2px solid #e2e2e2e2" }}
+        style={{
+          borderRadius: "16px",
+          padding: "0%",
+          border: "2px solid #e2e2e2e2",
+        }}
       >
         {imgBase64 === "" ? (
           <img
@@ -103,8 +112,10 @@ const Profile = ({modNickname}) => {
           />
         )}
       </button>
-      <div style={{ display: "flex", flexDirection: "column", width:"100px" }}>
-        <div style={{  marginLeft: "15%", color: "#896E6E", fontWeight:"bold" }}>
+      <div style={{ display: "flex", flexDirection: "column", width: "100px" }}>
+        <div
+          style={{ marginLeft: "15%", color: "#896E6E", fontWeight: "bold" }}
+        >
           {ProfileInfo.nickname}
         </div>
         <div
@@ -116,7 +127,9 @@ const Profile = ({modNickname}) => {
           }}
         >
           <img style={{ width: "30px", marginRight: "3%" }} src={ucoin}></img>
-          <div style={{ color: "#896E6E" , fontWeight:"bold"}}>{ProfileInfo.ucoin}</div>
+          <div style={{ color: "#896E6E", fontWeight: "bold" }}>
+            {ProfileInfo.ucoin}
+          </div>
           <button
             onClick={coinWindow}
             style={{
@@ -124,20 +137,20 @@ const Profile = ({modNickname}) => {
               borderRadius: "10px",
               padding: "5px",
               fontSize: "small",
-              marginLeft:"5px"
+              marginLeft: "5px",
             }}
           >
             충전
           </button>
         </div>
       </div>
-      <Modal isOpen={toggleprofile} >
-        <ModalBody isOpen={toggleprofile} style={{background:"#FFB4AC"}} >
+      <Modal isOpen={toggleprofile}>
+        <ModalBody isOpen={toggleprofile} style={{ background: "#FFB4AC" }}>
           <Row>
             <button
               onClick={(e) => {
                 toggleProfileBtn(e);
-              }}  
+              }}
               style={{
                 background: "transparent",
                 border: "none",
@@ -149,7 +162,11 @@ const Profile = ({modNickname}) => {
             </button>
           </Row>
           <Row>
-          <MyProfile modNickname={(e)=>modNickname(e)} choicename={sessionStorage.getItem("nickname")} checkProfilefunc={(e)=>checkMyprofile(e)}/>
+            <MyProfile
+              modNickname={(e) => modNickname(e)}
+              choicename={sessionStorage.getItem("nickname")}
+              checkProfilefunc={(e) => checkMyprofile(e)}
+            />
           </Row>
         </ModalBody>
       </Modal>
