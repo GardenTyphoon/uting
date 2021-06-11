@@ -50,7 +50,7 @@ const MeetingControls = ({ participantss }) => {
   const submitReport = async () => {
     let reportNickname = document.getElementsByName("reportNickname");
     let reportContent = document.getElementsByName("reportContent");
-    const res = await axios.post("/api/reports/saveReport", {
+    const res = await defaultAxios.post("/reports/saveReport", {
       reportTarget:
         reportNickname[0].options[reportNickname[0].selectedIndex].value,
       reportContent: reportContent[0].value,
