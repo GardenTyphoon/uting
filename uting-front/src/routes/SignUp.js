@@ -117,10 +117,7 @@ const SignUp = () => {
     }
     if (name === "check-email") {
       setUsercode(value);
-    } else if (name === "phone") {
-      if (value.length === 11) setValidPhone(true);
-      else setValidPhone(false);
-    } else {
+    }  else {
       setUserinfo({
         ...userinfo,
         [name]: value,
