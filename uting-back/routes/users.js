@@ -409,7 +409,8 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
-      console.log("socketidList : " + socketidList);
+      console.log("socketidList : ");
+      console.log(socketidList);
       res.send(socketidList);
     });
   }
