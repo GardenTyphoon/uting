@@ -6,8 +6,7 @@ import axios from "axios";
     https://github.com/axios/axios 의 Request Config 챕터 확인
 */
 const tokenAxios = axios.create({
-  baseURL: "/api",
-  timeout: 1000,
+  baseURL: "http://localhost:3001/",
 });
 
 var token = sessionStorage.getItem("token");

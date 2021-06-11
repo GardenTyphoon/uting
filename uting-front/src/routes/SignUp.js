@@ -117,16 +117,15 @@ const SignUp = () => {
     }
     if (name === "check-email") {
       setUsercode(value);
-    } else if (name === "phone") {
-      if (value.length === 11) setValidPhone(true);
-      else setValidPhone(false);
-    } else {
+    }  else {
       setUserinfo({
         ...userinfo,
         [name]: value,
       });
     }
+    
   };
+
 
   /*사용자 정보 firebase storage에 저장하기 - 회원가입!*/
   let onSignupSubmit = async (e) => {
@@ -182,12 +181,13 @@ const SignUp = () => {
 
   /*대학생 인증 및 이메일 인증 코드 전송*/
   let sendEmail = async (e) => {
-    e.preventDefault();
+    
     const data = {
       email: userinfo.email,
     };
 
     if (data.email.slice(-6) === ".ac.kr") {
+      
       const res = await defaultAxios.post("/users/sendEmail", data);
       setGetalert({
         flag: true,
