@@ -117,16 +117,19 @@ const SignUp = () => {
     }
     if (name === "check-email") {
       setUsercode(value);
-    } else if (name === "phone") {
-      if (value.length === 11) setValidPhone(true);
-      else setValidPhone(false);
-    } else {
+    }  else {
       setUserinfo({
         ...userinfo,
         [name]: value,
       });
     }
+    
   };
+
+  useEffect(() => {
+   console.log(userinfo);
+    
+  }, [userinfo]);
 
   /*사용자 정보 firebase storage에 저장하기 - 회원가입!*/
   let onSignupSubmit = async (e) => {
