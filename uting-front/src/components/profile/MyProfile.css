@@ -1,66 +1,63 @@
-@font-face{
-    font-family:'NanumSquare_acR';
-    src:url('./../../ttf/NanumSquare_acR.ttf');
+@font-face {
+  font-family: "NanumSquare_acR";
+  src: url("./../../ttf/NanumSquare_acR.ttf");
 }
 
+.ProfileContainer {
+  width: 15%;
+  background-color: #ffb4ac;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: NanumSquare_acR;
+  padding: 3%;
+  font-size: 13px;
+  margin-bottom: 3%;
+}
+.ProfileTop {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: bolder;
+  font-size: large;
+}
+.ProfileCenter {
+  width: 100%;
+}
+.ProfileImgAndName {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: bolder;
+  font-size: 100%;
+}
+.ProfileOthers {
+  color: #454545;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
 
-.ProfileContainer{
-
-    width:15%;
-    background-color: #FFB4AC;  
-    border-radius: 10px;
-    display: flex;
-    flex-direction:column;
-    align-items: center;
-    font-family: NanumSquare_acR;
-    padding: 3%;
-    font-size:13px;
-    margin-bottom: 3%;
-
+  justify-content: space-around;
+  font-size: 100%;
 }
-.ProfileTop{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    font-weight: bolder;
-    font-size:large;
+.ProfileBtn {
+  background: linear-gradient(to bottom, #ff9a51, #ff6994);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  padding-left: 10px;
+  padding-right: 10px;
 }
-.ProfileCenter{
-    width:100%;
+.introduce {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
-.ProfileImgAndName{
-    display : flex;
-    flex-direction:column;
-    align-items:center;
-    font-weight:bolder;
-    font-size:100%;
+.scrollBar::-webkit-scrollbar {
+  display: none;
 }
-.ProfileOthers{
-    color:#454545;
-    font-weight: normal;
-    display:flex;
-    flex-direction:column;
-
-    justify-content: space-around;
-    font-size:100%;
-}
-.ProfileBtn{
-    background: linear-gradient(to bottom, #FF9A51, #FF6994);
-    border:none;
-    border-radius:10px;
-    color : white;
-    padding-left : 10px;
-    padding-right : 10px;
-}
-.introduce{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-}
-.scrollBar::-webkit-scrollbar{
-    display:none;
-}
-.scrollBar{
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+.scrollBar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
