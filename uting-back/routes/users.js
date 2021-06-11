@@ -32,7 +32,6 @@ const upload = multer({
 });
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
-  console.log("sendEmail");
   let user_email = req.body.email;
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
@@ -65,7 +64,6 @@ router.post("/sendEmail", async function (req, res, next) {
 });
 
 router.post("/signup", function (req, res, next) {
-  console.log(req.body);
   const encrypted = crypto
     .createHmac("sha1", config.secret)
     .update(req.body.password)
