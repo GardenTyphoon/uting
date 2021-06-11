@@ -32,6 +32,7 @@ const upload = multer({
 });
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
+  console.log("sendemail")
   let user_email = req.body.email;
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
@@ -186,6 +187,7 @@ router.post("/signin", function (req, res, next) {
 });
 
 router.post("/checknickname", function (req, res, next) {
+  console.log(req.body)
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {

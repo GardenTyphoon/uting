@@ -7,7 +7,6 @@ import axios from "axios";
 */
 const tokenAxios = axios.create({
   baseURL: "/api",
-  timeout: 1000,
 });
 
 var token = sessionStorage.getItem("token");

@@ -182,12 +182,13 @@ const SignUp = () => {
 
   /*대학생 인증 및 이메일 인증 코드 전송*/
   let sendEmail = async (e) => {
-    e.preventDefault();
+    
     const data = {
       email: userinfo.email,
     };
 
     if (data.email.slice(-6) === ".ac.kr") {
+      
       const res = await defaultAxios.post("/users/sendEmail", data);
       setGetalert({
         flag: true,
