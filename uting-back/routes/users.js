@@ -30,6 +30,8 @@ const upload = multer({
   }),
   limits: { fileSize: 5 * 1024 * 1024 },
 });
+
+
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
@@ -205,11 +207,13 @@ router.post("/viewMyProfile", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
         if (req.body.sessionUser === per.email) {
+          res.status(200)
           res.send(per);
         }
       }
       if (req.body.type === "myprofile") {
         if (req.body.sessionUser === per.nickname) {
+          res.status(201)
           res.send(per);
         }
       }

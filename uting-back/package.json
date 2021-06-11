@@ -6,7 +6,8 @@
     "start": "node ./bin/www",
     "back": "nodemon ./bin/www",
     "front": "cd ../uting-front && npm start",
-    "dev": "concurrently \"npm run back\" \"npm run front\""
+    "dev": "concurrently \"npm run back\" \"npm run front\"",
+    "test": "mocha"
   },
   "dependencies": {
     "aws-sdk": "^2.903.0",
@@ -39,5 +40,10 @@
   "main": "app.js",
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
+    "mocha": "^9.0.0"
+  }
 }
