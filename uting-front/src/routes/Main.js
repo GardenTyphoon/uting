@@ -363,7 +363,7 @@ const Main = () => {
           </ModalBody>
         </Modal>
         <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
-          <ModalHeader style={{ marginLeft: "40%" }} toggle={tutorialtoggle}>
+          <ModalHeader style={{ marginLeft: "40%", fontFamily:"NanumSquare_acR" }} toggle={tutorialtoggle}>
             U-TING 메뉴얼
           </ModalHeader>
           <ModalBody>

@@ -190,7 +190,6 @@ const Vote = forwardRef(
             i--;
           }
         }
-        //alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
         setGetalert({
           flag: true,
           message: `${goManner.name}` + "님에게 학점을 부여하였습니다.",

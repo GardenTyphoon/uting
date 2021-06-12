@@ -48,12 +48,16 @@ const FindPassword = () => {
 
   const changePassword = async () => {
     if (newPasswordTemp === userinfo.newPassword) {
+      console.log(newPasswordTemp);
       let data = { userinfo: userinfo };
       const res = await defaultAxios.post("/users/changePassword", data);
+      console.log(res.data);
       setGetalert({ flag: true, message: res.data });
       if (res.data === "비밀번호가 성공적으로 변경되었습니다.") {
+        console.log("비밀번호가 성공적으로~~");
         window.location.reload();
       } else {
+        console.log("이전에 사용하신~~")
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
         }, 1500);
@@ -146,7 +150,7 @@ const FindPassword = () => {
             <div className="FindPasswordEachRow">
               <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호</div>
               <Input
-                type="text"
+                type="password"
                 name="newPasswordTemp"
                 placeholder="새 비밀번호를 입력하세요."
                 style={{
@@ -164,7 +168,7 @@ const FindPassword = () => {
             <div className="FindPasswordEachRow">
               <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호 확인</div>
               <Input
-                type="text"
+                type="password"
                 name="newPassword"
                 placeholder="새 비밀번호를 한번 더 입력하세요."
                 style={{

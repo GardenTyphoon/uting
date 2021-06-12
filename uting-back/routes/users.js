@@ -56,9 +56,6 @@ router.post("/sendEmail", async function (req, res, next) {
     smtpTransport({
       service: "gmail",
       host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      requireTLS: true,
       auth: {
         user: "uting4u@gmail.com",
         pass: "uting0515!",
