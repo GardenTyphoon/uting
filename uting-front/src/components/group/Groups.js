@@ -145,7 +145,6 @@ const Groups = ({
       userNickname: sessionUser,
     });
 
-    //window.location.reload();
     getGroupInfo();
   };
 
