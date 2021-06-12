@@ -60,6 +60,7 @@ router.post("/sendEmail", async function (req, res, next) {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
+      res.send("error")
     } else {
       console.log("Email sent: " + info.response);
       res.send(code);
@@ -390,7 +391,7 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send("success logout");
+          res.send("success");
         }
       );
     }

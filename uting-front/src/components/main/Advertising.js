@@ -62,7 +62,7 @@ const Advertising = () => {
         key={item.src}
       >
         <img
-          style={{ width: "230px", height: "500px" }}
+          style={{ width: "300px", height: "600px" }}
           src={item.src}
           alt={item.altText}
         />

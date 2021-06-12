@@ -1,6 +1,6 @@
 .adContainer{
   background: #ffe4e1;
-  width:1519px;
+  width:210vh;
   height:140vh;
   padding:20px;
   padding-left:60px;
@@ -22,7 +22,7 @@
 .checkcontent{
     height: 210px;
     width:1000px;
-    margin-left: 15%;
+    margin-left: 25%;
     padding: 20px 18px;
     border: 1px solid #ccc;
     overflow-y: scroll;
@@ -44,7 +44,7 @@
     color: #404040;
     margin-bottom: 20px;
     font-weight: 700;
-    margin-left: 15%;
+    margin-left: 25%;
     margin-bottom: 1%;
     margin-top: 5%;
 }
@@ -54,4 +54,12 @@
 .tablediv{
     margin-left: 33%;
     margin-top: 2%;
+}
+.td-div{
+    margin-left: 20%;
+    margin-bottom: 5%;
+}
+.emailinfo{
+    margin-left: 20%;
+    margin-bottom: 5%;
 }
