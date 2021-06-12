@@ -82,6 +82,7 @@ const Ad = () => {
         let res = await defaultAxios.post("/ads/uploadAdImg", formData);
   
         content["file"] = res.data.url;
+        
       }
       let data = {
         type: content.requesttype,
