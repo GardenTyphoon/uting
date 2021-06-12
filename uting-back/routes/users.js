@@ -330,6 +330,7 @@ router.post("/savesocketid", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -372,6 +373,7 @@ router.post("/logout", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -409,7 +411,10 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
+<<<<<<< Updated upstream
       console.log("socketidList : " + socketidList);
+=======
+>>>>>>> Stashed changes
       res.send(socketidList);
     });
   }
@@ -437,6 +442,7 @@ router.post("/cutUcoin", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -475,6 +481,7 @@ router.post("/manner", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: (perObj.mannerCredit + req.body.manner) / 2,
@@ -513,6 +520,7 @@ router.post("/report", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
