@@ -30,7 +30,7 @@ services:
                         - "3001:3001"
         mongo:
                 container_name: mongo
-                image: mongo
+                image: kehp/uting_mongo
                 ports:
                         - "27017:27017"
                 volumes:

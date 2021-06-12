@@ -30,9 +30,10 @@ const upload = multer({
   }),
   limits: { fileSize: 5 * 1024 * 1024 },
 });
+
+
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
-  console.log("sendemail")
   let user_email = req.body.email;
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
@@ -187,7 +188,6 @@ router.post("/signin", function (req, res, next) {
 });
 
 router.post("/checknickname", function (req, res, next) {
-  console.log(req.body)
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {
@@ -207,11 +207,13 @@ router.post("/viewMyProfile", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
         if (req.body.sessionUser === per.email) {
+          res.status(200)
           res.send(per);
         }
       }
       if (req.body.type === "myprofile") {
         if (req.body.sessionUser === per.nickname) {
+          res.status(201)
           res.send(per);
         }
       }
@@ -276,7 +278,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}` });
+  res.json({ url: `/uploads/${req.file.filename}`});
 });
 
 router.post("/addUcoin", function (req, res, next) {
@@ -289,7 +291,9 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => {}
+    (err, us) => {
+      res.send("Update Ucoin")
+    }
   );
 });
 
@@ -341,10 +345,9 @@ router.post("/savesocketid", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send(perObj);
+          res.send("Success savesocketid");
         }
       );
-      //res.send(perObj)
     }
     if (ismember === false) {
       res.send("no");
@@ -383,7 +386,7 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send("success");
+          res.send("success logout");
         }
       );
     }
@@ -402,7 +405,6 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            console.log(mem + " : " + per.socketid);
             let data = {
               nickname: per.nickname,
               socketid: per.socketid,
@@ -411,8 +413,6 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
-      console.log("socketidList : ");
-      console.log(socketidList);
       res.send(socketidList);
     });
   }
