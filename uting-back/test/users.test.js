@@ -11,9 +11,9 @@ const { assert } = require("chai");
 
 describe("USER API TEST", () => {
 
-//   before("Database Connect", function(){
-//     return mongoose.createConnection("mongodb://localhost:27017",{useNewUrlParser: true, useUnifiedTopology: true,})
-//   });
+  before("Database Connect", function(){
+    return mongoose.createConnection("mongodb://localhost:27017",{useNewUrlParser: true, useUnifiedTopology: true,})
+  });
 
 
   // describe("/sendEmail API Test", () => {
@@ -172,7 +172,7 @@ describe("USER API TEST", () => {
       .post("/users/changePassword")
       .send(data)
       .end((err, res) => {
-        assert.equal(res.text, "비밀번호가 성공적으로 변경되었습니다.")
+        assert.equal(res.text, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요.")
         done();
       })
     })
