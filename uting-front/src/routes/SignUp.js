@@ -151,7 +151,7 @@ const SignUp = () => {
           email: userinfo.email,
           password: userinfo.password,
           phone: userinfo.phone,
-        };
+        }; 
 
         const res = await defaultAxios.post("/users/signup", data);
         console.log(res.data);
