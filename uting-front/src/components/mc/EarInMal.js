@@ -22,6 +22,7 @@ import {
 import "./EarInMal.css";
 import { SOCKET } from "../../utils/constants";
 
+
 const items = [
   //for 설명서
   {
@@ -68,6 +69,12 @@ const EarInMal = ({
   const [toExplain, setToExplain] = useState(false);
   const [explainIndex, setExplainIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
+
+
+  let toggleAlert = (e) => {
+    setGetalert({ ...getalert, flag: !getalert.flag });
+  };
 
   var data;
   let toSendSckId;
@@ -201,7 +208,10 @@ const EarInMal = ({
     };
     const socket = socketio.connect(SOCKET);
     socket.emit("sendQues", data);
-    alert("전송완료!");
+    setGetalert({ flag: true, message: "전송완료~!" });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
     setMsgModalFlag(false);
     setIsAsked(true);
   };
@@ -218,7 +228,10 @@ const EarInMal = ({
     };
     const socket = socketio.connect(SOCKET);
     socket.emit("respondMsg", data);
-    alert("전송완료!");
+    setGetalert({ flag: true, message: "전송완료~!" });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
     setNeedToRespond(false);
   };
   const notifyQuestion = async (e) => {
@@ -230,7 +243,10 @@ const EarInMal = ({
     };
     const socket = socketio.connect(SOCKET);
     socket.emit("sendMsg", data);
-    alert("전송완료~!");
+    setGetalert({ flag: true, message: "전송완료~!" });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
   };
 
   const giveTurn = async () => {
@@ -308,8 +324,34 @@ const EarInMal = ({
 
   return (
     <div className="EarInMal">
-      {console.log("pariticipants : ")}
-      {console.log(participants)}
+      <Modal isOpen={getalert.flag}>
+          <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+            <img
+              style={{
+                width: "40px",
+                height: "40px",
+                marginLeft: "210px",
+                marginBottom: "1000px",
+              }}
+              src={introLog}
+            ></img>
+          </ModalHeader>
+          <ModalBody style={{ height: "90px" }}>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "4%",
+                marginBottom: "8%",
+                fontFamily: "NanumSquare_acR",
+                fontWeight: "bold",
+                fontSize: "20px",
+                height: "50px",
+              }}
+            >
+              {getalert.message}
+            </div>
+          </ModalBody>
+        </Modal>
       <Modal isOpen={toExplain} toggle={explain}>
         <ModalHeader toggle={explain}>귓속말 게임</ModalHeader>
         <ModalBody style={{ textAlign: "center" }}>
