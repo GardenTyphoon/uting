@@ -126,7 +126,6 @@ const SignUp = () => {
     
   };
 
-
   /*사용자 정보 firebase storage에 저장하기 - 회원가입!*/
   let onSignupSubmit = async (e) => {
     e.preventDefault();
