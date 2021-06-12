@@ -74,11 +74,9 @@ const Meeting = ({ checkFunc }) => {
     }
   };
   const getMyGroupMember = async () => {
-    console.log("불렀음");
     let res = await defaultAxios.post("/groups/getMyGroupMember", {
       sessionUser: sessionUser,
     });
-    console.log(res);
     let onlyMe = [sessionUser];
     if (res.data === "no") setGroupMembers(onlyMe);
     else setGroupMembers(res.data);
