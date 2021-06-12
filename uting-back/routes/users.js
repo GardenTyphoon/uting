@@ -31,7 +31,6 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
 });
 
-
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
@@ -40,6 +39,9 @@ router.post("/sendEmail", async function (req, res, next) {
     smtpTransport({
       service: "gmail",
       host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
       auth: {
         user: "uting4u@gmail.com",
         pass: "uting0515!",
@@ -208,13 +210,13 @@ router.post("/viewMyProfile", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
         if (req.body.sessionUser === per.email) {
-          res.status(200)
+          res.status(200);
           res.send(per);
         }
       }
       if (req.body.type === "myprofile") {
         if (req.body.sessionUser === per.nickname) {
-          res.status(201)
+          res.status(201);
           res.send(per);
         }
       }
@@ -279,7 +281,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}`});
+  res.json({ url: `/uploads/${req.file.filename}` });
 });
 
 router.post("/addUcoin", function (req, res, next) {
@@ -293,7 +295,7 @@ router.post("/addUcoin", function (req, res, next) {
       },
     },
     (err, us) => {
-      res.send("Update Ucoin")
+      res.send("Update Ucoin");
     }
   );
 });
@@ -337,6 +339,7 @@ router.post("/savesocketid", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -378,6 +381,7 @@ router.post("/logout", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -441,6 +445,7 @@ router.post("/cutUcoin", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -479,6 +484,7 @@ router.post("/manner", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: (perObj.mannerCredit + req.body.manner) / 2,
@@ -517,6 +523,7 @@ router.post("/report", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,

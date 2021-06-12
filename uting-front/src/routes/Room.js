@@ -256,6 +256,7 @@ const Room = () => {
         document.getElementById("audio").play();
       } else if (data.type === "notifyTurn") {
         toast(`${data.turn}님의 차례입니다!`);
+        setRespondFlag(false);
         setGameTurn(data.turn);
         setParticipantsForTurn(data.remainParticipants);
       } else if (data.type === "receiveMsg") {
@@ -264,6 +265,7 @@ const Room = () => {
       } else if (data.type === "receiveQues") {
         console.log("receiveQues!!!");
         toast(`${data.mesg}`);
+        setRespondFlag(false);
         setRespondFlag(true);
         setQuestion(data.mesg);
       } else if (data.type === "gameStart") {
@@ -273,8 +275,12 @@ const Room = () => {
         setGameNum(data.gameNum);
       } else if (data.type === "endGame") {
         toast(data.message);
+        setGameTurn();
         setGameStartFlag(false);
         setGameNum(-1);
+      } else if (data.type === "notifyRole") {
+        toast(data.message);
+        setRole(data.role);
       } else if (data.type === "notifyRole") {
         toast(data.message);
         setRole(data.role);
