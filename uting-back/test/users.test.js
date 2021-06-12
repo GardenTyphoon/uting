@@ -52,23 +52,6 @@ describe("USER API TEST", () => {
   //   });
   // });
 
-  describe("signin API Test", () => {
-    it("Success Login, Response 200 Code", function(done){
-      this.timeout(20000)
-      let data = {
-        email: "gnup@ajou.ac.kr",
-        password: "1234"
-      }
-      chai.request(app)
-      .post("/users/signin")
-      .send(data)
-      .end((err, res) => {
-        expect(res).to.have.status(200)
-        done()
-      });
-    });
-  });
-
   describe("checknickname API Test", () => {
     it("Check Nickname, Response 200 Code", function(done){
       this.timeout(20000)
@@ -90,7 +73,7 @@ describe("USER API TEST", () => {
       this.timeout(30000)
       let data = {
         type: "profile",
-        sessionUser: "gnup@ajou.ac.kr"
+        sessionUser: "tester1@ajou.ac.kr"
       }
       chai.request(app)
       .post("/users/viewMyProfile")
@@ -131,6 +114,19 @@ describe("USER API TEST", () => {
         done();
       })
     })
+
+    it("Modify user's profile image, Response json.url", function(done){
+      this.timeout(20000)
+      let data = {
+        filename: "garden_typhoon"
+      }
+      chai.request(app)
+      .post("/users/modifyMyProfileImg")
+      .send(data)
+      .end((err, res) => {
+        done();
+      })
+    })
   });
 
   describe("userInfo API Test", () => {
@@ -147,6 +143,40 @@ describe("USER API TEST", () => {
         done();
       })
     })
+
+    it("Modify users's manner", function(done){
+      this.timeout(20000)
+      let data = {
+        name: "노예",
+        manner: "0"
+      }
+      chai.request(app)
+      .post("/users/manner")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "success")
+        done();
+      });
+    });
+
+    it("Change user's password", function(done){
+      this.timeout(20000)
+      let data = {
+        userinfo: {
+          name: "Tester1",
+          email: "tester1@ajou.ac.kr",
+          newPassword: "dddj1i23!@#",
+        }
+      }
+      chai.request(app)
+      .post("/users/changePassword")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "비밀번호가 성공적으로 변경되었습니다.")
+        done();
+      })
+    })
+
   })
 
   describe("userSocketId API Test", () => {
@@ -160,7 +190,7 @@ describe("USER API TEST", () => {
       .send(data)
       .end((err, res) => {
         assert.equal(res.body[0], "") // Empty state is true
-        assert.equal(res.body[1], "") // Empty state is true
+        assert.equal(res.body[1], "Testsocketid1") // Empty state is true
         done();
       })
     })
@@ -171,14 +201,142 @@ describe("USER API TEST", () => {
         users : ["노예1호", "노예"]
       }
       chai.request(app)
-      .post("/users/usersSocketIdx")
+      .post("/users/usersSocketIdx", )
       .send(data)
       .end((err, res) => {
         assert.equal(res.body[1], "0")
+        assert.equal(res.body[3], "1")
+        done();
+      });
+    });
+    
+    it("SocketId save in user database, Reponse user obeject", function(done){
+      this.timeout(20000)
+      let data = {
+        currentUser: "노예",
+        currentSocketId : {
+          id : "Testsocketid1"
+        }
+      }
+      chai.request(app)
+      .post("/users/savesocketid")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "Success savesocketid")
+        done();
+      });
+    });
+
+    it("Get preMemSocketid, Response member's socketId", function(done){
+      this.timeout(20000)
+      let data = {
+        preMember: ["노예", "노예1호"]
+      }
+      chai.request(app)
+      .post("/users/preMemSocketid")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.toString("nickname: '노예1호', socketid: ''")
+        done();
+      })
+
+    });
+
+  });
+
+  describe("About Ucoin API Test", () => {
+    it("Add Ucoin", function(done){
+      this.timeout(20000)
+      let data = {
+        ucoin: "10",
+        chargingCoin: "1",
+        userId: "60c3855602511049e0818570",
+      }
+      chai.request(app)
+      .post("/users/addUcoin")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "Update Ucoin")
+        done();
+      });
+    });
+
+    it("Cut Ucoin", function(done){
+      this.timeout(20000)
+      let data = {
+        currentUser: "노예",
+      }
+      chai.request(app)
+      .post("/users/cutUcoin")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "success")
+        done();
+      });
+    });
+  });
+
+  describe("About log in-out API Test", () => {
+
+    it("Signin(login) API Test, Response 200 Code", function(done){
+      this.timeout(20000)
+      let data = {
+        email: "gnup@ajou.ac.kr",
+        password: "1234"
+      }
+      chai.request(app)
+      .post("/users/signin")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(200)
+        done()
+      });
+    });
+
+    it("Is user logined ?", function(done){
+      this.timeout(20000)
+      let data = {
+        addMember: "노예",
+      }
+      chai.request(app)
+      .post("/users/logined")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "no")
+        done();
+      });
+    });
+
+    it("Logout API Test", function(done){
+      this.timeout(20000)
+      let data = {
+        email: "tester1@ajou.ac.kr",
+      }
+      chai.request(app)
+      .post("/users/logout")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "success logout") // if fail, return "no"
+        done();
+      });
+    });
+  });
+
+  describe("Report other user", () => {
+    it("Report other users, Response success", function(done){
+      this.timeout(20000)
+      let data = {
+        nickname: "노예1호"
+      }
+      chai.request(app)
+      .post("/users/report")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.text, "success")
+        assert.notEqual(res.text, "fail")
         done();
       })
     })
-    
   })
- 
+
 });

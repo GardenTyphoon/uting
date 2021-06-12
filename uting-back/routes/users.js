@@ -278,7 +278,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}` });
+  res.json({ url: `/uploads/${req.file.filename}`});
 });
 
 router.post("/addUcoin", function (req, res, next) {
@@ -291,7 +291,9 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => {}
+    (err, us) => {
+      res.send("Update Ucoin")
+    }
   );
 });
 
@@ -343,10 +345,9 @@ router.post("/savesocketid", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send(perObj);
+          res.send("Success savesocketid");
         }
       );
-      //res.send(perObj)
     }
     if (ismember === false) {
       res.send("no");
@@ -385,7 +386,7 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send("success");
+          res.send("success logout");
         }
       );
     }
@@ -404,7 +405,6 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            console.log(mem + " : " + per.socketid);
             let data = {
               nickname: per.nickname,
               socketid: per.socketid,
@@ -413,7 +413,6 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
-      console.log("socketidList : " + socketidList);
       res.send(socketidList);
     });
   }

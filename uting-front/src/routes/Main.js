@@ -170,7 +170,6 @@ const Main = () => {
       currentSocketId: socketId,
     };
     const res = await defaultAxios.post("/users/savesocketid", data);
-    console.log(res);
   };
   useEffect(() => {
     putSocketid();
