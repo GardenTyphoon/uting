@@ -11,8 +11,8 @@ const crypto = require("crypto");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const { rejects } = require("assert");
-const AWS = require('aws-sdk');
-const multerS3=require('multer-s3');
+// const AWS = require('aws-sdk');
+// const multerS3=require('multer-s3');
 
 // -- local upload code --
 // fs.readdir("uploads", (error) => {
@@ -34,19 +34,19 @@ const multerS3=require('multer-s3');
 //   limits: { fileSize: 5 * 1024 * 1024 },
 // });
 
-let s3 = new AWS.S3();
+// let s3 = new AWS.S3();
 
-let upload = multer({
-  storage: multerS3({
-    s3:s3,
-    bucket:"utingProfileImage",
-    key: function(req,file,cb) {
-      const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext)
-    },
-    acl: 'public-read-write'
-  })
-})
+// let upload = multer({
+//   storage: multerS3({
+//     s3:s3,
+//     bucket:"utingProfileImage",
+//     key: function(req,file,cb) {
+//       const ext = path.extname(file.originalname);
+//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext)
+//     },
+//     acl: 'public-read-write'
+//   })
+// })
 
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
