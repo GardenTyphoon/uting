@@ -243,7 +243,7 @@ const Groups = ({
       <Modal isOpen={addMemberModal}>
         <ModalHeader
           toggle={toggelAddMember}
-          style={{ fontFamily: "Jua", fontSize: "20px" }}
+          style={{ fontFamily: "NanumSquare_acR", fontSize: "20px" }}
         >
           그룹 생성
         </ModalHeader>
