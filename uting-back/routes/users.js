@@ -391,7 +391,7 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send("success logout");
+          res.send("success");
         }
       );
     }
