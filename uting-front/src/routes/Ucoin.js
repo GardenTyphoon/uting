@@ -75,7 +75,9 @@ const Ucoin = () => {
   const getProfile = async (e) => {
     const res = await jwtAxios.post("/users/viewMyProfile", {
       sessionUser: `${sessionStorage.getItem("email")}`,
+      type: "profile",
     });
+    console.log(res.data);
     let data = {
       _id: res.data._id,
       name: res.data.name,

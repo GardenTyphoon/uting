@@ -21,6 +21,7 @@ import socketio from "socket.io-client";
 import jwtAxios from "../../utils/jwtAxios";
 import introLog from "../../img/배경없는유팅로고.png";
 import baseurl from "../../utils/baseurl";
+import { SOCKET } from "../../utils/constants";
 const AddMember = ({
   currentUser,
   modalState,
@@ -45,7 +46,7 @@ const AddMember = ({
     };
     const res = await jwtAxios
       .post("/users/logined", data)
-      .then(async (data) => {
+      .then(async ({ data }) => {
         if (data.status === true) {
           setSocketId(data.socketid);
           let groupData = {
@@ -82,7 +83,7 @@ const AddMember = ({
 
   useEffect(() => {
     console.log(preMemSocketIdList);
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     socket.emit("message", { socketid: socketId });
 
     setPrecheck(true);

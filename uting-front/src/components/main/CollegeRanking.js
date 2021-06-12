@@ -26,11 +26,7 @@ const CollegeContainer = styled.div`
   font-weight: 500;
 `;
 const CollegeRanking = () => {
-  const collegeTop10 = [
-    "아주대학교",
-    "서울대학교",
-    "연세대학교",
-  ];
+  const collegeTop10 = ["아주대학교", "서울대학교", "연세대학교"];
   const rankingColor = ["#FF9D93", "#FFADA4", "#FBBCB5", "FFFEFE"];
   return (
     <CollegeRankingContainer>

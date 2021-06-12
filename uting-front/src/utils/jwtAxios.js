@@ -6,10 +6,11 @@ import axios from "axios";
     https://github.com/axios/axios 의 Request Config 챕터 확인
 */
 const tokenAxios = axios.create({
-  baseURL: "https://localhost:3001",
-  timeout: 1000,
+  baseURL: "http://localhost:3001",
 });
-
+// const tokenAxios = axios.create({
+//   baseURL: "http://localhost:3001",
+// });
 var token = sessionStorage.getItem("token");
 
 tokenAxios.interceptors.request.use(

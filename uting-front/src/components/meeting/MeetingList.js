@@ -26,9 +26,9 @@ import {
   attendMeeting,
 } from "../../utils/api";
 import { ConsoleLogger } from "amazon-chime-sdk-js";
+import { SOCKET } from "../../utils/constants";
 
 function birthToAge(birth) {
-  console.log(birth);
   let year = birth.slice(0, 4);
   return 2021 - Number(year) + 1;
 }
@@ -108,7 +108,7 @@ export default function MeetingList({
   const updateNewParticipants_to_OriginParticipants = async (
     meetingRoomParticipants
   ) => {
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     let data = {
       preMember: meetingRoomParticipants,
     };
@@ -162,8 +162,6 @@ export default function MeetingList({
   };
   const attendRoomByID = async (room, groupMembersInfo) => {
     setRoomObj(room);
-
-    // setFlag(true)
     const userNum = room.users.length;
     let sumManner = room.avgManner * userNum;
     let sumAge = room.avgAge * userNum;
@@ -225,7 +223,7 @@ export default function MeetingList({
 
         setAppMeetingInfo(room.title, sessionUser, "ap-northeast-2");
         if (room.title !== undefined) {
-          const socket = socketio.connect(`${baseurl.baseBack}`);
+          const socket = socketio.connect(SOCKET);
           socket.emit("makeMeetingRoomMsg", {
             groupMembersSocketId: groupMembersSocketId,
             roomtitle: room.title,
@@ -238,9 +236,14 @@ export default function MeetingList({
         console.log(error);
       }
     } else if (coinCheck === false) {
-      alert(
-        "그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요."
-      );
+      setGetalert({
+        flag: true,
+        message:
+          "그룹원 중에 유코인이 부족한 사람이 있어 비팅방 참가가 불가합니다. 유코인을 충전하세요.",
+      });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
     }
   };
 

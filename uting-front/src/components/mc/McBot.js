@@ -27,6 +27,7 @@ import {
 } from "reactstrap";
 import ReactAudioPlayer from "react-audio-player";
 import socketio from "socket.io-client";
+import { SOCKET } from "../../utils/constants";
 import baseurl from "../../utils/baseurl";
 
 const Box = styled.div`
@@ -36,7 +37,7 @@ const Box = styled.div`
   padding: 10px;
   background: linear-gradient(to bottom, #ffd5d5, #ddf5ff);
   width: 200px;
-  height: 270px;
+  height: 230px;
   font-size: large;
   font-weight: 500;
 `;
@@ -107,7 +108,7 @@ const McBot = ({
   };
 
   let getMusicName = (e) => {
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     if (e === 1) {
       console.log(e);
       console.log(participantsSocketIdList);
@@ -131,12 +132,12 @@ const McBot = ({
   };
 
   let pause = () => {
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     socket.emit("musicpause", { socketIdList: participantsSocketIdList });
   };
 
   let play = () => {
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     socket.emit("replay", { socketIdList: participantsSocketIdList });
   };
 
@@ -173,10 +174,12 @@ const McBot = ({
 
   useEffect(() => {
     if (gameNum === 1) {
+      setContent("");
       setContentFade(true);
       setNumber(4);
       setGameNum(1);
     } else if (gameNum === 2) {
+      setContent("");
       setContentFade(true);
       setNumber(4);
       setGameNum(2);

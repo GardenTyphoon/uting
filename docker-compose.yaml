@@ -1,0 +1,60 @@
+version: "3"
+services:
+        front:
+                build:
+                        dockerfile: Dockerfile.dev
+                        context: ./uting-front
+                volumes:
+                        - ./uting-front/:/app
+                        - /app/node_modules
+                networks:
+                        - network
+        back:
+                build:
+                        dockerfile: Dockerfile.dev
+                        context: ./uting-back
+                volumes:
+                        - ./uting-back/:/app
+                        - /app/node_modules
+                        - ~/.aws:/root/.aws
+                environment:
+                        - NODE_PATH=src
+                        - PORT=3001
+                        - DB_HOST=mongo
+                        - DB=uting
+                networks:
+                        - network
+                depends_on:
+                        - mongo
+                ports:
+                        - "3001:3001"
+        mongo:
+                container_name: mongo
+                image: kehp/uting_mongo
+                ports:
+                        - "27017:27017"
+                volumes:
+                        - data:/data/db
+                networks:
+                        - network
+
+        nginx:
+                restart: always
+                build:
+                        dockerfile: Dockerfile.dev
+                        context: ./nginx
+                volumes:
+                        - /etc/letsencrypt:/etc/letsencrypt
+                ports:
+                        - "80:80"
+                        - "443:443"
+                networks:
+                        - network
+
+networks:
+        network:
+                driver: bridge
+
+volumes:
+        data:
+                driver: local

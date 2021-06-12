@@ -30,6 +30,7 @@ const upload = multer({
   }),
   limits: { fileSize: 5 * 1024 * 1024 },
 });
+
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
@@ -146,7 +147,30 @@ router.post("/signin", function (req, res, next) {
   };
 
   const respond = (token) => {
-    console.log(token);
+    User.findByIdAndUpdate(
+      perObj._id,
+      {
+        $set: {
+          status: true,
+          _id: perObj._id,
+          name: perObj.name,
+          nickname: perObj.nickname,
+          gender: perObj.gender,
+          birth: perObj.birth,
+          email: perObj.email,
+          password: perObj.password,
+          phone: perObj.phone,
+          imgURL: perObj.imgURL,
+          mannerCredit: perObj.mannerCredit,
+          socketid: perObj.socketid,
+          ucoin: perObj.ucoin,
+          beReported: perObj.beReported,
+        },
+      },
+      (err, u) => {
+        console.log(u);
+      }
+    );
     res.json({
       message: "logged in successfully",
       token,
@@ -182,11 +206,13 @@ router.post("/viewMyProfile", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
         if (req.body.sessionUser === per.email) {
+          res.status(200);
           res.send(per);
         }
       }
       if (req.body.type === "myprofile") {
         if (req.body.sessionUser === per.nickname) {
+          res.status(201);
           res.send(per);
         }
       }
@@ -264,7 +290,9 @@ router.post("/addUcoin", function (req, res, next) {
         ucoin: newUcoin,
       },
     },
-    (err, us) => { }
+    (err, us) => {
+      res.send("Update Ucoin");
+    }
   );
 });
 
@@ -307,6 +335,7 @@ router.post("/savesocketid", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -316,10 +345,9 @@ router.post("/savesocketid", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send(perObj);
+          res.send("Success savesocketid");
         }
       );
-      //res.send(perObj)
     }
     if (ismember === false) {
       res.send("no");
@@ -349,6 +377,7 @@ router.post("/logout", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -358,7 +387,7 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send("success");
+          res.send("success logout");
         }
       );
     }
@@ -377,7 +406,6 @@ router.post("/preMemSocketid", function (req, res, next) {
       user.forEach((per) => {
         req.body.preMember.forEach((mem) => {
           if (mem === per.nickname) {
-            console.log(mem + " : " + per.socketid);
             let data = {
               nickname: per.nickname,
               socketid: per.socketid,
@@ -386,7 +414,6 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
-      console.log("socketidList : " + socketidList);
       res.send(socketidList);
     });
   }
@@ -414,6 +441,7 @@ router.post("/cutUcoin", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -452,6 +480,7 @@ router.post("/manner", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: (perObj.mannerCredit + req.body.manner) / 2,
@@ -490,6 +519,7 @@ router.post("/report", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -508,23 +538,30 @@ router.post("/report", function (req, res, next) {
   });
 });
 router.post("/changePassword", function (req, res, next) {
-
   User.find(function (err, user) {
     user.forEach((per) => {
-      if (per.name === req.body.userinfo.name && per.email === req.body.userinfo.email) {
-
+      if (
+        per.name === req.body.userinfo.name &&
+        per.email === req.body.userinfo.email
+      ) {
         if (!per.verify(req.body.userinfo.newPassword)) {
           const encrypted = crypto
             .createHmac("sha1", config.secret)
             .update(req.body.userinfo.newPassword)
             .digest("base64");
-          User.findByIdAndUpdate(per._id, { $set: { password:encrypted} }, (err, gr) => { });
-          res.send("비밀번호가 성공적으로 변경되었습니다.")
+          User.findByIdAndUpdate(
+            per._id,
+            { $set: { password: encrypted } },
+            (err, gr) => {}
+          );
+          res.send("비밀번호가 성공적으로 변경되었습니다.");
         } else {
-          res.send("최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요.")
+          res.send(
+            "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요."
+          );
         }
       }
-    })
-  })
-})
+    });
+  });
+});
 module.exports = router;

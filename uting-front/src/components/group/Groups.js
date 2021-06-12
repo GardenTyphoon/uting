@@ -25,6 +25,7 @@ import AnotherProfile from "../profile/MyProfile";
 import baseurl from "../../utils/baseurl";
 import socketio from "socket.io-client";
 import { ConsoleLogger } from "amazon-chime-sdk-js";
+import { SOCKET } from "../../utils/constants";
 
 const Member = styled.div`
   border: 1.5px solid rgb(221, 221, 221);
@@ -117,7 +118,7 @@ const Groups = ({
   }, [modifyNickname]);
 
   const leaveGroup = async () => {
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     setClickLeaveGroup(false);
     let groupMemberExceptMe = [];
     groupMember.map((mem) => {
@@ -131,8 +132,12 @@ const Groups = ({
       preMember: groupMemberExceptMe,
     });
     console.log(res.data);
+    let socketList=[]
+    for(let i=0;i<res.data.length;i++){
+      socketList.push(res.data[i].socketid)
+    }
     socket.emit("leaveGroup", {
-      socketIdList: res.data,
+      socketIdList: socketList,
       leavingUsers: sessionUser,
     });
 
@@ -140,7 +145,7 @@ const Groups = ({
       userNickname: sessionUser,
     });
 
-    window.location.reload();
+    getGroupInfo();
   };
 
   let saveGroupSocketId = async () => {

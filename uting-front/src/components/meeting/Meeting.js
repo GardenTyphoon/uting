@@ -8,6 +8,7 @@ import { useAppState } from "../../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
 import { createGetAttendeeCallback, fetchMeeting } from "../../utils/api";
 import "./Meeting.css";
+import { SOCKET } from "../../utils/constants";
 import { alignItems } from "styled-system";
 import baseurl from "../../utils/baseurl";
 
@@ -123,6 +124,7 @@ const Meeting = ({ checkFunc }) => {
               socketid: userInfo.data.socketid,
             };
             setGroupmemeinfo(data);
+            console.log(groupMembersInfo)
             groupMembersSocketId.push(userInfo.data.socketid);
           }
           avgManner += userInfo.data.mannerCredit;

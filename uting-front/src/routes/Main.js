@@ -23,6 +23,7 @@ import { useAppState } from "../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
 import { createGetAttendeeCallback, fetchMeeting } from "../utils/api";
 import { minWidth } from "styled-system";
+import { SOCKET } from "../utils/constants";
 import baseurl from "../utils/baseurl";
 
 const Main = () => {
@@ -86,7 +87,7 @@ const Main = () => {
   useEffect(() => {
     // setTutorialModal(true);
 
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });

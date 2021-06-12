@@ -30,9 +30,10 @@ import help from "../img/help.png";
 import airplane from "../img/airplane.png";
 import McBotTutorial from "../components/mc/McBotTutorial";
 import { backgroundColor } from "styled-system";
-import baseurl from "../utils/baseurl";
 import "./Room.css";
 import introLog from "../img/배경없는유팅로고.png";
+import { SOCKET } from "../utils/constants";
+import baseurl from "../utils/baseurl";
 const McBotContainer = styled.div`
   width: 350px;
   height: 550px;
@@ -213,7 +214,7 @@ const Room = () => {
 
   useEffect(() => {
     setGetalert({ flag: false, message: "" });
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     socket.on("connect", function () {
       socket.emit("login", { uid: sessionStorage.getItem("nickname") });
     });
@@ -255,6 +256,7 @@ const Room = () => {
         document.getElementById("audio").play();
       } else if (data.type === "notifyTurn") {
         toast(`${data.turn}님의 차례입니다!`);
+        setRespondFlag(false);
         setGameTurn(data.turn);
         setParticipantsForTurn(data.remainParticipants);
       } else if (data.type === "receiveMsg") {
@@ -263,6 +265,7 @@ const Room = () => {
       } else if (data.type === "receiveQues") {
         console.log("receiveQues!!!");
         toast(`${data.mesg}`);
+        setRespondFlag(false);
         setRespondFlag(true);
         setQuestion(data.mesg);
       } else if (data.type === "gameStart") {
@@ -272,8 +275,12 @@ const Room = () => {
         setGameNum(data.gameNum);
       } else if (data.type === "endGame") {
         toast(data.message);
+        setGameTurn();
         setGameStartFlag(false);
         setGameNum(-1);
+      } else if (data.type === "notifyRole") {
+        toast(data.message);
+        setRole(data.role);
       } else if (data.type === "notifyRole") {
         toast(data.message);
         setRole(data.role);
@@ -358,7 +365,7 @@ const Room = () => {
             i--;
           }
         }
-        const socket = socketio.connect(`${baseurl.baseBack}`);
+        const socket = socketio.connect(SOCKET);
         socket.emit("midleave", {
           memlist: parObj,
           midleaveUser: sessionStorage.getItem("nickname"),
@@ -408,9 +415,7 @@ const Room = () => {
     };
     toast(iloveyou.mylove + "님에게 정상적으로 메시지를 보냈습니다.");
     document.getElementsByName("loveinput").values = "";
-    document.getElementsByName("mylove").values = "";
-
-    const socket = socketio.connect(`${baseurl.baseBack}`);
+    const socket = socketio.connect(SOCKET);
     socket.emit("golove", { lovemessage: data });
   };
 
@@ -586,7 +591,6 @@ const Room = () => {
             <img src={help} width="25" />
           </button>
           {intervalMessage}
-
           <McBot
             participantsSocketIdList={participantsSocketId}
             currentSocketId={socketId}

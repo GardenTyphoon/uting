@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { endMeeting } from "../../utils/api";
 import introLog from "../../img/배경없는유팅로고.png";
 import baseurl from "../../utils/baseurl";
+import { SOCKET } from "../../utils/constants";
 const Vote = forwardRef(
   (
     { participantsSocketIdList, participants, meeting_id, meetingMembers },
@@ -58,7 +59,7 @@ const Vote = forwardRef(
     };
 
     const onClickAgree = (e) => {
-      const socket = socketio.connect(`${baseurl.baseBack}`);
+      const socket = socketio.connect(SOCKET);
       socket.emit("endMeetingAgree", {
         participantsSocketIdList,
         numOfAgree: numOfAgree + 1,
@@ -69,7 +70,7 @@ const Vote = forwardRef(
     };
 
     const onClickDisagree = (e) => {
-      const socket = socketio.connect(`${baseurl.baseBack}`);
+      const socket = socketio.connect(SOCKET);
       socket.emit("endMeetingDisagree", {
         participantsSocketIdList,
         numOfDisagree: numOfDisagree + 1,
@@ -80,7 +81,7 @@ const Vote = forwardRef(
     };
 
     const emitStartVote = () => {
-      const socket = socketio.connect(`${baseurl.baseBack}`);
+      const socket = socketio.connect(SOCKET);
       socket.emit("startVote", { socketidList: participantsSocketIdList });
       console.log(participantsSocketIdList);
       console.log("emitvote");

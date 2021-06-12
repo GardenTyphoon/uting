@@ -1,23 +1,23 @@
 @font-face {
-    font-family: "NanumSquare_acR";
-    src: url("../../ttf/NanumSquare_acR.ttf");
+  font-family: "NanumSquare_acR";
+  src: url("../../ttf/NanumSquare_acR.ttf");
 }
 
-.remoteinfo{
-    font-family: NanumSquare_acR;
-    font-size: 50;
-    background-color: red;
+.remoteinfo {
+  font-family: NanumSquare_acR;
+  font-size: 50;
+  background-color: red;
 }
-.anotherbutton{
-    border:0;
-    background-color:rgb(251,188,181);
-    border-radius:10px;
-    margin-bottom:6px;
-    width:60px;
-    box-shadow:1px 1px 5px grey ;
-    font-family: "NanumSquare_acR";
-    margin-right: 24px;
+.anotherbutton {
+  border: 0;
+  background-color: rgb(251, 188, 181);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  width: 60px;
+  box-shadow: 1px 1px 5px grey;
+  font-family: "NanumSquare_acR";
+  margin-right: 24px;
 }
-.anotherbutton:active{
-    box-shadow:1px 1px 5px white;
+.anotherbutton:active {
+  box-shadow: 1px 1px 5px white;
 }
