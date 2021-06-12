@@ -90,12 +90,11 @@ const Room = () => {
 
   const [existMidleave, setExistMidleave] = useState(false);
   window.addEventListener("keydown", function (e) {
-    console.log(e.keyCode);
+    
     if (
       (e.ctrlKey == true && (e.keyCode == 78 || e.keyCode == 82)) ||
       e.keyCode === 116
     ) {
-      console.log("f5");
       e.preventDefault();
     }
   });
@@ -118,7 +117,6 @@ const Room = () => {
 
   useEffect(() => {
     putSocketid();
-    console.log(socketId);
   }, [socketId]);
 
   let saveParticipantsSocketId = async () => {
@@ -129,13 +127,12 @@ const Room = () => {
 
     if (res.data.socketid !== "undefined") {
       setParObj(res.data);
-      console.log(res.data);
       let arr = [];
       for (let i = 0; i < res.data.length; i++) {
         arr.push(res.data[i].socketid);
       }
       setParticipantsSocketId(arr);
-      console.log(arr);
+      
     }
   };
   useEffect(() => {
@@ -160,13 +157,12 @@ const Room = () => {
         par.push(res.data.users[i].nickname);
         setChimeinfo();
       }
-      console.log("이거", res.data.chime_info);
       setMeetingMembers(res.data.users);
-      console.log(res.data);
+     
       setMeeting_id(meetingId);
       setParticipants(par);
       setChimeinfo(res.data.chime_info);
-      console.log(res.data.maxNum);
+      
       setmaxNum(res.data.maxNum);
       setReady(true);
       setExistMidleave(false);
@@ -182,20 +178,20 @@ const Room = () => {
       "",
     ];
     //let index = Math.floor(Math.random() * messageArr.length);
-    console.log(intervalMessageCheck);
-    /* if (intervalMessageCheck < 4) {
+    
+     if (intervalMessageCheck < 4) {
       if (intervalMessageCheck === 0) {
         setTimeout(() => {
           setIntervalMessage(messageArr[0]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(2);
-        }, 6000);
+        }, 60000);
       } else if (intervalMessageCheck === 1) {
         setTimeout(() => {
           setIntervalMessage(messageArr[1]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(1);
-        }, 6000);
+        }, 60000);
       } else if (intervalMessageCheck === 2) {
         setTimeout(() => {
           setIntervalMessage(messageArr[2]);
@@ -209,7 +205,7 @@ const Room = () => {
           setIntervalFade(4);
         }, 1200000);
       }
-    }*/
+    }
   }, [intervalMessageCheck]);
 
   useEffect(() => {
@@ -233,16 +229,14 @@ const Room = () => {
         }, 15000);
       } else if (data.type === "startVote") {
         toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
-        console.log("Room - startVote");
+        
         voteRef.current.onStartVote();
       } else if (data.type === "endMeetingAgree") {
         if (voteRef.current != null) {
-          console.log("Room - endMeetingAgree");
           voteRef.current.onEndMeetingAgree(data.numOfAgree);
         }
       } else if (data.type === "endMeetingDisagree") {
         if (voteRef.current != null) {
-          console.log("Room - endMeetingDisagree");
           voteRef.current.onEndMeetingDisagree(data.numOfDisagree);
         }
       } else if (data.type === "musicplay") {
@@ -260,10 +254,8 @@ const Room = () => {
         setGameTurn(data.turn);
         setParticipantsForTurn(data.remainParticipants);
       } else if (data.type === "receiveMsg") {
-        console.log("receiveMsg!!!");
         toast(`${data.mesg}`);
       } else if (data.type === "receiveQues") {
-        console.log("receiveQues!!!");
         toast(`${data.mesg}`);
         setRespondFlag(false);
         setRespondFlag(true);
@@ -301,7 +293,6 @@ const Room = () => {
 
   useEffect(() => {
     if (existMidleave === true) {
-      console.log("여깅");
       getparticipants();
     }
   }, [existMidleave]);
@@ -314,18 +305,13 @@ const Room = () => {
     }
   }, [socketFlag]);
 
-  useEffect(() => {
-    if (gameNum) {
-      //console.log("gameNum Room.js start~!~! : " + gameNum);
-    }
-  }, [gameNum]);
 
   let cutUcoin = async (e) => {
     let data = {
       currentUser: e,
     };
     const res = await defaultAxios.post("/users/cutUcoin", data);
-    console.log(res);
+
   };
 
   const midLeaveBtn = (e) => {
@@ -333,12 +319,10 @@ const Room = () => {
   };
 
   let midLeave = async (e) => {
-    console.log("중도퇴장");
     // meeting 디비에 해당 사람 gender빼기, users object빼기
     // users 디비에 ucoin차감하기
     let ismember = false;
     let mem = {};
-    console.log("meetingMembers", meetingMembers);
     for (let i = 0; i < meetingMembers.length; i++) {
       if (meetingMembers[i].nickname === sessionStorage.getItem("nickname")) {
         ismember = true;
@@ -351,10 +335,8 @@ const Room = () => {
         user: mem.nickname,
         gender: mem.gender,
       };
-      console.log(data);
 
       const res = await defaultAxios.post("/meetings/leavemember", data);
-      console.log(res);
       if (res.data === "success") {
         cutUcoin(sessionStorage.getItem("nickname"));
         setToggleMidLeave(false);
@@ -389,7 +371,7 @@ const Room = () => {
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
-    console.log(parObj);
+  
     if (name === "mylove") {
       for (let i = 0; i < parObj.length; i++) {
         if (parObj[i].nickname === value) {
@@ -419,9 +401,6 @@ const Room = () => {
     socket.emit("golove", { lovemessage: data });
   };
 
-  useEffect(() => {
-    console.log(iloveyou);
-  }, [iloveyou]);
   useEffect(() => {
     saveParticipantsSocketId();
   }, [participants]);
@@ -631,18 +610,18 @@ const Room = () => {
         </ModalBody>
       </Modal>
 
-      <Modal isOpen={toggleMidLeave}>
-        <ModalHeader>중도 퇴장</ModalHeader>
-        <ModalBody>
+      <Modal isOpen={toggleMidLeave} style={{fontFamily:"NanumSquare_acR"}}>
+        <ModalHeader >중도 퇴장</ModalHeader>
+        <ModalBody style={{textAlign:"center"}}>
           <span style={{ color: "red", fontWeight: "bold" }}>중도 퇴장</span>을
-          하시면 <span style={{ fontWeight: "bold" }}>U COIN이 1 차감</span>하게
+          하시면 <span style={{ fontWeight: "bold", color: "red"  }}>U COIN이 1 차감</span>하게
           됩니다.
           <br />
           그래도 퇴장을 원하시면{" "}
           <span style={{ fontWeight: "bold" }}>나가기</span>를 눌러주세요.
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={(e) => midLeave(e)}>
+          <Button color="danger" onClick={(e) => midLeave(e)}>
             나가기
           </Button>{" "}
           <Button color="secondary" onClick={(e) => midLeaveBtn(e)}>
