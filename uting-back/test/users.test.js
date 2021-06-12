@@ -3,14 +3,17 @@ const chaiHttp = require("chai-http");
 const mongoose = require("mongoose");
 chai.use(chaiHttp)
 const expect = chai.expect;
-const { User } = require("../model");
 const app = require("../app");
+const { assert } = require("chai");
+
+// DB의 경우 test 용 mongodb 가 새로 생성됩니다. 회원가입 시 중복 방지가 통합되어있지 않아
+// 계속 호출하면 입력이 반복됩니다. 그래서 주석처리해뒀습니다.
 
 describe("USER API TEST", () => {
 
-  // before("Database Connect", function(){
-  //   return mongoose.createConnection("mongodb://localhost:27017",{useNewUrlParser: true, useUnifiedTopology: true,})
-  // });
+  before("Database Connect", function(){
+    return mongoose.createConnection("mongodb://localhost:27017",{useNewUrlParser: true, useUnifiedTopology: true,})
+  });
 
 
   // describe("/sendEmail API Test", () => {
@@ -70,19 +73,19 @@ describe("USER API TEST", () => {
     it("Check Nickname, Response 200 Code", function(done){
       this.timeout(20000)
       let data = {
-        nickname: "아미타이거"
+        nickname: "노예1호"
       }
       chai.request(app)
       .post("/users/checknickname")
       .send(data)
       .end((err, res) => {
-        expect(res).to.have.status(200)
+        assert.equal(res.text, "exist")
         done()
       });
     });
   });
 
-  describe("viewMyProfile API Test", () => {
+  describe("About user Profile API Test", () => {
     it("Get user's profile, Response 200 Code", function(done){
       this.timeout(30000)
       let data = {
@@ -101,7 +104,7 @@ describe("USER API TEST", () => {
       this.timeout(20000)
       let data = {
         type: "myprofile",
-        sessionUser: "Paldal'slave"
+        sessionUser: "노예1호"
       }
       chai.request(app)
       .post("/users/viewMyProfile")
@@ -111,5 +114,71 @@ describe("USER API TEST", () => {
         done()
       });
     });
+
+    it("Modify user's profile, Response \"success\"", function(done){
+      this.timeout(20000)
+      let data = {
+        _id: "60c3855602511049e0818570",
+        nickname: "노예1호",
+        introduce: "안녕하세요 팔달관에서 생활하는 학생입니다.",
+        mbit: "ENFP",
+      }
+      chai.request(app)
+      .post("/users/modifyMyProfile")
+      .send(data)
+      .end((err, res) => {
+        expect(res.text).to.equal("success")
+        done();
+      })
+    })
   });
+
+  describe("userInfo API Test", () => {
+    it("Get users'info, Response user object", function(done){
+      this.timeout(20000);
+      let data = {
+        userId : "노예1호",
+      }
+      chai.request(app)
+      .post("/users/userInfo")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.body.nickname, '노예1호');
+        done();
+      })
+    })
+  })
+
+  describe("userSocketId API Test", () => {
+    it("Get usersSocketId, Response users socketId List in Room", function(done){
+      this.timeout(20000);
+      let data = {
+        users : ["노예1호", "노예"]
+      }
+      chai.request(app)
+      .post("/users/usersSocketId")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.body[0], "") // Empty state is true
+        assert.equal(res.body[1], "") // Empty state is true
+        done();
+      })
+    })
+
+    it("Get usersSocketIdx, Response users socketId with socketIdx", function(done){
+      this.timeout(20000);
+      let data = {
+        users : ["노예1호", "노예"]
+      }
+      chai.request(app)
+      .post("/users/usersSocketIdx")
+      .send(data)
+      .end((err, res) => {
+        assert.equal(res.body[1], "0")
+        done();
+      })
+    })
+    
+  })
+ 
 });
