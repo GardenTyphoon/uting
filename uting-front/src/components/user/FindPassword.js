@@ -136,51 +136,53 @@ const FindPassword = () => {
     <div>
       {checkcode === true && nextBtn === true ? (
         <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <div style={{ fontFamily: "NanumSquare_acR" }}>
-          <div className="FindPasswordEachRow">
-            <div className="FindPasswordTitle" style={{width:"80px"}}>새 비밀번호</div>
-            <Input
-              type="password"
-              name="newPasswordTemp"
-              style={{
-                width: "300px",
-                fontFamily: "NanumSquare_acR",
-                margin: "10px",
-              }}
-              onChange={(e) => onChangehandler(e)}
-              value={newPasswordTemp}
-            />
-           
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ fontFamily: "NanumSquare_acR" }}>
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호</div>
+              <Input
+                type="text"
+                name="newPasswordTemp"
+                placeholder="새 비밀번호를 입력하세요."
+                style={{
+                  width: "300px",
+                  fontFamily: "NanumSquare_acR",
+                  margin: "10px",
+                }}
+                onChange={(e) => onChangehandler(e)}
+                value={newPasswordTemp}
+              />
+
+            </div>
+            <div style={{ fontSize: "small", color: "#ff6994", marginLeft: "16%" }}>*영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 </div>
+
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호 확인</div>
+              <Input
+                type="text"
+                name="newPassword"
+                placeholder="새 비밀번호를 한번 더 입력하세요."
+                style={{
+                  width: "300px",
+                  fontFamily: "NanumSquare_acR",
+                  margin: "10px",
+                }}
+                onChange={(e) => onChangehandler(e)}
+                value={userinfo.newPassword}
+              />
+            </div>
           </div>
-          <div style={{fontSize:"small", color:"#ff6994",marginLeft:"16%"}}>*영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 </div>
-        
-          <div className="FindPasswordEachRow">
-          <div className="FindPasswordTitle" style={{width:"80px"}}>새 비밀번호 확인</div>
-          <Input
-            type="password"
-            name="newPassword"
-            style={{
-              width: "300px",
-              fontFamily: "NanumSquare_acR",
-              margin: "10px",
-            }}
-            value={userinfo.newPassword}
-            onChange={(e) => onChangehandler(e)}
-          />
+          <div style={{ textAlign: "center" }}>
+            <button className="gradientBtn" onClick={() => changePassword()} style={{ width: "100px" }}>
+              변경하기
+            </button>
+          </div>
         </div>
-        </div>
-        <div style={{ textAlign: "center" }}>
-          <button className="gradientBtn" onClick={() => changePassword()} style={{ width: "100px" }}>
-            변경하기
-          </button>
-        </div>
-      </div>
       ) : (
         <div
           style={{

@@ -62,7 +62,7 @@ const Main = () => {
   let sessionUser = sessionStorage.getItem("nickname");
 
   const modNickname = (e) => {
-    console.log(e);
+    
     setModifyNickname(e);
   };
 
@@ -159,18 +159,17 @@ const Main = () => {
 
       history.push(`/room/${roomtitle}`);
     } catch (error) {
-      console.log(error);
     }
   };
 
   const putSocketid = async (e) => {
-    console.log(socketId);
+    
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
     const res = await defaultAxios.post("/users/savesocketid", data);
-    console.log(res);
+    
   };
   useEffect(() => {
     putSocketid();
@@ -185,7 +184,6 @@ const Main = () => {
       first: e.first,
       last: e.last,
     };
-    console.log(data);
     setFiltermanner(data);
   };
 
