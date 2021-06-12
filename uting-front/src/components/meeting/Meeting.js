@@ -124,6 +124,7 @@ const Meeting = ({ checkFunc }) => {
               socketid: userInfo.data.socketid,
             };
             setGroupmemeinfo(data);
+            console.log(groupMembersInfo)
             groupMembersSocketId.push(userInfo.data.socketid);
           }
           avgManner += userInfo.data.mannerCredit;

@@ -19,8 +19,16 @@ var members = [];
 // PORT => 3001
 var app = express();
 
+// mongoose
+//   .connect("mongodb://mongo/uting", {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false,
+//   })
+//   .then(() => console.log("Connect MongoDB"));
 mongoose
-  .connect("mongodb://mongo/uting", {
+  .connect("mongodb://localhost:27017/uting", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,

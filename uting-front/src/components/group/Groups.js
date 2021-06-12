@@ -132,8 +132,12 @@ const Groups = ({
       preMember: groupMemberExceptMe,
     });
     console.log(res.data);
+    let socketList=[]
+    for(let i=0;i<res.data.length;i++){
+      socketList.push(res.data[i].socketid)
+    }
     socket.emit("leaveGroup", {
-      socketIdList: res.data,
+      socketIdList: socketList,
       leavingUsers: sessionUser,
     });
 
@@ -141,7 +145,8 @@ const Groups = ({
       userNickname: sessionUser,
     });
 
-    window.location.reload();
+    //window.location.reload();
+    getGroupInfo();
   };
 
   let saveGroupSocketId = async () => {
