@@ -154,6 +154,7 @@ const FindPassword = () => {
                 margin: "10px",
               }}
               onChange={(e) => onChangehandler(e)}
+              value={newPasswordTemp}
             />
            
           </div>
@@ -169,6 +170,7 @@ const FindPassword = () => {
               fontFamily: "NanumSquare_acR",
               margin: "10px",
             }}
+            value={userinfo.newPassword}
             onChange={(e) => onChangehandler(e)}
           />
         </div>
