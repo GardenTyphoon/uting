@@ -239,21 +239,8 @@ const Main = () => {
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
-          <div
-            style={{
-              fontFamily: "NanumSquare_acR",
-              fontSize: "large",
-              color: "rgb(89,57,70)",
-              fontWeight: "bold",
-              marginBottom: "6%",
-              marginTop: "20%",
-              marginLeft: "13%",
-            }}
-          >
-            학교별 매너학점 TOP10
-          </div>
-          <CollegeRanking />
-          <div style={{ marginTop: "13%", marginLeft: "30%" }}>
+          
+          <div style={{ marginTop: "50%", marginLeft: "40%" }}>
             <Advertising></Advertising>
           </div>
         </div>
