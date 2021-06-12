@@ -85,16 +85,7 @@ const Intro = () => {
               <>
                 <SignIn />
                 <div className="findAccount">
-                  <button
-                    style={{
-                      background: "transparent",
-                      border: "none",
-                      color: "gray",
-                    }}
-                  >
-                    아이디 찾기
-                  </button>{" "}
-                  |
+                  
                   <button
                     onClick={() => toggleFindPasswordModal()}
                     style={{
@@ -154,11 +145,6 @@ const Intro = () => {
         <ModalBody>
           <FindPassword />
         </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => toggleFindPasswordModal()}>
-            닫기
-          </Button>
-        </ModalFooter>
       </Modal>
     </div>
   );
