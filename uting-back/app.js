@@ -20,7 +20,7 @@ var members = [];
 var app = express();
 
 mongoose
-  .connect("mongodb://localhost:27017/uting", {
+  .connect("mongodb://mongo/uting", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
