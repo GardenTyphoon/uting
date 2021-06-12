@@ -93,7 +93,7 @@ describe("USER API TEST", () => {
       .post("/users/viewMyProfile")
       .send(data)
       .end((err, res) => {
-        expect(res).to.have.status(201)
+        expect(res).to.have.status(200)
         done()
       });
     });
@@ -172,7 +172,7 @@ describe("USER API TEST", () => {
       .post("/users/changePassword")
       .send(data)
       .end((err, res) => {
-        assert.equal(res.text, "비밀번호가 성공적으로 변경되었습니다.")
+        assert.equal(res.text, "최근 사용한 비밀번호입니다. 다른 비밀번호를 선택해 주세요.")
         done();
       })
     })
@@ -210,7 +210,7 @@ describe("USER API TEST", () => {
       });
     });
     
-    it("SocketId save in user database, Reponse user obeject", function(done){
+    it("Save socketId  in user database, Reponse user obeject", function(done){
       this.timeout(20000)
       let data = {
         currentUser: "노예",

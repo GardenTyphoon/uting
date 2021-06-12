@@ -30,8 +30,6 @@ const upload = multer({
   }),
   limits: { fileSize: 5 * 1024 * 1024 },
 });
-
-
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
@@ -57,9 +55,7 @@ router.post("/sendEmail", async function (req, res, next) {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      console.log(error);
     } else {
-      console.log("Email sent: " + info.response);
       res.send(code);
     }
   });
@@ -132,7 +128,6 @@ router.post("/signin", function (req, res, next) {
               },
               (err, token) => {
                 if (err) {
-                  console.log(err);
                   reject(err);
                 }
                 resolve(token);
@@ -188,6 +183,7 @@ router.post("/signin", function (req, res, next) {
 });
 
 router.post("/checknickname", function (req, res, next) {
+  console.log(req.body)
   let ismember = false;
   User.find(function (err, user) {
     user.forEach((per) => {
@@ -207,13 +203,11 @@ router.post("/viewMyProfile", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
         if (req.body.sessionUser === per.email) {
-          res.status(200)
           res.send(per);
         }
       }
       if (req.body.type === "myprofile") {
         if (req.body.sessionUser === per.nickname) {
-          res.status(201)
           res.send(per);
         }
       }
@@ -278,7 +272,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}`});
+  res.json({ url: `/uploads/${req.file.filename}` });
 });
 
 router.post("/addUcoin", function (req, res, next) {
@@ -348,6 +342,7 @@ router.post("/savesocketid", function (req, res, next) {
           res.send("Success savesocketid");
         }
       );
+      //res.send(perObj)
     }
     if (ismember === false) {
       res.send("no");
