@@ -148,7 +148,6 @@ const FindPassword = () => {
             <Input
               type="password"
               name="newPasswordTemp"
-              placeholder="새 비밀번호를 입력하세요."
               style={{
                 width: "300px",
                 fontFamily: "NanumSquare_acR",
@@ -165,7 +164,6 @@ const FindPassword = () => {
           <Input
             type="password"
             name="newPassword"
-            placeholder="새 비밀번호를 한번 더 입력하세요."
             style={{
               width: "300px",
               fontFamily: "NanumSquare_acR",
