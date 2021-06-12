@@ -62,6 +62,10 @@ const Conversation = ({ tab }) => {
     setConversationList(res.data);
   };
 
+  useEffect(()=>{
+    getConversationList()
+  },[check])
+
   useEffect(() => {
     if (tab === "1") {
       getConversationList();
