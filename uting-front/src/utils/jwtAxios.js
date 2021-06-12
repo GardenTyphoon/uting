@@ -7,9 +7,10 @@ import axios from "axios";
 */
 const tokenAxios = axios.create({
   baseURL: "/api",
-  timeout: 1000,
 });
-
+// const tokenAxios = axios.create({
+//   baseURL: "http://localhost:3001",
+// });
 var token = sessionStorage.getItem("token");
 
 tokenAxios.interceptors.request.use(
