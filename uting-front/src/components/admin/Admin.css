@@ -26,3 +26,28 @@
     border-radius: 20px;
     
 }
+
+.addbtn{
+    border: none;
+    background-color: lightblue;
+    color: white;
+    font-family:"NanumSquare_acR";
+    font-size: 25px;
+    border-radius: 10px;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    text-align: center;
+}
+
+
+.datalist{
+    margin-top: 0.5%;
+    font-size: large;
+    font-weight: bold;
+    font-family:"NanumSquare_acR";
+    margin-left: 1%;
+}
+.datanum{
+    margin-right: 1%;
+
+}

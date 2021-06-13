@@ -4,6 +4,7 @@ import styled from "styled-components";
 import classnames from "classnames";
 import Conversation from "./Conversation";
 import GameRecom from "./GameRcom";
+import defaultAxios from "../../utils/defaultAxios";
 import {
   Button,
   ButtonGroup,
@@ -43,54 +44,63 @@ const FlexBox = styled.div`
 `;
 
 const AdminMc = () => {
-  const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("0");
 
-  let isOpen = () => {
-    setOpen(!open);
+  const [state,setState]=useState({type:"1",content:""})
+  const [check,setCheck]=useState(false)
+
+  const onChangehandler = (e) => {
+    let { name, value } = e.target;
+    if(name==="type"){
+      setState({...state,type:value})
+    }
+    else if(name==="content"){
+      setState({...state,content:value})
+    }
   };
 
-  const toggle = (tab) => {
-    if (activeTab !== tab) setActiveTab(tab);
-  };
+  const submit = async(e) => {
+    console.log(state)
+    let data = {
+      type: state.type,
+      content: state.content,
+    };
+    const res = await defaultAxios.post("/mcs/", data);
+   
 
-  useEffect(() => {
-    setActiveTab("1");
-  }, []);
+    if(res.data==="저장완료"){
+      setCheck(!check);
+      setState({type:"1",content:""})
+      document.getElementById("type").value="1"
+      document.getElementById("content").value=""
+    }
+    
+  }
+
 
   return (
     <CardBody>
-      mc봇에 대화추천 게임추천 데이터 CRUD할 예정
-      <Nav tabs>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === "1" })}
-            onClick={() => {
-              toggle("1");
-            }}
-          >
-            대화
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={classnames({ active: activeTab === "2" })}
-            onClick={() => {
-              toggle("2");
-            }}
-          >
-            게임
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
-          <Conversation tab={activeTab}></Conversation>
-        </TabPane>
-        <TabPane tabId="2">
-          <GameRecom tab={activeTab}></GameRecom>
-        </TabPane>
-      </TabContent>
+      <Row>
+        <Col><Conversation check={check} ></Conversation></Col>
+        <Col> <GameRecom check={check}></GameRecom></Col>
+        <Col>
+          <Input id="type" name="type" type="select" onChange={onChangehandler}>
+            <option value="1">옵션을 선택하시오.</option>
+            <option value="conversation">대화</option>
+            <option value="game">게임</option>
+          </Input>
+          <Input
+            id="content"
+            name="content"
+            type="text"
+            placeholder="대화 주제를 기입하시오."
+            onChange={onChangehandler}
+          ></Input>
+          <Button onClick={(e)=>submit(e)} color="info" >
+            추가
+          </Button>
+        </Col>
+      </Row>
+      
     </CardBody>
   );
 };

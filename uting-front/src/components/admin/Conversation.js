@@ -30,29 +30,10 @@ import {
   NavItem,
   NavLink,
 } from "reactstrap";
+import './Admin.css'
 
-const Conversation = ({ tab }) => {
-  const [addModal, setAddModal] = useState(false);
-  const [newConversation, setNewConversation] = useState("");
+const Conversation = ({check}) => {
   const [conversationList, setConversationList] = useState([]);
-  const [check, setCheck] = useState(false);
-
-  const toggle = () => setAddModal(!addModal);
-
-  let onChangehandler = (e) => {
-    let { name, value } = e.target;
-    setNewConversation(value);
-  };
-
-  let submitConversation = async (e) => {
-    let data = {
-      type: "conversation",
-      content: newConversation,
-    };
-    const res = await defaultAxios.post("/mcs/", data);
-    setAddModal(false);
-    setCheck(!check);
-  };
 
   let getConversationList = async (e) => {
     let data = {
@@ -66,36 +47,13 @@ const Conversation = ({ tab }) => {
     getConversationList()
   },[check])
 
-  useEffect(() => {
-    if (tab === "1") {
-      getConversationList();
-    }
-  }, [tab]);
 
   return (
     <div>
-      <Button onClick={toggle}>대화 주제 생성</Button>
-      <Modal isOpen={addModal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>대화 주제 생성 폼</ModalHeader>
-        <ModalBody>
-          <Input
-            type="text"
-            placeholder="대화 주제를 기입하시오."
-            onChange={onChangehandler}
-          ></Input>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={(e) => submitConversation(e)}>
-            추가
-          </Button>
-          <Button color="secondary" onClick={toggle}>
-            취소
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <div className="addbtn" >대화 주제</div>
       <div>
         {conversationList.map((data, i) => {
-          return <div>{data}</div>;
+          return <div className="datalist"><span className="datanum">{i+1}</span><span>{data}</span></div>;
         })}
       </div>
     </div>

@@ -51,6 +51,7 @@ let upload = multer({
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
+  console.log(req.body.email)
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
     smtpTransport({
