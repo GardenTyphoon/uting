@@ -52,12 +52,14 @@ const Conversation = ({check}) => {
   }
 
 
+
   return (
     <div>
       <div className="addbtn" >대화 주제</div>
       <div>
         {conversationList.map((data, i) => {
           return <div onClick={(e)=>deleteData(data)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span></div>;
+
         })}
       </div>
     </div>
