@@ -29,13 +29,23 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
 } from "reactstrap";
-import './Admin.css'
+import "./Admin.css";
 
-const Conversation = ({check}) => {
+const Conversation = ({ check }) => {
   const [conversationList, setConversationList] = useState([]);
-  const [toggleDel,setToggleDel]=useState(false);
-  const [delData,setDelData]=useState({"data":"","idx":""})
+  const [toggleDel, setToggleDel] = useState(false);
+  const [delData, setDelData] = useState({ data: "", idx: "" });
+  const [currentPage, setCurrentPage] = useState(0);
+  const [pagesCount, setPagesCount] = useState(0);
+
+  var pageSize = 3;
+  const handleClick = (e, index) => {
+    setCurrentPage(index);
+  };
 
   let getConversationList = async (e) => {
     let data = {
@@ -43,39 +53,83 @@ const Conversation = ({check}) => {
     };
     const res = await defaultAxios.post("/mcs/list", data);
     setConversationList(res.data);
+
+    setPagesCount(Math.ceil(res.data.length / pageSize));
   };
 
-  useEffect(()=>{
-    getConversationList()
-  },[check])
+  useEffect(() => {
+    getConversationList();
+  }, [check]);
 
-  const deleteData = async(e) => {
-    console.log(e)
+  const deleteData = async (e) => {
+    console.log(e);
     let data = {
-      type:"conversation",
-      data:delData.data
+      type: "conversation",
+      data: delData.data,
+    };
+    const res = await defaultAxios.post("/mcs/delete", data);
+    if (res.data === "delete") {
+      getConversationList();
+      setDelData({ data: "", idx: "" });
     }
-    const res = await defaultAxios.post("/mcs/delete",data)
-    if(res.data==="delete"){
-      getConversationList()
-      setDelData({data:"",idx:""})
-    }
-  }
+  };
 
-  const toggleDelete = (e,i) =>{
-    setToggleDel(!toggleDel)
-    setDelData({data:e,idx:i})
-  }
-
-
+  const toggleDelete = (e, i) => {
+    setToggleDel(!toggleDel);
+    setDelData({ data: e, idx: i });
+  };
 
   return (
     <div>
-      <div className="addbtn" >대화 주제</div>
-      <div>
-        {conversationList.map((data, i) => {
-          return <div onClick={(e)=>toggleDelete(data,i)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span><span>{i===delData.idx?<button onClick={(e)=>deleteData(e)} className="delbtn">삭제</button>:""}</span></div>;
-        })}
+      <div className="addbtn">대화 주제</div>
+      {conversationList
+        .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
+        .map((data, i) => (
+          <div onClick={(e) => toggleDelete(data, i)} className="datalist">
+            <span className="datanum">{i + 1}.</span>
+            <span>{data}</span>
+            <span>
+              {i === delData.idx ? (
+                <button
+                  onClick={(e) => deleteData(e)}
+                  style={{ float: "right", marginRight: "5%" }}
+                  className="delbtn"
+                >
+                  삭제
+                </button>
+              ) : (
+                ""
+              )}
+            </span>
+          </div>
+        ))}
+      <br></br>
+      <div className="pagination-wrapper">
+        <Pagination aria-label="Page navigation example">
+          <PaginationItem disabled={currentPage <= 0}>
+            <PaginationLink
+              onClick={(e) => handleClick(e, currentPage - 1)}
+              previous
+              href="#"
+            />
+          </PaginationItem>
+
+          {[...Array(pagesCount)].map((page, i) => (
+            <PaginationItem active={i === currentPage} key={i}>
+              <PaginationLink onClick={(e) => handleClick(e, i)} href="#">
+                {i + 1}
+              </PaginationLink>
+            </PaginationItem>
+          ))}
+
+          <PaginationItem disabled={currentPage >= pagesCount - 1}>
+            <PaginationLink
+              onClick={(e) => handleClick(e, currentPage + 1)}
+              next
+              href="#"
+            />
+          </PaginationItem>
+        </Pagination>
       </div>
     </div>
   );
