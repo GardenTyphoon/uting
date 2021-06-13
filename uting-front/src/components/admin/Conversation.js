@@ -62,7 +62,7 @@ const Conversation = ({ check }) => {
   }, [check]);
 
   const deleteData = async (e) => {
-    console.log(e);
+    console.log("del");
     let data = {
       type: "conversation",
       data: delData.data,
@@ -86,7 +86,7 @@ const Conversation = ({ check }) => {
         .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
         .map((data, i) => (
           <div onClick={(e) => toggleDelete(data, i)} className="datalist">
-            <span className="datanum">{i + 1}.</span>
+            <span className="datanum">{(currentPage)*5+i+1}.</span>
             <span>{data}</span>
             <span>
               {i === delData.idx ? (

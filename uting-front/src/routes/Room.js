@@ -228,6 +228,7 @@ const Room = () => {
           getparticipants();
         }, 15000);
       } else if (data.type === "startVote") {
+        getparticipants();
         toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
         
         voteRef.current.onStartVote();
