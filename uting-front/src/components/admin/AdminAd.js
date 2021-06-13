@@ -135,7 +135,7 @@ const AdminAd = () => {
                   </Row>
                   <Row
                     style={{
-                      marginLeft: "10%",
+                      marginLeft: "7%",
                       marginRight: "50%",
                       marginBottom:"2%"
                     }}
@@ -173,19 +173,19 @@ const AdminAd = () => {
                           
                           <Col style={{marginLeft:"30%"}}>
                             <div style={{width:"50px",marginBottom:"80px",marginLeft:"10%",fontFamily:"NanumSquare_acR",fontWeight:"bold"}}>내용</div>
-                            <div>{clickData.contents}</div>
+                            <div style={{width:"150px",textAlign:"left"}}>{clickData.contents}</div>
                           </Col>
                          
-                          <Col  style={{marginLeft:"30%"}}>
+                          <Col  style={{marginLeft:"20%"}}>
                              <div style={{marginBottom:"80px",width:"50px" ,marginLeft:"25%",fontFamily:"NanumSquare_acR",fontWeight:"bold"}}>이메일</div>
                             <div>{clickData.email}</div>
                           </Col>
                           
-                          <Col  style={{marginLeft:"30%"}}>
+                          <Col  style={{marginLeft:"20%"}}>
                             <div style={{width:"50px",marginBottom:"80px",fontFamily:"NanumSquare_acR",fontWeight:"bold",marginLeft:"10%"}}>상태</div>
                             {clickData.status === "false" ? <div style={{width:"50px",marginLeft:"13%"}}>보류</div> : <div style={{width:"100px"}}>승인완료</div>}
                           </Col>
-                          <Col  style={{display:"flex",marginTop:"100px"}}>
+                          <Col  style={{display:"flex",marginTop:"100px",marginLeft:"10%"}}>
                           {clickData.status === "false" ? (
                             <span  style={{marginRight:"2%"}}>
                             <Button style={{width:"70px",marginLeft:"20px"}}  color="warning" onClick={(e) => accept(e)}>
