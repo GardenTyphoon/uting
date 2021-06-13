@@ -41,7 +41,7 @@ const FindPassword = () => {
     }
     else{
       setIsExistUser(false);
-      setGetalert({ flag: true, message: "없는 사용자입니다." });
+      setGetalert({ flag: true, message: "존재하지 않는 사용자입니다." });
       setTimeout(() => {
         window.location.reload();
         }, 1500);
