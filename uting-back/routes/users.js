@@ -298,6 +298,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
+  console.log(req.file);
   res.json({ url: `${req.file.filename}` });
 });
 
