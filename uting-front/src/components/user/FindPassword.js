@@ -46,13 +46,15 @@ const FindPassword = () => {
     }
   };
 
-  const changePassword = async () => {
+  const changePassword = async (e) => {
     if (newPasswordTemp === userinfo.newPassword) {
       let data = { userinfo: userinfo };
       const res = await defaultAxios.post("/users/changePassword", data);
+      console.log("hihi")
       setGetalert({ flag: true, message: res.data });
       if (res.data === "비밀번호가 성공적으로 변경되었습니다.") {
         window.location.reload();
+
       } else {
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
