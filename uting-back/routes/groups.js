@@ -2,40 +2,8 @@ var express = require("express");
 var router = express.Router();
 const { Group } = require("../model");
 
-router.post("/getMyGroupMember", function (req, res, next) {
-  let isMember = false;
-  Group.find(function (err, group) {
-    group.forEach((gr) => {
-      gr.member.forEach((nickname) => {
-        if (req.body.sessionUser === nickname) {
-          isMember = true;
-          res.send(gr.member);
-        }
-      });
-    });
-    if (isMember === false) res.send("no");
-  });
-});
 
-// POST write one group
-router.post("/info", function (req, res, next) {
-  let ismember = false;
-  Group.find(function (err, group) {
-    group.forEach((per) => {
-      per.member.forEach((mem) => {
-        if (req.body.sessionUser === mem) {
-          ismember = true;
-          res.send(per);
-        }
-      });
-    });
-    if (ismember === false) {
-      res.send("no");
-    }
-  });
-});
 
-// POST write one group
 router.post("/", function (req, res, next) {
   let exist = false;
   let foundPer;
@@ -70,14 +38,49 @@ router.post("/", function (req, res, next) {
     }
   });
 });
+
+
+router.post("/getMyGroupMember", function (req, res, next) {
+  let isMember = false;
+  Group.find(function (err, group) {
+    group.forEach((gr) => {
+      gr.member.forEach((nickname) => {
+        if (req.body.sessionUser === nickname) {
+          isMember = true;
+          res.send(gr.member);
+        }
+      });
+    });
+    if (isMember === false) res.send("no");
+  });
+});
+
+
+router.post("/info", function (req, res, next) {
+  let ismember = false;
+  Group.find(function (err, group) {
+    group.forEach((per) => {
+      per.member.forEach((mem) => {
+        if (req.body.sessionUser === mem) {
+          ismember = true;
+          res.send(per);
+        }
+      });
+    });
+    if (ismember === false) {
+      res.send("no");
+    }
+  });
+});
+
+
+
 router.post("/leaveGroup", function (req, res, next) {
   let success = false;
   let onlyOnePerson = false;
-  console.log(req.body.userNickname);
   Group.find(function (err, group) {
     group.forEach((gr) => {
       gr.member.forEach((mem) => {
-        console.log(gr._id);
         if (req.body.userNickname === mem) {
           console.log(gr._id);
           Group.findByIdAndUpdate(
@@ -89,7 +92,6 @@ router.post("/leaveGroup", function (req, res, next) {
           onlyOnePerson = true;
         }
       });
-      console.log(gr.member.length);
       if (gr.member.length === 2 && onlyOnePerson === true) {
         Group.findByIdAndDelete(gr._id, (err) => {});
       }

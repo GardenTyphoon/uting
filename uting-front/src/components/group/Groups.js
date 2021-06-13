@@ -105,9 +105,7 @@ const Groups = ({
   };
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionStorage.getItem("nickname") };
-    console.log(sessionUser);
     const res = await defaultAxios.post("/groups/info", data);
-    console.log(res.data.member);
     setGroupMember(res.data.member);
   };
 
