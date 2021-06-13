@@ -185,13 +185,13 @@ const Room = () => {
           setIntervalMessage(messageArr[0]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(2);
-        }, 60000);
+        }, 600000);
       } else if (intervalMessageCheck === 1) {
         setTimeout(() => {
           setIntervalMessage(messageArr[1]);
           setIntervalMessageChekc(intervalMessageCheck + 1);
           setIntervalFade(1);
-        }, 60000);
+        }, 600000);
       } else if (intervalMessageCheck === 2) {
         setTimeout(() => {
           setIntervalMessage(messageArr[2]);
