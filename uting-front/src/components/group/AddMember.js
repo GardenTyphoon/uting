@@ -98,7 +98,7 @@ const AddMember = ({
       }
     }
     if (check === true) {
-      const socket = socketio.connect(`${baseurl.baseBack}`);
+      const socket = socketio.connect(SOCKET);
       socket.emit("premessage", { socketidList: preMemSocketIdList });
     }
   }, [precheck]);

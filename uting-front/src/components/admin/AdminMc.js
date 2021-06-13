@@ -44,74 +44,69 @@ const FlexBox = styled.div`
 `;
 
 const AdminMc = () => {
-  const [state, setState] = useState({ type: "1", content: "" });
-  const [checkconv, setCheckconv] = useState(false);
-  const [checkgame, setCheckgame] = useState(false);
+
+  const [state,setState]=useState({type:"1",content:""})
+  const [checkconv,setCheckconv]=useState(false)
+  const [checkgame,setCheckgame]=useState(false)
   const onChangehandler = (e) => {
     let { name, value } = e.target;
-    if (name === "type") {
-      setState({ ...state, type: value });
-    } else if (name === "content") {
-      setState({ ...state, content: value });
+    if(name==="type"){
+      setState({...state,type:value})
+    }
+    else if(name==="content"){
+      setState({...state,content:value})
     }
   };
 
-  const submit = async (e) => {
-    console.log(state);
+  const submit = async(e) => {
+    console.log(state)
     let data = {
       type: state.type,
       content: state.content,
     };
     const res = await defaultAxios.post("/mcs/", data);
+   
 
-    if (res.data === "저장완료") {
-      if (state.type === "game") {
-        setCheckgame(!checkgame);
-      } else if (state.type === "conversation") {
-        setCheckconv(!checkconv);
+    if(res.data==="저장완료"){
+      if(state.type==="game"){
+        setCheckgame(!checkgame)
       }
-      setState({ type: "1", content: "" });
-      document.getElementById("type").value = "1";
-      document.getElementById("content").value = "";
+      else if(state.type==="conversation"){
+        setCheckconv(!checkconv)
+      }
+      setState({type:"1",content:""})
+      document.getElementById("type").value="1"
+      document.getElementById("content").value=""
     }
-  };
+    
+  }
+
 
   return (
-    <CardBody style={{ width: "100%", marginBottom: "5%" }}>
+    <CardBody>
       <Row>
-        <div style={{ width: "100%", marginBottom: "5%" }}>
-          <Conversation check={checkconv}></Conversation>
-        </div>
+        <Col><Conversation check={checkconv} ></Conversation></Col>
+        <Col> <GameRecom check={checkgame}></GameRecom></Col>
+        <Col>
+          <Input id="type" name="type" type="select" onChange={onChangehandler}>
+            <option value="1">옵션을 선택하시오.</option>
+            <option value="conversation">대화</option>
+            <option value="game">게임</option>
+          </Input>
+          <Input
+            id="content"
+            name="content"
+            type="textarea"
+            
+            placeholder={state.type==="conversation"?"대화 주제를 기입하시오.":state.type==="game"?"게임 주제를 기입하시오":""}
+            onChange={onChangehandler}
+          ></Input>
+          <Button id="btn" onClick={(e)=>submit(e)} color="info" >
+            추가
+          </Button>
+        </Col>
       </Row>
-      <Row>
-        <div style={{ width: "100%", marginBottom: "5%" }}>
-          <GameRecom check={checkgame}></GameRecom>
-        </div>
-      </Row>
-      <Row>
-        <Input id="type" name="type" type="select" onChange={onChangehandler}>
-          <option value="1">옵션을 선택하시오.</option>
-          <option value="conversation">대화</option>
-          <option value="game">게임</option>
-        </Input>
-        <Input
-          id="content"
-          name="content"
-          type="textarea"
-          placeholder={
-            state.type === "conversation"
-              ? "대화 주제를 기입하시오."
-              : state.type === "game"
-              ? "게임 주제를 기입하시오"
-              : ""
-          }
-          onChange={onChangehandler}
-          style={{ resize: "none", height: "50px" }}
-        ></Input>
-        <Button id="btn" onClick={(e) => submit(e)} color="info">
-          추가
-        </Button>
-      </Row>
+      
     </CardBody>
   );
 };
