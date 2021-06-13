@@ -12,6 +12,8 @@
   "dependencies": {
     "aws-sdk": "^2.903.0",
     "blob": "^0.1.0",
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "concurrently": "^6.0.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -22,6 +24,7 @@
     "http-errors": "^1.6.3",
     "jade": "^1.11.0",
     "jsonwebtoken": "^8.5.1",
+    "mocha": "^9.0.0",
     "mongodb": "^3.6.5",
     "mongoose": "^5.12.3",
     "mongoose-auto-increment": "^5.0.1",
