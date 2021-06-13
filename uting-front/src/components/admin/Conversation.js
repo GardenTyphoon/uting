@@ -34,6 +34,8 @@ import './Admin.css'
 
 const Conversation = ({check}) => {
   const [conversationList, setConversationList] = useState([]);
+  const [toggleDel,setToggleDel]=useState(false);
+  const [delData,setDelData]=useState({"data":"","idx":""})
 
   let getConversationList = async (e) => {
     let data = {
@@ -49,6 +51,20 @@ const Conversation = ({check}) => {
 
   const deleteData = async(e) => {
     console.log(e)
+    let data = {
+      type:"conversation",
+      data:delData.data
+    }
+    const res = await defaultAxios.post("/mcs/delete",data)
+    if(res.data==="delete"){
+      getConversationList()
+      setDelData({data:"",idx:""})
+    }
+  }
+
+  const toggleDelete = (e,i) =>{
+    setToggleDel(!toggleDel)
+    setDelData({data:e,idx:i})
   }
 
 
@@ -57,7 +73,7 @@ const Conversation = ({check}) => {
       <div className="addbtn" >대화 주제</div>
       <div>
         {conversationList.map((data, i) => {
-          return <div onClick={(e)=>deleteData(data)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span></div>;
+          return <div onClick={(e)=>toggleDelete(data,i)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span><span>{i===delData.idx?<button onClick={(e)=>deleteData(e)}>삭제</button>:""}</span></div>;
         })}
       </div>
     </div>

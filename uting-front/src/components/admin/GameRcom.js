@@ -33,6 +33,8 @@ import {
 
 const GameRecom = ({check}) => {
   const [gameList, setGameList] = useState([]);
+  const [toggleDel,setToggleDel]=useState(false);
+  const [delData,setDelData]=useState({"data":"","idx":""})
 
   let getGameList = async (e) => {
     let data = {
@@ -48,6 +50,20 @@ const GameRecom = ({check}) => {
 
   const deleteData = async(e) => {
     console.log(e)
+    let data = {
+      type:"game",
+      data:delData.data
+    }
+    const res = await defaultAxios.post("/mcs/delete",data)
+    if(res.data==="delete"){
+      getGameList()
+      setDelData({data:"",idx:""})
+    }
+  }
+
+  const toggleDelete = (e,i) =>{
+    setToggleDel(!toggleDel)
+    setDelData({data:e,idx:i})
   }
 
   return (
@@ -55,7 +71,7 @@ const GameRecom = ({check}) => {
       <div className="addbtn" >게임 주제</div>
       <div>
         {gameList.map((data, i) => {
-          return <div onClick={(e)=>deleteData(data)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span></div>;
+          return <div onClick={(e)=>toggleDelete(data,i)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span><span>{i===delData.idx?<button onClick={(e)=>deleteData(e)}>삭제</button>:""}</span></div>;
         })}
       </div>
     </div>
