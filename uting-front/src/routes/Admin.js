@@ -27,7 +27,7 @@ const { SubMenu } = Menu;
 const { Header, Content, Sider, Footer } = Layout;
 
 const Admin = () => {
-  const [menustate, setMenustate] = useState("");
+  const [menustate, setMenustate] = useState("MC봇 관리");
   const onSider = (e) => {
     setMenustate(e.target.innerText);
   };
@@ -36,15 +36,15 @@ const Admin = () => {
     <Layout style={{ minHeight: "100vh" }}>
       <Sider onClick={(e) => onSider(e)}>
         <div className="App-logo" />
-        <Menu theme="dark" mode="inline">
+        <Menu theme="dark" mode="inline"defaultSelectedKeys={['1']}>
           <Menu.Item key="1">
-            <span>MC봇 관리</span>
+            MC봇 관리
           </Menu.Item>
           <Menu.Item key="2">
-            <span>신고 관리</span>
+            신고 관리
           </Menu.Item>
           <Menu.Item key="3">
-            <span>광고 관리</span>
+           광고 관리
           </Menu.Item>
         </Menu>
       </Sider>
