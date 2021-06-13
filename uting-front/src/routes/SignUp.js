@@ -362,8 +362,8 @@ const SignUp = () => {
           <Input
             type="text"
             name="nickname"
-            placeholder="8글자 이내의 닉네임"
-            maxLength="8"
+            placeholder="3글자 이내의 닉네임"
+            maxLength="3"
             style={{ width: "40vw", marginBottom: "20px", minWidth: "370px" }}
             onChange={(e) => onChangehandler(e)}
           />
