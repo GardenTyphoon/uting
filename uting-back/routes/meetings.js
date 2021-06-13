@@ -9,7 +9,6 @@ const AWS = require('aws-sdk');
 const chime = new AWS.Chime({ region: 'us-east-1' });
 const alternateEndpoint = process.env.ENDPOINT;
 if (alternateEndpoint) {
-  console.log('Using endpoint: ' + alternateEndpoint);
   chime.createMeeting({ ClientRequestToken: uuid() }, () => {});
   AWS.NodeHttpClient.sslAgent.options.rejectUnauthorized = false;
   chime.endpoint = new AWS.Endpoint(alternateEndpoint);
@@ -111,7 +110,6 @@ router.post('/create', async function(req, res, next){
     }
     else if(flag === 1){ // join meeting*
       let isroom = false;
-      console.log("flag 1");
       let perObj = {};
     
       let temp = Meeting.find(function (err, meeting) {
@@ -172,7 +170,6 @@ router.post('/create', async function(req, res, next){
     }
 
     else if(flag === 2){ // invite meeting
-      console.log("flag 2");
       const title = req.body.title;
       const name = req.body.session;
       const region = "us-east-1"
@@ -272,14 +269,14 @@ router.post('/leavemember', async function(req,res,next){
             i--;
           }
         }
-        console.log(perObj.users)
+
         if(req.body.gender==="woman"){
           perObj.numOfWoman=perObj.numOfWoman-1
         }
         if(req.body.gender==="man"){
           perObj.numOfMan=perObj.numOfMan-1
         }
-        console.log(perObj)
+        
         Meeting.findByIdAndUpdate(
           perObj._id,
           {
