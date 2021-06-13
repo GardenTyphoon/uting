@@ -31,30 +31,10 @@ import {
   NavLink,
 } from "reactstrap";
 
-const GameRecom = ({ tab }) => {
-  const [addModal, setAddModal] = useState(false);
-  const [newGame, setNewGame] = useState("");
+const GameRecom = ({check}) => {
   const [gameList, setGameList] = useState([]);
-  const [check, setCheck] = useState(false);
-
-  const toggle = () => {
-    setAddModal(!addModal);
-  };
-
-  let onChangehandler = (e) => {
-    let { name, value } = e.target;
-    setNewGame(value);
-  };
-
-  let submitConversation = async (e) => {
-    let data = {
-      type: "game",
-      content: newGame,
-    };
-    const res = await defaultAxios.post("/mcs/", data);
-    setAddModal(false);
-    setCheck(!check);
-  };
+  const [toggleDel,setToggleDel]=useState(false);
+  const [delData,setDelData]=useState({"data":"","idx":""})
 
   let getGameList = async (e) => {
     let data = {
@@ -68,36 +48,31 @@ const GameRecom = ({ tab }) => {
     getGameList()
   },[check])
 
-  useEffect(() => {
-    if (tab === "2") {
-      getGameList();
+
+  const deleteData = async(e) => {
+    console.log(e)
+    let data = {
+      type:"game",
+      data:delData.data
     }
-  }, [tab]);
+    const res = await defaultAxios.post("/mcs/delete",data)
+    if(res.data==="delete"){
+      getGameList()
+      setDelData({data:"",idx:""})
+    }
+  }
+
+  const toggleDelete = (e,i) =>{
+    setToggleDel(!toggleDel)
+    setDelData({data:e,idx:i})
+  }
 
   return (
     <div>
-      <Button onClick={toggle}>게임 주제 생성</Button>
-      <Modal isOpen={addModal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>게임 주제 생성 폼</ModalHeader>
-        <ModalBody>
-          <Input
-            type="text"
-            placeholder="게임 주제를 기입하시오."
-            onChange={onChangehandler}
-          ></Input>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={(e) => submitConversation(e)}>
-            추가
-          </Button>
-          <Button color="secondary" onClick={toggle}>
-            취소
-          </Button>
-        </ModalFooter>
-      </Modal>
+      <div className="addbtn" >게임 주제</div>
       <div>
         {gameList.map((data, i) => {
-          return <div>{data}</div>;
+          return <div onClick={(e)=>toggleDelete(data,i)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span><span>{i===delData.idx?<button onClick={(e)=>deleteData(e)} className="delbtn">삭제</button>:""}</span></div>;
         })}
       </div>
     </div>

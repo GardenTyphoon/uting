@@ -62,7 +62,7 @@ const FindPassword = () => {
     }
   };
 
-  const changePassword = async () => {
+  const changePassword = async (e) => {
     if (newPasswordTemp === userinfo.newPassword) {
 
       let data = { userinfo: userinfo };
