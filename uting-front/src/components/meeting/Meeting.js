@@ -8,10 +8,13 @@ import { useAppState } from "../../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
 import { createGetAttendeeCallback, fetchMeeting } from "../../utils/api";
 import "./Meeting.css";
-import { SOCKET } from "../../utils/constants";
-import { alignItems } from "styled-system";
 import baseurl from "../../utils/baseurl";
-
+import introLogo from "../../img/../img/배경없는유팅로고.png"
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+} from "reactstrap";
 function birthToAge(birth) {
   let year = birth.slice(0, 4);
   return 2021 - Number(year) + 1;
@@ -44,6 +47,7 @@ const Meeting = ({ checkFunc }) => {
   let sessionUser = sessionStorage.getItem("nickname");
   let groupMembersSocketId = [];
   let groupMembersInfo = [];
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
   //let roomtitle="";
   const [room, setRoom] = useState({
     title: "", //방제
@@ -91,7 +95,10 @@ const Meeting = ({ checkFunc }) => {
     const res = await jwtAxios.post("/meetings/check", { title: room });
   
     if (res.data === true) {
-      alert("이미 존재하는 방 이름입니다.");
+      setGetalert({ flag: true, message: "이미 존재하는 방 이름입니다." });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
     } else if (res.data === false) {
       if (contidionMakingRoom(toggleShowWarningMess, room.title, room.num)) {
         //내가 속한 그룹의 그룹원들 닉네임 받아오기
@@ -181,9 +188,11 @@ const Meeting = ({ checkFunc }) => {
           } catch (error) {
           }
         } else if (coinCheck === false) {
-          alert(
-            "그룹원 중에 유코인이 부족한 사람이 있어 방생성이 불가합니다. 유코인을 충전하세요."
-          );
+          setGetalert({ flag: true, message: '그룹원 중에 유코인이 부족한 사람이 있어 방생성이 불가합니다.'
+         });
+          setTimeout(() => {
+            setGetalert({ flag: false, message: "" });
+          }, 1500);
         }
       }
     }
@@ -237,7 +246,37 @@ const Meeting = ({ checkFunc }) => {
       >
         방만들기
       </button>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLogo}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
+      </Modal>
+    
     </div>
+    
   );
 };
 export default Meeting;
