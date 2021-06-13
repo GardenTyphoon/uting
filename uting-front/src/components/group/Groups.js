@@ -124,10 +124,11 @@ const Groups = ({
         groupMemberExceptMe.push(mem);
       }
     });
-
+    console.log(groupMemberExceptMe)
     let res = await jwtAxios.post(`${baseurl.baseBack}/users/preMemSocketid`, {
       preMember: groupMemberExceptMe,
     });
+    console.log(res);
     let socketList=[]
     for(let i=0;i<res.data.length;i++){
       socketList.push(res.data[i].socketid)
