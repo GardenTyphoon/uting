@@ -559,6 +559,19 @@ router.post("/report", function (req, res, next) {
     }
   });
 });
+router.post("/isExistUser", function(req,res,next){
+  let check=false;
+  User.find(function(err,user){
+    user.forEach((per)=>{
+      if(per.name===req.body.userinfo.name && per.email===req.body.userinfo.email){
+        check=true;
+        res.send(true);
+      }
+    })
+    if(check===false)
+      res.send(false);
+  })
+})
 router.post("/changePassword", function (req, res, next) {
   User.find(function (err, user) {
     user.forEach((per) => {
