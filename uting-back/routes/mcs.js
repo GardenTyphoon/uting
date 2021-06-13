@@ -24,4 +24,8 @@ router.post("/list", function (req, res, next) {
   });
 });
 
+router.post("/delete",function(req,res,next){
+  
+})
+
 module.exports = router;

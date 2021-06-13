@@ -46,12 +46,19 @@ const GameRecom = ({check}) => {
     getGameList()
   },[check])
 
+
+  const deleteData = async(e) => {
+    console.log(e)
+  }
+
   return (
     <div>
       <div className="addbtn" >게임 주제</div>
       <div>
         {gameList.map((data, i) => {
-          return <div className="datalist"><span className="datanum">{i+1}</span><span>{data}</span></div>;
+
+          return <div onClick={(e)=>deleteData(data)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span></div>;
+
         })}
       </div>
     </div>

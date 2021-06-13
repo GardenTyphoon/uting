@@ -41,13 +41,28 @@
 
 
 .datalist{
-    margin-top: 0.5%;
+    margin-top: 3%;
     font-size: large;
     font-weight: bold;
     font-family:"NanumSquare_acR";
-    margin-left: 1%;
+    margin-left: 3%;
+
 }
 .datanum{
-    margin-right: 1%;
+    margin-right: 2%;
+}
 
+#type{
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+#content{
+    margin-top: 2%;
+    margin-bottom: 3%;
+    height: 300px;
+    resize: none;
+}
+#btn{
+    float: right;
+    margin-right: 1%;
 }
