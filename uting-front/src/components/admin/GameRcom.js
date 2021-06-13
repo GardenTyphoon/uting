@@ -48,6 +48,7 @@ const GameRecom = ({check}) => {
     getGameList()
   },[check])
 
+
   const deleteData = async(e) => {
     console.log(e)
     let data = {
