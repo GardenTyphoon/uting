@@ -46,8 +46,8 @@ const FlexBox = styled.div`
 const AdminMc = () => {
 
   const [state,setState]=useState({type:"1",content:""})
-  const [check,setCheck]=useState(false)
-
+  const [checkconv,setCheckconv]=useState(false)
+  const [checkgame,setCheckgame]=useState(false)
   const onChangehandler = (e) => {
     let { name, value } = e.target;
     if(name==="type"){
@@ -68,7 +68,12 @@ const AdminMc = () => {
    
 
     if(res.data==="저장완료"){
-      setCheck(!check);
+      if(state.type==="game"){
+        setCheckgame(!checkgame)
+      }
+      else if(state.type==="conversation"){
+        setCheckconv(!checkconv)
+      }
       setState({type:"1",content:""})
       document.getElementById("type").value="1"
       document.getElementById("content").value=""
@@ -80,8 +85,8 @@ const AdminMc = () => {
   return (
     <CardBody>
       <Row>
-        <Col><Conversation check={check} ></Conversation></Col>
-        <Col> <GameRecom check={check}></GameRecom></Col>
+        <Col><Conversation check={checkconv} ></Conversation></Col>
+        <Col> <GameRecom check={checkgame}></GameRecom></Col>
         <Col>
           <Input id="type" name="type" type="select" onChange={onChangehandler}>
             <option value="1">옵션을 선택하시오.</option>
