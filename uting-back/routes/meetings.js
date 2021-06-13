@@ -37,7 +37,6 @@ router.post('/', async function(req, res, next) {
   }).catch((err) => {
     res.send(err);
   });
-  console.log(attendeeCache);
 });
 
 // getAttendee
@@ -209,7 +208,9 @@ router.post('/savemember', function(req, res,next){
         users:req.body.member
       },
     },
-    (err, us) => {}
+    (err, us) => {
+      res.send("Success savemember")
+    }
   );
 })
 
@@ -229,7 +230,7 @@ router.post('/getparticipants', function(req,res,next){
 });
 
 router.post('/check', function(req,res,next){
-let flag=false;
+  let flag=false;
   Meeting.find(function(err,meeting){
     meeting.forEach((obj)=>{
       if(obj.title===req.body.title.title){
@@ -249,10 +250,7 @@ let flag=false;
 });
 
 router.post('/leavemember', async function(req,res,next){
-  console.log("--------------------------")
-  console.log(req.body)
   Meeting.find(async function (err, meeting) {
-    //console.log(user)
     meeting.forEach((meet) => {
       if (req.body.title === meet.title) {
         isroom = true;
@@ -301,9 +299,6 @@ router.post('/leavemember', async function(req,res,next){
           }
         );
       }
-      
-      
-      //res.send(perObj)
     }
     if (isroom === false) {
       res.send("no");
@@ -312,12 +307,10 @@ router.post('/leavemember', async function(req,res,next){
 })
 
 router.post('/logs', function(req, res, next){
-  console.log('Writing logs to cloudwatch');
-  res.redirect('back');
+  res.redirect(200, 'back');
 })
 
 router.post('/end', async function(req, res, next){
-  console.log(req.body, "여기임")
   const title = req.body.title;
 
 
@@ -327,8 +320,7 @@ router.post('/end', async function(req, res, next){
 
   delete meetingCache[title];
   delete attendeeCache[title];
-  res.statusCode = 200;
-  res.end();
+  res.end(200);
 })
 
 module.exports = router;
