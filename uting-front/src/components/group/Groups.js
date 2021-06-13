@@ -130,8 +130,12 @@ const Groups = ({
       preMember: groupMemberExceptMe,
     });
     console.log(res.data);
+    let socketList=[]
+    for(let i=0;i<res.data.length;i++){
+      socketList.push(res.data[i].socketid)
+    }
     socket.emit("leaveGroup", {
-      socketIdList: res.data,
+      socketIdList: socketList,
       leavingUsers: sessionUser,
     });
 
@@ -139,7 +143,7 @@ const Groups = ({
       userNickname: sessionUser,
     });
 
-    window.location.reload();
+    getGroupInfo();
   };
 
   let saveGroupSocketId = async () => {
@@ -237,7 +241,7 @@ const Groups = ({
       <Modal isOpen={addMemberModal}>
         <ModalHeader
           toggle={toggelAddMember}
-          style={{ fontFamily: "Jua", fontSize: "20px" }}
+          style={{ fontFamily: "NanumSquare_acR", fontSize: "20px" }}
         >
           그룹 생성
         </ModalHeader>

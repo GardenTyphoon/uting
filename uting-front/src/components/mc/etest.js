@@ -21,7 +21,6 @@ import {
 } from "reactstrap";
 import "./EarInMal.css";
 import { SOCKET } from "../../utils/constants";
-import introLog from "../../img/배경없는유팅로고.png";
 
 const items = [
   //for 설명서
@@ -70,7 +69,6 @@ const EarInMal = ({
   const [explainIndex, setExplainIndex] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [getalert, setGetalert] = useState({ flag: false, message: "" });
-  const [exceptTurn, setExceptTurn] = useState(participants);
 
   let toggleAlert = (e) => {
     setGetalert({ ...getalert, flag: !getalert.flag });
@@ -103,7 +101,8 @@ const EarInMal = ({
   const determineTurn = (member) => {
     var rand = getRandomInt(0, member.length);
     setTurn(member[rand]);
-    var tmp = member.slice();
+    console.log("participantsForTurn :" + participantsForTurn);
+    var tmp = participantsForTurn.slice();
     tmp.splice(rand, 1);
 
     setParticipantsForTurn(tmp);
@@ -111,7 +110,7 @@ const EarInMal = ({
 
   const start = () => {
     setIsGameStart(true);
-    determineTurn(participants);
+    determineTurn(participantsForTurn);
     setFlag(true);
   };
   const globalizeGameStart = () => {
@@ -133,17 +132,8 @@ const EarInMal = ({
   useEffect(() => {
     if (gameStartFlag) {
       setIsGameStart(true);
-    } else {
-      setTurnFlag(false);
-      setIsAsked(false);
-      setNeedToRespond(false);
     }
   }, [gameStartFlag]);
-
-  useEffect(async () => {
-    console.log("participantsForTurn  ");
-    console.log(participantsForTurn);
-  }, [participantsForTurn]);
 
   const matchMemSckId = async (nickname) => {
     let tmp = [];
@@ -172,15 +162,6 @@ const EarInMal = ({
     }
   }, [giveTurnFlag]);
 
-  useEffect(async () => {
-    if (turn) {
-      var idx = participants.indexOf(`${turn}`);
-      var tmp = participants.slice();
-      tmp.splice(idx, 1);
-      setExceptTurn(tmp);
-    }
-  }, [turn]);
-
   const globalizeTurn = async () => {
     await matchMemSckId(turn);
     console.log(participants);
@@ -198,12 +179,12 @@ const EarInMal = ({
     setTurnFlag(isTurn);
   }, [isTurn]);
 
-  useEffect(async () => {
+  useEffect(() => {
     setTurn(gameTurn);
+    console.log("gameTurn : " + gameTurn);
+    console.log("currentUser : " + currentUser);
     if (gameTurn === currentUser) {
       setTurnFlag(true);
-    } else {
-      setTurnFlag(false);
     }
   }, [gameTurn]);
 
@@ -270,17 +251,16 @@ const EarInMal = ({
     await matchMemSckId(turn);
     if (participantsForTurn.length === 0) {
       //멤버 한바퀴 다돌아서 새롭게 랜덤 턴 시
-      var idx = participants.indexOf(`${turn}`);
-      var tmp = participants.slice();
-      tmp.splice(idx, 1);
+      let tmp = participants.slice();
+      tmp.splice(toSckIndex, 1);
+      console.log("determine with participants : " + tmp);
       await determineTurn(tmp);
     } else {
       await determineTurn(participantsForTurn);
     }
+    setGiveTurnFlag(true);
     setTurnFlag(false);
     setIsAsked(false);
-    setNeedToRespond(false);
-    setGiveTurnFlag(true);
   };
 
   const ending = () => {
@@ -460,10 +440,9 @@ const EarInMal = ({
                     style={{
                       gridColumn: "1/5",
                       gridRow: "2/3",
-                      paddingTop: "5%",
                     }}
                   >
-                    {exceptTurn.map((member) => (
+                    {participants.map((member) => (
                       <Button
                         outline
                         color="secondary"
@@ -507,14 +486,8 @@ const EarInMal = ({
                   <h5 style={{ fontSize: "medium", gridColumn: "1/5" }}>
                     질문할 사용자 선택
                   </h5>
-                  <div
-                    style={{
-                      gridColumn: "1/5",
-                      girdRow: "1/3",
-                      paddingTop: "5%",
-                    }}
-                  >
-                    {exceptTurn.map((member, index) => (
+                  <div style={{ gridColumn: "1/5", girdRow: "1/3" }}>
+                    {participants.map((member, index) => (
                       <Button
                         outline
                         color="secondary"
@@ -563,18 +536,12 @@ const EarInMal = ({
                   >
                     {question}
                   </div>
-                  <div
-                    style={{
-                      gridColumn: "1/5",
-                      gridRow: "2/3",
-                      paddingTop: "5%",
-                    }}
-                  >
+                  <div style={{ gridColumn: "1/5", gridRow: "2" }}>
                     {participants.map((member, index) => (
                       <Button
                         outline
                         color="secondary"
-                        style={{ border: 0, padding: "0px", marginRight: "5%" }}
+                        style={{ border: 0 }}
                         key={index + 10}
                         value={member}
                         onClick={respond}

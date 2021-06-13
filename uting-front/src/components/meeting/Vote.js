@@ -190,7 +190,6 @@ const Vote = forwardRef(
             i--;
           }
         }
-        //alert(`${goManner.name}`+"님에게 학점을 부여하였습니다.")
         setGetalert({
           flag: true,
           message: `${goManner.name}` + "님에게 학점을 부여하였습니다.",
@@ -244,14 +243,14 @@ const Vote = forwardRef(
     };
     return (
       <div>
-        <Modal isOpen={toggleEndMeetingBtn}>
-          <ModalHeader>미팅 종료 투표</ModalHeader>
-          <ModalBody className="meetingend">
+        <Modal isOpen={toggleEndMeetingBtn}  style={{fontFamily:"NanumSquare_acR"}}>
+          <ModalHeader  style={{fontFamily:"NanumSquare_acR"}}>미팅 종료 투표</ModalHeader>
+          <ModalBody className="meetingend"  style={{fontFamily:"NanumSquare_acR", textAlign:"center"}}>
             <span style={{ color: "red", fontWeight: "bold" }}>미팅 종료</span>
             를 위한 투표를 진행하시겠습니까?
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={(e) => onClickStartVoteBtn(e)}>
+            <Button color="warning" onClick={(e) => onClickStartVoteBtn(e)}>
               투표하기
             </Button>{" "}
             <Button
@@ -263,12 +262,14 @@ const Vote = forwardRef(
           </ModalFooter>
         </Modal>
         <Modal isOpen={toggleManner}>
-          <ModalHeader>매너학점</ModalHeader>
-          <ModalBody>
+          <ModalHeader  style={{fontFamily:"NanumSquare_acR"}} >매너학점</ModalHeader>
+          <ModalBody  style={{fontFamily:"NanumSquare_acR"}}>
             <Input
               type="select"
               name="par_name"
               id="par_name"
+              style={{marginBottom:"10px"}} 
+              
               onChange={(e) => onChangehandler(e)}
             >
               <option value="default" selected>
@@ -281,6 +282,8 @@ const Vote = forwardRef(
             {goManner !== "" ? (
               <span>
                 <Input
+                  style={{marginBottom:"10px"}} 
+              
                   id="realmanner"
                   type="select"
                   name="realmanner"
@@ -304,9 +307,9 @@ const Vote = forwardRef(
               ""
             )}
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter  style={{fontFamily:"NanumSquare_acR"}}>
             <Button
-              color="primary"
+              color="warning"
               onClick={(e) => {
                 saveManner(e);
               }}

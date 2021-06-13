@@ -11,26 +11,42 @@ const crypto = require("crypto");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const { rejects } = require("assert");
+const AWS = require('aws-sdk');
+const multerS3=require('multer-s3');
 
-fs.readdir("uploads", (error) => {
-  // uploads 폴더 없으면 생성
-  if (error) {
-    fs.mkdirSync("uploads");
-  }
-});
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "uploads/");
-    },
-    filename(req, file, cb) {
+// -- local upload code --
+// fs.readdir("uploads", (error) => {
+//   // uploads 폴더 없으면 생성
+//   if (error) {
+//     fs.mkdirSync("uploads");
+//   }
+// });
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, cb) {
+//       cb(null, "uploads/");
+//     },
+//     filename(req, file, cb) {
+//       const ext = path.extname(file.originalname);
+//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+//     },
+//   }),
+//   limits: { fileSize: 5 * 1024 * 1024 },
+// });
+
+let s3 = new AWS.S3();
+
+let upload = multer({
+  storage: multerS3({
+    s3:s3,
+    bucket:"utingProfileImage",
+    key: function(req,file,cb) {
       const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext)
     },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
-
+    acl: 'public-read-write'
+  })
+})
 
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
@@ -40,6 +56,9 @@ router.post("/sendEmail", async function (req, res, next) {
     smtpTransport({
       service: "gmail",
       host: "smtp.gmail.com",
+      port: 587,
+      secure: false,
+      requireTLS: true,
       auth: {
         user: "uting4u@gmail.com",
         pass: "uting0515!",
@@ -58,6 +77,7 @@ router.post("/sendEmail", async function (req, res, next) {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
+      res.send("error")
     } else {
       console.log("Email sent: " + info.response);
       res.send(code);
@@ -207,13 +227,13 @@ router.post("/viewMyProfile", function (req, res, next) {
     user.forEach((per) => {
       if (req.body.type === "profile") {
         if (req.body.sessionUser === per.email) {
-          res.status(200)
+          res.status(200);
           res.send(per);
         }
       }
       if (req.body.type === "myprofile") {
         if (req.body.sessionUser === per.nickname) {
-          res.status(201)
+          res.status(201);
           res.send(per);
         }
       }
@@ -278,7 +298,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}`});
+  res.json({ url: `/uploads/${req.file.filename}` });
 });
 
 router.post("/addUcoin", function (req, res, next) {
@@ -292,7 +312,7 @@ router.post("/addUcoin", function (req, res, next) {
       },
     },
     (err, us) => {
-      res.send("Update Ucoin")
+      res.send("Update Ucoin");
     }
   );
 });
@@ -336,6 +356,7 @@ router.post("/savesocketid", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -377,6 +398,7 @@ router.post("/logout", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -386,7 +408,7 @@ router.post("/logout", function (req, res, next) {
           },
         },
         (err, u) => {
-          res.send("success logout");
+          res.send("success");
         }
       );
     }
@@ -440,6 +462,7 @@ router.post("/cutUcoin", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,
@@ -478,6 +501,7 @@ router.post("/manner", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: (perObj.mannerCredit + req.body.manner) / 2,
@@ -516,6 +540,7 @@ router.post("/report", function (req, res, next) {
             gender: perObj.gender,
             birth: perObj.birth,
             email: perObj.email,
+            password: perObj.password,
             phone: perObj.phone,
             imgURL: perObj.imgURL,
             mannerCredit: perObj.mannerCredit,

@@ -11,6 +11,7 @@ import {
   ModalBody,
 } from "reactstrap";
 import defaultAxios from "../../utils/defaultAxios";
+import "./FindPassword.css"
 const FindPassword = () => {
   let history = useHistory();
   const [userinfo, setUserinfo] = useState({
@@ -47,12 +48,16 @@ const FindPassword = () => {
 
   const changePassword = async () => {
     if (newPasswordTemp === userinfo.newPassword) {
+      console.log(newPasswordTemp);
       let data = { userinfo: userinfo };
       const res = await defaultAxios.post("/users/changePassword", data);
+      console.log(res.data);
       setGetalert({ flag: true, message: res.data });
       if (res.data === "비밀번호가 성공적으로 변경되었습니다.") {
+        console.log("비밀번호가 성공적으로~~");
         window.location.reload();
       } else {
+        console.log("이전에 사용하신~~")
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
         }, 1500);
@@ -141,36 +146,43 @@ const FindPassword = () => {
             alignItems: "center",
           }}
         >
-          <div>
-            <div>새 비밀번호</div>
-            <input
-              type="password"
-              name="newPasswordTemp"
-              placeholder="영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 "
-              style={{
-                width: "300px",
-                fontFamily: "NanumSquare_acR",
-                margin: "10px",
-              }}
-              onChange={(e) => onChangehandler(e)}
-            />
-          </div>
-          <div>
-            <div>새 비밀번호 확인</div>
-            <input
-              type="password"
-              name="newPassword"
-              placeholder="새 비밀번호를 한번 더 입력하세요."
-              style={{
-                width: "300px",
-                fontFamily: "NanumSquare_acR",
-                margin: "10px",
-              }}
-              onChange={(e) => onChangehandler(e)}
-            />
+          <div style={{ fontFamily: "NanumSquare_acR" }}>
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호</div>
+              <Input
+                type="password"
+                name="newPasswordTemp"
+                placeholder="새 비밀번호를 입력하세요."
+                style={{
+                  width: "300px",
+                  fontFamily: "NanumSquare_acR",
+                  margin: "10px",
+                }}
+                onChange={(e) => onChangehandler(e)}
+                value={newPasswordTemp}
+              />
+
+            </div>
+            <div style={{ fontSize: "small", color: "#ff6994", marginLeft: "16%" }}>*영문 대소문자, 숫자 및 특수문자 (!,@,#,$,%,^,&,*) 조합 8자리 </div>
+
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호 확인</div>
+              <Input
+                type="password"
+                name="newPassword"
+                placeholder="새 비밀번호를 한번 더 입력하세요."
+                style={{
+                  width: "300px",
+                  fontFamily: "NanumSquare_acR",
+                  margin: "10px",
+                }}
+                onChange={(e) => onChangehandler(e)}
+                value={userinfo.newPassword}
+              />
+            </div>
           </div>
           <div style={{ textAlign: "center" }}>
-            <button onClick={() => changePassword()} style={{ width: "100px" }}>
+            <button className="gradientBtn" onClick={() => changePassword()} style={{ width: "100px" }}>
               변경하기
             </button>
           </div>
@@ -183,20 +195,25 @@ const FindPassword = () => {
             alignItems: "center",
           }}
         >
-          <div>
-            <input
-              type="text"
-              name="name"
-              placeholder="이름을 입력해주세요."
-              style={{
-                width: "300px",
-                fontFamily: "NanumSquare_acR",
-                margin: "10px",
-              }}
-              onChange={(e) => onChangehandler(e)}
-            />
-            <div>
-              <input
+          <div style={{ fontFamily: "NanumSquare_acR" }}>
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle">이름</div>
+              <Input
+                type="text"
+                name="name"
+                placeholder="이름을 입력해주세요."
+                style={{
+                  width: "300px",
+                  fontFamily: "NanumSquare_acR",
+                  margin: "10px",
+                }}
+                onChange={(e) => onChangehandler(e)}
+              />
+            </div>
+
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle">전화번호</div>
+              <Input
                 type="text"
                 name="phone"
                 placeholder="전화번호를 입력해주세요. ('-' 제외)"
@@ -207,12 +224,14 @@ const FindPassword = () => {
                 }}
                 onChange={(e) => onChangehandler(e)}
               />
-              <button onClick={onClickCertification} style={{ width: "110px" }}>
+              <button className="gradientBtn" onClick={onClickCertification} style={{ width: "80px", margin: "0px" }}>
                 본인인증
               </button>
             </div>
-            <div>
-              <input
+
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle">이메일</div>
+              <Input
                 type="text"
                 name="email"
                 placeholder="학교 이메일을 입력해주세요."
@@ -223,12 +242,15 @@ const FindPassword = () => {
                 }}
                 onChange={(e) => onChangehandler(e)}
               />
-              <button style={{ width: "110px" }} onClick={(e) => sendEmail(e)}>
-                이메일 인증
+              <button className="gradientBtn" style={{ width: "80px", margin: "0px" }} onClick={(e) => sendEmail(e)}>
+                대학 인증
               </button>
             </div>
-            <div>
-              <input
+
+
+            <div className="FindPasswordEachRow">
+              <div className="FindPasswordTitle">인증코드</div>
+              <Input
                 type="text"
                 name="check-email"
                 placeholder="인증 코드를 입력해주세요."
@@ -239,13 +261,15 @@ const FindPassword = () => {
                 }}
                 onChange={(e) => onChangehandler(e)}
               />
-              <button style={{ width: "110px" }} onClick={(e) => check(e)}>
+              <button className="gradientBtn" style={{ width: "80px", margin: "0px" }} onClick={(e) => check(e)}>
                 확인
               </button>
             </div>
+
           </div>
           <div style={{ textAlign: "center" }}>
             <button
+              className="gradientBtn"
               onClick={() => setNextBtn(!nextBtn)}
               style={{ width: "100px" }}
             >

@@ -64,6 +64,10 @@ const GameRecom = ({ tab }) => {
     setGameList(res.data);
   };
 
+  useEffect(()=>{
+    getGameList()
+  },[check])
+
   useEffect(() => {
     if (tab === "2") {
       getGameList();

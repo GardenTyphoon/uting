@@ -268,6 +268,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
                 fontWeight: "600",
                 width: "100%",
                 resize: "none",
+                height:"60px",
               }}
               maxLength="50"
               name="introduce"

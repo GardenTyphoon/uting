@@ -17,19 +17,27 @@ import "./Ad.css";
 import utingLogo from "../img/utingLogo.png";
 import FormData from "form-data";
 import ProfileNoImage from "../img/ProfileNoImage.jpg";
+import introLog from "../img/배경없는유팅로고.png";
 const Ad = () => {
-  const [content, setContent] = useState({});
+  const [content, setContent] = useState(
+    {requesttype:"",last:"",first:"",company:"",email:"",domainaddress:"",file:"",
+    title:"",textarea:""});
   const [imgBase64, setImgBase64] = useState("");
   const [imgFile, setImgFile] = useState(null);
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
 
   let onChangehandler = (e) => {
     let { name, value } = e.target;
-
+    
     setContent({ ...content, [name]: value });
   };
 
   const onChangeImg = async (e) => {
     // 이미지를 선택했으면
+    let { name, value } = e.target;
+    console.log(name)
+    console.log(value)
+    setContent({ ...content, [name]: value });
     let reader = new FileReader();
 
     reader.onloadend = () => {
@@ -50,29 +58,58 @@ const Ad = () => {
   }, [imgFile]);
 
   let submit = async (e) => {
-    if (imgFile != null) {
-      let formData = new FormData();
-      formData.append("img", imgFile);
-      formData.append("requester", content.last + content.first);
-      let res = await defaultAxios.post("/ads/uploadAdImg", formData);
+    console.log(content)
+    if(content.requesttype===""||content.last===""||content.first===""||content.company===""||content.email===""||content.domainaddress===""||content.file===""||content.title===""||content.textarea===""){
 
-      content["file"] = res.data.url;
+      setGetalert({
+        flag: true,
+        message: "입력하지 않은 값이 있습니다.",
+      });
+
+      setTimeout(()=>{
+        setGetalert({
+          flag: false,
+          message: "",
+        });
+      },1500)
     }
-    let data = {
-      type: content.requesttype,
-      name: content.last + content.first,
-      email: content.email + "@" + content.domainaddress,
-      file: content.file,
-      contents: content.textarea,
-      title: content.title,
-    };
-    console.log(data);
-    const res = await defaultAxios.post("/ads/save", data);
-    console.log(res);
-    if (res.data === "요청완료") {
-      alert("접수가 완료되었습니다.");
-      window.location.reload();
+    else{
+      console.log(content)
+      if (imgFile != null) {
+        let formData = new FormData();
+        formData.append("img", imgFile);
+        formData.append("requester", content.last + content.first);
+        let res = await defaultAxios.post("/ads/uploadAdImg", formData);
+  
+        content["file"] = res.data.url;
+        
+      }
+      let data = {
+        type: content.requesttype,
+        name: content.last + content.first,
+        email: content.email + "@" + content.domainaddress,
+        file: content.file,
+        contents: content.textarea,
+        title: content.title,
+      };
+      console.log(data);
+      const res = await defaultAxios.post("/ads/save", data);
+      console.log(res);
+      if (res.data === "요청완료") {
+        setGetalert({
+          flag: true,
+          message: "접수가 완료되었습니다.",
+        });
+        setTimeout(()=>{
+          setGetalert({
+            flag: false,
+            message: "",
+          });
+        },1500)
+        window.location.reload();
+      }
     }
+   
   };
 
   return (
@@ -136,9 +173,9 @@ const Ad = () => {
       </div>
       <div
         className="formcheck"
-        style={{ float: "left", marginLeft: "15%", marginTop: "1%" }}
+        style={{ float: "left", marginLeft: "25%", marginTop: "1%" }}
       >
-        <input type="radio" />
+        <input onChange={(e) => onChangehandler(e)} name="agree" type="radio" />
         <span style={{ marginLeft: "1%" }}>
           개인 정보 취급 방침에 동의합니다.
         </span>
@@ -148,52 +185,70 @@ const Ad = () => {
         <table>
           <tbody>
             <tr>
-              <th>질문유형</th>
+              <th >질문유형</th>
               <td>
-                <div>
-                  <input
+                <div className="td-div">
+                  <Input
                     onChange={(e) => onChangehandler(e)}
                     type="radio"
                     name="requesttype"
                     value="Ad"
+
                   />
-                  <label for="inquiryCd1">광고</label>
-                  <input
+                  <label for="inquiryCd1" style={{marginRight:"2%"}}>광고</label>
+                  <Input
                     onChange={(e) => onChangehandler(e)}
                     type="radio"
                     name="requesttype"
                     value="another"
+                    style={{marginLeft:"1%"}}
                   />
-                  <label for="inquiryCd1">기타</label>
+                  <label  style={{marginLeft:"7%"}} for="inquiryCd1">기타</label>
                 </div>
               </td>
             </tr>
             <tr>
-              <th>성, 이름</th>
+              <th >성, 이름</th>
               <td>
-                <div>
+                <div className="td-div" >
                   <input
                     onChange={(e) => onChangehandler(e)}
                     type="text"
                     name="last"
                     placeholder="성"
+                    style={{border:"none",borderRadius:"10px",height:"40px",marginRight:"2%"}}
                   />
                   <input
                     onChange={(e) => onChangehandler(e)}
                     type="text"
                     name="first"
                     placeholder="이름"
+                    style={{border:"none",borderRadius:"10px",height:"40px"}}
                   />
                 </div>
               </td>
             </tr>
             <tr>
-              <th>이메일</th>
+              <th >회사명</th>
               <td>
+                <div className="td-div">
+                  <input
+                    onChange={(e) => onChangehandler(e)}
+                    type="text"
+                    name="company"
+                    placeholder="회사명"
+                    style={{border:"none",borderRadius:"10px",height:"40px"}}
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th >이메일</th>
+              <td style={{width:"500px"}}>
                 <div className="emailinfo">
                   <input
                     onChange={(e) => onChangehandler(e)}
-                    style={{ width: "150px", float: "left" }}
+                    style={{ width: "150px", float: "left",border:"none",borderRadius:"10px",height:"40px" }}
                     type="text"
                     name="email"
                   />
@@ -201,7 +256,7 @@ const Ad = () => {
                   {content.domainaddress === "1" ? (
                     <input
                       onChange={(e) => onChangehandler(e)}
-                      style={{ width: "150px", float: "left" }}
+                      style={{ width: "150px", float: "left"}}
                       type="text"
                       name="domainaddress"
                     />
@@ -229,9 +284,9 @@ const Ad = () => {
               </td>
             </tr>
             <tr>
-              <th>파일</th>
+              <th >파일</th>
               <td>
-                <div>
+                <div className="td-div">
                   {imgBase64 === "" ? (
                     <img
                       style={{ width: "80px", height: "80px", margin: "10px" }}
@@ -257,33 +312,63 @@ const Ad = () => {
               </td>
             </tr>
             <tr>
-              <th>제목</th>
+              <th >제목</th>
               <td>
-                <div>
+                <div className="td-div">
                   <input
                     onChange={(e) => onChangehandler(e)}
                     type="text"
                     name="title"
+                    style={{border:"none",borderRadius:"10px",height:"40px"}}
                   />
                 </div>
               </td>
             </tr>
             <tr>
-              <th>문의내용</th>
+              <th >문의내용</th>
               <td>
-                <div>
+                <div className="td-div">
                   <textarea
                     onChange={(e) => onChangehandler(e)}
                     type="textarea"
                     name="textarea"
+                    style={{resize:"none",width:"600px",height:"160px",border:"none",borderRadius:"10px"}}
                   />
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <Button onClick={(e) => submit(e)}>접수</Button>
+        <Button style={{marginLeft:"30%",width:"150px",height:"50px"}} onClick={(e) => submit(e)}>접수</Button>
       </div>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLog}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };

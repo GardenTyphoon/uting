@@ -62,7 +62,7 @@ const Main = () => {
   let sessionUser = sessionStorage.getItem("nickname");
 
   const modNickname = (e) => {
-    console.log(e);
+    
     setModifyNickname(e);
   };
 
@@ -159,18 +159,17 @@ const Main = () => {
 
       history.push(`/room/${roomtitle}`);
     } catch (error) {
-      console.log(error);
     }
   };
 
   const putSocketid = async (e) => {
-    console.log(socketId);
+    
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
     const res = await defaultAxios.post("/users/savesocketid", data);
-    console.log(res);
+    
   };
   useEffect(() => {
     putSocketid();
@@ -185,7 +184,6 @@ const Main = () => {
       first: e.first,
       last: e.last,
     };
-    console.log(data);
     setFiltermanner(data);
   };
 
@@ -239,21 +237,8 @@ const Main = () => {
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
-          <div
-            style={{
-              fontFamily: "NanumSquare_acR",
-              fontSize: "large",
-              color: "rgb(89,57,70)",
-              fontWeight: "bold",
-              marginBottom: "6%",
-              marginTop: "20%",
-              marginLeft: "13%",
-            }}
-          >
-            학교별 매너학점 TOP10
-          </div>
-          <CollegeRanking />
-          <div style={{ marginTop: "13%", marginLeft: "30%" }}>
+          
+          <div style={{ marginTop: "50%", marginLeft: "40%" }}>
             <Advertising></Advertising>
           </div>
         </div>
@@ -378,7 +363,7 @@ const Main = () => {
           </ModalBody>
         </Modal>
         <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
-          <ModalHeader style={{ marginLeft: "40%" }} toggle={tutorialtoggle}>
+          <ModalHeader style={{ marginLeft: "40%", fontFamily:"NanumSquare_acR" }} toggle={tutorialtoggle}>
             U-TING 메뉴얼
           </ModalHeader>
           <ModalBody>

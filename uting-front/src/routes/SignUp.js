@@ -126,7 +126,6 @@ const SignUp = () => {
     
   };
 
-
   /*사용자 정보 firebase storage에 저장하기 - 회원가입!*/
   let onSignupSubmit = async (e) => {
     e.preventDefault();
@@ -152,7 +151,7 @@ const SignUp = () => {
           email: userinfo.email,
           password: userinfo.password,
           phone: userinfo.phone,
-        };
+        }; 
 
         const res = await defaultAxios.post("/users/signup", data);
         console.log(res.data);
