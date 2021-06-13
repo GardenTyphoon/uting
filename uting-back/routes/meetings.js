@@ -73,7 +73,8 @@ router.post('/create', async function(req, res, next){
           avgAge:req.body.avgAge,
           users:req.body.users,
           numOfWoman:req.body.numOfWoman,
-          numOfMan : req.body.numOfMan
+          numOfMan : req.body.numOfMan,
+          hostImgURL:req.body.hostImgURL,
         });
         meeting.save();
 

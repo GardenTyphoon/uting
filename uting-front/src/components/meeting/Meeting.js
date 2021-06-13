@@ -104,12 +104,12 @@ const Meeting = ({ checkFunc }) => {
         //내가 속한 그룹의 그룹원들 닉네임 받아오기
         //평균 나이, 평균 학점, 현재 남녀 수 구하기
         let avgManner = 0;
-        let sumManner = 0;
-        let sumAge = 0;
         let avgAge = 0;
         let nowOfWoman = 0;
         let nowOfMan = 0;
+        let hostImgURL="";
         for (let i = 0; i < groupMembers.length; i++) {
+          
           let userInfo = await jwtAxios.post("/users/userInfo", {
             userId: groupMembers[i],
           });
@@ -130,6 +130,9 @@ const Meeting = ({ checkFunc }) => {
             setGroupmemeinfo(data);
             groupMembersSocketId.push(userInfo.data.socketid);
           }
+          if(userInfo.data.nickname === sessionUser) {
+            hostImgURL = userInfo.data.imgURL;
+          }
           avgManner += userInfo.data.mannerCredit;
           avgAge += birthToAge(userInfo.data.birth);
           if (userInfo.data.gender === "woman") {
@@ -148,7 +151,7 @@ const Meeting = ({ checkFunc }) => {
           avgAge = parseInt(avgAge);
 
           const roomTitle = room.title.trim().toLocaleLowerCase();
-
+         
           let data = {
             title: roomTitle,
             maxNum: Number(room.num),
@@ -159,6 +162,7 @@ const Meeting = ({ checkFunc }) => {
             numOfMan: nowOfMan,
             session: sessionUser,
             flag: 0,
+            hostImgURL:hostImgURL,
           };
           data.users = groupMembersInfo;
 

@@ -348,7 +348,7 @@ export default function MeetingList({
           <Container className="MeetingRoom">
             <Row style={{ width: "100%" }}>
               <img
-                src={MeetingRoom}
+                src={room.hostImgURL}
                 className="MeetingRoomImg"
                 style={{ borderColor: groupMannerInfo[Number(index)].color }}
                 id={"Tooltip-" + room._id.substr(0, 10)}
