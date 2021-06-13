@@ -116,9 +116,11 @@ const AdminAd = () => {
             <Col style={{ marginLeft: "1%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}> 작성자 </Col>
           </Row>
           <div>
+            
             {requestList.map((data, i) => {
               return (
                 <>
+                
                   <Row
                     key={i}
                     className="rowbutton"
@@ -201,11 +203,14 @@ const AdminAd = () => {
                           )}
                           <span>
                           <Button onClick={(e) => modaltoggle(e)}>거절</Button></span>
+                         
                         </div>
+                        
                       </Fade>
                     ) : (
                       ""
                     )}
+                    
                   </Row>
                 </>
               );
