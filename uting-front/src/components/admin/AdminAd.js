@@ -79,7 +79,7 @@ const AdminAd = () => {
 
   let getAd = async (e) => {
     await defaultAxios
-      .get("/ads/adslist")
+      .post("/ads/adslist")
       .then(({ data }) => {
         setRequestList(data);
       })
