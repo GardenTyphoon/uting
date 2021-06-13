@@ -36,15 +36,6 @@ import {
   Fade,
 } from "reactstrap";
 
-const RightButton = styled.div`
-  position: relative;
-  padding: 1rem 1rem;
-  margin: -1rem -1rem -1rem auto;
-`;
-
-const FlexBox = styled.div`
-  display: flex;
-`;
 
 const AdminAd = () => {
   const [open, setOpen] = useState(false);
@@ -118,11 +109,11 @@ const AdminAd = () => {
     <>
       <CardBody>
         <div style={{ width: "100%", height: "50%" }}>
-          <span className="reportedlist">문의 목록</span>
+          <span className="reportedlist" style={{fontFamily:"NanumSquare_acR",fontSize:"25px",fontWeight:"bold"}} >문의 목록</span>
           <Row className="header">
-            <Col style={{ marginLeft: "10%" }}>문의 타입 </Col>
-            <Col style={{ marginLeft: "2%" }}> 제목 </Col>
-            <Col style={{ marginLeft: "1%" }}> 작성자 </Col>
+            <Col style={{ marginLeft: "10%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}>문의 타입 </Col>
+            <Col style={{ marginLeft: "2%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}> 제목 </Col>
+            <Col style={{ marginLeft: "1%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}> 작성자 </Col>
           </Row>
           <div>
             {requestList.map((data, i) => {
@@ -133,25 +124,28 @@ const AdminAd = () => {
                     className="rowbutton"
                     onClick={(e) => fadetoggle(data, i)}
                   >
-                    <Col style={{ marginLeft: "10%" }}>
+                    <Col style={{ marginLeft: "10%" ,fontSize:"20px"}}>
                       {data.type === "Ad" ? "광고" : "기타"}
                     </Col>
-                    <Col style={{ marginLeft: "2%" }}>{data.title}</Col>
-                    <Col style={{ marginLeft: "2%" }}>{data.name}</Col>
+                    <Col style={{ marginLeft: "2%" ,fontSize:"20px" }}>{data.title}</Col>
+                    <Col style={{ marginLeft: "2%" ,fontSize:"20px" }}>{data.name}</Col>
                   </Row>
                   <Row
                     style={{
                       marginLeft: "10%",
                       marginRight: "50%",
-                      marginTop: "1%",
-                      marginBottom: "1%",
                     }}
                   >
                     {clickData.num === i ? (
+                      
                       <Fade in={fadeIn}>
+                        <hr></hr>
                         <div style={{ float: "left" }}>
+                         
                           {imgBase64 === "" ? (
+                            
                             <Col>
+                             <div>이미지</div>
                               <img
                                 src={ProfileNoImage}
                                 alt="profile img"
@@ -159,9 +153,11 @@ const AdminAd = () => {
                                 width="100"
                                 style={{ borderRadius: "10px" }}
                               />
+                              
                             </Col>
                           ) : (
                             <Col>
+                             <div>이미지</div>
                               <img
                                 src={imgBase64}
                                 alt="profile img"
@@ -171,31 +167,40 @@ const AdminAd = () => {
                               />{" "}
                             </Col>
                           )}
-                          <Col
-                            style={{ marginLeft: "20%", marginRight: "1000px" }}
-                          >
-                            {clickData.contents}
-                          </Col>
+                          
                           <Col
                             style={{ marginLeft: "30%", marginRight: "1000px" }}
                           >
-                            {clickData.email}
+                            <div>내용</div>
+                            <div>{clickData.contents}</div>
+                            
                           </Col>
+                         
                           <Col
                             style={{ marginLeft: "50%", marginRight: "1000px" }}
                           >
-                            {clickData.status === "false" ? "보류" : "승인완료"}
+                             <div>이메일</div>
+                            <div>{clickData.email}</div>
+                          </Col>
+                          
+                          <Col
+                            style={{ marginLeft: "70%", marginRight: "1000px" }}
+                          >
+                            <div>상태</div>
+                            <div>{clickData.status === "false" ? "보류" : "승인완료"}</div>
                           </Col>
                         </div>
-                        <div>
+                        <div style={{float:"right",marginRight:"3%"}}>
                           {clickData.status === "false" ? (
-                            <Button color="warning" onClick={(e) => accept(e)}>
+                            <span >
+                            <Button  color="warning" onClick={(e) => accept(e)}>
                               수락
-                            </Button>
+                            </Button></span>
                           ) : (
                             ""
                           )}
-                          <Button onClick={(e) => modaltoggle(e)}>거절</Button>
+                          <span>
+                          <Button onClick={(e) => modaltoggle(e)}>거절</Button></span>
                         </div>
                       </Fade>
                     ) : (

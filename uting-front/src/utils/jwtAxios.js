@@ -8,7 +8,8 @@ import axios from "axios";
  const tokenAxios = axios.create({
    baseURL: "/api",
  });
-/*const tokenAxios = axios.create({
+/*
+const tokenAxios = axios.create({
   baseURL: "http://localhost:3001",
 });*/
 var token = sessionStorage.getItem("token");
@@ -16,7 +17,7 @@ var token = sessionStorage.getItem("token");
 tokenAxios.interceptors.request.use(
   function (config) {
     if (!sessionStorage.getItem("token")) {
-      
+      console.log("토큰없슴");
       return config;
     } else {
       token = sessionStorage.getItem("token");
