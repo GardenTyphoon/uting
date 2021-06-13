@@ -117,19 +117,19 @@ const AdminBad = () => {
     <>
       <CardBody>
         <div style={{ width: "100%", height: "50%" }}>
-          <span className="reportedlist">신고자 목록</span>
+          <span style={{fontFamily:"NanumSquare_acR",fontSize:"25px",fontWeight:"bold"}} className="reportedlist">신고자 목록</span>
           <Row className="header">
-            <Col style={{ marginLeft: "10%" }}> 신고된 사람 </Col>
-            <Col style={{ marginLeft: "2%" }}> 신고 사유 </Col>
-            <Col style={{ marginLeft: "1%" }}> 신고한 사람 </Col>
+            <Col style={{ marginLeft: "10%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}> 신고된 사람 </Col>
+            <Col style={{ marginLeft: "2%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}> 신고 사유 </Col>
+            <Col style={{ marginLeft: "1%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}> 신고한 사람 </Col>
           </Row>
           <div>
             {reportedList.map((per, i) => {
               return (
                 <Row className="rowbutton" onClick={(e) => toggle(per)}>
-                  <Col style={{ marginLeft: "10%" }}>{per.target}</Col>
-                  <Col>{per.content}</Col>
-                  <Col style={{ marginLeft: "2%" }}>{per.requester}</Col>
+                  <Col style={{ marginLeft: "10%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}>{per.target}</Col>
+                  <Col style={{fontFamily:"NanumSquare_acR" ,fontSize:"20px"}}>{per.content}</Col>
+                  <Col style={{ marginLeft: "2%",fontFamily:"NanumSquare_acR" ,fontSize:"20px" }}>{per.requester}</Col>
                 </Row>
               );
             })}
@@ -138,21 +138,21 @@ const AdminBad = () => {
       </CardBody>
 
       <Modal isOpen={modal}>
-        <ModalHeader toggle={(e) => toggle("none")}>
+        <ModalHeader style={{fontFamily:"NanumSquare_acR" ,fontSize:"20px"}} toggle={(e) => toggle("none")}>
           신고처리 및 봐주기
         </ModalHeader>
         <ModalBody>
-          <div>
+          <div style={{fontFamily:"NanumSquare_acR" ,fontSize:"20px"}}>
             [{choice.target}]님이{" "}
-            <span style={{ color: "red" }}>{choice.content}</span> 이유로
+            <span style={{ color: "red",  fontFamily:"NanumSquare_acR"}}>{choice.content}</span> 이유로
             신고되었습니다.
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="danger" onClick={(e) => goHell(e)}>
+          <Button color="danger" style={{fontFamily:"NanumSquare_acR"}} onClick={(e) => goHell(e)}>
             신고처리
           </Button>{" "}
-          <Button color="warning" onClick={(e) => pass(e)}>
+          <Button color="warning" style={{fontFamily:"NanumSquare_acR"}} onClick={(e) => pass(e)}>
             봐주기
           </Button>
         </ModalFooter>

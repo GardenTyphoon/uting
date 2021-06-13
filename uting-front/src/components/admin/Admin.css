@@ -10,7 +10,8 @@
     background-color: antiquewhite;
     border-radius: 10px;
     height: 50px;
-    padding-top: 1.3%;
+    padding-top: 1%;
+    padding-bottom: 3%;
 }
 .rowbutton{
     border: 0;
