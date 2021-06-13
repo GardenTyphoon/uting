@@ -5,13 +5,12 @@ import axios from "axios";
     생성할때 사용하는 옵션들 (baseURL, timeout, headers 등)은 다음 URL에서 확인할 수 있습니다.
     https://github.com/axios/axios 의 Request Config 챕터 확인
 */
- const tokenAxios = axios.create({
-   baseURL: "/api",
- });
-/*
+// const tokenAxios = axios.create({
+//   baseURL: "/api",
+// });
 const tokenAxios = axios.create({
   baseURL: "http://localhost:3001",
-});*/
+});
 var token = sessionStorage.getItem("token");
 
 tokenAxios.interceptors.request.use(
