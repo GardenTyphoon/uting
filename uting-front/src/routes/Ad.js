@@ -123,7 +123,7 @@ const Ad = () => {
     <div className="adContainer">
       <img className="utingLogo" src={utingLogo} />
       <div className="contactus">Contact Us</div>
-      <div>
+      <div style={{display:"flex", flexDirection:"column", width:"70%"}}>
         <div className="request">문의 약관</div>
         <div className="checkcontent">
           ‘U-TING’(이하 ‘회사’)은 고객님의 개인정보를 중요시하며, “정보통신망
@@ -177,15 +177,16 @@ const Ad = () => {
           <br />- 방문에 관한 기록(통신사실확인자료) | 보존 이유 : 통신비밀
           보호법, 보존 기간 : 3개월
         </div>
-      </div>
-      <div
+        <div
         className="formcheck"
-        style={{ float: "left", marginLeft: "25%", marginTop: "1%" }}
+        
       >
         <input onChange={(e) => onChangehandler(e)} name="agree" type="radio" />
-        <span style={{ marginLeft: "1%" }}>
+        <span style={{ }}>
           개인 정보 취급 방침에 동의합니다.
         </span>
+      </div>
+     
       </div>
 
       <div className="tablediv">
@@ -193,25 +194,24 @@ const Ad = () => {
           <tbody>
             <tr>
               <th >질문유형</th>
-              <td>
-                <div className="td-div">
-                  <Input
+              <td >
+                  <input
                     onChange={(e) => onChangehandler(e)}
                     type="radio"
                     name="requesttype"
                     value="Ad"
-
+                    style={{marginRight:"2%", margin:"2%"}}
                   />
-                  <label for="inquiryCd1" style={{marginRight:"2%"}}>광고</label>
-                  <Input
+                  <label for="inquiryCd1" style={{margin:"2%"}}>광고</label>
+                  <input
                     onChange={(e) => onChangehandler(e)}
                     type="radio"
                     name="requesttype"
                     value="another"
-                    style={{marginLeft:"1%"}}
+                    style={{margin:"2%"}}
                   />
-                  <label  style={{marginLeft:"7%"}} for="inquiryCd1">기타</label>
-                </div>
+                  <label  style={{margin:"2%"}} for="inquiryCd1">기타</label>
+                
               </td>
             </tr>
             <tr>
@@ -339,14 +339,14 @@ const Ad = () => {
                     onChange={(e) => onChangehandler(e)}
                     type="textarea"
                     name="textarea"
-                    style={{resize:"none",width:"600px",height:"160px",border:"none",borderRadius:"10px"}}
+                    style={{resize:"none",width:"80%",height:"160px",border:"none",borderRadius:"10px"}}
                   />
                 </div>
               </td>
             </tr>
           </tbody>
         </table>
-        <Button style={{marginLeft:"30%",width:"150px",height:"50px"}} onClick={(e) => submit(e)}>접수</Button>
+        <Button className="gradientBtn" style={{border:"none", width:"120px",height:"40px", marginLeft:"38%"}} onClick={(e) => submit(e)}>접수</Button>
       </div>
       <Modal isOpen={getalert.flag}>
         <ModalHeader style={{ height: "70px", textAlign: "center" }}>
