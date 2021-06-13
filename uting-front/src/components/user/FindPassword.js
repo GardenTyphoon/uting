@@ -28,10 +28,26 @@ const FindPassword = () => {
   const [nextBtn, setNextBtn] = useState(false);
   const [newPasswordTemp, setNewPasswordTemp] = useState("");
   const [getalert, setGetalert] = useState({ flag: false, message: "" });
-
+  const [isExistUser, setIsExistUser] = useState(false);
   let toggleAlert = (e) => {
     setGetalert({ ...getalert, flag: !getalert.flag });
   };
+  const clickNextBtn = async () => {
+    setNextBtn(!nextBtn);
+    const res = await defaultAxios.post("/users/isExistUser", { userinfo: userinfo });
+    if (res.data === true) {
+      setIsExistUser(true);
+
+    }
+    else{
+      setIsExistUser(false);
+      setGetalert({ flag: true, message: "존재하지 않는 사용자입니다." });
+      setTimeout(() => {
+        window.location.reload();
+        }, 1500);
+      
+    }
+  }
   const onChangehandler = (e) => {
     let { name, value } = e.target;
     if (name === "check-email") {
@@ -48,16 +64,15 @@ const FindPassword = () => {
 
   const changePassword = async () => {
     if (newPasswordTemp === userinfo.newPassword) {
-      console.log(newPasswordTemp);
+
       let data = { userinfo: userinfo };
       const res = await defaultAxios.post("/users/changePassword", data);
-      console.log(res.data);
+
       setGetalert({ flag: true, message: res.data });
       if (res.data === "비밀번호가 성공적으로 변경되었습니다.") {
-        console.log("비밀번호가 성공적으로~~");
+
         window.location.reload();
       } else {
-        console.log("이전에 사용하신~~")
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
         }, 1500);
@@ -138,7 +153,7 @@ const FindPassword = () => {
   };
   return (
     <div>
-      {checkcode === true && nextBtn === true ? (
+      {checkcode && nextBtn && isExistUser  ? (
         <div
           style={{
             display: "flex",
@@ -146,6 +161,7 @@ const FindPassword = () => {
             alignItems: "center",
           }}
         >
+
           <div style={{ fontFamily: "NanumSquare_acR" }}>
             <div className="FindPasswordEachRow">
               <div className="FindPasswordTitle" style={{ width: "80px" }}>새 비밀번호</div>
@@ -187,6 +203,8 @@ const FindPassword = () => {
             </button>
           </div>
         </div>
+
+
       ) : (
         <div
           style={{
@@ -270,7 +288,7 @@ const FindPassword = () => {
           <div style={{ textAlign: "center" }}>
             <button
               className="gradientBtn"
-              onClick={() => setNextBtn(!nextBtn)}
+              onClick={() => clickNextBtn()}
               style={{ width: "100px" }}
             >
               다음 단계
