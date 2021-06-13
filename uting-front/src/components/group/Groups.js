@@ -99,7 +99,7 @@ const Groups = ({
   //let sessionUser = sessionStorage.getItem("nickname");
 
   const showProfile = (data) => {
-    console.log(data);
+   
     setToggleOtherProfile(true);
     setAnotherName(data);
   };
@@ -124,12 +124,10 @@ const Groups = ({
         groupMemberExceptMe.push(mem);
       }
     });
-    console.log(groupMemberExceptMe);
 
     let res = await jwtAxios.post(`${baseurl.baseBack}/users/preMemSocketid`, {
       preMember: groupMemberExceptMe,
     });
-    console.log(res.data);
     let socketList=[]
     for(let i=0;i<res.data.length;i++){
       socketList.push(res.data[i].socketid)

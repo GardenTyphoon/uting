@@ -24,7 +24,7 @@ const SignIn = () => {
 
   const enterEvent = (e) => {
     if (e.key === "Enter") {
-      console.log(e.key);
+
       onSubmit();
     }
   };
@@ -77,7 +77,6 @@ const SignIn = () => {
             setGetalert({ flag: false, message: "" });
           }, 1500);
         } else {
-          console.log(res.data);
           try {
             setIslogined(true);
             sessionStorage.setItem("token", res.data.token);
@@ -98,7 +97,6 @@ const SignIn = () => {
         }
       })
       .catch((err) => {
-        console.log(err.message);
       });
   };
   return (

@@ -44,7 +44,6 @@ export const RemoteVideos = (props) => {
       ...alive,
       [tileId]: !alive[tileId],
     });
-    console.log(alive);
   };
 
   return (

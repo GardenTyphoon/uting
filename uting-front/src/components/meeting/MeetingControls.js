@@ -56,8 +56,6 @@ const MeetingControls = ({ participantss }) => {
       reportContent: reportContent[0].value,
       reportRequester: sessionStorage.getItem("nickname"),
     });
-    console.log(res.data);
-    //alert(res.data);
     setGetalert({ flag: true, message: res.data });
     setTimeout(() => {
       setToggleReport(false);

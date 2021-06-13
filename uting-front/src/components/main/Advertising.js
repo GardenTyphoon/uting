@@ -26,7 +26,6 @@ const Advertising = () => {
         responseList.push(response);
       }
     }
-    console.log(responseList);
     setAdslist(responseList);
   };
 

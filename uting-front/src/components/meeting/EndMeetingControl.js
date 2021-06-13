@@ -30,7 +30,6 @@ const EndMeetingControl= () => {
         history.push('/main');
       }
     } catch (e) {
-      console.log('Could not end meeting', e);
     }
   };
 

@@ -83,8 +83,7 @@ const Vote = forwardRef(
     const emitStartVote = () => {
       const socket = socketio.connect(SOCKET);
       socket.emit("startVote", { socketidList: participantsSocketIdList });
-      console.log(participantsSocketIdList);
-      console.log("emitvote");
+      
     };
 
     useImperativeHandle(ref, () => ({
@@ -102,7 +101,6 @@ const Vote = forwardRef(
         }
       },
       onClickEndMeetingBtn() {
-        console.log(participantsSocketIdList);
         setToggleEndMeetingBtn(!toggleEndMeetingBtn);
       },
     }));
@@ -172,7 +170,6 @@ const Vote = forwardRef(
         setGoManner({ ...goManner, ["manner"]: Number(value) });
       }
 
-      console.log(value);
     };
 
     let saveManner = async (e) => {
@@ -181,7 +178,7 @@ const Vote = forwardRef(
         manner: goManner.manner,
       };
       const res = await defaultAxios.post("/users/manner", data);
-      console.log(res);
+  
       if (res.data === "success") {
         let arr = copyParticipants;
         for (let i = 0; i < arr.length; i++) {
@@ -221,7 +218,6 @@ const Vote = forwardRef(
           gender: mem.gender,
           session: sessionUser,
         };
-        console.log(data);
 
         const res = await defaultAxios.post("/meetings/leavemember", data);
 
