@@ -15,6 +15,7 @@ import {
   ModalHeader,
   ModalBody,
 } from "reactstrap";
+import { SOCKET } from "../../utils/constants";
 function birthToAge(birth) {
   let year = birth.slice(0, 4);
   return 2021 - Number(year) + 1;
@@ -179,7 +180,7 @@ const Meeting = ({ checkFunc }) => {
 
             setAppMeetingInfo(roomTitle, sessionUser, "ap-northeast-2");
             if (roomTitle !== undefined) {
-              const socket = socketio.connect(`${baseurl.baseBack}`);
+              const socket = socketio.connect(SOCKET);
               socket.emit("makeMeetingRoomMsg", {
                 groupMembersSocketId: groupMembersSocketId,
                 roomtitle: roomTitle,
