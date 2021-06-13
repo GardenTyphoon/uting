@@ -36,7 +36,6 @@ import {
   Fade,
 } from "reactstrap";
 
-
 const AdminAd = () => {
   const [open, setOpen] = useState(false);
   const [requestList, setRequestList] = useState([]);
@@ -44,9 +43,14 @@ const AdminAd = () => {
   const [clickData, setClickData] = useState({});
   const [imgBase64, setImgBase64] = useState("");
   const [modal, setModal] = useState(false);
+  const [imgModal, setImgModal] = useState(false);
 
   const modaltoggle = (e) => {
     setModal(!modal);
+  };
+
+  const imgModaltoggle = (e) => {
+    setImgModal(!imgModal);
   };
 
   const fadetoggle = (e, i) => {
@@ -109,11 +113,41 @@ const AdminAd = () => {
     <>
       <CardBody>
         <div style={{ width: "100%", height: "50%" }}>
-          <span className="reportedlist" style={{fontFamily:"NanumSquare_acR",fontSize:"25px",fontWeight:"bold"}} >문의 목록</span>
+          <span
+            className="reportedlist"
+            style={{
+              fontFamily: "NanumSquare_acR",
+              fontSize: "25px",
+              fontWeight: "bold",
+            }}
+          >
+            문의 목록
+          </span>
           <Row className="header">
-            <Col style={{ marginLeft: "10%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}>문의 타입 </Col>
-            <Col style={{ marginLeft: "2%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}> 제목 </Col>
-            <Col style={{ marginLeft: "1%",fontFamily:"NanumSquare_acR",fontSize:"20px"  }}> 작성자 </Col>
+            <Col
+              style={{
+                fontFamily: "NanumSquare_acR",
+                fontSize: "20px",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>문의타입</div>
+            </Col>
+            <Col
+              style={{
+                fontFamily: "NanumSquare_acR",
+                fontSize: "20px",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>제목</div>
+            </Col>
+            <Col
+              style={{
+                fontFamily: "NanumSquare_acR",
+                fontSize: "20px",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>작성자</div>
+            </Col>
           </Row>
           <div>
             {requestList.map((data, i) => {
@@ -124,83 +158,61 @@ const AdminAd = () => {
                     className="rowbutton"
                     onClick={(e) => fadetoggle(data, i)}
                   >
-                    <Col style={{ marginLeft: "10%" ,fontSize:"20px"}}>
-                      {data.type === "Ad" ? "광고" : "기타"}
+                    <Col style={{ fontSize: "20px" }}>
+                      <div style={{ textAlign: "center" }}>
+                        {data.type === "Ad" ? "광고" : "기타"}
+                      </div>
                     </Col>
-                    <Col style={{ marginLeft: "2%" ,fontSize:"20px" }}>{data.title}</Col>
-                    <Col style={{ marginLeft: "2%" ,fontSize:"20px" }}>{data.name}</Col>
+                    <Col style={{ fontSize: "20px" }}>
+                      <div style={{ textAlign: "center" }}>{data.title}</div>
+                    </Col>
+                    <Col style={{ fontSize: "20px" }}>
+                      <div style={{ textAlign: "center" }}>{data.name}</div>
+                    </Col>
                   </Row>
-                  <Row
-                    style={{
-                      marginLeft: "10%",
-                      marginRight: "50%",
-                    }}
-                  >
+                  <Row>
                     {clickData.num === i ? (
-                      
                       <Fade in={fadeIn}>
-                        <hr></hr>
-                        <div style={{ float: "left" }}>
-                         
-                          {imgBase64 === "" ? (
-                            
-                            <Col>
-                             <div>이미지</div>
-                              <img
-                                src={ProfileNoImage}
-                                alt="profile img"
-                                height="100"
-                                width="100"
-                                style={{ borderRadius: "10px" }}
-                              />
-                              
-                            </Col>
-                          ) : (
-                            <Col>
-                             <div>이미지</div>
-                              <img
-                                src={imgBase64}
-                                alt="profile img"
-                                height="100"
-                                width="130"
-                                style={{ borderRadius: "10px", float: "left" }}
-                              />{" "}
-                            </Col>
-                          )}
-                          
-                          <Col
-                            style={{ marginLeft: "30%", marginRight: "1000px" }}
-                          >
+                        <hr />
+                        <Row>
+                          <Col xs="6">
                             <div>내용</div>
                             <div>{clickData.contents}</div>
-                            
                           </Col>
-                         
-                          <Col
-                            style={{ marginLeft: "50%", marginRight: "1000px" }}
-                          >
-                             <div>이메일</div>
+                          <Col>
+                            <div>이메일</div>
                             <div>{clickData.email}</div>
                           </Col>
-                          
-                          <Col
-                            style={{ marginLeft: "70%", marginRight: "1000px" }}
-                          >
+                          <Col>
                             <div>상태</div>
-                            <div>{clickData.status === "false" ? "보류" : "승인완료"}</div>
+                            <div>
+                              {clickData.status === "false"
+                                ? "보류"
+                                : "승인완료"}
+                            </div>
                           </Col>
-                        </div>
-                        <div style={{float:"right",marginRight:"3%"}}>
+                        </Row>
+                        <div style={{ float: "right", marginRight: "3%" }}>
+                          <Button onClick={(e) => imgModaltoggle(e)}>
+                            이미지보기
+                          </Button>
                           {clickData.status === "false" ? (
-                            <span >
-                            <Button  color="warning" onClick={(e) => accept(e)}>
-                              수락
-                            </Button></span>
+                            <span>
+                              <Button
+                                color="warning"
+                                onClick={(e) => accept(e)}
+                              >
+                                수락
+                              </Button>
+                            </span>
                           ) : (
                             ""
                           )}
                           <span>
-                          <Button onClick={(e) => modaltoggle(e)}>거절</Button></span>
+                            <Button onClick={(e) => modaltoggle(e)}>
+                              거절
+                            </Button>
+                          </span>
                         </div>
                       </Fade>
                     ) : (
@@ -223,6 +235,41 @@ const AdminAd = () => {
             </Button>{" "}
             <Button color="warning" onClick={(e) => modaltoggle(e)}>
               취소
+            </Button>
+          </ModalFooter>
+        </Modal>
+        <Modal isOpen={imgModal}>
+          <ModalHeader toggle={(e) => imgModaltoggle(e)}>
+            이미지 보기
+          </ModalHeader>
+          <ModalBody>
+            {imgBase64 === "" ? (
+              <>
+                <div>이미지</div>
+                <img
+                  src={ProfileNoImage}
+                  alt="profile img"
+                  height="100%"
+                  width="100%"
+                  style={{ borderRadius: "10px", float: "left" }}
+                />
+              </>
+            ) : (
+              <>
+                <div style={{ textAlign: "center" }}>이미지</div>
+                <img
+                  src={imgBase64}
+                  alt="profile img"
+                  height="100%"
+                  width="100%"
+                  style={{ borderRadius: "10px", float: "left" }}
+                />
+              </>
+            )}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="warning" onClick={(e) => imgModaltoggle(e)}>
+              확인
             </Button>
           </ModalFooter>
         </Modal>

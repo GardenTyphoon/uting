@@ -33,42 +33,29 @@ const Admin = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider onClick={(e) => onSider(e)}>
-        <div className="App-logo" />
-        <Menu theme="dark" mode="inline">
-          <Menu.Item key="1">
-            <span>MC봇 관리</span>
-          </Menu.Item>
-          <Menu.Item key="2">
-            <span>신고 관리</span>
-          </Menu.Item>
-          <Menu.Item key="3">
-            <span>광고 관리</span>
-          </Menu.Item>
-        </Menu>
-      </Sider>
-      <Layout>
-        <Header style={{ background: "#fff", padding: 0 }} />
-        <Content style={{ margin: "0 16px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Admin</Breadcrumb.Item>
-          </Breadcrumb>
-          <div style={{ padding: 24, background: "#fff", minHeight: 360 }}>
-            {menustate === "MC봇 관리" ? (
-              <AdminMc></AdminMc>
-            ) : menustate === "신고 관리" ? (
-              <AdminBad></AdminBad>
-            ) : menustate == "광고 관리" ? (
-              <AdminAd></AdminAd>
-            ) : (
-              "UTING관리자 페이지 입니다."
-            )}
-          </div>
-        </Content>
-        <Footer style={{ textAlign: "center" }}>UTING ADMIN</Footer>
-      </Layout>
+    <Layout className="layout">
+      <Header>
+        <div className="logo" />
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}></Menu>
+      </Header>
+      <Content style={{ padding: "0 50px" }}>
+        <Breadcrumb style={{ margin: "16px 0" }}>
+          <Breadcrumb.Item>Admin</Breadcrumb.Item>
+        </Breadcrumb>
+        <div
+          style={{
+            display: "grid",
+            width: "100%",
+            height: "100%",
+            gridTemplateColumns: "0.5fr 1fr 1fr",
+          }}
+        >
+          <AdminMc></AdminMc>
+          <AdminBad></AdminBad>
+          <AdminAd></AdminAd>
+        </div>
+      </Content>
+      <Footer style={{ textAlign: "center" }}>UTING ADMIN</Footer>
     </Layout>
   );
 };
