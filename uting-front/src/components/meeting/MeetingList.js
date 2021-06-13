@@ -233,7 +233,6 @@ export default function MeetingList({
 
         history.push(`/room/${room.title}`);
       } catch (error) {
-        console.log(error);
       }
     } else if (coinCheck === false) {
       setGetalert({

@@ -36,7 +36,6 @@ export default function Rooms(props) {
 
   useEffect(() => {
     if (meetingStatus === MeetingStatus.Ended) {
-      console.log("[useMeetingEndRedirect] Meeting ended");
       dispatch({
         type: ActionType.ADD,
         payload: {

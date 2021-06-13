@@ -82,7 +82,6 @@ const AddMember = ({
   }, []);
 
   useEffect(() => {
-    console.log(preMemSocketIdList);
     const socket = socketio.connect(SOCKET);
     socket.emit("message", { socketid: socketId });
 

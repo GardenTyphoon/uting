@@ -41,7 +41,7 @@ const Intro = () => {
     setFindPasswordModal(!findPasswordModal);
   let logout = async (e) => {
     let data = { email: sessionStorage.getItem("email") };
-    console.log(data);
+
     const res = await defaultAxios.post("/users/logout", data);
     if (res.data === "success") {
       sessionStorage.clear();
