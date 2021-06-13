@@ -44,7 +44,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
     });
 
     if (res.data.imgURL !== "") {
-      setImgBase64(staticpath + res.data.imgURL);
+      setImgBase64(res.data.imgURL);
     }
     let data = {
       _id: res.data._id,

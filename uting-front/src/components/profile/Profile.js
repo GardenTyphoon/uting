@@ -61,8 +61,8 @@ const Profile = ({ modNickname }) => {
       type: "profile",
     });
     if (res.data.imgURL !== "") {
-      let staticpath = `${baseurl.baseBack}`;
-      setImgBase64(staticpath + res.data.imgURL);
+      // let staticpath = `${baseurl.baseBack}`;
+      setImgBase64(res.data.imgURL);
     }
     let data = {
       nickname: res.data.nickname,
