@@ -1,84 +1,96 @@
-.reportedlist{
-    margin-left: 40%;
-    font-size: large;
-    margin-top: 5%;
+.reportedlist {
+  margin-left: 40%;
+  font-size: large;
+  margin-top: 5%;
 }
 
-.header{
-    margin-top: 5%;
-    margin-bottom: 3%;
-    background-color: antiquewhite;
-    border-radius: 10px;
-    height: 50px;
-    padding-top: 1%;
-    padding-bottom: 3%;
+.header {
+  margin-top: 5%;
+  margin-bottom: 3%;
+  background-color: antiquewhite;
+  border-radius: 10px;
+  height: 50px;
+  padding-top: 1%;
+  padding-bottom: 3%;
 }
-.rowbutton{
-    border: 0;
-    outline: 0;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    margin-bottom: 1%;
-    border-radius: 20px;
-    
+.rowbutton {
+  border: 0;
+  outline: 0;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-bottom: 1%;
+  border: solid 1px rgb(170, 167, 167);
+  border-radius: 10px;
+  background-color: rgb(245, 240, 235);
 }
-.rowbutton:active{
-    background-color: rgb(248, 244, 204);
-    border-radius: 20px;
-    
-}
-
-.addbtn{
-    border: none;
-    background-color: lightblue;
-    color: white;
-    font-family:"NanumSquare_acR";
-    font-size: 25px;
-    border-radius: 10px;
-    margin-top: 1%;
-    margin-bottom: 1%;
-    text-align: center;
+.rowbutton:active {
+  background-color: rgb(248, 244, 204);
 }
 
-
-.datalist{
-    margin-top: 3%;
-    font-size: large;
-    font-weight: bold;
-    font-family:"NanumSquare_acR";
-    margin-left: 3%;
-
-}
-.datanum{
-    margin-right: 2%;
-}
-
-#type{
-    margin-top: 2%;
-    margin-bottom: 1%;
-}
-#content{
-    margin-top: 2%;
-    margin-bottom: 3%;
-    height: 300px;
-    resize: none;
-}
-#btn{
-    float: right;
-    margin-right: 1%;
+.addbtn {
+  border: none;
+  background-color: lightblue;
+  color: white;
+  font-family: "NanumSquare_acR";
+  font-size: 25px;
+  border-radius: 10px;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  text-align: center;
 }
 
-.delbtn{
-    border: none;
-    margin-left: 70%;
-    background-color: rgb(253, 116, 144);
-    color: white;
-    border-radius: 10px;
+.datalist {
+  margin-top: 3%;
+  font-size: large;
+  font-weight: bold;
+  font-family: "NanumSquare_acR";
+  margin-left: 3%;
 }
-.delbtn:active{
-    border: none;
-    margin-left: 70%;
-    background-color: rgb(155, 44, 66);
-    color: white;
-    border-radius: 10px;
+.datanum {
+  margin-right: 2%;
+}
+
+#type {
+  margin-top: 2%;
+  margin-bottom: 1%;
+}
+#content {
+  margin-top: 2%;
+  margin-bottom: 3%;
+  height: 300px;
+  resize: none;
+}
+#btn {
+  float: right;
+  margin-right: 1%;
+}
+
+.delbtn {
+  border: none;
+  background-color: rgb(253, 116, 144);
+  color: white;
+  border-radius: 10px;
+}
+.delbtn:active {
+  border: none;
+  margin-left: 70%;
+  background-color: rgb(155, 44, 66);
+  color: white;
+  border-radius: 10px;
+}
+body {
+  text-align: center;
+}
+
+.pagination-wrapper {
+  overflow-x: auto;
+}
+
+.pagination {
+  justify-content: center;
+  margin: 30px;
+}
+
+.data-slice {
+  margin-top: 15px;
 }

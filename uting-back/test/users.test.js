@@ -16,20 +16,20 @@ describe("USER API TEST", () => {
   });
 
 
-  // describe("/sendEmail API Test", () => {
-  //   it("이메일 인증 코드를 리턴 받는다.", function(done){
-  //     let data = {
-  //       email: "gnup@ajou.ac.kr"
-  //     }
-  //     chai.request(app)
-  //     .post("/users/sendEmail")
-  //     .send(data)
-  //     .end((err, res) => {
-  //       expect(res).to.have.status(200)
-  //       done()
-  //     });
-  //   });
-  // });
+  describe("/sendEmail API Test", () => {
+    it("이메일 인증 코드를 리턴 받는다.", function(done){
+      let data = {
+        email: "gnup@ajou.ac.kr"
+      }
+      chai.request(app)
+      .post("/users/sendEmail")
+      .send(data)
+      .end((err, res) => {
+        expect(res).to.have.status(200)
+        done()
+      });
+    });
+  });
   // describe("/signup API Test", () => {
   //   it("회원 가입 완료 메시지를 받는다.", function(done){
   //     this.timeout(20000); // 일반적으로 100xxms 걸림. 테스트를 통과하기 위해서 20000으로 설정하였음.
@@ -316,7 +316,7 @@ describe("USER API TEST", () => {
       .post("/users/logout")
       .send(data)
       .end((err, res) => {
-        assert.equal(res.text, "success logout") // if fail, return "no"
+        assert.equal(res.text, "success") // if fail, return "no"
         done();
       });
     });

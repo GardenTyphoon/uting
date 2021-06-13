@@ -126,6 +126,7 @@ const AdminAd = () => {
                     className="rowbutton"
                     onClick={(e) => fadetoggle(data, i)}
                   >
+                    
                     <Col style={{ marginLeft: "10%" ,fontSize:"20px"}}>
                       {data.type === "Ad" ? "광고" : "기타"}
                     </Col>
@@ -134,20 +135,20 @@ const AdminAd = () => {
                   </Row>
                   <Row
                     style={{
-                      marginLeft: "10%",
+                      marginLeft: "7%",
                       marginRight: "50%",
+                      marginBottom:"2%"
                     }}
+                  
                   >
                     {clickData.num === i ? (
                       
-                      <Fade in={fadeIn}>
-                        <hr></hr>
-                        <div style={{ float: "left" }}>
-                         
+                      <Fade   style={{ display:"flex" }} in={fadeIn}>
+
                           {imgBase64 === "" ? (
                             
-                            <Col>
-                             <div>이미지</div>
+                            <Col >
+                             <div  >이미지</div>
                               <img
                                 src={ProfileNoImage}
                                 alt="profile img"
@@ -158,8 +159,8 @@ const AdminAd = () => {
                               
                             </Col>
                           ) : (
-                            <Col>
-                             <div>이미지</div>
+                            <Col >
+                             <div style={{marginBottom:"30%",marginLeft:"30%",fontFamily:"NanumSquare_acR",fontWeight:"bold"}}>이미지</div>
                               <img
                                 src={imgBase64}
                                 alt="profile img"
@@ -170,42 +171,33 @@ const AdminAd = () => {
                             </Col>
                           )}
                           
-                          <Col
-                            style={{ marginLeft: "30%", marginRight: "1000px" }}
-                          >
-                            <div>내용</div>
-                            <div>{clickData.contents}</div>
-                            
+                          <Col style={{marginLeft:"30%"}}>
+                            <div style={{width:"50px",marginBottom:"80px",marginLeft:"10%",fontFamily:"NanumSquare_acR",fontWeight:"bold"}}>내용</div>
+                            <div style={{width:"150px",textAlign:"left"}}>{clickData.contents}</div>
                           </Col>
                          
-                          <Col
-                            style={{ marginLeft: "50%", marginRight: "1000px" }}
-                          >
-                             <div>이메일</div>
+                          <Col  style={{marginLeft:"20%"}}>
+                             <div style={{marginBottom:"80px",width:"50px" ,marginLeft:"25%",fontFamily:"NanumSquare_acR",fontWeight:"bold"}}>이메일</div>
                             <div>{clickData.email}</div>
                           </Col>
                           
-                          <Col
-                            style={{ marginLeft: "70%", marginRight: "1000px" }}
-                          >
-                            <div>상태</div>
-                            <div>{clickData.status === "false" ? "보류" : "승인완료"}</div>
+                          <Col  style={{marginLeft:"20%"}}>
+                            <div style={{width:"50px",marginBottom:"80px",fontFamily:"NanumSquare_acR",fontWeight:"bold",marginLeft:"10%"}}>상태</div>
+                            {clickData.status === "false" ? <div style={{width:"50px",marginLeft:"13%"}}>보류</div> : <div style={{width:"100px"}}>승인완료</div>}
                           </Col>
-                        </div>
-                        <div style={{float:"right",marginRight:"3%"}}>
+                          <Col  style={{display:"flex",marginTop:"100px",marginLeft:"10%"}}>
                           {clickData.status === "false" ? (
-                            <span >
-                            <Button  color="warning" onClick={(e) => accept(e)}>
+                            <span  style={{marginRight:"2%"}}>
+                            <Button style={{width:"70px",marginLeft:"20px"}}  color="warning" onClick={(e) => accept(e)}>
                               수락
                             </Button></span>
                           ) : (
                             ""
                           )}
                           <span>
-                          <Button onClick={(e) => modaltoggle(e)}>거절</Button></span>
-                         
-                        </div>
-                        
+                            {clickData.status === "true"?<Button style={{width:"70px",marginLeft:"40px"}} onClick={(e) => modaltoggle(e)}>거절</Button>:<Button style={{width:"70px"}} onClick={(e) => modaltoggle(e)}>거절</Button>}
+                          </span>
+                         </Col>
                       </Fade>
                     ) : (
                       ""
