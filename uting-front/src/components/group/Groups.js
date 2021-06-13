@@ -226,7 +226,10 @@ const Groups = ({
         ""
       )}
       <Modal isOpen={clickLeaveGroup}>
-        <ModalBody>그룹을 떠나시겠습니까?</ModalBody>
+        <ModalHeader style={{fontFamily:"NanumSquare_acR"}}>
+          그룹 퇴장
+        </ModalHeader>
+        <ModalBody style={{fontFamily:"NanumSquare_acR", textAlign:"center"}}>그룹을 떠나시겠습니까?</ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => leaveGroup()}>
             예
