@@ -4,25 +4,42 @@ const { Ad }=require('../model');
 const fs = require("fs");
 const multer = require("multer");
 const path = require("path");
-fs.readdir("uploads", (error) => {
-  // uploads 폴더 없으면 생성
-  if (error) {
-    fs.mkdirSync("uploads");
-  }
-});
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "uploads/");
-    },
-    filename(req, file, cb) {
+// fs.readdir("uploads", (error) => {
+//   // uploads 폴더 없으면 생성
+//   if (error) {
+//     fs.mkdirSync("uploads");
+//   }
+// });
+
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, cb) {
+//       cb(null, "uploads/");
+//     },
+//     filename(req, file, cb) {
+//       const ext = path.extname(file.originalname);
+//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+//     },
+//   }),
+//   limits: { fileSize: 5 * 1024 * 1024 },
+// });
+
+let s3 = new AWS.S3();
+
+let upload = multer({
+  storage: multerS3({
+    s3:s3,
+    bucket:"uting-ad-image",
+    key: function(req,file,cb) {
       const ext = path.extname(file.originalname);
       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
     },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
+    acl: 'public-read-write'
+  })
+})
 
 router.post('/save', function(req,res,next){
   const ad = new Ad({
@@ -42,7 +59,7 @@ router.post('/save', function(req,res,next){
 })
 
 router.post("/uploadAdImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}` });
+  res.json({ url: `${req.file.location}` });
 });
 
 router.post('/reject', function(req,res,next){

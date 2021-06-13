@@ -70,8 +70,8 @@ const AdminAd = () => {
       status: e.status,
     };
     setClickData(data);
-    let staticpath = `${baseurl.baseBack}`;
-    setImgBase64(staticpath + e.file);
+    // let staticpath = `${baseurl.baseBack}`;
+    setImgBase64(e.file);
   };
   let isOpen = () => {
     setOpen(!open);
