@@ -110,19 +110,20 @@ const AddMember = ({
           style={{
             textAlign: "center",
             marginBottom: "2%",
-            fontFamily: "Jua",
+            fontFamily: "NanumSquare_acR",
             fontSize: "20px",
           }}
         >
           추가할 사용자의 닉네임을 기입하시오.
         </div>
         <Input
-          style={{ width: "80%", display: "inline" }}
+          style={{ width: "75%", display: "inline" }}
           onChange={(e) => onChangehandler(e)}
           type="text"
         />
         <Button
-          style={{ display: "inline", marginLeft: "5%", marginBottom: "2%" }}
+        className="gradientBtn"
+          style={{ display: "inline", marginLeft: "5%", marginBottom: "2%", fontFamily:"NanumSquare_acR", border:"none", width:"80px" }}
           color="danger"
           onClick={(e) => addGroupMember(e)}
         >

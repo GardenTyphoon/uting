@@ -11,25 +11,42 @@ const crypto = require("crypto");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const { rejects } = require("assert");
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
 
-fs.readdir("uploads", (error) => {
-  // uploads 폴더 없으면 생성
-  if (error) {
-    fs.mkdirSync("uploads");
-  }
-});
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "uploads/");
-    },
-    filename(req, file, cb) {
+// -- local upload code --
+// fs.readdir("uploads", (error) => {
+//   // uploads 폴더 없으면 생성
+//   if (error) {
+//     fs.mkdirSync("uploads");
+//   }
+// });
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination(req, file, cb) {
+//       cb(null, "uploads/");
+//     },
+//     filename(req, file, cb) {
+//       const ext = path.extname(file.originalname);
+//       cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+//     },
+//   }),
+//   limits: { fileSize: 5 * 1024 * 1024 },
+// });
+
+let s3 = new AWS.S3();
+
+let upload = multer({
+  storage: multerS3({
+    s3:s3,
+    bucket:"uting-profile-image",
+    key: function(req,file,cb) {
       const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext)
     },
-  }),
-  limits: { fileSize: 5 * 1024 * 1024 },
-});
+    acl: 'public-read-write'
+  })
+})
 
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
@@ -281,8 +298,8 @@ router.post("/modifyMyProfile", function (req, res, next) {
   );
 });
 
-router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}` });
+router.post("/modifyMyProfileImg", upload.single("img"), (req, res, next) => {
+  res.json({ url: `${req.file.location}` });
 });
 
 router.post("/addUcoin", function (req, res, next) {
@@ -542,6 +559,19 @@ router.post("/report", function (req, res, next) {
     }
   });
 });
+router.post("/isExistUser", function(req,res,next){
+  let check=false;
+  User.find(function(err,user){
+    user.forEach((per)=>{
+      if(per.name===req.body.userinfo.name && per.email===req.body.userinfo.email){
+        check=true;
+        res.send(true);
+      }
+    })
+    if(check===false)
+      res.send(false);
+  })
+})
 router.post("/changePassword", function (req, res, next) {
   User.find(function (err, user) {
     user.forEach((per) => {

@@ -25,7 +25,6 @@ const upload = multer({
 });
 
 router.post('/save', function(req,res,next){
-  console.log(req.body)
   const ad = new Ad({
     type:req.body.type,
     name:req.body.name,
@@ -46,18 +45,10 @@ router.post("/uploadAdImg", upload.single("img"), (req, res) => {
   res.json({ url: `/uploads/${req.file.filename}` });
 });
 
-router.get('/',function(req,res,next){
-  Ad.find({}).then((ad)=>{ 
-    res.json(ad);
-  }).catch((err) => {
-    res.send(err);
-  });
-})
-
 router.post('/reject', function(req,res,next){
-  Ad.deleteOne({_id:req.body._id}).then((result)=>{
-
-    res.send("delete")
+  Ad.deleteOne({_id:req.body._id}).then((result, err)=>{
+    if(result.n != 0) res.send("delete")
+    else res.send("fail to delete")
   })
 
 })
@@ -65,9 +56,7 @@ router.post('/reject', function(req,res,next){
 router.post('/accept', function(req,res,next){
   let ismember = false;
   let perObj = {};
-  console.log(req.body)
   Ad.find(function (err, ads) {
-    //console.log(user)
     ads.forEach((ad) => {
       if (ad._id.toString() === req.body._id) {
         ismember = true;
@@ -102,12 +91,11 @@ router.post('/accept', function(req,res,next){
 })
 
 router.post('/adslist', function(req, res, next) {
-  Ad.find({}).then((ads)=>{ 
+  Ad.find({}).then((ads)=>{
     res.send(ads);
   }).catch((err) => {
     res.send(err);
   });
 });
-
 
 module.exports = router;

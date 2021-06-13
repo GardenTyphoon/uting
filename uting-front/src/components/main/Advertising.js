@@ -16,10 +16,7 @@ const Advertising = () => {
   const [adslist, setAdslist] = useState([]);
 
   let getAdlist = async (e) => {
-    let data = {
-      type: "get",
-    };
-    const res = await defaultAxios.post("/ads/adslist", data);
+    const res = await defaultAxios.post("/ads/adslist");
     let responseList = [];
     for (let i = 0; i < res.data.length; i++) {
       let response = { src: "", name: "" };

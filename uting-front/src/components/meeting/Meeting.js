@@ -74,11 +74,10 @@ const Meeting = ({ checkFunc }) => {
     }
   };
   const getMyGroupMember = async () => {
-    console.log("불렀음");
+    
     let res = await defaultAxios.post("/groups/getMyGroupMember", {
       sessionUser: sessionUser,
     });
-    console.log(res);
     let onlyMe = [sessionUser];
     if (res.data === "no") setGroupMembers(onlyMe);
     else setGroupMembers(res.data);
@@ -90,7 +89,7 @@ const Meeting = ({ checkFunc }) => {
   const makeRoom = async (e) => {
     e.preventDefault();
     const res = await jwtAxios.post("/meetings/check", { title: room });
-    console.log(res.data);
+  
     if (res.data === true) {
       alert("이미 존재하는 방 이름입니다.");
     } else if (res.data === false) {
@@ -103,8 +102,6 @@ const Meeting = ({ checkFunc }) => {
         let avgAge = 0;
         let nowOfWoman = 0;
         let nowOfMan = 0;
-        console.log("room.title", room.title);
-        console.log("room.maxNum", room.num);
         for (let i = 0; i < groupMembers.length; i++) {
           let userInfo = await jwtAxios.post("/users/userInfo", {
             userId: groupMembers[i],
@@ -124,7 +121,6 @@ const Meeting = ({ checkFunc }) => {
               socketid: userInfo.data.socketid,
             };
             setGroupmemeinfo(data);
-            console.log(groupMembersInfo)
             groupMembersSocketId.push(userInfo.data.socketid);
           }
           avgManner += userInfo.data.mannerCredit;
@@ -133,7 +129,6 @@ const Meeting = ({ checkFunc }) => {
             nowOfWoman += 1;
           } else nowOfMan += 1;
         }
-        console.log(groupMembersInfo);
         let coinCheck = true;
         for (let i = 0; i < groupMembersInfo.length; i++) {
           if (groupMembersInfo[i].ucoin < 1) {
@@ -174,7 +169,6 @@ const Meeting = ({ checkFunc }) => {
             setAppMeetingInfo(roomTitle, sessionUser, "ap-northeast-2");
             if (roomTitle !== undefined) {
               const socket = socketio.connect(`${baseurl.baseBack}`);
-              console.log("groupMembersSocketId", groupMembersSocketId);
               socket.emit("makeMeetingRoomMsg", {
                 groupMembersSocketId: groupMembersSocketId,
                 roomtitle: roomTitle,
@@ -185,7 +179,6 @@ const Meeting = ({ checkFunc }) => {
 
             history.push(`/room/${roomTitle}`);
           } catch (error) {
-            console.log(error);
           }
         } else if (coinCheck === false) {
           alert(
