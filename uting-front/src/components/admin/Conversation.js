@@ -74,7 +74,7 @@ const Conversation = ({check}) => {
       <div className="addbtn" >대화 주제</div>
       <div>
         {conversationList.map((data, i) => {
-          return <div onClick={(e)=>toggleDelete(data,i)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span><span>{i===delData.idx?<button onClick={(e)=>deleteData(e)}>삭제</button>:""}</span></div>;
+          return <div onClick={(e)=>toggleDelete(data,i)} className="datalist"><span className="datanum">{i+1}.</span><span>{data}</span><span>{i===delData.idx?<button onClick={(e)=>deleteData(e)} className="delbtn">삭제</button>:""}</span></div>;
         })}
       </div>
     </div>

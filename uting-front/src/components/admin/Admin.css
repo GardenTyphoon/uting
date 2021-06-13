@@ -66,3 +66,18 @@
     float: right;
     margin-right: 1%;
 }
+
+.delbtn{
+    border: none;
+    margin-left: 70%;
+    background-color: rgb(253, 116, 144);
+    color: white;
+    border-radius: 10px;
+}
+.delbtn:active{
+    border: none;
+    margin-left: 70%;
+    background-color: rgb(155, 44, 66);
+    color: white;
+    border-radius: 10px;
+}
