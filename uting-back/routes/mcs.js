@@ -25,6 +25,29 @@ router.post("/list", function (req, res, next) {
 });
 
 router.post("/delete",function(req,res,next){
+  let obj = {}
+  let exist=false;
+  Mc.find(function (err, mc) {
+    mc.forEach((one) => {
+      if (req.body.type === one.type && req.body.data===one.content) {
+        obj=one
+        exist=true
+      }
+    });
+    
+    if(exist===true){
+      Mc.deleteOne({_id:obj._id}).then((result, err)=>{
+        res.send("delete")
+      })
+    }
+    if(exist===false){
+      res.send("fail")
+    }
+    
+  });
+
+
+  
   
 })
 
