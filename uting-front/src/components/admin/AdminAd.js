@@ -174,7 +174,6 @@ const AdminAd = () => {
                           <Col style={{marginLeft:"30%"}}>
                             <div style={{width:"50px",marginBottom:"80px",marginLeft:"10%",fontFamily:"NanumSquare_acR",fontWeight:"bold"}}>내용</div>
                             <div>{clickData.contents}</div>
-                            
                           </Col>
                          
                           <Col  style={{marginLeft:"30%"}}>
