@@ -19,12 +19,13 @@
     padding-top: 1%;
     padding-bottom: 1%;
     margin-bottom: 1%;
-    border-radius: 20px;
-    
+    border: solid 1px rgb(170, 167, 167);
+    border-radius: 10px;
+    background-color: rgb(245, 240, 235);
+
 }
 .rowbutton:active{
     background-color: rgb(248, 244, 204);
-    border-radius: 20px;
     
 }
 
