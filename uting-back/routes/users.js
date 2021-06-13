@@ -39,7 +39,7 @@ let s3 = new AWS.S3();
 let upload = multer({
   storage: multerS3({
     s3:s3,
-    bucket:"utingProfileImage",
+    bucket:"uting-profile-image",
     key: function(req,file,cb) {
       const ext = path.extname(file.originalname);
       cb(null, path.basename(file.originalname, ext) + Date.now() + ext)
@@ -298,7 +298,7 @@ router.post("/modifyMyProfile", function (req, res, next) {
 });
 
 router.post("/modifyMyProfileImg", upload.single("img"), (req, res) => {
-  res.json({ url: `/uploads/${req.file.filename}` });
+  res.json({ url: `${req.file.filename}` });
 });
 
 router.post("/addUcoin", function (req, res, next) {
