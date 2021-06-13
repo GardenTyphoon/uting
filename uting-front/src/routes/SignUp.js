@@ -12,7 +12,7 @@ import defaultAxios from "../utils/defaultAxios";
 import { useHistory } from "react-router-dom";
 import { is } from "date-fns/locale";
 import "./SignUp.css";
-import introLog from "../img/배경없는유팅로고.png";
+import introLogo from "../img/배경없는유팅로고.png";
 const SignUpContainer = styled.div`
   margin: 0 auto;
   padding: 10vh;
@@ -129,7 +129,6 @@ const SignUp = () => {
   /*사용자 정보 firebase storage에 저장하기 - 회원가입!*/
   let onSignupSubmit = async (e) => {
     e.preventDefault();
-    console.log(userinfo);
     if (
       checkcode === true &&
       userinfo.name !== "" &&
@@ -154,7 +153,7 @@ const SignUp = () => {
         }; 
 
         const res = await defaultAxios.post("/users/signup", data);
-        console.log(res.data);
+        
 
         setUserinfo({
           name: "",
@@ -196,7 +195,6 @@ const SignUp = () => {
         setGetalert({ flag: false, message: "" });
       }, 1500);
       setCode(res.data);
-      console.log(res);
     } else if(data.email.length<1){
       setGetalert({
         flag: true,
@@ -218,12 +216,7 @@ const SignUp = () => {
 
   /*발급된 인증코드와 맞는지 체크하는 함수*/
   let check = (e) => {
-    console.log("확인 클릭");
     if (code === usercode) {
-      console.log("같음");
-      
-      console.log(checkcode);
-        console.log("완료")
         setGetalert({ flag: true, message: "인증코드 확인이 완료되었습니다." });
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
@@ -232,7 +225,6 @@ const SignUp = () => {
       setCheckcode(true);
     } else {
       
-      console.log("같음");
       setCheckcode(false);
       setGetalert({ flag: true, message: "인증코드가 틀렸습니다." });
       setTimeout(() => {
@@ -463,7 +455,7 @@ const SignUp = () => {
               marginLeft: "210px",
               marginBottom: "1000px",
             }}
-            src={introLog}
+            src={introLogo}
           ></img>
         </ModalHeader>
         <ModalBody style={{ height: "90px" }}>
