@@ -64,7 +64,6 @@ const Ucoin = () => {
   };
 
   const addUcoin = () => {
-    console.log(ProfileInfo._id);
     const res = jwtAxios.post("/users/addUcoin", {
       userId: ProfileInfo._id,
       ucoin: ProfileInfo.ucoin,
@@ -77,7 +76,6 @@ const Ucoin = () => {
       sessionUser: `${sessionStorage.getItem("email")}`,
       type: "profile",
     });
-    console.log(res.data);
     let data = {
       _id: res.data._id,
       name: res.data.name,

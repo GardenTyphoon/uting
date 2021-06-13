@@ -16,7 +16,7 @@ var token = sessionStorage.getItem("token");
 tokenAxios.interceptors.request.use(
   function (config) {
     if (!sessionStorage.getItem("token")) {
-      console.log("토큰없슴");
+      
       return config;
     } else {
       token = sessionStorage.getItem("token");

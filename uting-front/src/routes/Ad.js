@@ -35,8 +35,7 @@ const Ad = () => {
   const onChangeImg = async (e) => {
     // 이미지를 선택했으면
     let { name, value } = e.target;
-    console.log(name)
-    console.log(value)
+   
     setContent({ ...content, [name]: value });
     let reader = new FileReader();
 
@@ -54,11 +53,10 @@ const Ad = () => {
   };
 
   useEffect(() => {
-    console.log(imgFile);
   }, [imgFile]);
 
   let submit = async (e) => {
-    console.log(content)
+    
     if(content.requesttype===""||content.last===""||content.first===""||content.company===""||content.email===""||content.domainaddress===""||content.file===""||content.title===""||content.textarea===""){
 
       setGetalert({
@@ -74,7 +72,6 @@ const Ad = () => {
       },1500)
     }
     else{
-      console.log(content)
       if (imgFile != null) {
         let formData = new FormData();
         formData.append("img", imgFile);
@@ -92,9 +89,8 @@ const Ad = () => {
         contents: content.textarea,
         title: content.title,
       };
-      console.log(data);
       const res = await defaultAxios.post("/ads/save", data);
-      console.log(res);
+   
       if (res.data === "요청완료") {
         setGetalert({
           flag: true,
