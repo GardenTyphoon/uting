@@ -12,7 +12,7 @@ const config = require("../config");
 const jwt = require("jsonwebtoken");
 const { rejects } = require("assert");
 const AWS = require('aws-sdk');
-const multerS3=require('multer-s3');
+const multerS3 = require('multer-s3');
 
 // -- local upload code --
 // fs.readdir("uploads", (error) => {
