@@ -32,6 +32,10 @@ const Ad = () => {
     setContent({ ...content, [name]: value });
   };
 
+  useEffect(()=>{
+    console.log(content)
+  },[content])
+
   const onChangeImg = async (e) => {
     // 이미지를 선택했으면
     let { name, value } = e.target;
@@ -81,10 +85,17 @@ const Ad = () => {
         content["file"] = res.data.url;
         
       }
+      let domain;
+      if(content.domainaddress==="1"){
+        domain=content.domainaddress2
+      }
+      else {
+        domain=content.domainaddress;
+      }
       let data = {
         type: content.requesttype,
         name: content.last + content.first,
-        email: content.email + "@" + content.domainaddress,
+        email: content.email + "@" + domain,
         file: content.file,
         contents: content.textarea,
         title: content.title,
@@ -250,11 +261,11 @@ const Ad = () => {
                   />
                   <span style={{ float: "left" }}>@</span>
                   {content.domainaddress === "1" ? (
-                    <input
+                    <Input
                       onChange={(e) => onChangehandler(e)}
-                      style={{ width: "150px", float: "left"}}
+                      style={{ width: "150px", float: "left",border:"none",borderRadius:"10px"}}
                       type="text"
-                      name="domainaddress"
+                      name="domainaddress2"
                     />
                   ) : (
                     ""
