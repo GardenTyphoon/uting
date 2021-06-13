@@ -42,7 +42,7 @@ const Conversation = ({ check }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [pagesCount, setPagesCount] = useState(0);
 
-  var pageSize = 3;
+  var pageSize = 5;
   const handleClick = (e, index) => {
     setCurrentPage(index);
   };
