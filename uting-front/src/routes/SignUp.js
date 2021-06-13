@@ -197,7 +197,15 @@ const SignUp = () => {
       }, 1500);
       setCode(res.data);
       console.log(res);
-    } else {
+    } else if(data.email.length<1){
+      setGetalert({
+        flag: true,
+        message: "대학교 이메일을 기입해주세요.",
+      });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
+    }else {
       setGetalert({
         flag: true,
         message: "대학교 이메일로만 가입이 가능합니다.",
@@ -210,15 +218,21 @@ const SignUp = () => {
 
   /*발급된 인증코드와 맞는지 체크하는 함수*/
   let check = (e) => {
+    console.log("확인 클릭");
     if (code === usercode) {
-      setCheckcode(true);
-      if (checkcode === true) {
+      console.log("같음");
+      
+      console.log(checkcode);
+        console.log("완료")
         setGetalert({ flag: true, message: "인증코드 확인이 완료되었습니다." });
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
         }, 1500);
-      }
+      
+      setCheckcode(true);
     } else {
+      
+      console.log("같음");
       setCheckcode(false);
       setGetalert({ flag: true, message: "인증코드가 틀렸습니다." });
       setTimeout(() => {
