@@ -70,8 +70,10 @@ const FindPassword = () => {
 
       setGetalert({ flag: true, message: res.data });
       if (res.data === "비밀번호가 성공적으로 변경되었습니다.") {
-
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+        
       } else {
         setTimeout(() => {
           setGetalert({ flag: false, message: "" });
