@@ -84,7 +84,7 @@ const SignIn = () => {
             sessionStorage.setItem("email", email);
             setGetalert({ flag: true, message: "로그인 되었습니다." });
 
-            if (email === "admin@ajou.ac.kr") {
+            if (email === "zztiok@ajou.ac.kr") {
               window.location.href = `${baseurl.baseFront}/admin`;
             } else {
               setTimeout(() => {
