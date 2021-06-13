@@ -91,11 +91,12 @@ const AdminMc = () => {
           <Input
             id="content"
             name="content"
-            type="text"
-            placeholder="대화 주제를 기입하시오."
+            type="textarea"
+            
+            placeholder={state.type==="conversation"?"대화 주제를 기입하시오.":state.type==="game"?"게임 주제를 기입하시오":""}
             onChange={onChangehandler}
           ></Input>
-          <Button onClick={(e)=>submit(e)} color="info" >
+          <Button id="btn" onClick={(e)=>submit(e)} color="info" >
             추가
           </Button>
         </Col>

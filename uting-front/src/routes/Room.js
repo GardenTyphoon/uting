@@ -396,7 +396,8 @@ const Room = () => {
       sender: sessionStorage.getItem("nickname"),
     };
     toast(iloveyou.mylove + "님에게 정상적으로 메시지를 보냈습니다.");
-    document.getElementsByName("loveinput").values = "";
+    document.getElementById("loveinput").value = "";
+    document.getElementById("mylove").value="";
     const socket = socketio.connect(SOCKET);
     socket.emit("golove", { lovemessage: data });
   };
@@ -501,6 +502,7 @@ const Room = () => {
               <select
                 className="loveinput"
                 name="mylove"
+                id="mylove"
                 style={{
                   width: "100%",
                   marginLeft: "10px",
@@ -535,6 +537,7 @@ const Room = () => {
               <input
                 className="loveinput"
                 placeholder="메시지를 입력해주세요."
+                id="loveinput"
                 style={{
                   width: "150%",
                   marginLeft: "10%",
