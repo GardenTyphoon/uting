@@ -125,7 +125,7 @@ const Groups = ({
       }
     });
     console.log(groupMemberExceptMe)
-    let res = await jwtAxios.post(`${baseurl.baseBack}/users/preMemSocketid`, {
+    let res = await jwtAxios.post(`/users/preMemSocketid`, {
       preMember: groupMemberExceptMe,
     });
     console.log(res);
@@ -138,7 +138,7 @@ const Groups = ({
       leavingUsers: sessionUser,
     });
 
-    res = await jwtAxios.post(`${baseurl.baseBack}/groups/leaveGroup`, {
+    res = await jwtAxios.post(`/groups/leaveGroup`, {
       userNickname: sessionUser,
     });
 
