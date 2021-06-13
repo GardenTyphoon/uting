@@ -21,7 +21,8 @@ const Advertising = () => {
     for (let i = 0; i < res.data.length; i++) {
       let response = { src: "", name: "" };
       if (res.data[i].status === "true") {
-        response.src = `${baseurl.baseBack}` + res.data[i].file;
+        // response.src = `${baseurl.baseBack}` + res.data[i].file;
+        response.src = res.data[i].file;
         response.name = res.data[i].name;
         responseList.push(response);
       }
