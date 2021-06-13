@@ -116,20 +116,20 @@ const AdminBad = () => {
   return (
     <>
       <CardBody>
-        <div style={{ width: "100%", height: "50%" }}>
-          <span style={{fontFamily:"NanumSquare_acR",fontSize:"25px",fontWeight:"bold"}} className="reportedlist">신고자 목록</span>
+        <div style={{ width: "100%", height: "50%", textAlign:"center" }}>
+          <span style={{fontFamily:"NanumSquare_acR",fontSize:"25px",fontWeight:"bold"}}>신고자 목록</span>
           <Row className="header">
-            <Col style={{ marginLeft: "10%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}> 신고된 사람 </Col>
-            <Col style={{ marginLeft: "2%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}> 신고 사유 </Col>
-            <Col style={{ marginLeft: "1%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}> 신고한 사람 </Col>
+            <Col style={{ fontFamily:"NanumSquare_acR",fontSize:"20px", textAlign:"center" }}> 신고된 사람 </Col>
+            <Col style={{ fontFamily:"NanumSquare_acR",fontSize:"20px", textAlign:"center"  }}> 신고 사유 </Col>
+            <Col style={{ fontFamily:"NanumSquare_acR",fontSize:"20px", textAlign:"center"  }}> 신고한 사람 </Col>
           </Row>
           <div>
             {reportedList.map((per, i) => {
               return (
                 <Row className="rowbutton" onClick={(e) => toggle(per)}>
-                  <Col style={{ marginLeft: "10%",fontFamily:"NanumSquare_acR",fontSize:"20px" }}>{per.target}</Col>
-                  <Col style={{fontFamily:"NanumSquare_acR" ,fontSize:"20px"}}>{per.content}</Col>
-                  <Col style={{ marginLeft: "2%",fontFamily:"NanumSquare_acR" ,fontSize:"20px" }}>{per.requester}</Col>
+                  <Col style={{ fontFamily:"NanumSquare_acR",fontSize:"20px", textAlign:"center" }}>{per.target}</Col>
+                  <Col style={{fontFamily:"NanumSquare_acR" ,fontSize:"20px", textAlign:"center"}}>{per.content}</Col>
+                  <Col style={{ fontFamily:"NanumSquare_acR" ,fontSize:"20px" , textAlign:"center"}}>{per.requester}</Col>
                 </Row>
               );
             })}
