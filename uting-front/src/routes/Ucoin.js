@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "reactstrap";
+import { Table, Button,  Modal,
+  ModalHeader,
+  ModalBody } from "reactstrap";
 import jwtAxios from "../utils/jwtAxios";
 import "./Ucoin.css";
-
+import introLogo from "../img/배경없는유팅로고.png"
 const Ucoin = () => {
   const [ProfileInfo, setProfileInfo] = useState({
     _id: "",
@@ -14,6 +16,8 @@ const Ucoin = () => {
   });
   const [cost, setCost] = useState(0);
   const [chargingCoin, setChargingCoin] = useState(0);
+  const [getalert, setGetalert] = useState({ flag: false, message: "" });
+
   var IMP = window.IMP;
   IMP.init("imp28864295");
 
@@ -25,7 +29,10 @@ const Ucoin = () => {
   const requestPay = () => {
     // IMP.request_pay(param, callback) 호출
     if (chargingCoin == 0) {
-      alert("결제할 코인을 선택하세요!");
+      setGetalert({ flag: true, message: "결제할 코인을 선택하세요!" });
+      setTimeout(() => {
+        setGetalert({ flag: false, message: "" });
+      }, 1500);
     } else {
       IMP.request_pay(
         {
@@ -54,13 +61,20 @@ const Ucoin = () => {
             var msg = "결제가 완료되었습니다.";
             msg += "\n구매 : " + rsp.name;
             msg += "\n결제 금액 : " + rsp.paid_amount + "원";
-            alert(msg);
-            window.close();        
+
+            setGetalert({ flag: true, message: msg });
+            setTimeout(() => {
+              window.close();  
+            }, 1500);
+                
             // 결제 성공 시 로직,
           } else {
             var msg = "결제에 실패하였습니다.";
             msg += "\n에러내용 : " + rsp.error_msg;
-            alert(msg);
+            setGetalert({ flag: true, message: msg });
+            setTimeout(() => {
+              setGetalert({ flag: false, message: "" });
+            }, 1500);
 
             // 결제 실패 시 로직,
           }
@@ -204,6 +218,34 @@ const Ucoin = () => {
       <Button onClick={requestPay} className="payBtn" style={{  border: "none"}}>
         결제하기
       </Button>
+      <Modal isOpen={getalert.flag}>
+        <ModalHeader style={{ height: "70px", textAlign: "center" }}>
+          <img
+            style={{
+              width: "40px",
+              height: "40px",
+              marginLeft: "210px",
+              marginBottom: "1000px",
+            }}
+            src={introLogo}
+          ></img>
+        </ModalHeader>
+        <ModalBody style={{ height: "90px" }}>
+          <div
+            style={{
+              textAlign: "center",
+              marginTop: "4%",
+              marginBottom: "8%",
+              fontFamily: "NanumSquare_acR",
+              fontWeight: "bold",
+              fontSize: "18px",
+              height: "50px",
+            }}
+          >
+            {getalert.message}
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 };
