@@ -98,8 +98,6 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
         console.log(sessionStorage.getItem("nickname"))
         if (res2.data === "success") {
           checkProfilefunc(true);
-          console.log(sessionStorage.getItem("nickname"))
-          console.log(originNickname)
           if (originNickname !== ProfileInfo.nickname) {
             let data = {
               originNickname: originNickname,
