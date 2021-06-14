@@ -3,7 +3,7 @@ import baseurl from "./baseurl";
 import defaultAxios from "./defaultAxios";
 
 export async function fetchMeeting(data) {
-  const response = await fetch('/api/meetings/create', {
+  const response = await fetch(`${baseurl.baseBack}/meetings/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
