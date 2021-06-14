@@ -220,6 +220,8 @@ router.post('/getparticipants', function(req,res,next){
           users: obj.users,
           maxNum: obj.maxNum,
           chime_info: attendeeCache[obj.title],
+          numOfWoman:obj.numOfWoman,
+          numOfMan:obj.numOfMan,
         }
         res.send(temp);
       }

@@ -105,6 +105,8 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
             if (res3.data === "success") {
               modNickname("success");
               sessionStorage.setItem("nickname", ProfileInfo.nickname);
+              checkProfilefunc(false)
+              modNickname("");
             }
           }
         }
