@@ -58,6 +58,7 @@ const Room = () => {
   const [parObj, setParObj] = useState({});
   const [vote, setVote] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [originparticipants,setOriginparticipants]=useState([])
   const [musicsrc, setMusicsrc] = useState("");
   const [respondFlag, setRespondFlag] = useState(false);
   const [gameStartFlag, setGameStartFlag] = useState(false);
@@ -87,6 +88,7 @@ const Room = () => {
     socketid: "",
     lovemessage: "",
   });
+  const [prenum,setPrenum]=useState({"man":0,"woman":0})
 
   const [existMidleave, setExistMidleave] = useState(false);
   window.addEventListener("keydown", function (e) {
@@ -158,9 +160,17 @@ const Room = () => {
         setChimeinfo();
       }
       setMeetingMembers(res.data.users);
-     
+      
       setMeeting_id(meetingId);
+      console.log(prenum.woman+prenum.man)
+      console.log(res.data.numOfWoman+res.data.numOfMan)
+      if(prenum.woman+prenum.man<res.data.numOfWoman+res.data.numOfMan){
+        setOriginparticipants(par)
+      }
       setParticipants(par);
+      setPrenum({"man":res.data.numOfMan,"woman":res.data.numOfWoman})
+     
+      
       setChimeinfo(res.data.chime_info);
       
       setmaxNum(res.data.maxNum);
@@ -480,6 +490,7 @@ const Room = () => {
           participants={participants}
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
+          originparticipants={originparticipants}
         ></Vote>
         <div style={{ height: "10%" }}></div> {/* 이걸로 조정해뒀음 */}
         {flagMessage === true ? (
