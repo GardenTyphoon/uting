@@ -10,12 +10,12 @@ import { createGetAttendeeCallback, fetchMeeting } from "../../utils/api";
 import "./Meeting.css";
 import baseurl from "../../utils/baseurl";
 import introLogo from "../../img/../img/배경없는유팅로고.png"
+import { SOCKET } from "../../utils/constants";
 import {
   Modal,
   ModalHeader,
   ModalBody,
 } from "reactstrap";
-import { SOCKET } from "../../utils/constants";
 function birthToAge(birth) {
   let year = birth.slice(0, 4);
   return 2021 - Number(year) + 1;
@@ -148,6 +148,7 @@ const Meeting = ({ checkFunc }) => {
         }
         if (coinCheck === true) {
           avgManner /= groupMembers.length;
+          
           avgAge /= groupMembers.length;
           avgAge = parseInt(avgAge);
 

@@ -58,6 +58,7 @@ const Room = () => {
   const [parObj, setParObj] = useState({});
   const [vote, setVote] = useState(false);
   const [participants, setParticipants] = useState([]);
+  const [originparticipants,setOriginparticipants]=useState([])
   const [musicsrc, setMusicsrc] = useState("");
   const [respondFlag, setRespondFlag] = useState(false);
   const [gameStartFlag, setGameStartFlag] = useState(false);
@@ -87,6 +88,7 @@ const Room = () => {
     socketid: "",
     lovemessage: "",
   });
+  const [prenum,setPrenum]=useState({"man":0,"woman":0})
 
   const [existMidleave, setExistMidleave] = useState(false);
   window.addEventListener("keydown", function (e) {
@@ -131,6 +133,7 @@ const Room = () => {
       for (let i = 0; i < res.data.length; i++) {
         arr.push(res.data[i].socketid);
       }
+      console.log(arr);
       setParticipantsSocketId(arr);
       
     }
@@ -158,9 +161,17 @@ const Room = () => {
         setChimeinfo();
       }
       setMeetingMembers(res.data.users);
-     
+      
       setMeeting_id(meetingId);
+      console.log(prenum.woman+prenum.man)
+      console.log(res.data.numOfWoman+res.data.numOfMan)
+      if(prenum.woman+prenum.man<res.data.numOfWoman+res.data.numOfMan){
+        setOriginparticipants(par)
+      }
       setParticipants(par);
+      setPrenum({"man":res.data.numOfMan,"woman":res.data.numOfWoman})
+     
+      
       setChimeinfo(res.data.chime_info);
       
       setmaxNum(res.data.maxNum);
@@ -229,9 +240,11 @@ const Room = () => {
         }, 15000);
       } else if (data.type === "startVote") {
         getparticipants();
-        toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
-        
-        voteRef.current.onStartVote();
+        setTimeout(() => {
+          toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
+          voteRef.current.onStartVote();
+        }, 15000);
+       
       } else if (data.type === "endMeetingAgree") {
         if (voteRef.current != null) {
           voteRef.current.onEndMeetingAgree(data.numOfAgree);
@@ -480,6 +493,7 @@ const Room = () => {
           participants={participants}
           meeting_id={meeting_id}
           meetingMembers={meetingMembers}
+          originparticipants={originparticipants}
         ></Vote>
         <div style={{ height: "10%" }}></div> {/* 이걸로 조정해뒀음 */}
         {flagMessage === true ? (

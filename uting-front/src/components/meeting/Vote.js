@@ -26,7 +26,7 @@ import baseurl from "../../utils/baseurl";
 import { SOCKET } from "../../utils/constants";
 const Vote = forwardRef(
   (
-    { participantsSocketIdList, participants, meeting_id, meetingMembers },
+    { participantsSocketIdList, participants, meeting_id, meetingMembers,originparticipants },
     ref
   ) => {
     const history = useHistory();

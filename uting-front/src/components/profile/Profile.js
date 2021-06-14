@@ -12,11 +12,12 @@ import {
   Modal,
   ModalBody,
   ModalFooter,
-  Row,
+  Row,ModalHeader,
 } from "reactstrap";
 import baseurl from "../../utils/baseurl";
+import UcoinComponent from "./Ucoin.js";
 
-const Profile = ({ modNickname }) => {
+const Profile = ({ modNickname}) => {
   const history = useHistory();
   const [imgBase64, setImgBase64] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({
@@ -30,9 +31,16 @@ const Profile = ({ modNickname }) => {
     setToggleProfile(!toggleprofile);
   };
   const [checkProfile, setCheckProfile] = useState(false);
+  const [checkCoin,setCheckCoin]=useState(false);
+
+  const [toggleCoin,setToggleCoin]=useState(false)
 
   let sessionUser = sessionStorage.getItem("email");
 
+  let toggleCoinModal = (e)=>{
+    setToggleCoin(!toggleCoin)
+  }
+  /*
   const coinWindow = () => {
     const coinWin = window.open(
       //ret = 창 객체
@@ -40,7 +48,7 @@ const Profile = ({ modNickname }) => {
       "_blank",
       "resizable=no, left=0, top=0, width=820, height=1020"
     );
-  };
+  };*/
   useEffect(() => {
     getProfile();
   }, []);
@@ -50,10 +58,21 @@ const Profile = ({ modNickname }) => {
       getProfile();
     }
   }, [checkProfile]);
+  
+  useEffect(() => {
+    if (checkCoin === true) {
+      getProfile();
+      
+    }
+  }, [checkCoin]);
 
   let checkMyprofile = (e) => {
     setCheckProfile(e);
   };
+
+  let checkMycoin =(e)=>{
+    setCheckCoin(e)
+  }
 
   const getProfile = async (e) => {
     const res = await defaultAxios.post("/users/viewMyProfile", {
@@ -71,6 +90,8 @@ const Profile = ({ modNickname }) => {
     };
     setProfileInfo(data);
     setCheckProfile(false);
+    setCheckCoin(false)
+    setToggleCoin(false)
   };
 
   return (
@@ -131,7 +152,7 @@ const Profile = ({ modNickname }) => {
             {ProfileInfo.ucoin}
           </div>
           <button
-            onClick={coinWindow}
+            onClick={toggleCoinModal}
             style={{
               border: "none",
               borderRadius: "10px",
@@ -168,6 +189,12 @@ const Profile = ({ modNickname }) => {
               checkProfilefunc={(e) => checkMyprofile(e)}
             />
           </Row>
+        </ModalBody>
+      </Modal>
+      <Modal isOpen={toggleCoin}>
+        <ModalHeader toggle={toggleCoinModal}>유코인 충전</ModalHeader>
+        <ModalBody  style={{ width:"500px"}}>
+          <UcoinComponent checkMycoin={(e)=>{checkMycoin(e)}}></UcoinComponent>
         </ModalBody>
       </Modal>
     </div>
