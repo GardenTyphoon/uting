@@ -1,8 +1,9 @@
+ module.exports = {
+   baseFront: "",
+   baseBack: "/api",
+ };
 
-module.exports = {
-  baseFront: "",
-  baseBack: "/api",
-};
+
 /*
  module.exports = {
    baseFront: "http://localhost:3000",
