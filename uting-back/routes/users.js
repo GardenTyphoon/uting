@@ -11,8 +11,8 @@ const crypto = require("crypto");
 const config = require("../config");
 const jwt = require("jsonwebtoken");
 const { rejects } = require("assert");
-const AWS = require('aws-sdk');
-const multerS3 = require('multer-s3');
+const AWS = require("aws-sdk");
+const multerS3 = require("multer-s3");
 
 // -- local upload code --
 // fs.readdir("uploads", (error) => {
@@ -38,20 +38,20 @@ let s3 = new AWS.S3();
 
 let upload = multer({
   storage: multerS3({
-    s3:s3,
-    bucket:"uting-profile-image",
-    key: function(req,file,cb) {
+    s3: s3,
+    bucket: "uting-profile-image",
+    key: function (req, file, cb) {
       const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext)
+      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
     },
-    acl: 'public-read-write'
-  })
-})
+    acl: "public-read-write",
+  }),
+});
 
 /* GET users listing. */
 router.post("/sendEmail", async function (req, res, next) {
   let user_email = req.body.email;
-  console.log(req.body.email)
+  console.log(req.body.email);
   const code = Math.random().toString(36).substr(2, 11);
   var transporter = nodemailer.createTransport(
     smtpTransport({
@@ -78,7 +78,7 @@ router.post("/sendEmail", async function (req, res, next) {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
-      res.send("error")
+      res.send("error");
     } else {
       console.log("Email sent: " + info.response);
       res.send(code);
@@ -126,6 +126,9 @@ router.post("/signin", function (req, res, next) {
       if (user.verify(password)) {
         if (user.beReported >= 3) {
           res.send("hell");
+        }
+        if (user.status === true) {
+          throw new Error("login failed");
         } else {
           perObj = user;
           // create a promise that generates jwt asynchronously
@@ -436,8 +439,8 @@ router.post("/preMemSocketid", function (req, res, next) {
           }
         });
       });
-      console.log('sockidlist')
-      console.log(socketidList)
+      console.log("sockidlist");
+      console.log(socketidList);
       res.send(socketidList);
     });
   }
@@ -561,19 +564,21 @@ router.post("/report", function (req, res, next) {
     }
   });
 });
-router.post("/isExistUser", function(req,res,next){
-  let check=false;
-  User.find(function(err,user){
-    user.forEach((per)=>{
-      if(per.name===req.body.userinfo.name && per.email===req.body.userinfo.email){
-        check=true;
+router.post("/isExistUser", function (req, res, next) {
+  let check = false;
+  User.find(function (err, user) {
+    user.forEach((per) => {
+      if (
+        per.name === req.body.userinfo.name &&
+        per.email === req.body.userinfo.email
+      ) {
+        check = true;
         res.send(true);
       }
-    })
-    if(check===false)
-      res.send(false);
-  })
-})
+    });
+    if (check === false) res.send(false);
+  });
+});
 router.post("/changePassword", function (req, res, next) {
   User.find(function (err, user) {
     user.forEach((per) => {
