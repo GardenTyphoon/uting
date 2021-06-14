@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Table, Button,  Modal,
   ModalHeader,
   ModalBody } from "reactstrap";
-import jwtAxios from "../utils/jwtAxios";
+import jwtAxios from "../../utils/jwtAxios";
 import "./Ucoin.css";
-import introLogo from "../img/배경없는유팅로고.png"
-const Ucoin = () => {
+import introLogo from "../../img/배경없는유팅로고.png"
+const Ucoin = ({checkMycoin}) => {
   const [ProfileInfo, setProfileInfo] = useState({
     _id: "",
     nickname: "",
@@ -63,9 +63,7 @@ const Ucoin = () => {
             msg += "\n결제 금액 : " + rsp.paid_amount + "원";
 
             setGetalert({ flag: true, message: msg });
-            setTimeout(() => {
-              window.close();  
-            }, 1500);
+            checkMycoin(true)
                 
             // 결제 성공 시 로직,
           } else {
@@ -118,19 +116,14 @@ const Ucoin = () => {
     <div
       style={{
         backgroundColor: "#ffe4e1",
-        width: "100vw",
-        height: "100vh",
-        padding: "2%",
         fontFamily:"NanumSquare_acR"
       }}
     >
-      <h1>코인 충전</h1>
       <dl
         style={{
           margin: "0 0 30px 0",
           padding: "16px 0 0 17px",
           height: "80px",
-          background: "white",
         }}
       >
         <dt>{currentUser} 님</dt>
@@ -204,11 +197,9 @@ const Ucoin = () => {
       </Table>
       <div
         style={{
-          background: "white",
-          margin: "0 0 30px 0",
-          padding: "16px 0 0 17px",
-          height: "80px",
-          width: "40%",
+          margin: "0 30px 30px 30px",
+          padding:"2px"
+          
         }}
       >
         충전 후 Ucoin :{" "}
