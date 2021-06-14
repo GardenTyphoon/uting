@@ -106,7 +106,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
               reNickname: ProfileInfo.nickname,
             };
             const res3 = await jwtAxios.post("/groups/modifyNickname", data);
-            if (res3.data === "success") {
+           
               modNickname("success");
               console.log(sessionStorage.getItem("nickname"))
               sessionStorage.setItem("nickname", ProfileInfo.nickname);
@@ -117,7 +117,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
                 setOriginNickname(ProfileInfo.nickname)
               }
               
-            }
+            
           }
         }
       } else {
