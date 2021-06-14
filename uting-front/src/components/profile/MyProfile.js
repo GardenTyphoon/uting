@@ -197,6 +197,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
               }}
               type="text"
               name="nickname"
+              maxLength="3"
               class="modify" // 닉네임은 변경 가능
               value={ProfileInfo.nickname}
               onChange={onChange}
