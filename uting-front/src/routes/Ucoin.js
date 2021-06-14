@@ -44,12 +44,18 @@ const Ucoin = () => {
         async (rsp) => {
           // callback
           if (rsp.success) {
-            await addUcoin();
+            
+            console.log(ProfileInfo);
+            const res = await jwtAxios.post("/users/addUcoin", {
+              userId: ProfileInfo._id,
+              ucoin: ProfileInfo.ucoin,
+              chargingCoin: chargingCoin,
+            });
             var msg = "결제가 완료되었습니다.";
             msg += "\n구매 : " + rsp.name;
             msg += "\n결제 금액 : " + rsp.paid_amount + "원";
             alert(msg);
-            window.close();
+            window.close();        
             // 결제 성공 시 로직,
           } else {
             var msg = "결제에 실패하였습니다.";
@@ -64,6 +70,7 @@ const Ucoin = () => {
   };
 
   const addUcoin = () => {
+    console.log(ProfileInfo);
     const res = jwtAxios.post("/users/addUcoin", {
       userId: ProfileInfo._id,
       ucoin: ProfileInfo.ucoin,
@@ -100,6 +107,7 @@ const Ucoin = () => {
         width: "100vw",
         height: "100vh",
         padding: "2%",
+        fontFamily:"NanumSquare_acR"
       }}
     >
       <h1>코인 충전</h1>
@@ -193,7 +201,7 @@ const Ucoin = () => {
         <strong> {ProfileInfo.ucoin + chargingCoin} UCOIN</strong>
         <br />총 결제 금액 : <strong> {cost} 원</strong>
       </div>
-      <Button onClick={requestPay} className="payBtn">
+      <Button onClick={requestPay} className="payBtn" style={{  border: "none"}}>
         결제하기
       </Button>
     </div>
