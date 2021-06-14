@@ -75,6 +75,7 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
     } else {
       // 편집한 프로필을 저장하고, 다시 readOnly
       if (imgcheck !== true) {
+        console.log("편집!")
         setBtn("프로필 편집");
         setCheck(false);
         var inputs = document.getElementsByClassName("modify");
@@ -94,8 +95,11 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
           ProfileInfo["imgURL"] = res.data.url;
         }
         const res2 = await jwtAxios.post("/users/modifyMyProfile", ProfileInfo);
+        console.log(sessionStorage.getItem("nickname"))
         if (res2.data === "success") {
           checkProfilefunc(true);
+          console.log(sessionStorage.getItem("nickname"))
+          console.log(originNickname)
           if (originNickname !== ProfileInfo.nickname) {
             let data = {
               originNickname: originNickname,
@@ -104,9 +108,15 @@ const MyProfile = ({ choicename, checkProfilefunc, modNickname }) => {
             const res3 = await jwtAxios.post("/groups/modifyNickname", data);
             if (res3.data === "success") {
               modNickname("success");
+              console.log(sessionStorage.getItem("nickname"))
               sessionStorage.setItem("nickname", ProfileInfo.nickname);
-              checkProfilefunc(false)
-              modNickname("");
+              if(sessionStorage.getItem("nickname")===ProfileInfo.nickname){
+                console.log(sessionStorage.getItem("nickname"))
+                modNickname("");
+                checkProfilefunc(false)
+                setOriginNickname(ProfileInfo.nickname)
+              }
+              
             }
           }
         }

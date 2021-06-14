@@ -13,9 +13,9 @@
 .payBtn {
   font-family: NanumSquare_acR;
   width: 20%;
-  height: 5%;
+  height: 6%;
   background: linear-gradient(to bottom, #ff9a51, #ff6994);
-  border: none;
+
   border-radius: 10px;
   color: white;
   float: right;
