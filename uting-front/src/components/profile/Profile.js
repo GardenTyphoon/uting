@@ -16,7 +16,7 @@ import {
 } from "reactstrap";
 import baseurl from "../../utils/baseurl";
 
-const Profile = ({ modNickname }) => {
+const Profile = ({ modNickname}) => {
   const history = useHistory();
   const [imgBase64, setImgBase64] = useState("");
   const [ProfileInfo, setProfileInfo] = useState({

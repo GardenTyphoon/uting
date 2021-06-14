@@ -27,14 +27,15 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log("Connect MongoDB"));
-// mongoose
-//   .connect("mongodb://localhost:27017/uting", {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useCreateIndex: true,
-//     useFindAndModify: false,
-//   })
-//   .then(() => console.log("Connect MongoDB"));
+  /*
+mongoose
+   .connect("mongodb://localhost:27017/uting", {
+     useNewUrlParser: true,
+     useUnifiedTopology: true,
+     useCreateIndex: true,
+     useFindAndModify: false,
+   })
+   .then(() => console.log("Connect MongoDB"));*/
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
