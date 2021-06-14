@@ -1,8 +1,9 @@
 var express = require("express");
+const authMiddleware = require("../middlewares/auth");
 var router = express.Router();
 const { Mc } = require("../model");
 
-router.post("/", function (req, res, next) {
+router.post("/", authMiddleware, function (req, res, next) {
   const mc = new Mc({
     type: req.body.type,
     content: req.body.content,
@@ -12,7 +13,7 @@ router.post("/", function (req, res, next) {
   });
 });
 
-router.post("/list", function (req, res, next) {
+router.post("/list", authMiddleware, function (req, res, next) {
   let list = [];
   Mc.find(function (err, mc) {
     mc.forEach((one) => {
@@ -24,31 +25,26 @@ router.post("/list", function (req, res, next) {
   });
 });
 
-router.post("/delete",function(req,res,next){
-  let obj = {}
-  let exist=false;
+router.post("/delete", authMiddleware, function (req, res, next) {
+  let obj = {};
+  let exist = false;
   Mc.find(function (err, mc) {
     mc.forEach((one) => {
-      if (req.body.type === one.type && req.body.data===one.content) {
-        obj=one
-        exist=true
+      if (req.body.type === one.type && req.body.data === one.content) {
+        obj = one;
+        exist = true;
       }
     });
-    
-    if(exist===true){
-      Mc.deleteOne({_id:obj._id}).then((result, err)=>{
-        res.send("delete")
-      })
+
+    if (exist === true) {
+      Mc.deleteOne({ _id: obj._id }).then((result, err) => {
+        res.send("delete");
+      });
     }
-    if(exist===false){
-      res.send("fail")
+    if (exist === false) {
+      res.send("fail");
     }
-    
   });
-
-
-  
-  
-})
+});
 
 module.exports = router;

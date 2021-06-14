@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, Link, Switch, Router } from "react-router-dom";
-import defaultAxios from "../../utils/defaultAxios";
+import jwtAxios from "../../utils/jwtAxios";
 import styled from "styled-components";
 import classnames from "classnames";
 import {
@@ -51,7 +51,7 @@ const Conversation = ({ check }) => {
     let data = {
       type: "conversation",
     };
-    const res = await defaultAxios.post("/mcs/list", data);
+    const res = await jwtAxios.post("/mcs/list", data);
     setConversationList(res.data);
 
     setPagesCount(Math.ceil(res.data.length / pageSize));
@@ -67,7 +67,7 @@ const Conversation = ({ check }) => {
       type: "conversation",
       data: delData.data,
     };
-    const res = await defaultAxios.post("/mcs/delete", data);
+    const res = await jwtAxios.post("/mcs/delete", data);
     if (res.data === "delete") {
       getConversationList();
       setDelData({ data: "", idx: "" });
@@ -86,7 +86,7 @@ const Conversation = ({ check }) => {
         .slice(currentPage * pageSize, (currentPage + 1) * pageSize)
         .map((data, i) => (
           <div onClick={(e) => toggleDelete(data, i)} className="datalist">
-            <span className="datanum">{(currentPage)*5+i+1}.</span>
+            <span className="datanum">{currentPage * 5 + i + 1}.</span>
             <span>{data}</span>
             <span>
               {i === delData.idx ? (

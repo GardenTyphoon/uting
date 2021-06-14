@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import defaultAxios from "../../utils/defaultAxios";
+import jwtAxios from "../../utils/jwtAxios";
 import woman from "../../img/woman.png";
 import man from "../../img/man.png";
 import MeetingRoom from "../../img/MeetingRoom.png";
@@ -232,8 +233,7 @@ export default function MeetingList({
         await meetingManager.start();
 
         history.push(`/room/${room.title}`);
-      } catch (error) {
-      }
+      } catch (error) {}
     } else if (coinCheck === false) {
       setGetalert({
         flag: true,
@@ -286,7 +286,7 @@ export default function MeetingList({
   }, [checkState]);
 
   let getMeetings = async (e) => {
-    const res = await defaultAxios.post("/meetings/");
+    const res = await jwtAxios.post("/meetings/");
 
     let arr = [];
     res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));
