@@ -320,7 +320,7 @@ router.post('/end', async function(req, res, next){
 
   delete meetingCache[title];
   delete attendeeCache[title];
-  res.end(200);
+  res.end();
 })
 
 module.exports = router;
