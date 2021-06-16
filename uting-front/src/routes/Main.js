@@ -242,7 +242,7 @@ const Main = () => {
         <div className="Room">
           <div
             className="RoomTop"
-            style={{ width: "100%", marginBottom: "30px" , marginLeft:"15px"}}
+            style={{ width: "100%", marginBottom: "30px" }}
           >
             <div className="RoomTop" style={{ width: "79%" }}>
               <div
