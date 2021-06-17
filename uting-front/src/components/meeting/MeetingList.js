@@ -289,9 +289,9 @@ export default function MeetingList({
     const res = await jwtAxios.post("/meetings/");
 
     let arr = [];
-    if(res.data.lenght>=1){
+   // if(res.data.lenght>=1){
       res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));
-    }
+   // }
     setGroupMannerInfo(arr);
     setView(res.data);
     setOriginList(res.data);
@@ -350,7 +350,7 @@ export default function MeetingList({
               <img
                 src={room.hostImgURL}
                 className="MeetingRoomImg"
-                style={{ borderColor: groupMannerInfo[Number(index)].color }}
+                //style={{ borderColor: groupMannerInfo[Number(index)].color }}
                 id={"Tooltip-" + room._id.substr(0, 10)}
                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
