@@ -19,7 +19,7 @@ describe("USER API TEST", () => {
   describe("/sendEmail API Test", () => {
     it("이메일 인증 코드를 리턴 받는다.", function(done){
       let data = {
-        email: "gnup@ajou.ac.kr"
+        email: "marsetia@ajou.ac.kr"
       }
       chai.request(app)
       .post("/users/sendEmail")

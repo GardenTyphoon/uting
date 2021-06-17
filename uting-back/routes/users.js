@@ -126,10 +126,10 @@ router.post("/signin", function (req, res, next) {
       if (user.verify(password)) {
         if (user.beReported >= 3) {
           res.send("hell");
-        }
-        if (user.status === true) {
-          throw new Error("login failed");
         } else {
+          /*if (user.status === true) {
+          throw new Error("login failed");
+        }*/
           perObj = user;
           // create a promise that generates jwt asynchronously
           const p = new Promise((resolve, reject) => {

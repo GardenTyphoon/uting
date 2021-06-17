@@ -289,8 +289,8 @@ export default function MeetingList({
     const res = await jwtAxios.post("/meetings/");
 
     let arr = [];
-    res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));
-
+      res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));
+   
     setGroupMannerInfo(arr);
     setView(res.data);
     setOriginList(res.data);

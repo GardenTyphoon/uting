@@ -234,7 +234,7 @@ const Main = () => {
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
-          <div style={{ marginTop: "50%", marginLeft: "40%" }}>
+          <div style={{ marginTop: "50%"}}>
             <Advertising></Advertising>
           </div>
         </div>
@@ -242,9 +242,9 @@ const Main = () => {
         <div className="Room">
           <div
             className="RoomTop"
-            style={{ width: "100%", marginBottom: "20px" }}
+            style={{ width: "100%", marginBottom: "30px" }}
           >
-            <div className="RoomTop" style={{ width: "75%" }}>
+            <div className="RoomTop" style={{ width: "79%" }}>
               <div
                 style={{
                   fontFamily: "NanumSquare_acR",
@@ -293,9 +293,6 @@ const Main = () => {
           </div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
               marginTop: "10px",
               minHeight: "450px",
               height: "70vh",

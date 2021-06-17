@@ -27,6 +27,7 @@ mongoose
     useFindAndModify: false,
   })
   .then(() => console.log("Connect MongoDB"));
+
 //mongoose
 //  .connect("mongodb://localhost:27017/uting", {
 //    useNewUrlParser: true,
