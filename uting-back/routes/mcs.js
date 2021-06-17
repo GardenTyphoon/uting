@@ -17,6 +17,7 @@ router.post("/list", authMiddleware, function (req, res, next) {
   let list = [];
   Mc.find(function (err, mc) {
     mc.forEach((one) => {
+      console.log(one)
       if (req.body.type === one.type) {
         list.push(one.content);
       }
