@@ -45,6 +45,7 @@
 }
 .RoomListContainer {
   overflow: auto;
+  height:75vh;
 }
 .RoomListContainer::-webkit-scrollbar {
   width: 7px;

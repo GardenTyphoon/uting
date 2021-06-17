@@ -64,10 +64,9 @@ background-image: url("../img/Intro이미지.png");
   background: linear-gradient(to bottom, #e7a97c, #ff6994);
 }
 .diva {
-  float: right;
+  text-align: right;
   position: fixed;
   bottom: 1%;
-  margin-left: 90%;
   font-family: "Jua";
   color: white;
 }
