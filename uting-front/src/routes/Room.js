@@ -582,7 +582,7 @@ const Room = () => {
               borderStyle: "none",
               background: "transparent",
               position: "relative",
-              left: "90px",
+              left:"45%"
             }}
           >
             <img src={help} width="25" />
