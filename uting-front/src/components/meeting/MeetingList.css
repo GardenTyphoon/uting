@@ -15,11 +15,12 @@
   margin-top: 0px;
 }
 .MeetingRoomImg {
-  width: 10%;
+  width: 90px;
+  height:90px;
   border-radius: 50%;
   margin-left: 23px;
   margin-right: 2%;
-  border: 4px solid;
+  border: 4px solid ;
   object-fit: cover;
 }
 .joinBtn {
@@ -44,6 +45,7 @@
 }
 .RoomListContainer {
   overflow: auto;
+  height:75vh;
 }
 .RoomListContainer::-webkit-scrollbar {
   width: 7px;

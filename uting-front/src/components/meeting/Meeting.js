@@ -10,6 +10,7 @@ import { createGetAttendeeCallback, fetchMeeting } from "../../utils/api";
 import "./Meeting.css";
 import baseurl from "../../utils/baseurl";
 import introLogo from "../../img/../img/배경없는유팅로고.png"
+import { SOCKET } from "../../utils/constants";
 import {
   Modal,
   ModalHeader,
@@ -180,7 +181,7 @@ const Meeting = ({ checkFunc }) => {
 
             setAppMeetingInfo(roomTitle, sessionUser, "ap-northeast-2");
             if (roomTitle !== undefined) {
-              const socket = socketio.connect(`${baseurl.baseBack}`);
+              const socket = socketio.connect(SOCKET);
               socket.emit("makeMeetingRoomMsg", {
                 groupMembersSocketId: groupMembersSocketId,
                 roomtitle: roomTitle,

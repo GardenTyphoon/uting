@@ -99,13 +99,12 @@ const Groups = ({
   //let sessionUser = sessionStorage.getItem("nickname");
 
   const showProfile = (data) => {
-   
     setToggleOtherProfile(true);
     setAnotherName(data);
   };
   const getGroupInfo = async (e) => {
     let data = { sessionUser: sessionStorage.getItem("nickname") };
-    const res = await defaultAxios.post("/groups/info", data);
+    const res = await jwtAxios.post("/groups/info", data);
     setGroupMember(res.data.member);
   };
 
@@ -124,21 +123,21 @@ const Groups = ({
         groupMemberExceptMe.push(mem);
       }
     });
-    console.log(groupMemberExceptMe)
-    let res = await jwtAxios.post('/users/preMemSocketid', {
+    console.log(groupMemberExceptMe);
+    let res = await jwtAxios.post("/users/preMemSocketid", {
       preMember: groupMemberExceptMe,
     });
     console.log(res);
-    let socketList=[]
-    for(let i=0;i<res.data.length;i++){
-      socketList.push(res.data[i].socketid)
+    let socketList = [];
+    for (let i = 0; i < res.data.length; i++) {
+      socketList.push(res.data[i].socketid);
     }
     socket.emit("leaveGroup", {
       socketIdList: socketList,
       leavingUsers: sessionUser,
     });
 
-    res = await jwtAxios.post('/groups/leaveGroup', {
+    res = await jwtAxios.post("/groups/leaveGroup", {
       userNickname: sessionUser,
     });
 
@@ -227,10 +226,14 @@ const Groups = ({
         ""
       )}
       <Modal isOpen={clickLeaveGroup}>
-        <ModalHeader style={{fontFamily:"NanumSquare_acR"}}>
+        <ModalHeader style={{ fontFamily: "NanumSquare_acR" }}>
           그룹 퇴장
         </ModalHeader>
-        <ModalBody style={{fontFamily:"NanumSquare_acR", textAlign:"center"}}>그룹을 떠나시겠습니까?</ModalBody>
+        <ModalBody
+          style={{ fontFamily: "NanumSquare_acR", textAlign: "center" }}
+        >
+          그룹을 떠나시겠습니까?
+        </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={() => leaveGroup()}>
             예

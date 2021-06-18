@@ -133,6 +133,7 @@ const Room = () => {
       for (let i = 0; i < res.data.length; i++) {
         arr.push(res.data[i].socketid);
       }
+      console.log(arr);
       setParticipantsSocketId(arr);
       
     }
@@ -239,9 +240,11 @@ const Room = () => {
         }, 15000);
       } else if (data.type === "startVote") {
         getparticipants();
-        toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
-        
-        voteRef.current.onStartVote();
+        setTimeout(() => {
+          toast("미팅 종료를 위한 투표를 시작합니다!ㅠoㅠ");
+          voteRef.current.onStartVote();
+        }, 15000);
+       
       } else if (data.type === "endMeetingAgree") {
         if (voteRef.current != null) {
           voteRef.current.onEndMeetingAgree(data.numOfAgree);
@@ -579,7 +582,7 @@ const Room = () => {
               borderStyle: "none",
               background: "transparent",
               position: "relative",
-              left: "90px",
+              left:"45%"
             }}
           >
             <img src={help} width="25" />

@@ -94,6 +94,8 @@ const McBot = ({
 
     //랜덤값생성
     let index = Math.floor(Math.random() * res.data.length);
+    console.log(res.data);
+    console.log(index);
     setContent(res.data[index]);
   };
 

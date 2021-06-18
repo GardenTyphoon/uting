@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 import renewImg from "../img/새로고침.svg";
 import Tutorial from "../components/main/Tutorial.js";
 import Advertising from "../components/main/Advertising.js";
+import jwtAxios from "../utils/jwtAxios";
 
 import { useAppState } from "../providers/AppStateProvider";
 import { useMeetingManager } from "amazon-chime-sdk-component-library-react";
@@ -62,7 +63,6 @@ const Main = () => {
   let sessionUser = sessionStorage.getItem("nickname");
 
   const modNickname = (e) => {
-    
     setModifyNickname(e);
   };
 
@@ -158,18 +158,15 @@ const Main = () => {
       await meetingManager.start();
 
       history.push(`/room/${roomtitle}`);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   const putSocketid = async (e) => {
-    
     let data = {
       currentUser: sessionStorage.getItem("nickname"),
       currentSocketId: socketId,
     };
-    const res = await defaultAxios.post("/users/savesocketid", data);
-    
+    const res = await jwtAxios.post("/users/savesocketid", data);
   };
   useEffect(() => {
     putSocketid();
@@ -237,8 +234,7 @@ const Main = () => {
       </div>
       <div className="mainBottom">
         <div className="CollegeRanking">
-          
-          <div style={{ marginTop: "50%", marginLeft: "40%" }}>
+          <div style={{ marginTop: "50%"}}>
             <Advertising></Advertising>
           </div>
         </div>
@@ -246,9 +242,9 @@ const Main = () => {
         <div className="Room">
           <div
             className="RoomTop"
-            style={{ width: "100%", marginBottom: "20px" }}
+            style={{ width: "100%", marginBottom: "30px" }}
           >
-            <div className="RoomTop" style={{ width: "75%" }}>
+            <div className="RoomTop" style={{ width: "79%" }}>
               <div
                 style={{
                   fontFamily: "NanumSquare_acR",
@@ -297,9 +293,6 @@ const Main = () => {
           </div>
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-evenly",
               marginTop: "10px",
               minHeight: "450px",
               height: "70vh",
@@ -363,7 +356,10 @@ const Main = () => {
           </ModalBody>
         </Modal>
         <Modal size="lg" isOpen={tutorialmodal} toggle={tutorialtoggle}>
-          <ModalHeader style={{ marginLeft: "40%", fontFamily:"NanumSquare_acR" }} toggle={tutorialtoggle}>
+          <ModalHeader
+            style={{ marginLeft: "40%", fontFamily: "NanumSquare_acR" }}
+            toggle={tutorialtoggle}
+          >
             U-TING 메뉴얼
           </ModalHeader>
           <ModalBody>

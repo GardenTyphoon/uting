@@ -1,8 +1,7 @@
 var express = require("express");
+const authMiddleware = require("../middlewares/auth");
 var router = express.Router();
 const { Group } = require("../model");
-
-
 
 router.post("/", function (req, res, next) {
   let exist = false;
@@ -39,7 +38,6 @@ router.post("/", function (req, res, next) {
   });
 });
 
-
 router.post("/getMyGroupMember", function (req, res, next) {
   let isMember = false;
   Group.find(function (err, group) {
@@ -54,7 +52,6 @@ router.post("/getMyGroupMember", function (req, res, next) {
     if (isMember === false) res.send("no");
   });
 });
-
 
 router.post("/info", function (req, res, next) {
   let ismember = false;
@@ -72,8 +69,6 @@ router.post("/info", function (req, res, next) {
     }
   });
 });
-
-
 
 router.post("/leaveGroup", function (req, res, next) {
   let success = false;

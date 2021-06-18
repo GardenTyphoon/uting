@@ -24,7 +24,6 @@ const SignIn = () => {
 
   const enterEvent = (e) => {
     if (e.key === "Enter") {
-
       onSubmit();
     }
   };
@@ -61,7 +60,8 @@ const SignIn = () => {
           setIslogined(false);
           setGetalert({
             flag: true,
-            message: "아이디 및 비밀번호가 틀렸거나, 없는 사용자입니다.",
+            message:
+              "아이디 및 비밀번호가 틀렸거나, 없는 사용자거나 중복로그인입니다.",
           });
           setTimeout(() => {
             setGetalert({ flag: false, message: "" });
@@ -96,8 +96,7 @@ const SignIn = () => {
           }
         }
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   };
   return (
     <Container className="SignInContainer">
