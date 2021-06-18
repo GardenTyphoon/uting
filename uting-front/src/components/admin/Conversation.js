@@ -92,7 +92,7 @@ const Conversation = ({ check }) => {
               {i === delData.idx ? (
                 <button
                   onClick={(e) => deleteData(e)}
-                  style={{ float: "right", marginRight: "5%" }}
+                  style={{marginLeft:"5%"}}
                   className="delbtn"
                 >
                   삭제
