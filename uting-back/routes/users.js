@@ -125,7 +125,7 @@ router.post("/signin", function (req, res, next) {
       // user exists, check the password
       if (user.verify(password)) {
         if (user.beReported >= 3) {
-          res.send("hell");
+         throw new Error("hell");
         } else {
           /*if (user.status === true) {
           throw new Error("login failed");
