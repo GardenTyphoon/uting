@@ -62,9 +62,7 @@ export default function MeetingList({
   const [prevFilter, setPrevFilter] = useState("");
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const [getalert, setGetalert] = useState({ flag: false, message: "" });
-  const [groupMannerInfo, setGroupMannerInfo] = useState({});
   const [resstatus, setResstatus] = useState("");
-  const [groupMannerInfoTemp, setGroupMannerInfoTemp] = useState([]);
 
   function getMannerCreditAndColor(avgManner) {
     let color;
@@ -287,11 +285,6 @@ export default function MeetingList({
 
   let getMeetings = async (e) => {
     const res = await jwtAxios.post("/meetings/");
-
-    let arr = [];
-      res.data.map((room) => arr.push(getMannerCreditAndColor(room.avgManner)));
-   
-    setGroupMannerInfo(arr);
     setView(res.data);
     setOriginList(res.data);
 
@@ -303,6 +296,7 @@ export default function MeetingList({
   }, []);
 
   useEffect(() => {
+    
     const filteredName = originList.filter((data) => {
       return data.title.toLowerCase().includes(filterRoomName);
     });
@@ -310,6 +304,8 @@ export default function MeetingList({
   }, [filterRoomName]);
 
   useEffect(() => {
+    console.log(originList)
+    console.log(viewRoomList)
     let filtered = [];
 
     originList.map((data) => {
@@ -320,6 +316,7 @@ export default function MeetingList({
         filtered.push(data);
       }
     });
+    console.log(filtered)
     setView(filtered);
   }, [filtermanner]);
 
@@ -349,7 +346,7 @@ export default function MeetingList({
               <img
                 src={room.hostImgURL}
                 className="MeetingRoomImg"
-                style={{ borderColor: groupMannerInfo[Number(index)].color }}
+                style={{ borderColor: getMannerCreditAndColor(room.avgManner).color }}
                 id={"Tooltip-" + room._id.substr(0, 10)}
                 onMouseOver={(e) => toggleToolTipId(room._id.substr(0, 10))}
                 onMouseOut={(e) => toggleToolTipId(room._id.substr(0, 10))}
@@ -363,7 +360,7 @@ export default function MeetingList({
                   style={{
                     display: "flex",
                     justifyContent: "center",
-                    color: groupMannerInfo[index].color,
+                    color: getMannerCreditAndColor(room.avgManner).color,
                     marginTop: "15%",
                   }}
                 >
@@ -371,7 +368,7 @@ export default function MeetingList({
                     {room.avgManner !== null ? room.avgManner : ""}
                   </div>
                   <div style={{ fontWeight: "bold" }}>
-                    {groupMannerInfo[index].credit}
+                    {getMannerCreditAndColor(room.avgManner).credit}
                   </div>
                 </div>
                 <div
