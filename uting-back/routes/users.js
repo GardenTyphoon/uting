@@ -256,20 +256,6 @@ router.post("/userInfo", function (req, res, next) {
     });
   });
 });
-
-router.post("/usersSocketId", function (req, res, next) {
-  let data = [];
-  User.find(function (err, user) {
-    user.forEach((per) => {
-      req.body.users.forEach((one) => {
-        if (one === per._id.toString() || one === per.nickname) {
-          data.push(per.socketid);
-        }
-      });
-    });
-    res.send(data);
-  });
-});
 router.post("/usersSocketIdx", function (req, res, next) {
   let data = [];
   User.find(function (err, user) {
