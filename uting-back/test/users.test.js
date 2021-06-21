@@ -3,7 +3,7 @@ const chaiHttp = require("chai-http");
 const mongoose = require("mongoose");
 chai.use(chaiHttp)
 const expect = chai.expect;
-const app = require("../app");
+const app = require("../test_app");
 const { assert } = require("chai");
 
 // DB의 경우 test 용 mongodb 가 새로 생성됩니다. 회원가입 시 중복 방지가 통합되어있지 않아
